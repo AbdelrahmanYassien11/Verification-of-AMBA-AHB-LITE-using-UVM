@@ -45,23 +45,36 @@ event control_phase_finished;
 inputs_monitor inputs_monitor_h;    // Handle to input monitor
 outputs_monitor outputs_monitor_h;  // Handle to output monitor
 STATE_e operation_interface;        // State of the AHB interface
+HRESP_e HRESP_o;
+
+sequence_item previous_seq_item;
 
 // Task: Handle generic receiving operations based on reset and enable signals
 task generic_reciever( input bit iHRESETn, input bit   iHWRITE, input bit  [TRANS_WIDTH:0] iHTRANS, 
                         input bit  [SIZE_WIDTH:0] iHSIZE, input bit  [BURST_WIDTH:0] iHBURST,
                         input bit  [PROT_WIDTH:0] iHPROT, input bit  [ADDR_WIDTH-1:0] iHADDR,     
-                        input bit  [DATA_WIDTH-1:0] iHWDATA, input STATE_e ioperation
+                        input bit  [DATA_WIDTH-1:0] iHWDATA, input STATE_e ioperation, input HRESP_o iHRESP_o
 );
+    HRESP_o = iHRESP_o;
+    if(HRESP === ERROR && iHRESP_o === RETRY) begin
+        iHRESETn    = previous_seq_item.HRESETn;
+        iHWRITE     = previous_seq_item.HWRITE;
+        iHTRANS     = previous_seq_item.HTRANS;
+        iHSIZE      = previous_seq_item.HSIZE;  
+        iHBRUST     = previous_seq_item.HBURST; 
+        iHPROT      = previous_seq_item.HPROT;  
+        iHADDR      = previous_seq_item.HADDR; 
+        iHWDATA     = previous_seq_item.HWDATA;
 
+        ioperation = previous_seq_item.operation_interface;
+    end
     operation_interface = ioperation; 
-    send_inputs(iHRESETn, iHWRITE, iHTRANS, iHSIZE, iHBURST, iHPROT, iHADDR, iHWDATA);
-    // wrst_n = iwrst_n;
-    // rrst_n = irrst_n;
+    send_inputs(iHRESETn, iHWRITE, iHTRANS, iHSIZE, iHBURST, iHPROT, iHADDR, iHWDATA, HRESP, HREADY);
         fork
             control_phase(iHRESETn, iHWRITE, iHTRANS, iHSIZE, iHBURST, iHPROT, iHADDR, iHWDATA);
             data_phase(iHRESETn, iHWRITE, iHTRANS, iHSIZE, iHBURST, iHPROT, iHADDR, iHWDATA);
         join_any
-
+    end
 endtask : generic_reciever
 
 
@@ -136,9 +149,22 @@ endtask : generic_reciever
                                 input bit  [PROT_WIDTH:0] iHPROT, input bit  [ADDR_WIDTH-1:0] iHADDR,     
                                 input bit  [DATA_WIDTH-1:0] iHWDATA);
 
-    outputs_monitor_h.write_to_monitor(iHRESETn, iHWRITE, iHTRANS, iHSIZE, iHBURST, iHPROT, iHADDR, iHWDATA, HRDATA, HRESP, HREADY, operation_interface);
-endfunction : send_outputs
+        outputs_monitor_h.write_to_monitor(iHRESETn, iHWRITE, iHTRANS, iHSIZE, iHBURST, iHPROT, iHADDR, iHWDATA, HRDATA, HRESP, HREADY, operation_interface);
+        previous_seq_item.HRESETn = iHRESETn;
+        previous_seq_item.HWRITE = iHWRITE;
+        previous_seq_item.HTRANS = iHTRANS;
+        previous_seq_item.HSIZE  = iHSIZE;
+        previous_seq_item.HBURST = iHBURST;
+        previous_seq_item.HPROT  = iHPROT;
+        previous_seq_item.HADDR  = iHADDR;
+        previous_seq_item.HWDATA = iHWDATA;
+        previous_seq_item.HWDATA = iHWDATA;
+        previous_seq_item.operations = operation_interface;
+    endfunction : send_outputs
 
 
+    always(@send_inputs) begin
+
+    end
 
 endinterface : inf

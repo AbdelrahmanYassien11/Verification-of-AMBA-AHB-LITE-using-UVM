@@ -43,11 +43,11 @@ class predictor extends uvm_subscriber #(sequence_item);
   bit   [DATA_WIDTH-1:0]  HWDATA; 
 
   // AHB lite output Signals
-  logic   [DATA_WIDTH-1:0]  HRDATA;
+  logic   [DATA_WIDTH-1:0]  HRDATA_expected;
   logic   [RESP_WIDTH-1:0]  HRESP; 
   logic   [DATA_WIDTH-1:0]  HREADY;
 
-
+  HRESP_e HRESP_o;
   logic [FIFO_WIDTH-1:0] data_out_expected;
   bit [FIFO_WIDTH-1:0] data_write_queue [$];
 
@@ -100,6 +100,9 @@ class predictor extends uvm_subscriber #(sequence_item);
     HBURST  <= t.HBURST;
     HPROT   <= t.HPROT;
     HADDR   <= t.HADDR;
+
+    HRESP <= t.HRESP;
+    HREADY  <= t.HREADY;
     data_str   = $sformatf("HRESETn:%0d, HWRITE:%0d, HTRANS:%0d, HSIZE:%0d, HBURST:%0d, HPROT:%0d, HADDR:%0d, HWDATA:%0d",
                             HRESETn, HWRITE, HTRANS, HSIZE, HBURST, HPROT, HADDR, HWDATA));
     -> inputs_written;
@@ -119,17 +122,86 @@ endtask : generic_predictor
 
   // Send expected results to the analysis port
   function void send_results();
-    seq_item_expected.wrst_n   = wrst_n;
-    seq_item_expected.rrst_n   = rrst_n;
-    seq_item_expected.w_en     = w_en;
-    seq_item_expected.r_en     = r_en;
-    seq_item_expected.data_in  = data_in;
+    seq_item_expected.HRESETn     = HRESETn;
+    seq_item_expected.HWRITE      = HWRITE;
+    seq_item_expected.HTRANS      = HTRANS;
+    seq_item_expected.HSIZE       = HSIZE;
+    seq_item_expected.HBURST      = HBURST;
+    seq_item_expected.HPROT       = HPROT;
+    seq_item_expected.HADDR       = HADDR;
+    seq_item_expected.HWDATA      = HWDATA;
 
-    seq_item_expected.data_out = data_out_expected;
-    seq_item_expected.empty    = empty_expected;
-    seq_item_expected.full     = full_expected;
+    seq_item_expected.HRESP       = HRESP;
+    seq_item_expected.HREADY      = HREADY;
+    seq_item_expected.HRDATA      = HRDATA_expected;
     -> expected_outputs_written;
   endfunction : send_results
+
+
+    task control_phase( input bit iHRESETn, input bit   iHWRITE, input bit  [TRANS_WIDTH:0] iHTRANS, 
+                        input bit  [SIZE_WIDTH:0] iHSIZE, input bit  [BURST_WIDTH:0] iHBURST,
+                        input bit  [PROT_WIDTH:0] iHPROT, input bit  [ADDR_WIDTH-1:0] iHADDR     
+                        );
+        @(negedge clk);
+        HRESETn <= iHRESETn;
+        if(HREADY === 1'b1 && iHRESETn == 1'b1 && HRESP === ) begin
+            HWRITE  <= iHWRITE;
+            HTRANS  <= iHTRANS;
+            HSIZE   <= iHSIZE;
+            HBURST  <= iHBURST;
+            HPROT   <= iHPROT;
+            HADDR   <= iHADDR;
+            -> control_phase_finished;
+        end
+    endtask : control_phase
+
+    task data_phase(input bit iHRESETn, input bit   iHWRITE, input bit  [TRANS_WIDTH:0] iHTRANS, 
+                    input bit  [SIZE_WIDTH:0] iHSIZE, input bit  [BURST_WIDTH:0] iHBURST,
+                    input bit  [PROT_WIDTH:0] iHPROT, input bit  [ADDR_WIDTH-1:0] iHADDR  
+                        );
+        @(control_phase_finished);
+        @(negedge clk);
+        if(iHRESETn === 1'b0)
+            reset_AHB();
+        else if(HWRITE === 1'b1) begin
+            write_AHB(iHWDATA);
+        end
+        else if(HWRITE === 1'b0) begin
+            read_AHB();
+        end
+        send_outputs(iHRESETn, iHWRITE, iHTRANS, iHSIZE, iHBURST, iHPROT, iHADDR, iHWDATA);
+    endtask : data_phase
+
+
+    // Task: Reset AHB pointers and flags
+    task reset_AHB();
+        repeat(15)
+            @(negedge clk);
+        HRESETn = 1'b1
+    endtask : reset_AHB
+
+
+    // Task: Write data into the AHB and handle pointer updates
+    task write_AHB(input bit [ADDR_WIDTH-1:0] iHWDATA);
+        HWDATA <= iHWDATA;
+        @(negedge clk);
+    endtask : write_AHB
+
+    // Task: Read data from the AHB and handle pointer updates
+    task read_AHB();
+        if(HREADY === 1'b1)
+            @(negedge clk);
+    endtask : read_AHB
+
+
+
+
+
+
+
+
+
+
 
   // Reset FIFO state
   task reset_FIFO();

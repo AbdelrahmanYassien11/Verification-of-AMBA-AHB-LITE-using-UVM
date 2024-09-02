@@ -8,6 +8,8 @@ package FIFO_pkg;
 
 	typedef enum {RESET, READ , WRITE, WRITE_READ} STATE_e;
 
+	typedef enum {OKAY, ERROR} HRESP_e;
+
 	//control phase signal parameters
 	parameter ADDR_WIDTH = 32;
    	parameter TRANS_WIDTH = 1;
