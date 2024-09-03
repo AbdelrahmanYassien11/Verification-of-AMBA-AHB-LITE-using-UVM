@@ -69,7 +69,7 @@ task generic_reciever( input bit iHRESETn, input bit   iHWRITE, input bit  [TRAN
         ioperation = previous_seq_item.operation_interface;
     end
     operation_interface = ioperation; 
-    send_inputs(iHRESETn, iHWRITE, iHTRANS, iHSIZE, iHBURST, iHPROT, iHADDR, iHWDATA, HRESP, HREADY);
+    send_inputs(iHRESETn, iHWRITE, iHTRANS, iHSIZE, iHBURST, iHPROT, iHADDR, iHWDATA, HRESP, HREADY, iHRESP_o);
         fork
             control_phase(iHRESETn, iHWRITE, iHTRANS, iHSIZE, iHBURST, iHPROT, iHADDR, iHWDATA);
             data_phase(iHRESETn, iHWRITE, iHTRANS, iHSIZE, iHBURST, iHPROT, iHADDR, iHWDATA);

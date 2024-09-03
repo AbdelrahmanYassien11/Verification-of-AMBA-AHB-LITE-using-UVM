@@ -29,6 +29,9 @@ class predictor extends uvm_subscriber #(sequence_item);
   event inputs_written;
   event expected_outputs_written;
 
+  logic [DATA_WIDTH-1:0] slave0 [P_SLAVE0_START:P_SLAVE0_END];
+  logic [DATA_WIDTH-1:0] slave1 [P_SLAVE1_START:P_SLAVE1_END];
+  logic [DATA_WIDTH-1:0] slave2 [P_SLAVE2_START:P_SLAVE2_END];
 
   // AHB lite Control Signals
   bit                   HRESETn;    // reset (active low)
@@ -47,9 +50,9 @@ class predictor extends uvm_subscriber #(sequence_item);
   logic   [RESP_WIDTH-1:0]  HRESP; 
   logic   [DATA_WIDTH-1:0]  HREADY;
 
-  HRESP_e HRESP_o;
   logic [FIFO_WIDTH-1:0] data_out_expected;
   bit [FIFO_WIDTH-1:0] data_write_queue [$];
+  HRESP_e HRESP_o;
 
   string data_str;
 
@@ -85,7 +88,7 @@ class predictor extends uvm_subscriber #(sequence_item);
       $display("my_predictor run phase");
       @(inputs_written);
       `uvm_info("PREDICTOR", {"WRITTEN_DATA: ", data_str}, UVM_HIGH)
-      predictor_idk();
+      generic_predictor();
       wait(expected_outputs_written.triggered);
       analysis_port_expected_outputs.write(seq_item_expected);
       `uvm_info("PREDICTOR", {"EXPECTED_DATA: ", seq_item_expected.convert2string()}, UVM_HIGH)
@@ -113,10 +116,10 @@ class predictor extends uvm_subscriber #(sequence_item);
                         input bit  [SIZE_WIDTH:0] iHSIZE, input bit  [BURST_WIDTH:0] iHBURST,
                         input bit  [PROT_WIDTH:0] iHPROT, input bit  [ADDR_WIDTH-1:0] iHADDR,     
                         input bit  [DATA_WIDTH-1:0] iHWDATA);
-        fork
-            control_phase(iHRESETn, iHWRITE, iHTRANS, iHSIZE, iHBURST, iHPROT, iHADDR, iHWDATA);
+        //fork
+            //control_phase(iHRESETn, iHWRITE, iHTRANS, iHSIZE, iHBURST, iHPROT, iHADDR, iHWDATA);
             data_phase(iHRESETn, iHWRITE, iHTRANS, iHSIZE, iHBURST, iHPROT, iHADDR, iHWDATA);
-        join_any
+        //join_any
 
 endtask : generic_predictor
 
@@ -138,38 +141,35 @@ endtask : generic_predictor
   endfunction : send_results
 
 
-    task control_phase( input bit iHRESETn, input bit   iHWRITE, input bit  [TRANS_WIDTH:0] iHTRANS, 
-                        input bit  [SIZE_WIDTH:0] iHSIZE, input bit  [BURST_WIDTH:0] iHBURST,
-                        input bit  [PROT_WIDTH:0] iHPROT, input bit  [ADDR_WIDTH-1:0] iHADDR     
-                        );
-        @(negedge clk);
-        HRESETn <= iHRESETn;
-        if(HREADY === 1'b1 && iHRESETn == 1'b1 && HRESP === ) begin
-            HWRITE  <= iHWRITE;
-            HTRANS  <= iHTRANS;
-            HSIZE   <= iHSIZE;
-            HBURST  <= iHBURST;
-            HPROT   <= iHPROT;
-            HADDR   <= iHADDR;
-            -> control_phase_finished;
-        end
-    endtask : control_phase
+    // task control_phase( input bit iHRESETn, input bit   iHWRITE, input bit  [TRANS_WIDTH:0] iHTRANS, 
+    //                     input bit  [SIZE_WIDTH:0] iHSIZE, input bit  [BURST_WIDTH:0] iHBURST,
+    //                     input bit  [PROT_WIDTH:0] iHPROT, input bit  [ADDR_WIDTH-1:0] iHADDR     
+    //                     );
+    //     //@(negedge clk);
+    //     HRESETn <= iHRESETn;
+    //     if(/*HREADY === 1'b1 &&*/ iHRESETn == 1'b1) begin
+    //         HWRITE  <= iHWRITE;
+    //         HTRANS  <= iHTRANS;
+    //         HSIZE   <= iHSIZE;
+    //         HBURST  <= iHBURST;
+    //         HPROT   <= iHPROT;
+    //         HADDR   <= iHADDR;
+    //         -> control_phase_finished;
+    //     end
+    // endtask : control_phase
 
-    task data_phase(input bit iHRESETn, input bit   iHWRITE, input bit  [TRANS_WIDTH:0] iHTRANS, 
-                    input bit  [SIZE_WIDTH:0] iHSIZE, input bit  [BURST_WIDTH:0] iHBURST,
-                    input bit  [PROT_WIDTH:0] iHPROT, input bit  [ADDR_WIDTH-1:0] iHADDR  
-                        );
-        @(control_phase_finished);
-        @(negedge clk);
-        if(iHRESETn === 1'b0)
+    task data_phase();
+        //@(control_phase_finished);
+        //@(negedge clk);
+        if(HRESETn === 1'b0)
             reset_AHB();
         else if(HWRITE === 1'b1) begin
-            write_AHB(iHWDATA);
+            write_AHB();
         end
         else if(HWRITE === 1'b0) begin
             read_AHB();
         end
-        send_outputs(iHRESETn, iHWRITE, iHTRANS, iHSIZE, iHBURST, iHPROT, iHADDR, iHWDATA);
+        send_results(/*iHRESETn, iHWRITE, iHTRANS, iHSIZE, iHBURST, iHPROT, iHADDR, iHWDATA*/);
     endtask : data_phase
 
 
@@ -177,20 +177,100 @@ endtask : generic_predictor
     task reset_AHB();
         repeat(15)
             @(negedge clk);
-        HRESETn = 1'b1
+        HRESP = OKAY;
+        HREADY = READY;
+        HTRANS = IDLE;
     endtask : reset_AHB
 
 
     // Task: Write data into the AHB and handle pointer updates
-    task write_AHB(input bit [ADDR_WIDTH-1:0] iHWDATA);
-        HWDATA <= iHWDATA;
-        @(negedge clk);
+  task write_AHB();
+    case (HTRANS)
+      INCR4: begin
+        if(HADDR >= 0 && HADDR <= 15)
+          slave0[HADDR] = HWDATA;
+        else if(HADDR >= 16 && HADDR <= 31)
+          slave1[HADDR] = HWDATA;
+        else if(HADDR >= 32 && HADDR <= 47)
+          slave2[HADDR] = HWDATA;
+        else
+          HRESP = ERROR;
+      end
+      INCR8: begin
+        
+        if(HADDR >= 0 && HADDR <= 15)
+          slave0[HADDR] = HWDATA;
+        else if(HADDR >= 16 && HADDR <= 31)
+          slave1[HADDR] = HWDATA;
+        else if(HADDR >= 32 && HADDR <= 47)
+          slave2[HADDR] = HWDATA;
+        else
+          HRESP = ERROR;
+      end
+      INCR16: begin
+        if(HADDR >= 0 && HADDR <= 15)
+          slave0[HADDR] = HWDATA;
+        else if(HADDR >= 16 && HADDR <= 31)
+          slave1[HADDR] = HWDATA;
+        else if(HADDR >= 32 && HADDR <= 47)
+          slave2[HADDR] = HWDATA;
+        else
+          HRESP = ERROR;
+      end
+      WRAP4: begin
+        if(HADDR >= 0 && HADDR <= 15)
+          slave0[HADDR] = HWDATA;
+        else if(HADDR >= 16 && HADDR <= 31)
+          slave1[HADDR] = HWDATA;
+        else if(HADDR >= 32 && HADDR <= 47)
+          slave2[HADDR] = HWDATA;
+        else
+          HRESP = ERROR;
+      end
+      WRAP8: begin
+        if(HADDR >= 0 && HADDR <= 15)
+          slave0[HADDR] = HWDATA;
+        else if(HADDR >= 16 && HADDR <= 31)
+          slave1[HADDR] = HWDATA;
+        else if(HADDR >= 32 && HADDR <= 47)
+          slave2[HADDR] = HWDATA;
+        else
+          HRESP = ERROR;
+      end
+      WRAP16: begin
+        if(HADDR >= 0 && HADDR <= 15)
+          slave0[HADDR] = HWDATA;
+        else if(HADDR >= 16 && HADDR <= 31)
+          slave1[HADDR] = HWDATA;
+        else if(HADDR >= 32 && HADDR <= 47)
+          slave2[HADDR] = HWDATA;
+        else
+          HRESP = ERROR;
+      end
+      default : /* default */;
+    endcase
+    if(HADDR >= 0 && HADDR <= 15)
+      slave0[HADDR] = HWDATA;
+    else if(HADDR >= 16 && HADDR <= 31)
+      slave1[HADDR] = HWDATA;
+    else if(HADDR >= 32 && HADDR <= 47)
+      slave2[HADDR] = HWDATA;
+    else
+      HRESP = ERROR;
+      //@(negedge clk);
     endtask : write_AHB
 
     // Task: Read data from the AHB and handle pointer updates
     task read_AHB();
-        if(HREADY === 1'b1)
-            @(negedge clk);
+      if(HADDR >= 0 && HADDR <= 15)
+        HRDATA = slave0[HADDR];
+      else if(HADDR >= 16 && HADDR <= 31)
+        HRDATA = slave1[HADDR];
+      else if(HADDR >= 32 && HADDR <= 47)
+        HRDATA = slave2[HADDR];
+      else
+        HRESP = ERROR;
+          //@(negedge clk);
     endtask : read_AHB
 
 

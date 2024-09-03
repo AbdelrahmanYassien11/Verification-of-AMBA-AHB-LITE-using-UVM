@@ -8,7 +8,7 @@ package FIFO_pkg;
 
 	typedef enum {RESET, READ , WRITE, WRITE_READ} STATE_e;
 
-	typedef enum {OKAY, ERROR} HRESP_e;
+	typedef enum {BYPASS, RETRY} HRESP_e;
 
 	//control phase signal parameters
 	parameter ADDR_WIDTH = 32;
@@ -24,17 +24,21 @@ package FIFO_pkg;
 
    	parameter P_SLAVE0_START = 16'h0000;
   	parameter P_SLAVE0_ADDR_SIZE = 'h0010;
-  	parameter P_SLAVE0_END = P_ADDR_START0 + P_ADDR_SIZE0 - 1;
+  	//parameter P_SLAVE0_END = P_ADDR_START0 + P_ADDR_SIZE0 - 1;
+  	parameter P_SLAVE0_END = P_SLAVE0_START + P_SLAVE0_ADDR_SIZE - 1;
 
 
-   	parameter P_SLAVE1_START = P_SLAVE0_END + 1;
-  	parameter P_SLAVE1_ADDR_SIZE = 'h0100;
-  	parameter P_SLAVE1_END = P_ADDR_START1 + P_ADDR_SIZE1 - 1;
+	parameter P_SLAVE1_START = 16'h0010;
+   	//parameter P_SLAVE1_START = P_SLAVE0_END + 1;
+  	parameter P_SLAVE1_ADDR_SIZE = 'h0010;
+  	//parameter P_SLAVE1_END = P_ADDR_START1 + P_ADDR_SIZE1 - 1;
+	parameter P_SLAVE1_END = P_SLAVE1_START + P_SLAVE1_ADDR_SIZE - 1;
 
-
-   	parameter P_SLAVE2_START = P_SLAVE1_END + 1;
-  	parameter P_SLAVE2_ADDR_SIZE = 'h1000;
-	parameter P_SLAVE2_END = P_ADDR_START1 + P_ADDR_SIZE1 - 1;
+	parameter P_SLAVE2_START = 16'h0020;
+   	//parameter P_SLAVE2_START = P_SLAVE1_END + 1;
+  	parameter P_SLAVE2_ADDR_SIZE = 'h0010;
+	//parameter P_SLAVE2_END = P_ADDR_START1 + P_ADDR_SIZE1 - 1;
+	parameter P_SLAVE2_END = P_SLAVE2_START + P_SLAVE2_ADDR_SIZE - 1;
 
   	int incorrect_counter;
    	int correct_counter;
