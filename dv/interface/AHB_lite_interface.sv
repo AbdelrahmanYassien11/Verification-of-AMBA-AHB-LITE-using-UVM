@@ -40,6 +40,7 @@ logic   [DATA_WIDTH-1:0]  HREADY;
 
 
 event control_phase_finished;
+event interconnect_is_resetting;
 
 // Monitor handles
 inputs_monitor inputs_monitor_h;    // Handle to input monitor
@@ -55,6 +56,8 @@ task generic_reciever( input bit iHRESETn, input bit   iHWRITE, input bit  [TRAN
                         input bit  [PROT_WIDTH:0] iHPROT, input bit  [ADDR_WIDTH-1:0] iHADDR,     
                         input bit  [DATA_WIDTH-1:0] iHWDATA, input STATE_e ioperation, input HRESP_o iHRESP_o
 );
+    @(negedge clk);//like an always block @negedge,
+    @(interconnect_is_resetting);
     HRESP_o = iHRESP_o;
     if(HRESP === ERROR && iHRESP_o === RETRY) begin
         iHRESETn    = previous_seq_item.HRESETn;
@@ -73,16 +76,17 @@ task generic_reciever( input bit iHRESETn, input bit   iHWRITE, input bit  [TRAN
         fork
             control_phase(iHRESETn, iHWRITE, iHTRANS, iHSIZE, iHBURST, iHPROT, iHADDR, iHWDATA);
             data_phase(iHRESETn, iHWRITE, iHTRANS, iHSIZE, iHBURST, iHPROT, iHADDR, iHWDATA);
-        join_any
+        join_none
     end
 endtask : generic_reciever
+
 
 
     task control_phase( input bit iHRESETn, input bit   iHWRITE, input bit  [TRANS_WIDTH:0] iHTRANS, 
                         input bit  [SIZE_WIDTH:0] iHSIZE, input bit  [BURST_WIDTH:0] iHBURST,
                         input bit  [PROT_WIDTH:0] iHPROT, input bit  [ADDR_WIDTH-1:0] iHADDR     
                         );
-        @(negedge clk);
+        //@(negedge clk); //added it in the generic_reciever, not here cause I dont want the inputs to both function calls to somehow be overwritten (being cautious)
         HRESETn <= iHRESETn;
         if(HREADY === 1'b1 && iHRESETn == 1'b1) begin
             HWRITE  <= iHWRITE;
@@ -100,7 +104,7 @@ endtask : generic_reciever
                     input bit  [PROT_WIDTH:0] iHPROT, input bit  [ADDR_WIDTH-1:0] iHADDR  
                         );
         @(control_phase_finished);
-        @(negedge clk);
+        //@(negedge clk);
         if(iHRESETn === 1'b0)
             reset_AHB();
         else if(HWRITE === 1'b1) begin
@@ -117,7 +121,8 @@ endtask : generic_reciever
     task reset_AHB();
         repeat(15)
             @(negedge clk);
-        HRESETn = 1'b1
+        -> interconnect_is_resetting;
+        //HRESETn <= 1'b1
     endtask : reset_AHB
 
 
