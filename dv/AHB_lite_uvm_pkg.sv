@@ -6,9 +6,59 @@ package FIFO_pkg;
 	parameter CYCLE_WRITE = 5;
 	parameter CYCLE_READ  = 10;
 
-	typedef enum {RESET, READ , WRITE, WRITE_READ} STATE_e;
+	typedef enum {READ, WRITE} WRITE_e;
 
-	typedef enum {BYPASS, RETRY} HRESP_e;
+	typedef enum {OKAY, ERROR, RETRY} HRESP_e;
+
+	typedef enum {IDLE, BUSY, NONSEQ, SEQ} HTRANS_e;
+
+	typedef enum {SINGLE, INCR, WRAP4, INCR4, WRAP8, INCR8, WRAP16, INCR16} HBURST_e;
+
+	typedef enum {BYTE, HALFWORD, WORD, 2WORD, 4WORD, 8WORD, 16WORD, 32WORD} HSIZE_e;
+
+	typedef enum {NOT_READY, READY} HREADY_e;
+
+
+	//HREADY PARAMETERS
+	parameter READY = 1;
+	parameter NOT_READY = 0;
+
+	//HTRANS PARAMETERS
+	// parameter IDLE 			= 2'b00;
+	// parameter BUSY 			= 2'b01;
+	// parameter NONSEQ 		= 2'b10;
+	// parameter SEQ 			= 2'b11;
+
+	// //HRESP PARAMETERS
+	// parameter OKAY 			= 2'b00;
+	// parameter ERROR 		= 2'b01;
+	// parameter RETRY 		= 2'b10;
+
+	// //HBURST PARAMETERS
+	// parameter SINGLE 		= 3'b00;
+	// parameter INCR 			= 3'b001;
+	// parameter WRAP4 		= 3'b010;
+	// parameter INCR4 		= 3'b011;
+	// parameter WRAP8 		= 3'b100;
+	// parameter INCR8 		= 3'b101;
+	// parameter WRAP16 		= 3'b110;
+	// parameter INCR16 		= 3'b111;
+
+	// //HSIZE PARAMETERS
+	// parameter BYTE_P		=3'b000;
+	// parameter HALFWORD_P	=3'b001;
+	// parameter WORD_P		=3'b010;
+	// parameter 2WORD_P		=3'b011;
+	// parameter 4WORD_P		=3'b100;
+	// parameter 8WORD_P		=3'b101;
+	// parameter 16WORD_P		=3'b110;
+	// parameter 32WORD_P		=3'b111;
+
+
+	//HPROT PARAMETERS
+
+
+
 
 	//control phase signal parameters
 	parameter ADDR_WIDTH = 32;
@@ -28,13 +78,13 @@ package FIFO_pkg;
   	parameter P_SLAVE0_END = P_SLAVE0_START + P_SLAVE0_ADDR_SIZE - 1;
 
 
-	parameter P_SLAVE1_START = 16'h0010;
+	parameter P_SLAVE1_START = 16'h0100;
    	//parameter P_SLAVE1_START = P_SLAVE0_END + 1;
   	parameter P_SLAVE1_ADDR_SIZE = 'h0010;
   	//parameter P_SLAVE1_END = P_ADDR_START1 + P_ADDR_SIZE1 - 1;
 	parameter P_SLAVE1_END = P_SLAVE1_START + P_SLAVE1_ADDR_SIZE - 1;
 
-	parameter P_SLAVE2_START = 16'h0020;
+	parameter P_SLAVE2_START = 16'h0200;
    	//parameter P_SLAVE2_START = P_SLAVE1_END + 1;
   	parameter P_SLAVE2_ADDR_SIZE = 'h0010;
 	//parameter P_SLAVE2_END = P_ADDR_START1 + P_ADDR_SIZE1 - 1;

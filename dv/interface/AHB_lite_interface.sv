@@ -57,9 +57,8 @@ task generic_reciever( input bit iHRESETn, input bit   iHWRITE, input bit  [TRAN
                         input bit  [DATA_WIDTH-1:0] iHWDATA, input STATE_e ioperation, input HRESP_o iHRESP_o
 );
     @(negedge clk);//like an always block @negedge,
-    @(interconnect_is_resetting);
     HRESP_o = iHRESP_o;
-    if(HRESP === ERROR && iHRESP_o === RETRY) begin
+    if(HRESP === RETRY) begin
         iHRESETn    = previous_seq_item.HRESETn;
         iHWRITE     = previous_seq_item.HWRITE;
         iHTRANS     = previous_seq_item.HTRANS;
@@ -71,12 +70,14 @@ task generic_reciever( input bit iHRESETn, input bit   iHWRITE, input bit  [TRAN
 
         ioperation = previous_seq_item.operation_interface;
     end
-    operation_interface = ioperation; 
-    send_inputs(iHRESETn, iHWRITE, iHTRANS, iHSIZE, iHBURST, iHPROT, iHADDR, iHWDATA, HRESP, HREADY, iHRESP_o);
+    if(HREADY === 1'b1) begin
+        operation_interface = ioperation; 
+        send_inputs(iHRESETn, iHWRITE, iHTRANS, iHSIZE, iHBURST, iHPROT, iHADDR, iHWDATA, HRESP, HREADY, iHRESP_o);
         fork
             control_phase(iHRESETn, iHWRITE, iHTRANS, iHSIZE, iHBURST, iHPROT, iHADDR, iHWDATA);
             data_phase(iHRESETn, iHWRITE, iHTRANS, iHSIZE, iHBURST, iHPROT, iHADDR, iHWDATA);
         join_none
+    end
     end
 endtask : generic_reciever
 
@@ -88,7 +89,7 @@ endtask : generic_reciever
                         );
         //@(negedge clk); //added it in the generic_reciever, not here cause I dont want the inputs to both function calls to somehow be overwritten (being cautious)
         HRESETn <= iHRESETn;
-        if(HREADY === 1'b1 && iHRESETn == 1'b1) begin
+        if(HREADY === 1'b1) begin
             HWRITE  <= iHWRITE;
             HTRANS  <= iHTRANS;
             HSIZE   <= iHSIZE;
@@ -104,7 +105,7 @@ endtask : generic_reciever
                     input bit  [PROT_WIDTH:0] iHPROT, input bit  [ADDR_WIDTH-1:0] iHADDR  
                         );
         @(control_phase_finished);
-        //@(negedge clk);
+        @(negedge clk);
         if(iHRESETn === 1'b0)
             reset_AHB();
         else if(HWRITE === 1'b1) begin
@@ -121,22 +122,46 @@ endtask : generic_reciever
     task reset_AHB();
         repeat(15)
             @(negedge clk);
-        -> interconnect_is_resetting;
         //HRESETn <= 1'b1
     endtask : reset_AHB
 
 
     // Task: Write data into the AHB and handle pointer updates
     task write_AHB(input bit [ADDR_WIDTH-1:0] iHWDATA);
-        HWDATA <= iHWDATA;
-        @(negedge clk);
+        case(HTRANS)
+            IDLE, BUSY:
+
+            NONSEQ, SEQ: 
+            HWDATA = iHWDATA;
+        endcase // HTRANS
     endtask : write_AHB
 
     // Task: Read data from the AHB and handle pointer updates
     task read_AHB();
-        if(HREADY === 1'b1)
-            @(negedge clk);
+        case(HTRANS)
+            IDLE, BUSY:
+            NONSEQ, SEQ:
+                if(HREADY === 1'b1)
+        endcase // HTRANS
     endtask : read_AHB
+
+
+
+    always@(negedge clk) begin
+        previous_seq_item.HRESETn = HRESETn;
+        previous_seq_item.HWRITE = HWRITE;
+        previous_seq_item.HTRANS = HTRANS;
+        previous_seq_item.HSIZE  = HSIZE;
+        previous_seq_item.HBURST = HBURST;
+        previous_seq_item.HPROT  = HPROT;
+        previous_seq_item.HADDR  = HADDR;
+        previous_seq_item.HWDATA = HWDATA;
+        previous_seq_item.HWDATA = HWDATA;
+        previous_seq_item.operations = operation_interface;
+        if(HREADY === 1'b1) begin
+            send_outputs();
+    
+    end
 
 
     // Function to send inputs to the input monitor
@@ -144,17 +169,6 @@ endtask : generic_reciever
                               input bit  [SIZE_WIDTH:0] iHSIZE, input bit  [BURST_WIDTH:0] iHBURST,
                               input bit  [PROT_WIDTH:0] iHPROT, input bit  [ADDR_WIDTH-1:0] iHADDR,     
                               input bit  [DATA_WIDTH-1:0] iHWDATA);
-
-        inputs_monitor_h.write_to_monitor(iHRESETn, iHWRITE, iHTRANS, iHSIZE, iHBURST, iHPROT, iHADDR, iHWDATA);
-    endfunction : send_inputs
-
-    // Function to send outputs to the output monitor
-    function void send_outputs( input bit iHRESETn, input bit   iHWRITE, input bit  [TRANS_WIDTH:0] iHTRANS, 
-                                input bit  [SIZE_WIDTH:0] iHSIZE, input bit  [BURST_WIDTH:0] iHBURST,
-                                input bit  [PROT_WIDTH:0] iHPROT, input bit  [ADDR_WIDTH-1:0] iHADDR,     
-                                input bit  [DATA_WIDTH-1:0] iHWDATA);
-
-        outputs_monitor_h.write_to_monitor(iHRESETn, iHWRITE, iHTRANS, iHSIZE, iHBURST, iHPROT, iHADDR, iHWDATA, HRDATA, HRESP, HREADY, operation_interface);
         previous_seq_item.HRESETn = iHRESETn;
         previous_seq_item.HWRITE = iHWRITE;
         previous_seq_item.HTRANS = iHTRANS;
@@ -163,13 +177,17 @@ endtask : generic_reciever
         previous_seq_item.HPROT  = iHPROT;
         previous_seq_item.HADDR  = iHADDR;
         previous_seq_item.HWDATA = iHWDATA;
-        previous_seq_item.HWDATA = iHWDATA;
         previous_seq_item.operations = operation_interface;
+
+        inputs_monitor_h.write_to_monitor(iHRESETn, iHWRITE, iHTRANS, iHSIZE, iHBURST, iHPROT, iHADDR, iHWDATA);
+    endfunction : send_inputs
+
+    // Function to send outputs to the output monitor
+    function void send_outputs();
+
+        outputs_monitor_h.write_to_monitor(HRDATA, HRESP, HREADY, operation_interface);
+
     endfunction : send_outputs
 
-
-    always(@send_inputs) begin
-
-    end
 
 endinterface : inf

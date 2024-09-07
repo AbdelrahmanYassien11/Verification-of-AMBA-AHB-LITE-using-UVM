@@ -50,10 +50,12 @@ class predictor extends uvm_subscriber #(sequence_item);
   logic   [RESP_WIDTH-1:0]  HRESP_expected; 
   logic   [DATA_WIDTH-1:0]  HREADY;
 
-  logic [FIFO_WIDTH-1:0] data_out_expected;
-  bit [FIFO_WIDTH-1:0] data_write_queue [$];
-  HRESP_e HRESP_o;
 
+  logic [DATA_WIDTH-1:0:0] slave0 [15:0];
+  logic [DATA_WIDTH-1:0:0] slave1 [15:0];
+  logic [DATA_WIDTH-1:0:0] slave2 [15:0];
+
+  HRESP_e HRESP_o;
   string data_str;
 
   // Constructor
@@ -97,15 +99,14 @@ class predictor extends uvm_subscriber #(sequence_item);
 
   // Write method for processing sequence items
   function void write(sequence_item t);
-    HWRITE  <= t.HWRITE;
-    HTRANS  <= t.HTRANS;
-    HSIZE   <= t.HSIZE;
-    HBURST  <= t.HBURST;
-    HPROT   <= t.HPROT;
-    HADDR   <= t.HADDR;
-
-    //HRESP <= t.HRESP;
-    HREADY  <= t.HREADY;
+    HWRITE  = t.HWRITE;
+    HTRANS  = t.HTRANS;
+    HSIZE   = t.HSIZE;
+    HBURST  = t.HBURST;
+    HPROT   = t.HPROT;
+    HADDR   = t.HADDR;
+    HWDATA  = t.HWDATA;
+    //HREADY  <= t.HREADY;
     data_str   = $sformatf("HRESETn:%0d, HWRITE:%0d, HTRANS:%0d, HSIZE:%0d, HBURST:%0d, HPROT:%0d, HADDR:%0d, HWDATA:%0d",
                             HRESETn, HWRITE, HTRANS, HSIZE, HBURST, HPROT, HADDR, HWDATA));
     -> inputs_written;
@@ -158,9 +159,7 @@ endtask : generic_predictor
     //     end
     // endtask : control_phase
 
-    task data_phase();
-        //@(control_phase_finished);
-        //@(negedge clk);
+    function data_phase();
         if(HRESETn === 1'b0)
             reset_AHB();
         else if(HWRITE === 1'b1) begin
@@ -170,16 +169,14 @@ endtask : generic_predictor
             read_AHB();
         end
         send_results(/*iHRESETn, iHWRITE, iHTRANS, iHSIZE, iHBURST, iHPROT, iHADDR, iHWDATA*/);
-    endtask : data_phase
+    endfunction : data_phase
 
 
     // Task: Reset AHB pointers and flags
     task reset_AHB();
-        repeat(15)
-            @(negedge clk);
-        HRESP_expected = OKAY;
-        HREADY_expected = READY;
-        HTRANS = IDLE;
+      HRESP_expected = OKAY;
+      HREADY_expected = READY;
+      HTRANS = IDLE;
     endtask : reset_AHB
 
 
@@ -188,387 +185,38 @@ endtask : generic_predictor
     HRESP_expected = OKAY;
     HREADY_expected = READY;
     case(HTRANS)
-      IDLE: begin
+      IDLE, BUSY:
 
-      end
-      NONSEQ: begin
-        if(HADDR >= 0 && HADDR <= 15)
+      NONSEQ, SEQ:  begin
+        if(HADDR[31:30] == 2'b00)
           slave0[HADDR] = HWDATA;
-        else if(HADDR >= 16 && HADDR <= 31)
+        else if(HADDR[31:30] == 2'b01)
           slave1[HADDR] = HWDATA;
-        else if(HADDR >= 32 && HADDR <= 47)
+        else if(HADDR[31:30] == 2'b10)
           slave2[HADDR] = HWDATA;
         else
-          HRESP = ERROR;
+          HRESP_expected = ERROR;
       end
-      SEQ: begin
-        case (HBURST)
-          INCR4: begin
-            for(int i = 1; i<= 3; i++)begin
-              if(HADDR >= 0 && HADDR <= 15)
-                slave0[HADDR + (HSIZE*i)] = HWDATA;
-              else if(HADDR >= 16 && HADDR <= 31)
-                slave1[HADDR + (HSIZE*i)] = HWDATA;
-              else if(HADDR >= 32 && HADDR <= 47)
-                slave2[HADDR + (HSIZE*i)] = HWDATA;
-              else
-                HRESP_expected = ERROR;
-            end
-          end
-          INCR8: begin
-            for(int i = 1; i<= 7; i++)begin
-              if(HADDR >= 0 && HADDR <= 15)
-                slave0[HADDR + (HSIZE*i)] = HWDATA;
-              else if(HADDR >= 16 && HADDR <= 31)
-                slave1[HADDR + (HSIZE*i)] = HWDATA;
-              else if(HADDR >= 32 && HADDR <= 47)
-                slave2[HADDR + (HSIZE*i)] = HWDATA;
-              else
-                HRESP_expected = ERROR;
-            end
-          end
-          INCR16: begin
-            for(int i = 1; i<= 15; i++)begin
-              if(HADDR >= 0 && HADDR <= 15)
-                slave0[HADDR + (HSIZE*i)] = HWDATA;
-              else if(HADDR >= 16 && HADDR <= 31)
-                slave1[HADDR + (HSIZE*i)] = HWDATA;
-              else if(HADDR >= 32 && HADDR <= 47)
-                slave2[HADDR + (HSIZE*i)] = HWDATA;
-              else
-                HRESP_expected = ERROR;
-            end
-          end
-          WRAP4: begin
-            for(int i = 1; i <= 2; i++)begin
-              if(HADDR >= 0 && HADDR <= 15)
-                slave0[HADDR + (HSIZE*i)] = HWDATA;
-              else if(HADDR >= 16 && HADDR <= 31)
-                slave1[HADDR + (HSIZE*i)] = HWDATA;
-              else if(HADDR >= 32 && HADDR <= 47)
-                slave2[HADDR + (HSIZE*i)] = HWDATA;
-              else
-                HRESP_expected = ERROR;
-            end
-            for(int i = -1; i < 0; i++)begin
-              if(HADDR >= 0 && HADDR <= 15)
-                slave0[HADDR + (HSIZE*i)] = HWDATA;
-              else if(HADDR >= 16 && HADDR <= 31)
-                slave1[HADDR + (HSIZE*i)] = HWDATA;
-              else if(HADDR >= 32 && HADDR <= 47)
-                slave2[HADDR + (HSIZE*i)] = HWDATA;
-              else
-                HRESP_expected = ERROR;
-            end
-          end
-          WRAP8: begin
-            for(int i = 1; i <= 3; i++)begin
-              if(HADDR >= 0 && HADDR <= 15)
-                slave0[HADDR + (HSIZE*i)] = HWDATA;
-              else if(HADDR >= 16 && HADDR <= 31)
-                slave1[HADDR + (HSIZE*i)] = HWDATA;
-              else if(HADDR >= 32 && HADDR <= 47)
-                slave2[HADDR + (HSIZE*i)] = HWDATA;
-              else
-                HRESP_expected = ERROR;
-              HADDR = HADDR + HSIZE;
-            end
-            for(int i = -4; i < 0; i++)begin
-              if(HADDR >= 0 && HADDR <= 15)
-                slave0[HADDR + (HSIZE*i)] = HWDATA;
-              else if(HADDR >= 16 && HADDR <= 31)
-                slave1[HADDR + (HSIZE*i)] = HWDATA;
-              else if(HADDR >= 32 && HADDR <= 47)
-                slave2[HADDR + (HSIZE*i)] = HWDATA;
-              else
-                HRESP_expected = ERROR;
-            end
-          end
-          WRAP16: begin
-            for(int i = 1; i <= 7; i++)begin
-              if(HADDR >= 0 && HADDR <= 15)
-                slave0[HADDR + (HSIZE*i)] = HWDATA;
-              else if(HADDR >= 16 && HADDR <= 31)
-                slave1[HADDR + (HSIZE*i)] = HWDATA;
-              else if(HADDR >= 32 && HADDR <= 47)
-                slave2[HADDR + (HSIZE*i)] = HWDATA;
-              else
-                HRESP_expected = ERROR;
-              HADDR = HADDR + HSIZE;
-            end
-            for(int i = -8; i < 0; i++)begin
-              if(HADDR >= 0 && HADDR <= 15)
-                slave0[HADDR + (HSIZE*i)] = HWDATA;
-              else if(HADDR >= 16 && HADDR <= 31)
-                slave1[HADDR + (HSIZE*i)] = HWDATA;
-              else if(HADDR >= 32 && HADDR <= 47)
-                slave2[HADDR + (HSIZE*i)] = HWDATA;
-              else
-                HRESP_expected = ERROR;
-            end
-          end
-        endcase
-      end
-      BUSY:begin
-        HRESP_expected = OKAY;
-      end
-      default:
-    endtask : write_AHB
+    endcase // HTRANS
+  endtask : write_AHB
 
-
-
-
-
-
-    task read_AHB();
+    // Task: Read data from the AHB and handle pointer updates
+  task read_AHB();
     HRESP_expected = OKAY;
     HREADY_expected = READY;
     case(HTRANS)
-      IDLE: begin
-
-      end
-      NONSEQ: begin
-        if(HADDR >= 0 && HADDR <= 15)
-          HRDATA = slave0[HADDR];
-        else if(HADDR >= 16 && HADDR <= 31)
-          HRDATA = slave1[HADDR];
-        else if(HADDR >= 32 && HADDR <= 47)
-          HRDATA = slave2[HADDR];
+      IDLE, BUSY:
+      NONSEQ, SEQ: begin
+        if(HADDR[31:30] == 2'b00)
+          HRDATA_expected = slave0[HADDR];
+        else if(HADDR[31:30] == 2'b01)
+          HRDATA_expected = slave1[HADDR];
+        else if(HADDR[31:30] == 2'b10)
+          HRDATA_expected = slave2[HADDR];
         else
-          HRESP = ERROR;
+          HRESP_expected = ERROR;
       end
-      SEQ: begin
-        case (HBURST)
-          INCR4: begin
-            for(int i = 1; i<= 3; i++)begin
-              if(HADDR >= 0 && HADDR <= 15)
-                HRDATA = slave0[HADDR + (HSIZE*i)];
-              else if(HADDR >= 16 && HADDR <= 31)
-                HRDATA = slave1[HADDR + (HSIZE*i)];
-              else if(HADDR >= 32 && HADDR <= 47)
-                HRDATA = slave2[HADDR + (HSIZE*i)];
-              else
-                HRESP_expected = ERROR;
-            end
-          end
-          INCR8: begin
-            for(int i = 1; i<= 7; i++)begin
-              if(HADDR >= 0 && HADDR <= 15)
-                HRDATA = slave0[HADDR + (HSIZE*i)];
-              else if(HADDR >= 16 && HADDR <= 31)
-                HRDATA = slave1[HADDR + (HSIZE*i)];
-              else if(HADDR >= 32 && HADDR <= 47)
-                HRDATA = slave2[HADDR + (HSIZE*i)];
-              else
-                HRESP_expected = ERROR;
-            end
-          end
-          INCR16: begin
-            for(int i = 1; i<= 15; i++)begin
-              if(HADDR >= 0 && HADDR <= 15)
-                HRDATA = slave0[HADDR + (HSIZE*i)];
-              else if(HADDR >= 16 && HADDR <= 31)
-                HRDATA = slave1[HADDR + (HSIZE*i)];
-              else if(HADDR >= 32 && HADDR <= 47)
-                HRDATA = slave2[HADDR + (HSIZE*i)];
-              else
-                HRESP_expected = ERROR;
-            end
-          end
-          WRAP4: begin
-            for(int i = 1; i <= 2; i++)begin
-              if(HADDR >= 0 && HADDR <= 15)
-                HRDATA = slave0[HADDR + (HSIZE*i)];
-              else if(HADDR >= 16 && HADDR <= 31)
-                HRDATA = slave1[HADDR + (HSIZE*i)];
-              else if(HADDR >= 32 && HADDR <= 47)
-                HRDATA = slave2[HADDR + (HSIZE*i)];
-              else
-                HRESP_expected = ERROR;
-            end
-            for(int i = -1; i < 0; i++)begin
-              if(HADDR >= 0 && HADDR <= 15)
-                HRDATA = slave0[HADDR + (HSIZE*i)];
-              else if(HADDR >= 16 && HADDR <= 31)
-                HRDATA = slave0[HADDR + (HSIZE*i)];
-              else if(HADDR >= 32 && HADDR <= 47)
-                HRDATA = slave0[HADDR + (HSIZE*i)];
-              else
-                HRESP_expected = ERROR;
-            end
-          end
-          WRAP8: begin
-            for(int i = 1; i <= 3; i++)begin
-              if(HADDR >= 0 && HADDR <= 15)
-                HRDATA = slave0[HADDR + (HSIZE*i)];
-              else if(HADDR >= 16 && HADDR <= 31)
-                HRDATA = slave1[HADDR + (HSIZE*i)];
-              else if(HADDR >= 32 && HADDR <= 47)
-                HRDATA = slave2[HADDR + (HSIZE*i)];
-              else
-                HRESP_expected = ERROR;
-              HADDR = HADDR + HSIZE;
-            end
-            for(int i = -4; i < 0; i++)begin
-              if(HADDR >= 0 && HADDR <= 15)
-                HRDATA = slave0[HADDR + (HSIZE*i)];
-              else if(HADDR >= 16 && HADDR <= 31)
-                HRDATA = slave1[HADDR + (HSIZE*i)];
-              else if(HADDR >= 32 && HADDR <= 47)
-                HRDATA = slave2[HADDR + (HSIZE*i)];
-              else
-                HRESP_expected = ERROR;
-            end
-          end
-          WRAP16: begin
-            for(int i = 1; i <= 7; i++)begin
-              if(HADDR >= 0 && HADDR <= 15)
-                HRDATA = slave0[HADDR + (HSIZE*i)];
-              else if(HADDR >= 16 && HADDR <= 31)
-                HRDATA = slave1[HADDR + (HSIZE*i)];
-              else if(HADDR >= 32 && HADDR <= 47)
-                HRDATA = slave2[HADDR + (HSIZE*i)];
-              else
-                HRESP_expected = ERROR;
-              HADDR = HADDR + HSIZE;
-            end
-            for(int i = -8; i < 0; i++)begin
-              if(HADDR >= 0 && HADDR <= 15)
-                HRDATA = slave0[HADDR + (HSIZE*i)];
-              else if(HADDR >= 16 && HADDR <= 31)
-                HRDATA = slave1[HADDR + (HSIZE*i)];
-              else if(HADDR >= 32 && HADDR <= 47)
-                HRDATA = slave2[HADDR + (HSIZE*i)];
-              else
-                HRESP_expected = ERROR;
-            end
-          end
-        endcase
-      end
-      BUSY:begin
-        HRESP_expected = OKAY;
-      end
-      default:
-    endtask : read_AHB
-
-
-
-
-
-
-
-
-
-
-
-
-  // Reset FIFO state
-  task reset_FIFO();
-    empty_expected = 1;
-    full_expected  = 0;
-    fork
-      read_reset();
-      write_reset();
-    join
-    just_reset = 1;
-    data_write_queue.delete();
-  endtask : reset_FIFO
-
-  // Reset read pointer
-  task read_reset();
-    read_pointer = 0;
-  endtask : read_reset
-
-  // Reset write pointer
-  task write_reset();
-    write_pointer = 0;
-  endtask : write_reset
-
-  // Task to handle FIFO read and write operations
-  task write_read_FIFO();
-    if((w_en === 1'b1) && (r_en === 1'b1)) begin
-      fork
-        read_FIFO();
-        write_FIFO();
-      join
-      FLAGS();
-    end
-    else if ((w_en === 1'b1) && (r_en === 1'b0)) begin
-      write_FIFO();
-      FLAGS();
-    end
-    else if ((w_en === 1'b0) && (r_en === 1'b1)) begin
-      read_FIFO();
-      FLAGS();
-    end
-  endtask : write_read_FIFO
-
-  // Write data to FIFO
-  task write_FIFO();
-    if(full_expected === 0) begin
-      data_write_queue.push_back(data_in);
-      if(write_pointer === FIFO_SIZE-1) begin
-        write_pointer = 0;
-        wrap_around = 1;
-      end
-      else begin
-        write_pointer = write_pointer + 1;
-      end
-    end
-    FLAGS();
-  endtask : write_FIFO
-
-  // Read data from FIFO
-  task read_FIFO();
-    #1step;
-    if(just_reset && !empty_expected) begin
-      just_reset = 0;
-      if(read_pointer === FIFO_SIZE-1) begin
-        read_pointer = 0;
-        wrap_around = 0;
-      end
-      else begin
-        read_pointer = read_pointer + 1;
-      end
-      FLAGS();
-      data_out_expected = data_write_queue.pop_front();
-    end
-    if(empty_expected === 0) begin
-      data_out_expected = data_write_queue.pop_front();
-      $display("QUEUE = %p", data_write_queue);
-      data_out_old = data_out_expected;
-      if(read_pointer === FIFO_SIZE-1) begin
-        read_pointer = 0;
-        wrap_around = 0;
-      end
-      else begin
-        read_pointer = read_pointer + 1;
-      end
-    end
-    else begin
-      just_reset = 1;
-    end
-    FLAGS();
-    $display("WRITE_POINTER = %0d", write_pointer);
-    $display("READ_POINTER = %0d", read_pointer);
-  endtask : read_FIFO
-
-  // Update FIFO status flags
-  task FLAGS();
-    if(read_pointer === write_pointer) begin
-      if((wrap_around && (read_pointer === write_pointer))) begin
-        full_expected = 1;
-        empty_expected = 0;
-      end
-      else begin
-        full_expected = 0;
-        empty_expected = 1;
-      end
-    end
-    else begin
-      full_expected = 0;
-      empty_expected = 0;
-    end
-  endtask : FLAGS
+    endcase // HTRANS
+  endtask : read_AHB
 
 endclass : predictor

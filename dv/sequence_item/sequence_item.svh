@@ -7,39 +7,83 @@ class sequence_item extends uvm_sequence_item;
  	endfunction
 
 rand int unsigned randomized_number_of_tests;
-rand STATE_e operation;
+
+rand HRESET_e     RESET_op;
+rand HWRITE_e     WRITE_op;
+     HRESP_e      RESP_op;
+rand HTRANS_e     TRANS_op;
+rand HBURST_e     BURST_op;
+rand HSIZE_e      SIZE_op;
 
 
-rand  logic                   wrst_n;
-rand  logic                   rrst_n;
-rand  bit                     w_en;
-rand  bit                     r_en;
-rand  bit   [FIFO_WIDTH-1:0]  data_in;
+  // AHB lite Control Signals
+  rand  bit   HRESETn;    // reset (active low)
 
-      logic [FIFO_WIDTH-1:0]  data_out;
-      logic                   empty;
-      logic                   full;
+        bit   HWRITE;
 
-      rand STATE_e state;
+        bit   [TRANS_WIDTH:0]  HTRANS; 
+        bit   [SIZE_WIDTH:0]  HSIZE;
+        bit   [BURST_WIDTH:0]  HBURST;
+        bit   [PROT_WIDTH:0]  HPROT; 
+
+  rand  bit   [ADDR_WIDTH-1:0]  HADDR;     
+  rand  bit   [DATA_WIDTH-1:0]  HWDATA; 
+
+        // AHB lite output Signals
+        logic   [DATA_WIDTH-1:0]  HRDATA;
+        logic   [RESP_WIDTH-1:0]  HRESP; 
+        logic   [DATA_WIDTH-1:0]  HREADY;   
+
       // the values that will be randomized
       //rand bit [FIFO_WIDTH-1:0] data_to_write;
       // active low synchronous reset
 
-       constraint reset_c {rrst_n == wrst_n;
-       }
-
-       constraint operation_rand_c { operation dist {0:=5, 1:=40, 2:=60, 3:=0};
+       constraint HWRITE_rand_c { HWRITE dist { 1:=50, 0:=50 };
        }
 
 
-      constraint data_in_c { data_in dist {'h00:/1, 'hFF:/1, ['h01 : 'hFE]:/40};
+      constraint HWDATA_c { HWDATA dist {'h00000000:/1, 'hFFFFFFFF:/1, ['h01 : 'hFFFFFFFE]:/40};
       }
 
-      constraint operation_c {operation == RESET -> rrst_n == 1'b0 && wrst_n == 1'b0;
-                              operation == WRITE -> rrst_n == 1'b1 && wrst_n == 1'b1 && w_en == 1'b1 && r_en == 1'b0;
-                              operation == READ ->  rrst_n == 1'b1 && wrst_n == 1'b1 && w_en == 1'b0 && r_en == 1'b1;
-                              operation == WRITE_READ -> rrst_n == 1'b1 && wrst_n == 1'b1 && w_en == 1'b1 && r_en == 1'b1;
-                              }
+      constraint HWADDR_SEL_c { HADDR[ADDR_WIDTH-1:(ADDR_WIDTH-$clog2(NO_OF_SLAVES))] inside {[0:2]};
+      }
+
+      constraint HADDR_c { HADDR[(ADDR_WIDTH-$clog2(NO_OF_SLAVES))-1:0] dist {'h00000000:/1, 'hFFFFFFFF:/1, ['h01 : 'hFFFFFFFE]:/40};
+      }
+
+      constraint RESET_c {RESET_op == RESETING -> HRESETn == 1'b0;
+                          RESET_op == WORKING  -> HRESETn == 1'b1; 
+      }
+
+      constraint WRITE_c {WRITE_op == READ   -> HWRITE == 1'b0;
+                          WRITE_op == WRITE  -> HREAD  == 1'b1; 
+      }
+
+      constraint TRANS_c {TRANS_op == IDLE    -> HTRANS == 2'b00;
+                          TRANS_op == BUSY    -> HTRANS == 2'b01;
+                          TRANS_op == NONSEQ  -> HTRANS == 2'b10; 
+                          TRANS_op == SEQ     -> HTRANS == 2'b11;
+      }
+
+      constraint BURST_c {BURST_op == SINGLE    -> HBURST == 3'b000;
+                          BURST_op == INCR      -> HBURST == 3'b001;
+                          BURST_op == WRAP4     -> HBURST == 3'b010; 
+                          BURST_op == INCR4     -> HBURST == 3'b011;
+                          BURST_op == WRAP8     -> HBURST == 3'b100;
+                          BURST_op == INCR8     -> HBURST == 3'b101;
+                          BURST_op == WRAP16    -> HBURST == 3'b110;
+                          BURST_op == INCR16    -> HBURST == 3'b111;
+      }
+
+      constraint SIZE_c  {SIZE_op == BYTE       -> HSIZE == 3'b000 && HWDATA[DATA_WIDTH-1:8]  == 'h0;
+                          SIZE_op == HALFWORD   -> HSIZE == 3'b001 && HWDATA[DATA_WIDTH-1:16] == 'h0;
+                          SIZE_op == WORD       -> HSIZE == 3'b010; 
+                          SIZE_op == 2WORD      -> HSIZE == 3'b011;
+                          SIZE_op == 4WORD      -> HSIZE == 3'b100;
+                          SIZE_op == 8WORD      -> HSIZE == 3'b101;
+                          SIZE_op == 16WORD     -> HSIZE == 3'b110;
+                          SIZE_op == 32WORD     -> HSIZE == 3'b111;
+      }
 
       constraint randomized_test_number_c { randomized_number_of_tests inside {[100 :150]};    
       }
@@ -59,15 +103,8 @@ rand  bit   [FIFO_WIDTH-1:0]  data_in;
       end
       else begin
         same = super.do_compare(rhs, comparer) && 
-               //(tested.rrst_n == rrst_n) &&
-               //(tested.wrst_n == wrst_n) &&
-               //(tested.data_in == data_in) &&
-               //(tested.w_en == w_en) &&
-               //(tested.r_en == r_en) &&
-
-               (tested.data_out === data_out); /*&&
-               (tested.empty == empty) &&
-               (tested.full == full);)*/
+               (tested.HRDATA === HRDATA);
+               //(tested.HREADY == HREADY) &&
       end
       return same;
     endfunction : do_compare
@@ -85,44 +122,55 @@ rand  bit   [FIFO_WIDTH-1:0]  data_in;
         $fatal(1,"Faied cast in do_copy");
 
       super.do_copy(rhs);	// give all the variables to the parent class, so it can be used by to_be_copied
-      wrst_n = to_be_copied.wrst_n;
-      rrst_n = to_be_copied.rrst_n;
+        HRESETn    = to_be_copied.HRESETn;
+        HWRITE     = to_be_copied.HWRITE;
+        HTRANS     = to_be_copied.HTRANS;
+        HSIZE      = to_be_copied.HSIZE;  
+        HBRUST     = to_be_copied.HBURST; 
+        HPROT      = to_be_copied.HPROT;  
+        HADDR      = to_be_copied.HADDR; 
+        HWDATA     = to_be_copied.HWDATA;
 
-      data_in = to_be_copied.data_in;
-
-      w_en = to_be_copied.w_en;
-      r_en = to_be_copied.r_en;
-
-      data_out = to_be_copied.data_out;
-
-      empty = to_be_copied.empty;
-      full = to_be_copied.full;
+        HRDATA     = to_be_copied.HRDATA;
+        HRESP      = to_be_copied.HRESP;
+        HREADY     = to_be_copied.HREADY;
     endfunction : do_copy
 
-    function string convert2string();
-      string            s;
+    function sequence_item clone_me();
+      sequence_item clone;
+      uvm_object tmp;
 
-      s = $sformatf(" time: %t  wrst_n:%0d  rrst_n:%0d  data_in: %0d  w_en: %0d  r_en: %0d  data_out: %0d  empty: %0d  full: %0d   incorrect flag assertion = %0d",
-                    $time, wrst_n, rrst_n, data_in, w_en, r_en, data_out, empty, full, incorrect_counter);
+      tmp = this.clone;
+      $cast(clone, tmp);
+      return clone;
+    endfunction : clone_me
+
+
+    function string convert2string();
+      string s;
+
+      s = $sformatf(" time: %t  HRESETn = %0d, HWRITE = %0d, HTRANS =  %0d, HSIZE = %0d, HBURST = %0d, HPROT = %0d, HADDR = %0d, HWDATA = %0d, HRDATA = %0d, HRESP = %0d, HREADY = %0d, incorrect_counter = %0d",
+                    $time, HRESETn, HWRITEm HTRANS, HSIZE, HBURST, HPROT, HADDR, HWDATA, HRDATA, HRESP, HREADY, incorrect_counter);
       return s;
     endfunction : convert2string
 
+
+    function string input2string();
+      string s;
+      s= $sformatf(" time: %t HRESETn = %0d, HWRITE = %0d, HTRANS =  %0d, HSIZE = %0d, HBURST = %0d, HPROT = %0d, HADDR = %0d, HWDATA = %0d",
+                    $time, HRESETn, HWRITEm HTRANS, HSIZE, HBURST, HPROT, HADDR, HWDATA);
+      return s;
+    endfunction
+
     function string output2string();
       string s;
-      s= $sformatf(" time: %t  data_out: %0d  empty: %0d   full: %0d",
-                    $time, data_out, empty, full);
+      s= $sformatf(" time: %t  HRDATA: %0d  HRESP: %0d   HREADY: %0d",
+                    $time, HRDATA, HRESP, HREADY);
       return s;
     endfunction
 
 
-    function sequence_item clone_me();
-    	sequence_item clone;
-    	uvm_object tmp;
 
-    	tmp = this.clone;
-    	$cast(clone, tmp);
-    	return clone;
-    endfunction : clone_me
 
 
 
