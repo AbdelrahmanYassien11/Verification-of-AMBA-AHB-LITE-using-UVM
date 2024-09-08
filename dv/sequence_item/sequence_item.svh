@@ -42,13 +42,15 @@ rand HSIZE_e      SIZE_op;
        }
 
 
-      constraint HWDATA_c { HWDATA dist {'h00000000:/1, 'hFFFFFFFF:/1, ['h01 : 'hFFFFFFFE]:/40};
+      constraint HWDATA_c { HSIZE == BYTE     => (HWDATA dist {'h00000000:/1, 'h000000FF:/1, ['h01 : 'h000000FE]:/40)
+                            HSIZE == HALFWORD => (HWDATA dist {'h00000000:/1, 'h0000FFFF:/1, ['h01 : 'h0000FFFE]:/40)
+                            HSIZE == HALFWORD => (HWDATA dist {'h00000000:/1, 'hFFFFFFFF:/1, ['h01 : 'hFFFFFFFE]:/40)};
       }
 
       constraint HWADDR_SEL_c { HADDR[ADDR_WIDTH-1:(ADDR_WIDTH-$clog2(NO_OF_SLAVES))] inside {[0:2]};
       }
 
-      constraint HADDR_c { HADDR[(ADDR_WIDTH-$clog2(NO_OF_SLAVES))-1:0] dist {'h00000000:/1, 'hFFFFFFFF:/1, ['h01 : 'hFFFFFFFE]:/40};
+      constraint HADDR_c { HADDR[(ADDR_WIDTH-$clog2(NO_OF_SLAVES))-1:0] dist {'h00000000:/1, 'h000000FF:/1, ['h00000001 : 'h000000FE]:/40};
       }
 
       constraint RESET_c {RESET_op == RESETING -> HRESETn == 1'b0;

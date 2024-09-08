@@ -22,15 +22,12 @@ class reset_sequence extends base_sequence;
   // Main task body to perform the reset sequence
   task body();
     // Display a message indicating the start of the body task
-    $display("start of body task");
 
     // Start the sequence item for the reset operation
     start_item(seq_item);
-    $display("start item has been invoked");
 
     // Set the reset signals
-    seq_item.rrst_n = 1'b0;  // Assert the read reset signal
-    seq_item.wrst_n = 1'b0;  // Assert the write reset signal
+    seq_item.HRESETn = 1'b0;  // Assert the read reset signal
 
     // Finish the sequence item after setting the reset signals
     finish_item(seq_item);
@@ -39,7 +36,6 @@ class reset_sequence extends base_sequence;
     `uvm_info("RESET_SEQUENCE", $sformatf("reset only: %s", seq_item.convert2string()), UVM_HIGH);
 
     // Display a message indicating the finish of the item
-    $display("finish item has been invoked");
   endtask : body
 
 endclass

@@ -24,9 +24,9 @@ module ahb_decoder_s3 #(parameter P_NUM         = 3, // how many slaves
      , input   wire        REMAP
 );
    /*********************************************************/
-   localparam P_ADDR_END0 = P_ADDR_START0 + P_ADDR_SIZE0 - 1;
-   localparam P_ADDR_END1 = P_ADDR_START1 + P_ADDR_SIZE1 - 1;
-   localparam P_ADDR_END2 = P_ADDR_START2 + P_ADDR_SIZE2 - 1;
+   localparam P_ADDR_END0 = P_ADDR_START0 + P_ADDR_SIZE0 - 1; //0¬15
+   localparam P_ADDR_END1 = P_ADDR_START1 + P_ADDR_SIZE1 - 1; //16¬31
+   localparam P_ADDR_END2 = P_ADDR_START2 + P_ADDR_SIZE2 - 1; //32¬47
    /*********************************************************/
    reg ihseld, ihsel0, ihsel1, ihsel2;
    assign HSELd = ihseld;
@@ -34,18 +34,18 @@ module ahb_decoder_s3 #(parameter P_NUM         = 3, // how many slaves
    assign HSEL1 = (REMAP) ? ihsel0 : ihsel1;
    assign HSEL2 = ihsel2;
    /*********************************************************/
-   wire [15:0] thaddr = HADDR[31:16];
+   wire [1:0] thaddr = HADDR[31:30];//wire [15:0] thaddr = HADDR[31:16];
    always @ (thaddr) begin // must be blocking assignment
-      if ((P_NUM>0)&&(thaddr>=P_ADDR_START0)&&(thaddr<=P_ADDR_END0)) ihsel0 <= 1'b1;
+      if ((P_NUM>0)&&(thaddr==2'b00)) ihsel0 <= 1'b1;
       else                                                           ihsel0 <= 1'b0;
-      if ((P_NUM>1)&&(thaddr>=P_ADDR_START1)&&(thaddr<=P_ADDR_END1)) ihsel1 <= 1'b1;
+      if ((P_NUM>1)&&(thaddr==2'b01)) ihsel1 <= 1'b1;
       else                                                           ihsel1 <= 1'b0;
-      if ((P_NUM>2)&&(thaddr>=P_ADDR_START2)&&(thaddr<=P_ADDR_END2)) ihsel2 <= 1'b1;
+      if ((P_NUM>2)&&(thaddr==2'b10)) ihsel2 <= 1'b1;
       else                                                           ihsel2 <= 1'b0;
 
-      if (((P_NUM>0)&&(thaddr>=P_ADDR_START0)&&(thaddr<=P_ADDR_END0))||
-          ((P_NUM>1)&&(thaddr>=P_ADDR_START1)&&(thaddr<=P_ADDR_END1))||
-          ((P_NUM>2)&&(thaddr>=P_ADDR_START2)&&(thaddr<=P_ADDR_END2))) ihseld <= 1'b0;
+      if (((P_NUM>0)&&(thaddr==2'b00))||
+          ((P_NUM>1)&&(thaddr==2'b01))||
+          ((P_NUM>2)&&(thaddr==2'b10))) ihseld <= 1'b0;
       else                                                             ihseld <= 1'b1;
 
    end // always

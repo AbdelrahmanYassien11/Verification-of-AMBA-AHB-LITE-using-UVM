@@ -26,9 +26,11 @@ module ahb_lite_s3
       , input   wire  [2:0]  M_HBURST
       , input   wire  [3:0]  M_HPROT
       , input   wire  [31:0] M_HWDATA
+
       , output  wire  [31:0] M_HRDATA
       , output  wire  [1:0]  M_HRESP
       , output  wire         M_HREADY
+
       , output  wire         HWRITE
       , output  wire  [31:0] HADDR
       , output  wire  [1:0]  HTRANS
@@ -37,14 +39,17 @@ module ahb_lite_s3
       , output  wire  [3:0]  HPROT
       , output  wire  [31:0] HWDATA
       , output  wire         HREADY
+
       , output  wire         HSEL0
       , input   wire  [1:0]  HRESP0
       , input   wire  [31:0] HRDATA0
       , input   wire         HREADY0
+
       , output  wire         HSEL1
       , input   wire  [1:0]  HRESP1
       , input   wire  [31:0] HRDATA1
       , input   wire         HREADY1
+
       , output  wire         HSEL2
       , input   wire  [1:0]  HRESP2
       , input   wire  [31:0] HRDATA2
@@ -65,6 +70,16 @@ module ahb_lite_s3
    assign HPROT  = M_HPROT;
    assign HWDATA = M_HWDATA;
    assign HREADY = M_HREADY;
+   
+
+
+
+
+
+
+
+
+
    /*********************************************************/
    defparam
    Uahb_decoder.P_NUM         = 3, // how many slaves
@@ -107,7 +122,7 @@ module ahb_lite_s3
 
    /*********************************************************/
    ahb_default_slave //slave
-              Uahb_default_slave (
+              default_slave (
               .HRESETn(HRESETn),
               .HCLK   (HCLK),
               .HSEL   (HSELd),
@@ -122,8 +137,8 @@ module ahb_lite_s3
               .HREADYin(HREADY),
               .HREADYout(HREADYd));
    /*********************************************************/
-   ahb_default_slave //slave
-              Uahb_default_slave0 (
+   ahb_slave //slave
+              slave0 (
               .HRESETn(HRESETn),
               .HCLK   (HCLK),
               .HSEL   (HSEL0),
@@ -138,8 +153,8 @@ module ahb_lite_s3
               .HREADYin(HREADY),
               .HREADYout(HREADY0));
    /*********************************************************/
-   ahb_default_slave //slave
-              Uahb_default_slave1 (
+   ahb_slave //slave
+              slave1 (
               .HRESETn(HRESETn),
               .HCLK   (HCLK),
               .HSEL   (HSEL1),
@@ -153,5 +168,21 @@ module ahb_lite_s3
               .HRESP (HRESP1),
               .HREADYin(HREADY),
               .HREADYout(HREADY1));
+
+   ahb_slave //slave
+              slave2 (
+              .HRESETn(HRESETn),
+              .HCLK   (HCLK),
+              .HSEL   (HSEL2),
+              .HADDR  (HADDR),
+              .HTRANS (HTRANS),
+              .HWRITE (HWRITE),
+              .HSIZE  (HSIZE),
+              .HBURST (HBURST),
+              .HWDATA (HWDATA),
+              .HRDATA(HRDATA2),
+              .HRESP (HRESP2),
+              .HREADYin(HREADY),
+              .HREADYout(HREADY2));
 
 endmodule

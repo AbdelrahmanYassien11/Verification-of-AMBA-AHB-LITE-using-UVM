@@ -123,102 +123,103 @@ class coverage extends uvm_subscriber #(sequence_item);
     /* --------------------------------------------------------------------------------------Data Frame coverage of the current operation (either write or read)---------------------------------------------------------------------------------------------- */
     df_operation: coverpoint BURST_cov iff (HRESETn) {
       bins SINGLE_Operation   =  {SINGLE};
-      bins INCR_Operation   =  {INCR};
-      bins WRAP4_Operation =  {WRAP4};
+      bins INCR_Operation     =  {INCR};
+      bins WRAP4_Operation    =  {WRAP4};
       bins INCR4_Operation    =  {INCR4};
       bins WRAP8_Operation    =  {WRAP8};
       bins INCR8_Operation    =  {INCR8};
-      bins WRAP16_Operation    =  {WRAP16};
-      bins INCR16_Operation    =  {INCR16};
+      bins WRAP16_Operation   =  {WRAP16};
+      bins INCR16_Operation   =  {INCR16};
 
     }
 
     /* -------------------------------------------------------------------------------Data Transition coverage of the current operation (from write to read and vice versa)---------------------------------------------------------------------------------------------- */
     dt_operation: coverpoint BURST_cov iff(HRESETn_cov) {
-      bins SINGLE_SINGLE_Transition       = (SINGLE => SINGLE);
-      bins SINGLE_INCR_Transition       = (SINGLE => INCR);
+      bins SINGLE_SINGLE_Transition    = (SINGLE => SINGLE);
+      bins SINGLE_INCR_Transition      = (SINGLE => INCR);
       bins SINGLE_WRAP4_Transition     = (SINGLE => WRAP4);
-      bins SINGLE_INCR4_Transition        = (SINGLE => INCR4);
-      bins SINGLE_WRAP8_Transition        = (SINGLE => WRAP8);
-      bins SINGLE_INCR8_Transition        = (SINGLE => INCR8);
-      bins SINGLE_WRAP16_Transition        = (SINGLE => WRAP16);
-      bins SINGLE_INCR16_Transition        = (SINGLE => INCR16);
+      bins SINGLE_INCR4_Transition     = (SINGLE => INCR4);
+      bins SINGLE_WRAP8_Transition     = (SINGLE => WRAP8);
+      bins SINGLE_INCR8_Transition     = (SINGLE => INCR8);
+      bins SINGLE_WRAP16_Transition    = (SINGLE => WRAP16);
+      bins SINGLE_INCR16_Transition    = (SINGLE => INCR16);
 
 
-      bins INCR_SINGLE_Transition       = (INCR => SINGLE);
+      bins INCR_SINGLE_Transition      = (INCR => SINGLE);
       bins INCR_INCR_Transition        = (INCR => INCR);
-      bins INCR_WRAP4_Transition     = (INCR => WRAP4);
-      bins INCR_INCR4_Transition        = (INCR => INCR4);
-      bins INCR_WRAP8_Transition        = (INCR => WRAP8);
-      bins INCR_INCR8_Transition        = (INCR => INCR8);
-      bins INCR_WRAP16_Transition        = (INCR => WRAP16);
-      bins INCR_INCR16_Transition        = (INCR => INCR16);
+      bins INCR_WRAP4_Transition       = (INCR => WRAP4);
+      bins INCR_INCR4_Transition       = (INCR => INCR4);
+      bins INCR_WRAP8_Transition       = (INCR => WRAP8);
+      bins INCR_INCR8_Transition       = (INCR => INCR8);
+      bins INCR_WRAP16_Transition      = (INCR => WRAP16);
+      bins INCR_INCR16_Transition      = (INCR => INCR16);
 
       bins WRAP4_SINGLE_Transition     = (WRAP4 => SINGLE);
-      bins WRAP4_INCR_Transition     = (WRAP4 => INCR);
+      bins WRAP4_INCR_Transition       = (WRAP4 => INCR);
       bins WRAP4_WRAP4_Transition      = (WRAP4 => INCR4);
       bins WRAP4_INCR4_Transition      = (WRAP4 => WRAP4);
       bins WRAP4_WRAP8_Transition      = (WRAP4 => WRAP8);
       bins WRAP4_INCR8_Transition      = (WRAP4 => INCR8);
-      bins WRAP4_WRAP16_Transition      = (WRAP4 => WRAP16);
-      bins WRAP4_INCR16_Transition      = (WRAP4 => INCR16);
+      bins WRAP4_WRAP16_Transition     = (WRAP4 => WRAP16);
+      bins WRAP4_INCR16_Transition     = (WRAP4 => INCR16);
 
-      bins INCR4_SINGLE_Transition       = (INCR4 => SINGLE);
-      bins INCR4_INCR_Transition        = (INCR4 => INCR);
+      bins INCR4_SINGLE_Transition     = (INCR4 => SINGLE);
+      bins INCR4_INCR_Transition       = (INCR4 => INCR);
       bins INCR4_WRAP4_Transition      = (INCR4 => WRAP4);
       bins INCR4_INCR4_Transition      = (INCR4 => INCR4);
       bins INCR4_WRAP8_Transition      = (INCR4 => WRAP8);
       bins INCR4_INCR8_Transition      = (INCR4 => INCR8);
-      bins INCR4_WRAP16_Transition      = (INCR4 => WRAP16);
-      bins INCR4_INCR16_Transition      = (INCR4 => INCR16);
+      bins INCR4_WRAP16_Transition     = (INCR4 => WRAP16);
+      bins INCR4_INCR16_Transition     = (INCR4 => INCR16);
 
-      bins WRAP8_SINGLE_Transition      = (WRAP8 => SINGLE);
-      bins WRAP8_INCR_Transition      = (WRAP8 => INCR);
+      bins WRAP8_SINGLE_Transition     = (WRAP8 => SINGLE);
+      bins WRAP8_INCR_Transition       = (WRAP8 => INCR);
       bins WRAP8_WRAP4_Transition      = (WRAP8 => WRAP4);
       bins WRAP8_INCR4_Transition      = (WRAP8 => INCR4);
       bins WRAP8_WRAP8_Transition      = (WRAP8 => WRAP8);
       bins WRAP8_INCR8_Transition      = (WRAP8 => INCR8);
-      bins WRAP8_WRAP16_Transition      = (WRAP8 => WRAP16);
-      bins WRAP8_INCR16_Transition      = (WRAP8 => INCR16);
+      bins WRAP8_WRAP16_Transition     = (WRAP8 => WRAP16);
+      bins WRAP8_INCR16_Transition     = (WRAP8 => INCR16);
 
-      bins INCR8_SINGLE_Transition      = (INCR8 => SINGLE);
-      bins INCR8_INCR_Transition      = (INCR8 => INCR);
+      bins INCR8_SINGLE_Transition     = (INCR8 => SINGLE);
+      bins INCR8_INCR_Transition       = (INCR8 => INCR);
       bins INCR8_WRAP4_Transition      = (INCR8 => WRAP4);
       bins INCR8_INCR4_Transition      = (INCR8 => INCR4);
       bins INCR8_WRAP8_Transition      = (INCR8 => WRAP8);
       bins INCR8_INCR8_Transition      = (INCR8 => INCR8);
-      bins INCR8_WRAP16_Transition      = (INCR8 => WRAP16);
-      bins INCR8_INCR16_Transition      = (INCR8 => INCR16);
+      bins INCR8_WRAP16_Transition     = (INCR8 => WRAP16);
+      bins INCR8_INCR16_Transition     = (INCR8 => INCR16);
 
-      bins WRAP16_SINGLE_Transition      = (WRAP16 => SINGLE);
+      bins WRAP16_SINGLE_Transition    = (WRAP16 => SINGLE);
       bins WRAP16_INCR_Transition      = (WRAP16 => INCR);
-      bins WRAP16_WRAP4_Transition      = (WRAP16 => WRAP4);
-      bins WRAP16_INCR4_Transition      = (WRAP16 => INCR4);
-      bins WRAP16_WRAP8_Transition      = (WRAP16 => WRAP8);
-      bins WRAP16_INCR8_Transition      = (WRAP16 => INCR8);
-      bins WRAP16_WRAP16_Transition      = (WRAP16 => WRAP16);
-      bins WRAP16_INCR16_Transition      = (WRAP16 => INCR16);
+      bins WRAP16_WRAP4_Transition     = (WRAP16 => WRAP4);
+      bins WRAP16_INCR4_Transition     = (WRAP16 => INCR4);
+      bins WRAP16_WRAP8_Transition     = (WRAP16 => WRAP8);
+      bins WRAP16_INCR8_Transition     = (WRAP16 => INCR8);
+      bins WRAP16_WRAP16_Transition    = (WRAP16 => WRAP16);
+      bins WRAP16_INCR16_Transition    = (WRAP16 => INCR16);
 
-      bins INCR16_SINGLE_Transition      = (INCR16 => SINGLE);
+      bins INCR16_SINGLE_Transition    = (INCR16 => SINGLE);
       bins INCR16_INCR_Transition      = (INCR16 => INCR);
-      bins INCR16_WRAP4_Transition      = (INCR16 => WRAP4);
-      bins INCR16_INCR4_Transition      = (INCR16 => INCR4);
-      bins INCR16_WRAP8_Transition      = (INCR16 => WRAP8);
-      bins INCR16_INCR8_Transition      = (INCR16 => INCR8);
-      bins INCR16_WRAP16_Transition      = (INCR16 => WRAP16);
-      bins INCR16_INCR16_Transition      = (INCR16 => INCR16);
+      bins INCR16_WRAP4_Transition     = (INCR16 => WRAP4);
+      bins INCR16_INCR4_Transition     = (INCR16 => INCR4);
+      bins INCR16_WRAP8_Transition     = (INCR16 => WRAP8);
+      bins INCR16_INCR8_Transition     = (INCR16 => INCR8);
+      bins INCR16_WRAP16_Transition    = (INCR16 => WRAP16);
+      bins INCR16_INCR16_Transition    = (INCR16 => INCR16);
     }
 
-  endgroup  
+  endgroup 
+
 
     // Covergroup for TRANS-related coverage
   covergroup SIZE_covgrp;
 
     /* --------------------------------------------------------------------------------------Data Frame coverage of the current operation (either write or read)---------------------------------------------------------------------------------------------- */
     df_operation: coverpoint SIZE_cov iff (HRESETn) {
-      bins SINGLE_Operation     =  {BYTE};
-      bins INCR_Operation       =  {HALFWORD};
-      bins WRAP4_Operation      =  {WORD};
+      bins SINGLE_Operation     =  {BYTE_P};
+      bins INCR_Operation       =  {HALFWORD_P};
+      bins WRAP4_Operation      =  {WORD_P};
       // bins INCR4_Operation      =  {2WORD};
       // bins WRAP8_Operation      =  {4WORD};
       // bins INCR8_Operation      =  {8WORD};
@@ -228,20 +229,21 @@ class coverage extends uvm_subscriber #(sequence_item);
 
     /* -------------------------------------------------------------------------------Data Transition coverage of the current operation (from write to read and vice versa)---------------------------------------------------------------------------------------------- */
     dt_operation: coverpoint SIZE_cov iff(HRESETn_cov) {
-      bins BYTE_BYTE_Transition          = (BYTE => BYTE);
-      bins BYTE_HALFWORD_Transition      = (BYTE => HALFWORD);
-      bins BYTE_WORD_Transition          = (BYTE => WORD);
+      bins BYTE_BYTE_Transition          = (BYTE_P => BYTE_P);
+      bins BYTE_HALFWORD_Transition      = (BYTE_P => HALFWORD_P);
+      bins BYTE_WORD_Transition          = (BYTE_P => WORD_P);
 
-      bins HALFWORD_BYTE_Transition      = (HALFWORD => BYTE);
-      bins HALFWORD_HALFWORD_Transition  = (HALFWORD => HALFWORD);
-      bins HALFWORD_WORD_Transition      = (HALFWORD => WORD);
+      bins HALFWORD_BYTE_Transition      = (HALFWORD_P => BYTE_P);
+      bins HALFWORD_HALFWORD_Transition  = (HALFWORD_P => HALFWORD_P);
+      bins HALFWORD_WORD_Transition      = (HALFWORD_P => WORD_P);
 
-      bins WORD_BYTE_Transition          = (WORD => BYTE);
-      bins WORD_HALFWORD_Transition      = (WORD => HALFWORD);
-      bins WORD_WORD_Transition          = (WORD => WORD);
+      bins WORD_BYTE_Transition          = (WORD_P => BYTE_P);
+      bins WORD_HALFWORD_Transition      = (WORD_P => HALFWORD_P);
+      bins WORD_WORD_Transition          = (WORD_P => WORD_P);
     }
 
-  endgroup 
+  endgroup
+
 
   covergroup SLAVE_SELECT_covgrp;
 
@@ -277,8 +279,6 @@ class coverage extends uvm_subscriber #(sequence_item);
     }
   endgroup 
 
-
-
   covergroup HADDR_covgrp;
     /* --------------------------------------------------------------------------------------Data Frame coverage of the current operation (either write or read)---------------------------------------------------------------------------------------------- */
     df_operation: coverpoint HADDR_cov[(ADDR_WIDTH-($clog2(NO_OF_SLAVES)))-1: 0] iff ( HRESETn_cov ) {
@@ -288,100 +288,27 @@ class coverage extends uvm_subscriber #(sequence_item);
     }
   endgroup 
 
-
-
   covergroup HWDATA_covgrp;
     /* --------------------------------------------------------------------------------------Data Frame coverage of the current operation (either write or read)---------------------------------------------------------------------------------------------- */
-    df_operation: coverpoint HWDATA_cov iff (HRESETn_cov && (HSIZE_cov === BYTE)) {
-      bins HWDATA_values_others          =  {['h000000FE:'h00000001]};
-      bins HWDATA_values_zeros           =  {'h00000000};
-      bins HWDATA_values_ones            =  {'h000000FF};
+    df_operation: coverpoint HWDATA_cov iff (HRESETn_cov && (HSIZE_cov === BYTE_P)) {
+      bins HWDATA_BYTE_values_others          =  {['h000000FE:'h00000001]};
+      bins HWDATA_BYTE_values_zeros           =  {'h00000000};
+      bins HWDATA_BYTE_values_ones            =  {'h000000FF};
 
-    df_operation: coverpoint HWDATA_cov iff (HRESETn_cov && (HSIZE_cov === HALFWORD)) {
-      bins HWDATA_values_others          =  {['h0000FFFE:'h00000001]};
-      bins HWDATA_values_zeros           =  {'h00000000};
-      bins HWDATA_values_ones            =  {'h0000FFFF};
+    df_operation: coverpoint HWDATA_cov iff (HRESETn_cov && (HSIZE_cov === HALFWORD_P)) {
+      bins HWDATA_HALFWORD_values_others      =  {['h0000FFFE:'h00000001]};
+      bins HWDATA_HALFWORD_values_zeros       =  {'h00000000};
+      bins HWDATA_HALFWORD_values_ones        =  {'h0000FFFF};
     }
 
-    df_operation: coverpoint HWDATA_cov iff (HRESETn_cov && (HSIZE_cov === WORD)) {
-      bins HWDATA_values_others          =  {['hFFFFFFFE:'h00000001]};
-      bins HWDATA_values_zeros           =  {'h00000000};
-      bins HWDATA_values_ones            =  {'hFFFFFFFF};
+    df_operation: coverpoint HWDATA_cov iff (HRESETn_cov && (HSIZE_cov === WORD_P)) {
+      bins HWDATA_WORD_values_others          =  {['hFFFFFFFE:'h00000001]};
+      bins HWDATA_WORD_values_zeros           =  {'h00000000};
+      bins HWDATA_WORD_values_ones            =  {'hFFFFFFFF};
     }
     /* -------------------------------------------------------------------------------Data Transition coverage of the current operation (from write to read and vice versa)---------------------------------------------------------------------------------------------- */
   endgroup 
 
-
-
-
-  // Covergroup for input-related coverage
-  covergroup INPUTS_covgrp;
-
-    /* ---------------------------------------------------------------------------------------------------Data Frame coverage of the DATA_IN --------------------------------------------------------------------------------------------------------------------------------- */
-    df_data_in: coverpoint data_in_cov iff (rrst_n && wrst_n && r_en_cov) {
-      bins DATA_IN_Values_others = {['hFE:'h00]};
-      bins DATA_IN_Values_zeros =  {'h00};
-      bins DATA_IN_Values_ones = {'hFF};
-    }
-
-    /* ------------------------------------------------------------------------------------------------------Data Frame coverage of the WRITE_ENABLE---------------------------------------------------------------------------------------------------------------------- */
-    df_w_en: coverpoint w_en_cov iff (rrst_n && wrst_n) {
-      bins WRITE_On = {1};
-      bins WRITE_Off =  {0};
-      bins WRITE_ON_for_FIFO_SIZE = (1 [* 8]);
-    }
-
-    /* ----------------------------------------------------------------------------------------------------Data Transition coverage of the WRITE_ENABLE------------------------------------------------------------------------------------------------------------ */
-    dt_w_en: coverpoint w_en_cov iff (rrst_n && wrst_n) {
-      bins WRITE_OFF_ON       = (0 => 1);
-      bins WRITE_ON_OFF       = (1 => 0);
-      bins WRITE_ON_ON        = (1 => 1);
-      bins WRITE_OFF_OFF      = (0 => 0);
-    }
-
-    /* -------------------------------------------------------------------------------------------------------Data Frame coverage of the READ_ENABLE----------------------------------------------------------------------------------------------------------------- */
-    df_r_en: coverpoint r_en_cov iff (rrst_n && wrst_n) {
-      bins READ_On = {1};
-      bins READ_Off =  {0};
-      bins READ_ON_for_FIFO_SIZE = (1 [* 8]);
-    }
-
-    /* -----------------------------------------------------------------------------------------------------Data Transition coverage of the READ_ENABLE-------------------------------------------------------------------------------------------------------- */
-    dt_r_en: coverpoint r_en_cov iff (rrst_n && wrst_n) {
-      bins READ_OFF_ON       = (0 => 1);
-      bins READ_ON_OFF       = (1 => 0);
-      bins READ_ON_ON        = (1 => 1);
-      bins READ_OFF_OFF      = (0 => 0);
-    }
-
-  endgroup
-
-  // Covergroup for flags-related coverage
-  covergroup FLAGS_covgrp;
-
-    /* --------------------------------------------------------------------------------------Data Transition coverage of different flags---------------------------------------------------------------------------------------------- */
-    dt_full: coverpoint full_expected_cov iff (rrst_n && wrst_n) {
-      bins full_expected_off_on   = (0 => 1);
-      bins full_expected_on_off   = (1 => 0);
-    }
-
-    dt_empty: coverpoint empty_expected_cov iff (rrst_n && wrst_n) {
-      bins empty_expected_off_on   = (0 => 1);
-      bins empty_expected_on_off   = (1 => 0);
-    }
-
-    /* --------------------------------------------------------------------------------------Data Frame coverage of different flags---------------------------------------------------------------------------------------------- */
-    df_full: coverpoint full_expected_cov iff (rrst_n && wrst_n) {
-      bins full_expected_ON   = {1};
-      bins full_expected_OFF  = {0};
-    }
-
-    df_empty: coverpoint empty_expected_cov iff (rrst_n && wrst_n) {
-      bins empty_expected_ON  = {1};
-      bins empty_expected_OFF = {0};
-    }
-
-  endgroup
 
   // Function to update coverage based on sequence item
   function void write (sequence_item t);
