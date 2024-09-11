@@ -20,17 +20,17 @@ class coverage extends uvm_subscriber #(sequence_item);
   virtual inf my_vif;
 
   // AHB lite Control Signals
-  rand  bit   HRESETn_cov;    // reset (active low)
+        bit   HRESETn_cov;    // reset (active low)
 
         bit   HWRITE_cov;
 
         bit   [TRANS_WIDTH:0]  HTRANS_cov; 
         bit   [SIZE_WIDTH:0]  HSIZE_cov;
-        bit   [BURST_WIDTH:0]  HBURST_cov;
+        bit   [BURST_WIDTH:0] HBURST_cov;
         bit   [PROT_WIDTH:0]  HPROT_cov; 
 
-  rand  bit   [ADDR_WIDTH-1:0]  HADDR_cov;     
-  rand  bit   [DATA_WIDTH-1:0]  HWDATA_Cov; 
+        bit   [ADDR_WIDTH-1:0]  HADDR_cov;     
+        bit   [DATA_WIDTH-1:0]  HWDATA_cov; 
 
         // AHB lite output Signals
         logic   [DATA_WIDTH-1:0]  HRDATA_cov;
@@ -49,14 +49,14 @@ class coverage extends uvm_subscriber #(sequence_item);
   covergroup RESET_covgrp;
 
     /* --------------------------------------------------------------------------------------Data Frame coverage of the current operation (either write or read)---------------------------------------------------------------------------------------------- */
-    df_operation: coverpoint RESET_cov {
+    df_operation: coverpoint HRESETn_cov {
       bins RESET_Operation     =  {RESETING};
       bins NON_RESET_Operation =  {WORKING};
       //bins READ_Operation_for_FIFO_SIZE = (READ [* 8]);
     }
 
     /* -------------------------------------------------------------------------------Data Transition coverage of the current operation (from write to read and vice versa)---------------------------------------------------------------------------------------------- */
-    dt_operation: coverpoint WRITE_cov iff(HRESETn_cov) {
+    dt_operation: coverpoint HRESETn_cov {
       bins RESETING_WORKING_Transition     = (RESETING => WORKING);
       bins WORKING_RESETING_Transition     = (WORKING => RESETING);
     }
@@ -67,14 +67,14 @@ class coverage extends uvm_subscriber #(sequence_item);
   covergroup WRITE_covgrp;
 
     /* --------------------------------------------------------------------------------------Data Frame coverage of the current operation (either write or read)---------------------------------------------------------------------------------------------- */
-    df_operation: coverpoint WRITE_cov iff (HRESETn) {
+    df_operation: coverpoint HWRITE_cov iff (HRESETn_cov) {
       bins WRITE_Operation = {WRITE};
       bins READ_Operation =  {READ};
       //bins READ_Operation_for_FIFO_SIZE = (READ [* 8]);
     }
 
     /* -------------------------------------------------------------------------------Data Transition coverage of the current operation (from write to read and vice versa)---------------------------------------------------------------------------------------------- */
-    dt_operation: coverpoint WRITE_cov iff(HRESETn_cov) {
+    dt_operation: coverpoint HWRITE_cov iff(HRESETn_cov) {
       bins WRITE_READ_Transition     = (READ => WRITE);
       bins READ_WRITE_Transition     = (WRITE => READ);
     }
@@ -85,7 +85,7 @@ class coverage extends uvm_subscriber #(sequence_item);
   covergroup TRANS_covgrp;
 
     /* --------------------------------------------------------------------------------------Data Frame coverage of the current operation (either write or read)---------------------------------------------------------------------------------------------- */
-    df_operation: coverpoint TRANS_cov iff (HRESETn) {
+    df_operation: coverpoint HTRANS_cov iff (HRESETn_cov) {
       bins IDLE_Operation   = {IDLE};
       bins BUSY_Operation   =  {BUSY};
       bins NONSEQ_Operation =  {NONSEQ};
@@ -93,7 +93,7 @@ class coverage extends uvm_subscriber #(sequence_item);
     }
 
     /* -------------------------------------------------------------------------------Data Transition coverage of the current operation (from write to read and vice versa)---------------------------------------------------------------------------------------------- */
-    dt_operation: coverpoint TRANS_cov iff(HRESETn_cov) {
+    dt_operation: coverpoint HTRANS_cov iff(HRESETn_cov) {
       bins IDLE_BUSY_Transition       = (IDLE => BUSY);
       bins IDLE_NONSEQ_Transition     = (IDLE => NONSEQ);
       bins IDLE_SEQ_Transition        = (IDLE => SEQ);
@@ -109,10 +109,10 @@ class coverage extends uvm_subscriber #(sequence_item);
       bins SEQ_WRITE_Transition       = (SEQ => IDLE);
       bins SEQ_BUSY_Transition        = (SEQ => BUSY);
       bins SEQ_NONSEQ_Transition      = (SEQ => NONSEQ);
-
-      bins SEQ_Operation_BURST_OPERATIONS = (NONSEQ => (SEQ [* 3]));
-      bins SEQ_Operation_BURST_OPERATIONS = (NONSEQ => (SEQ [* 7]));
-      bins SEQ_Operation_BURST_OPERATIONS = (NONSEQ => (SEQ [* 15]);
+      //bins WRITE_Operation_for_FIFO_SIZE = (WRITE [* 8]);
+      bins SEQ_Operation_BURST4_OPERATIONS = (SEQ [* 3]);
+      bins SEQ_Operation_BURST8_OPERATIONS = (SEQ [* 7]);
+      bins SEQ_Operation_BURST16_OPERATIONS = (SEQ [* 15]);
     }
 
   endgroup
@@ -121,7 +121,7 @@ class coverage extends uvm_subscriber #(sequence_item);
   covergroup BURST_covgrp;
 
     /* --------------------------------------------------------------------------------------Data Frame coverage of the current operation (either write or read)---------------------------------------------------------------------------------------------- */
-    df_operation: coverpoint BURST_cov iff (HRESETn) {
+    df_operation: coverpoint HBURST_cov iff (HRESETn_cov) {
       bins SINGLE_Operation   =  {SINGLE};
       bins INCR_Operation     =  {INCR};
       bins WRAP4_Operation    =  {WRAP4};
@@ -134,7 +134,7 @@ class coverage extends uvm_subscriber #(sequence_item);
     }
 
     /* -------------------------------------------------------------------------------Data Transition coverage of the current operation (from write to read and vice versa)---------------------------------------------------------------------------------------------- */
-    dt_operation: coverpoint BURST_cov iff(HRESETn_cov) {
+    dt_operation: coverpoint HBURST_cov iff(HRESETn_cov) {
       bins SINGLE_SINGLE_Transition    = (SINGLE => SINGLE);
       bins SINGLE_INCR_Transition      = (SINGLE => INCR);
       bins SINGLE_WRAP4_Transition     = (SINGLE => WRAP4);
@@ -216,10 +216,11 @@ class coverage extends uvm_subscriber #(sequence_item);
   covergroup SIZE_covgrp;
 
     /* --------------------------------------------------------------------------------------Data Frame coverage of the current operation (either write or read)---------------------------------------------------------------------------------------------- */
-    df_operation: coverpoint SIZE_cov iff (HRESETn) {
-      bins SINGLE_Operation     =  {BYTE_P};
-      bins INCR_Operation       =  {HALFWORD_P};
-      bins WRAP4_Operation      =  {WORD_P};
+    df_operation: coverpoint HSIZE_cov iff (HRESETn_cov) {
+      bins BYTE_Operation     =  {BYTE};
+      bins HALFWORD_Operation       =  {HALFWORD};
+      bins WORD_Operation      =  {WORD};
+
       // bins INCR4_Operation      =  {2WORD};
       // bins WRAP8_Operation      =  {4WORD};
       // bins INCR8_Operation      =  {8WORD};
@@ -228,18 +229,18 @@ class coverage extends uvm_subscriber #(sequence_item);
     }
 
     /* -------------------------------------------------------------------------------Data Transition coverage of the current operation (from write to read and vice versa)---------------------------------------------------------------------------------------------- */
-    dt_operation: coverpoint SIZE_cov iff(HRESETn_cov) {
-      bins BYTE_BYTE_Transition          = (BYTE_P => BYTE_P);
-      bins BYTE_HALFWORD_Transition      = (BYTE_P => HALFWORD_P);
-      bins BYTE_WORD_Transition          = (BYTE_P => WORD_P);
+    dt_operation: coverpoint HSIZE_cov iff(HRESETn_cov) {
+      bins BYTE_BYTE_Transition          = (BYTE => BYTE);
+      bins BYTE_HALFWORD_Transition      = (BYTE => HALFWORD);
+      bins BYTE_WORD_Transition          = (BYTE => WORD);
 
-      bins HALFWORD_BYTE_Transition      = (HALFWORD_P => BYTE_P);
-      bins HALFWORD_HALFWORD_Transition  = (HALFWORD_P => HALFWORD_P);
-      bins HALFWORD_WORD_Transition      = (HALFWORD_P => WORD_P);
+      bins HALFWORD_BYTE_Transition      = (HALFWORD => BYTE);
+      bins HALFWORD_HALFWORD_Transition  = (HALFWORD => HALFWORD);
+      bins HALFWORD_WORD_Transition      = (HALFWORD => WORD);
 
-      bins WORD_BYTE_Transition          = (WORD_P => BYTE_P);
-      bins WORD_HALFWORD_Transition      = (WORD_P => HALFWORD_P);
-      bins WORD_WORD_Transition          = (WORD_P => WORD_P);
+      bins WORD_BYTE_Transition          = (WORD => BYTE);
+      bins WORD_HALFWORD_Transition      = (WORD => HALFWORD);
+      bins WORD_WORD_Transition          = (WORD => WORD);
     }
 
   endgroup
@@ -264,22 +265,22 @@ class coverage extends uvm_subscriber #(sequence_item);
 
       bins SLAVE1_SLAVE0_Transition          = (2'b01 => 2'b00);
       bins SLAVE1_SLAVE1_Transition          = (2'b01 => 2'b01);
-      bins SLAVE2_SLAVE2_Transition          = (2'b01 => 2'b10);
-      bins SLAVE3_DEFAULT_Transition         = (2'b01 => 2'b11);
+      bins SLAVE1_SLAVE2_Transition          = (2'b01 => 2'b10);
+      bins SLAVE1_DEFAULT_Transition         = (2'b01 => 2'b11);
 
       bins SLAVE2_SLAVE0_Transition          = (2'b10 => 2'b00);
       bins SLAVE2_SLAVE1_Transition          = (2'b10 => 2'b01);
       bins SLAVE2_SLAVE2_Transition          = (2'b10 => 2'b10);
       bins SLAVE2_DEFAULT_Transition         = (2'b10 => 2'b11);
 
-      bins SLAVE2_SLAVE0_Transition          = (2'b11 => 2'b00);
-      bins SLAVE2_SLAVE1_Transition          = (2'b11 => 2'b01);
-      bins SLAVE2_SLAVE2_Transition          = (2'b11 => 2'b10);
-      bins SLAVE2_DEFAULT_Transition         = (2'b11 => 2'b11);
+      bins DEFAULT_SLAVE0_Transition          = (2'b11 => 2'b00);
+      bins DEFAULT_SLAVE1_Transition          = (2'b11 => 2'b01);
+      bins DEFAULT_SLAVE2_Transition          = (2'b11 => 2'b10);
+      bins DEFAULT_DEFAULT_Transition         = (2'b11 => 2'b11);
     }
   endgroup 
 
-  covergroup HADDR_covgrp;
+  covergroup ADDR_covgrp;
     /* --------------------------------------------------------------------------------------Data Frame coverage of the current operation (either write or read)---------------------------------------------------------------------------------------------- */
     df_operation: coverpoint HADDR_cov[(ADDR_WIDTH-($clog2(NO_OF_SLAVES)))-1: 0] iff ( HRESETn_cov ) {
       bins ADDR_values_others          =  {['hE:'h1]};
@@ -288,20 +289,21 @@ class coverage extends uvm_subscriber #(sequence_item);
     }
   endgroup 
 
-  covergroup HWDATA_covgrp;
+  covergroup WDATA_covgrp;
     /* --------------------------------------------------------------------------------------Data Frame coverage of the current operation (either write or read)---------------------------------------------------------------------------------------------- */
-    df_operation: coverpoint HWDATA_cov iff (HRESETn_cov && (HSIZE_cov === BYTE_P)) {
+    df_BYTE_operation: coverpoint HWDATA_cov iff (HRESETn_cov && (HSIZE_cov === BYTE)) {
       bins HWDATA_BYTE_values_others          =  {['h000000FE:'h00000001]};
       bins HWDATA_BYTE_values_zeros           =  {'h00000000};
       bins HWDATA_BYTE_values_ones            =  {'h000000FF};
+    }
 
-    df_operation: coverpoint HWDATA_cov iff (HRESETn_cov && (HSIZE_cov === HALFWORD_P)) {
+    df_HALFWORD_operation: coverpoint HWDATA_cov iff (HRESETn_cov && (HSIZE_cov === HALFWORD)) {
       bins HWDATA_HALFWORD_values_others      =  {['h0000FFFE:'h00000001]};
       bins HWDATA_HALFWORD_values_zeros       =  {'h00000000};
       bins HWDATA_HALFWORD_values_ones        =  {'h0000FFFF};
     }
 
-    df_operation: coverpoint HWDATA_cov iff (HRESETn_cov && (HSIZE_cov === WORD_P)) {
+    df_WORD_operation: coverpoint HWDATA_cov iff (HRESETn_cov && (HSIZE_cov === WORD)) {
       bins HWDATA_WORD_values_others          =  {['hFFFFFFFE:'h00000001]};
       bins HWDATA_WORD_values_zeros           =  {'h00000000};
       bins HWDATA_WORD_values_ones            =  {'hFFFFFFFF};
@@ -316,7 +318,7 @@ class coverage extends uvm_subscriber #(sequence_item);
     HWRITE_cov     = t.HWRITE;
     HTRANS_cov     = t.HTRANS;
     HSIZE_cov      = t.HSIZE;  
-    HBRUST_cov     = t.HBURST; 
+    HBURST_cov     = t.HBURST; 
     HPROT_cov      = t.HPROT;  
     HADDR_cov      = t.HADDR; 
     HWDATA_cov     = t.HWDATA;
@@ -341,9 +343,14 @@ class coverage extends uvm_subscriber #(sequence_item);
   // Constructor for the coverage component
   function new(string name, uvm_component parent);
     super.new(name, parent);
-    OPERATION_covgrp = new;
-    FLAGS_covgrp     = new;
-    INPUTS_covgrp    = new;
+    RESET_covgrp        = new;
+    WRITE_covgrp        = new;
+    TRANS_covgrp        = new;
+    BURST_covgrp        = new;
+    SIZE_covgrp         = new;
+    SLAVE_SELECT_covgrp = new;
+    ADDR_covgrp         = new;
+    WDATA_covgrp        = new;
   endfunction
 
   // Build phase for component setup

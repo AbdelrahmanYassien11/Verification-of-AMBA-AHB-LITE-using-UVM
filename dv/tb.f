@@ -1,8 +1,7 @@
-+incdir+sequence_macros
++incdir+sequence
 +incdir+sequence_item
 +incdir+tests
 +incdir+components
-FIFO_sva.sv
-FIFO_uvm_pkg.sv
-interface/FIFO_interface.sv
+AHB_lite_uvm_pkg.sv
+interface/AHB_lite_interface.sv
 top_test_uvm.sv

@@ -1,12 +1,15 @@
-package FIFO_pkg;
+package AHB_pkg;
 
 	import uvm_pkg::*;
 	`include "uvm_macros.svh"
 
 	parameter CYCLE_WRITE = 5;
 	parameter CYCLE_READ  = 10;
+	parameter NO_OF_SLAVES = 4;
 
-	typedef enum {READ, WRITE} WRITE_e;
+	typedef enum {RESETING, WORKING} HRESET_e;
+
+	typedef enum {READ, WRITE} HWRITE_e;
 
 	typedef enum {OKAY, ERROR, RETRY} HRESP_e;
 
@@ -14,16 +17,16 @@ package FIFO_pkg;
 
 	typedef enum {SINGLE, INCR, WRAP4, INCR4, WRAP8, INCR8, WRAP16, INCR16} HBURST_e;
 
-	typedef enum {BYTE, HALFWORD, WORD, 2WORD, 4WORD, 8WORD, 16WORD, 32WORD} HSIZE_e;
+	typedef enum {BYTE, HALFWORD, WORD, WORD2, WORD4, WORD8, WORD16, WORD32} HSIZE_e;
 
 	typedef enum {NOT_READY, READY} HREADY_e;
 
 
-	//HREADY PARAMETERS
-	parameter READY = 1;
-	parameter NOT_READY = 0;
+	// //HREADY PARAMETERS
+	// parameter READY = 1;
+	// parameter NOT_READY = 0;
 
-	//HTRANS PARAMETERS
+	// //HTRANS PARAMETERS
 	// parameter IDLE 			= 2'b00;
 	// parameter BUSY 			= 2'b01;
 	// parameter NONSEQ 		= 2'b10;
@@ -45,14 +48,14 @@ package FIFO_pkg;
 	// parameter INCR16 		= 3'b111;
 
 	// //HSIZE PARAMETERS
-	// parameter BYTE_P		=3'b000;
-	// parameter HALFWORD_P	=3'b001;
-	// parameter WORD_P		=3'b010;
-	// parameter 2WORD_P		=3'b011;
-	// parameter 4WORD_P		=3'b100;
-	// parameter 8WORD_P		=3'b101;
-	// parameter 16WORD_P		=3'b110;
-	// parameter 32WORD_P		=3'b111;
+	// parameter BYTE_P		= 3'b000;
+	// parameter HALFWORD_P	= 3'b001;
+	// parameter WORD_P		= 3'b010;
+	// parameter 2WORD_P		= 3'b011;
+	// parameter 4WORD_P		= 3'b100;
+	// parameter 8WORD_P		= 3'b101;
+	// parameter 16WORD_P		= 3'b110;
+	// parameter 32WORD_P		= 3'b111;
 
 
 	//HPROT PARAMETERS

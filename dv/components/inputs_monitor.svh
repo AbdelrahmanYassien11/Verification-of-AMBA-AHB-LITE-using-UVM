@@ -66,8 +66,8 @@ class inputs_monitor extends uvm_monitor;
                         input bit  [SIZE_WIDTH:0] iHSIZE, input bit  [BURST_WIDTH:0] iHBURST,
                         input bit  [PROT_WIDTH:0] iHPROT, input bit  [ADDR_WIDTH-1:0] iHADDR,     
                         input bit  [DATA_WIDTH-1:0] iHWDATA, input HRESET_e iRESET_op,
-                        input HRESET_e iWRITE_op, input HRESET_e iTRANS_op,
-                        input HRESET_e iBURST_op, input HRESET_e iSIZE_op
+                        input HWRITE_e iWRITE_op, input HTRANS_e iTRANS_op,
+                        input HBURST_e iBURST_op, input HSIZE_e iSIZE_op
   );
 
       // Create a new sequence item and populate it with data

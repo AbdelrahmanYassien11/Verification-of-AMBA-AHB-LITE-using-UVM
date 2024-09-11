@@ -29,9 +29,9 @@ class predictor extends uvm_subscriber #(sequence_item);
   event inputs_written;
   event expected_outputs_written;
 
-  logic [DATA_WIDTH-1:0] slave0 [P_SLAVE0_START:P_SLAVE0_END];
-  logic [DATA_WIDTH-1:0] slave1 [P_SLAVE1_START:P_SLAVE1_END];
-  logic [DATA_WIDTH-1:0] slave2 [P_SLAVE2_START:P_SLAVE2_END];
+  // logic [DATA_WIDTH-1:0] slave0 [P_SLAVE0_START:P_SLAVE0_END];
+  // logic [DATA_WIDTH-1:0] slave1 [P_SLAVE1_START:P_SLAVE1_END];
+  // logic [DATA_WIDTH-1:0] slave2 [P_SLAVE2_START:P_SLAVE2_END];
 
   // AHB lite Control Signals
   bit                   HRESETn;    // reset (active low)
@@ -48,16 +48,21 @@ class predictor extends uvm_subscriber #(sequence_item);
   // AHB lite output Signals
   logic   [DATA_WIDTH-1:0]  HRDATA_expected;
   logic   [RESP_WIDTH-1:0]  HRESP_expected; 
-  logic   [DATA_WIDTH-1:0]  HREADY;
+  logic   [DATA_WIDTH-1:0]  HREADY_expected;
 
 
-  logic [DATA_WIDTH-1:0:0] slave0 [15:0];
-  logic [DATA_WIDTH-1:0:0] slave1 [15:0];
-  logic [DATA_WIDTH-1:0:0] slave2 [15:0];
+  logic [DATA_WIDTH-1:0] slave0 [15:0];
+  logic [DATA_WIDTH-1:0] slave1 [15:0];
+  logic [DATA_WIDTH-1:0] slave2 [15:0];
 
-  HRESP_e HRESP_o;
+  HRESET_e     RESET_op;
+  HWRITE_e     WRITE_op;
+  HTRANS_e     TRANS_op;
+  HBURST_e     BURST_op;
+  HSIZE_e      SIZE_op;  
+
+  HRESP_e      RESP_op;
   string data_str;
-
   // Constructor
   function new(string name = "predictor", uvm_component parent);
     super.new(name, parent);
@@ -106,20 +111,24 @@ class predictor extends uvm_subscriber #(sequence_item);
     HPROT   = t.HPROT;
     HADDR   = t.HADDR;
     HWDATA  = t.HWDATA;
+
+    RESET_op   = t.RESET_op;
+    WRITE_op   = t.WRITE_op;
+    TRANS_op   = t.TRANS_op;
+    BURST_op   = t.BURST_op;          
+    SIZE_op    = t.SIZE_op;
+
     //HREADY  <= t.HREADY;
     data_str   = $sformatf("HRESETn:%0d, HWRITE:%0d, HTRANS:%0d, HSIZE:%0d, HBURST:%0d, HPROT:%0d, HADDR:%0d, HWDATA:%0d",
-                            HRESETn, HWRITE, HTRANS, HSIZE, HBURST, HPROT, HADDR, HWDATA));
+                            HRESETn, HWRITE, HTRANS, HSIZE, HBURST, HPROT, HADDR, HWDATA);
     -> inputs_written;
   endfunction
 
   // Task for processing AHB operations based on inputs
-  task generic_predictor( input bit iHRESETn, input bit   iHWRITE, input bit  [TRANS_WIDTH:0] iHTRANS, 
-                        input bit  [SIZE_WIDTH:0] iHSIZE, input bit  [BURST_WIDTH:0] iHBURST,
-                        input bit  [PROT_WIDTH:0] iHPROT, input bit  [ADDR_WIDTH-1:0] iHADDR,     
-                        input bit  [DATA_WIDTH-1:0] iHWDATA);
+  task generic_predictor();
         //fork
             //control_phase(iHRESETn, iHWRITE, iHTRANS, iHSIZE, iHBURST, iHPROT, iHADDR, iHWDATA);
-            data_phase(iHRESETn, iHWRITE, iHTRANS, iHSIZE, iHBURST, iHPROT, iHADDR, iHWDATA);
+            data_phase();
         //join_any
 
 endtask : generic_predictor
@@ -159,7 +168,7 @@ endtask : generic_predictor
     //     end
     // endtask : control_phase
 
-    function data_phase();
+    task data_phase();
         if(HRESETn === 1'b0)
             reset_AHB();
         else if(HWRITE === 1'b1) begin
@@ -169,7 +178,7 @@ endtask : generic_predictor
             read_AHB();
         end
         send_results(/*iHRESETn, iHWRITE, iHTRANS, iHSIZE, iHBURST, iHPROT, iHADDR, iHWDATA*/);
-    endfunction : data_phase
+    endtask : data_phase
 
 
     // Task: Reset AHB pointers and flags
@@ -185,8 +194,8 @@ endtask : generic_predictor
     HRESP_expected = OKAY;
     HREADY_expected = READY;
     case(HTRANS)
-      IDLE, BUSY:
-
+      IDLE, BUSY: begin
+      end
       NONSEQ, SEQ:  begin
         if(HADDR[31:30] == 2'b00)
           slave0[HADDR] = HWDATA;
@@ -205,7 +214,8 @@ endtask : generic_predictor
     HRESP_expected = OKAY;
     HREADY_expected = READY;
     case(HTRANS)
-      IDLE, BUSY:
+      IDLE, BUSY: begin
+      end
       NONSEQ, SEQ: begin
         if(HADDR[31:30] == 2'b00)
           HRDATA_expected = slave0[HADDR];

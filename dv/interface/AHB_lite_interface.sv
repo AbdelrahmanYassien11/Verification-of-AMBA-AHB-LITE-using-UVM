@@ -200,7 +200,7 @@ endtask : generic_reciever
     // Function to send outputs to the output monitor
     function void send_outputs();
 
-        outputs_monitor_h.write_to_monitor(HRDATA, HRESP, HREADY, operation_interface);
+        outputs_monitor_h.write_to_monitor(HRDATA, HRESP, HREADY);
 
     endfunction : send_outputs
 

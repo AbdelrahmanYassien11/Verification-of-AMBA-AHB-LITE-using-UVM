@@ -61,35 +61,16 @@ class outputs_monitor extends uvm_monitor;
   endfunction
 
   // Virtual function to write data to the monitor
-  virtual function void write_to_monitor (
-      input bit irrst_n, 
-      input bit iwrst_n, 
-      input bit [FIFO_WIDTH-1:0] idata_in, 
-      input bit iw_en, 
-      input bit ir_en,
-      input logic [FIFO_WIDTH-1:0] idata_out,
-      input logic iempty,
-      input logic ifull,
-      input STATE_e ioperation
+  virtual function void write_to_monitor ( input bit[DATA_WIDTH-1:0] iHRDATA, input bit [RESP_WIDTH:0] iHRESP, input bit iHREADY 
   );
 
     // Create a new sequence item and populate it with data
     sequence_item seq_item;
     seq_item = new("seq_item");
 
-    seq_item.rrst_n = irrst_n;
-    seq_item.wrst_n = iwrst_n;
-    seq_item.data_in = idata_in;
-    seq_item.w_en = iw_en;
-    seq_item.r_en = ir_en;
-    seq_item.data_out = idata_out;
-    seq_item.empty = iempty;
-    seq_item.full = ifull;
-    seq_item.operation = ioperation;
-
-    // Displaying the output data for debugging
-    $display("Time = %0t Data Out = %0d", $time(), idata_out);
-
+    seq_item.HRDATA = iHRDATA;
+    seq_item.HRESP  = iHRESP;
+    seq_item.HREADY = iHREADY;
     // Write the sequence item to the analysis port
     tlm_analysis_port.write(seq_item);
 

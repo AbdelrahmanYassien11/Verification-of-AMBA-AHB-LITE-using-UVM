@@ -42,9 +42,9 @@ rand HSIZE_e      SIZE_op;
        }
 
 
-      constraint HWDATA_c { HSIZE == BYTE     => (HWDATA dist {'h00000000:/1, 'h000000FF:/1, ['h01 : 'h000000FE]:/40)
-                            HSIZE == HALFWORD => (HWDATA dist {'h00000000:/1, 'h0000FFFF:/1, ['h01 : 'h0000FFFE]:/40)
-                            HSIZE == HALFWORD => (HWDATA dist {'h00000000:/1, 'hFFFFFFFF:/1, ['h01 : 'hFFFFFFFE]:/40)};
+      constraint HWDATA_c { HSIZE == BYTE     -> HWDATA dist {'h00000000:/1, 'h000000FF:/1, ['h01 : 'h000000FE]:/40};
+                            HSIZE == HALFWORD -> HWDATA dist {'h00000000:/1, 'h0000FFFF:/1, ['h01 : 'h0000FFFE]:/40};
+                            HSIZE == HALFWORD -> HWDATA dist {'h00000000:/1, 'hFFFFFFFF:/1, ['h01 : 'hFFFFFFFE]:/40};
       }
 
       constraint HWADDR_SEL_c { HADDR[ADDR_WIDTH-1:(ADDR_WIDTH-$clog2(NO_OF_SLAVES))] inside {[0:2]};
@@ -58,7 +58,7 @@ rand HSIZE_e      SIZE_op;
       }
 
       constraint WRITE_c {WRITE_op == READ   -> HWRITE == 1'b0;
-                          WRITE_op == WRITE  -> HREAD  == 1'b1; 
+                          WRITE_op == WRITE  -> HWRITE  == 1'b1; 
       }
 
       constraint TRANS_c {TRANS_op == IDLE    -> HTRANS == 2'b00;
@@ -80,11 +80,11 @@ rand HSIZE_e      SIZE_op;
       constraint SIZE_c  {SIZE_op == BYTE       -> HSIZE == 3'b000 && HWDATA[DATA_WIDTH-1:8]  == 'h0;
                           SIZE_op == HALFWORD   -> HSIZE == 3'b001 && HWDATA[DATA_WIDTH-1:16] == 'h0;
                           SIZE_op == WORD       -> HSIZE == 3'b010; 
-                          SIZE_op == 2WORD      -> HSIZE == 3'b011;
-                          SIZE_op == 4WORD      -> HSIZE == 3'b100;
-                          SIZE_op == 8WORD      -> HSIZE == 3'b101;
-                          SIZE_op == 16WORD     -> HSIZE == 3'b110;
-                          SIZE_op == 32WORD     -> HSIZE == 3'b111;
+                          SIZE_op == WORD2      -> HSIZE == 3'b011;
+                          SIZE_op == WORD4      -> HSIZE == 3'b100;
+                          SIZE_op == WORD8      -> HSIZE == 3'b101;
+                          SIZE_op == WORD16     -> HSIZE == 3'b110;
+                          SIZE_op == WORD32     -> HSIZE == 3'b111;
       }
 
       constraint randomized_test_number_c { randomized_number_of_tests inside {[100 :150]};    
@@ -128,7 +128,7 @@ rand HSIZE_e      SIZE_op;
         HWRITE     = to_be_copied.HWRITE;
         HTRANS     = to_be_copied.HTRANS;
         HSIZE      = to_be_copied.HSIZE;  
-        HBRUST     = to_be_copied.HBURST; 
+        HBURST     = to_be_copied.HBURST; 
         HPROT      = to_be_copied.HPROT;  
         HADDR      = to_be_copied.HADDR; 
         HWDATA     = to_be_copied.HWDATA;
@@ -152,7 +152,7 @@ rand HSIZE_e      SIZE_op;
       string s;
 
       s = $sformatf(" time: %t  HRESETn = %0d, HWRITE = %0d, HTRANS =  %0d, HSIZE = %0d, HBURST = %0d, HPROT = %0d, HADDR = %0d, HWDATA = %0d, HRDATA = %0d, HRESP = %0d, HREADY = %0d, incorrect_counter = %0d",
-                    $time, HRESETn, HWRITEm HTRANS, HSIZE, HBURST, HPROT, HADDR, HWDATA, HRDATA, HRESP, HREADY, incorrect_counter);
+                    $time, HRESETn, HWRITE, HTRANS, HSIZE, HBURST, HPROT, HADDR, HWDATA, HRDATA, HRESP, HREADY, incorrect_counter);
       return s;
     endfunction : convert2string
 
@@ -160,7 +160,7 @@ rand HSIZE_e      SIZE_op;
     function string input2string();
       string s;
       s= $sformatf(" time: %t HRESETn = %0d, HWRITE = %0d, HTRANS =  %0d, HSIZE = %0d, HBURST = %0d, HPROT = %0d, HADDR = %0d, HWDATA = %0d",
-                    $time, HRESETn, HWRITEm HTRANS, HSIZE, HBURST, HPROT, HADDR, HWDATA);
+                    $time, HRESETn, HWRITE, HTRANS, HSIZE, HBURST, HPROT, HADDR, HWDATA);
       return s;
     endfunction
 
