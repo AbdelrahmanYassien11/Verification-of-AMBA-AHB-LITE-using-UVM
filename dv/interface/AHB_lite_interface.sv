@@ -14,14 +14,12 @@
  * Copyright (c) 2024 Abdelrahman Mohamad Yassien. All Rights Reserved.
  ******************************************************************/
 
-interface inf (
-    clk                             // Write clock
-    );
+interface inf (input bit clk);
 
 import AHB_pkg::*;                  // Import AHB package for AHB constants
 
 // AHB lite Control Signals
-bit                   HRESETn;    // reset (active low)
+bit   HRESETn;    // reset (active low)
 
 bit   HWRITE;
 
@@ -71,7 +69,7 @@ task generic_reciever( input bit iHRESETn, input bit   iHWRITE, input bit  [TRAN
         iHWRITE     = previous_seq_item.HWRITE;
         iHTRANS     = previous_seq_item.HTRANS;
         iHSIZE      = previous_seq_item.HSIZE;  
-        iHBRUST     = previous_seq_item.HBURST; 
+        iHBURST     = previous_seq_item.HBURST; 
         iHPROT      = previous_seq_item.HPROT;  
         iHADDR      = previous_seq_item.HADDR; 
         iHWDATA     = previous_seq_item.HWDATA;
@@ -96,8 +94,7 @@ task generic_reciever( input bit iHRESETn, input bit   iHWRITE, input bit  [TRAN
             data_phase(iHRESETn, iHWRITE, iHTRANS, iHSIZE, iHBURST, iHPROT, iHADDR, iHWDATA);
         join_none
     end
-    end
-endtask : generic_reciever
+    endtask : generic_reciever
 
 
 
@@ -152,19 +149,24 @@ endtask : generic_reciever
     // Task: Write data into the AHB and handle pointer updates
     task write_AHB(input bit [ADDR_WIDTH-1:0] iHWDATA);
         case(HTRANS)
-            IDLE, BUSY:
+            IDLE, BUSY: begin
+            end
 
-            NONSEQ, SEQ: 
-            HWDATA = iHWDATA;
+            NONSEQ, SEQ: begin
+                HWDATA = iHWDATA;
+            end
         endcase // HTRANS
     endtask : write_AHB
 
     // Task: Read data from the AHB and handle pointer updates
     task read_AHB();
         case(HTRANS)
-            IDLE, BUSY:
-            NONSEQ, SEQ:
-                if(HREADY === 1'b1)
+            IDLE, BUSY: begin
+
+            end
+            NONSEQ, SEQ: begin
+                wait(HREADY === 1'b1);
+            end
         endcase // HTRANS
     endtask : read_AHB
 
@@ -176,7 +178,7 @@ endtask : generic_reciever
                                input bit  [PROT_WIDTH:0] iHPROT, input bit  [ADDR_WIDTH-1:0] iHADDR,     
                                input bit  [DATA_WIDTH-1:0] iHWDATA, input HRESET_e iRESET_op,
                                input HRESET_e iWRITE_op, input HRESET_e iTRANS_op,
-                               input HRESET_e iBURST_op, input HRESET_e iSIZE_op);
+                               input HRESET_e iBURST_op, input HSIZE_e iSIZE_op);
 
         previous_seq_item.HRESETn = iHRESETn;
         previous_seq_item.HWRITE = iHWRITE;
@@ -201,7 +203,6 @@ endtask : generic_reciever
     function void send_outputs();
 
         outputs_monitor_h.write_to_monitor(HRDATA, HRESP, HREADY);
-
     endfunction : send_outputs
 
 
@@ -209,7 +210,5 @@ endtask : generic_reciever
         if(HREADY === 1'b1 && HRESETn === 1'b1) begin
             send_outputs();
     end
-
-
 
 endinterface : inf

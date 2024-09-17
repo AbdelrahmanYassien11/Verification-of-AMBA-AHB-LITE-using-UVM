@@ -333,9 +333,14 @@ class coverage extends uvm_subscriber #(sequence_item);
     BURST_op_cov = t.BURST_op;
     SIZE_op_cov  = t.SIZE_op;
 
-    FLAGS_covgrp.sample();
-    OPERATION_covgrp.sample();
-    INPUTS_covgrp.sample();
+    RESET_covgrp.sample();
+    WRITE_covgrp.sample();
+    TRANS_covgrp.sample();
+    BURST_covgrp.sample();
+    SIZE_covgrp.sample();
+    SLAVE_SELECT_covgrp.sample();
+    ADDR_covgrp.sample();
+    WDATA_covgrp.sample();
 
     `uvm_info("COVERAGE", {"SAMPLE: ", t.convert2string}, UVM_HIGH)
   endfunction

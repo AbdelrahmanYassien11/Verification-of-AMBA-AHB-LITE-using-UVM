@@ -152,4 +152,4 @@ package AHB_pkg;
 	// `include "concurrent_write_read_once_test.svh"
 	// `include "concurrent_write_read_rand_test.svh"
 
-endpackage : FIFO_pkg
+endpackage : AHB_pkg

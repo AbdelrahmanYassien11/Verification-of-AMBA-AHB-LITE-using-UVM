@@ -1,6 +1,6 @@
 module top_test_uvm();
 	import uvm_pkg::*;
-	import FIFO_pkg::*;
+	import AHB_pkg::*;
 
 
 	bit clk;
