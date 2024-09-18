@@ -14,15 +14,142 @@
 # //
 # do run.do
 # QuestaSim-64 vlog 2021.1 Compiler 2021.01 Jan 19 2021
-# Start time: 23:45:26 on Sep 17,2024
+# Start time: 17:02:02 on Sep 18,2024
 # vlog -reportprogress 300 -f dut.f "+cover" -covercells 
 # -- Compiling module memory
 # -- Compiling module ahb_default_slave
-# ** Error: ../rtl/ahb_lite_s3.v(189): End of source encountered before closing `ifdef region started at ../rtl/ahb_slave.v(1).
-# End time: 23:45:27 on Sep 17,2024, Elapsed time: 0:00:01
+# -- Compiling module ahb_slave
+# -- Compiling module ahb_s2m_s3
+# -- Compiling module ahb_decoder_s3
+# -- Compiling module ahb_decoder_s3
+# ** Warning: ** while parsing file included at ../rtl/ahb_lite_s3.v(10)
+# ** at ../rtl/ahb_decoder_s3.v(14): (vlog-2275) Existing module 'ahb_decoder_s3' at line 14 will be overwritten.
+# -- Compiling module ahb_s2m_s3
+# ** Warning: ** while parsing file included at ../rtl/ahb_lite_s3.v(11)
+# ** at ../rtl/ahb_s2m_s3.v(12): (vlog-2275) Existing module 'ahb_s2m_s3' at line 12 will be overwritten.
+# -- Compiling module ahb_lite_s3
+# 
+# Top level modules:
+# 	ahb_lite_s3
+# End time: 17:02:02 on Sep 18,2024, Elapsed time: 0:00:00
+# Errors: 0, Warnings: 2
+# QuestaSim-64 vlog 2021.1 Compiler 2021.01 Jan 19 2021
+# Start time: 17:02:02 on Sep 18,2024
+# vlog -reportprogress 300 -f tb.f "+cover" -covercells 
+# -- Compiling package AHB_pkg
+# -- Importing package mtiUvm.uvm_pkg (uvm-1.1d Built-in)
+# ** Note: (vlog-2286) AHB_lite_uvm_pkg.sv(4): Using implicit +incdir+F:/questasim/questasim64_2021.1/uvm-1.1d/../verilog_src/uvm-1.1d/src from import uvm_pkg
+# -- Compiling interface inf
+# -- Importing package AHB_pkg
+# -- Compiling module top_test_uvm
+# 
+# Top level modules:
+# 	top_test_uvm
+# End time: 17:02:02 on Sep 18,2024, Elapsed time: 0:00:00
+# Errors: 0, Warnings: 0
+# QuestaSim-64 vopt 2021.1 Compiler 2021.01 Jan 19 2021
+# Start time: 17:02:03 on Sep 18,2024
+# vopt -reportprogress 300 top_test_uvm -o top_optimized "+acc" "+cover=bcefsx+ahb_lite_s3(rtl)" 
+# 
+# Top level modules:
+# 	top_test_uvm
+# 
+# Analyzing design...
+# -- Loading module top_test_uvm
+# -- Importing package mtiUvm.uvm_pkg (uvm-1.1d Built-in)
+# -- Importing package AHB_pkg
+# -- Loading package mtiUvm.questa_uvm_pkg
+# -- Loading interface inf
+# -- Loading module ahb_lite_s3
+# -- Loading module ahb_decoder_s3
+# -- Loading module ahb_s2m_s3
+# -- Loading module ahb_default_slave
+# -- Loading module ahb_slave
+# -- Loading module memory
+# ** Error (suppressible): ../rtl/ahb_slave.v(33): (vopt-8884) Illegal output port connection for 'data_out' (6th connection) to reg type. 
+# ** Error (suppressible): ../rtl/ahb_slave.v(33): (vopt-8884) Illegal output port connection for 'invalid' (7th connection) to reg type. 
+# Optimization failed
+# End time: 17:02:03 on Sep 18,2024, Elapsed time: 0:00:00
+# Errors: 2, Warnings: 0
+# ** Error: F:/questasim/questasim64_2021.1/win64/vopt failed.
+# Error in macro ./run.do line 5
+# Return status = 2
+#     (procedure "compile" line 1)
+#     invoked from within
+# "compile NoFilter vopt top_test_uvm -o top_optimized +acc +cover=bcefsx+ahb_lite_s3(rtl)"
+#     ("eval" body line 1)
+#     invoked from within
+# "eval compile NoFilter vopt $args"
+#     (procedure "vopt" line 9)
+#     invoked from within
+# "vopt top_test_uvm -o top_optimized +acc +cover=bcefsx+ahb_lite_s3(rtl)"
+do run.do
+# QuestaSim-64 vlog 2021.1 Compiler 2021.01 Jan 19 2021
+# Start time: 17:04:44 on Sep 18,2024
+# vlog -reportprogress 300 -f dut.f "+cover" -covercells 
+# -- Compiling module memory
+# -- Compiling module ahb_default_slave
+# -- Compiling module ahb_slave
+# -- Compiling module ahb_s2m_s3
+# -- Compiling module ahb_decoder_s3
+# -- Compiling module ahb_decoder_s3
+# ** Warning: ** while parsing file included at ../rtl/ahb_lite_s3.v(10)
+# ** at ../rtl/ahb_decoder_s3.v(14): (vlog-2275) Existing module 'ahb_decoder_s3' at line 14 will be overwritten.
+# -- Compiling module ahb_s2m_s3
+# ** Warning: ** while parsing file included at ../rtl/ahb_lite_s3.v(11)
+# ** at ../rtl/ahb_s2m_s3.v(12): (vlog-2275) Existing module 'ahb_s2m_s3' at line 12 will be overwritten.
+# -- Compiling module ahb_lite_s3
+# 
+# Top level modules:
+# 	ahb_lite_s3
+# End time: 17:04:44 on Sep 18,2024, Elapsed time: 0:00:00
+# Errors: 0, Warnings: 2
+# QuestaSim-64 vlog 2021.1 Compiler 2021.01 Jan 19 2021
+# Start time: 17:04:44 on Sep 18,2024
+# vlog -reportprogress 300 -f tb.f "+cover" -covercells 
+# -- Compiling package AHB_pkg
+# -- Importing package mtiUvm.uvm_pkg (uvm-1.1d Built-in)
+# ** Note: (vlog-2286) AHB_lite_uvm_pkg.sv(4): Using implicit +incdir+F:/questasim/questasim64_2021.1/uvm-1.1d/../verilog_src/uvm-1.1d/src from import uvm_pkg
+# -- Compiling interface inf
+# -- Importing package AHB_pkg
+# -- Compiling module top_test_uvm
+# 
+# Top level modules:
+# 	top_test_uvm
+# End time: 17:04:44 on Sep 18,2024, Elapsed time: 0:00:00
+# Errors: 0, Warnings: 0
+# QuestaSim-64 vopt 2021.1 Compiler 2021.01 Jan 19 2021
+# Start time: 17:04:45 on Sep 18,2024
+# vopt -reportprogress 300 top_test_uvm -o top_optimized "+acc" "+cover=bcefsx+ahb_lite_s3(rtl)" 
+# 
+# Top level modules:
+# 	top_test_uvm
+# 
+# Analyzing design...
+# -- Loading module top_test_uvm
+# -- Importing package mtiUvm.uvm_pkg (uvm-1.1d Built-in)
+# -- Importing package AHB_pkg
+# -- Loading package mtiUvm.questa_uvm_pkg
+# -- Loading interface inf
+# -- Loading module ahb_lite_s3
+# -- Loading module ahb_decoder_s3
+# -- Loading module ahb_s2m_s3
+# -- Loading module ahb_default_slave
+# -- Loading module ahb_slave
+# -- Loading module memory
+# ** Error (suppressible): ../rtl/ahb_slave.v(33): (vopt-8884) Illegal output port connection for 'invalid' (7th connection) to reg type. 
+# Optimization failed
+# End time: 17:04:45 on Sep 18,2024, Elapsed time: 0:00:00
 # Errors: 1, Warnings: 0
-# ** Error: F:/questasim/questasim64_2021.1/win64/vlog failed.
-# Error in macro ./run.do line 3
-# F:/questasim/questasim64_2021.1/win64/vlog failed.
-#     while executing
-# "vlog -f dut.f +cover -covercells"
+# ** Error: F:/questasim/questasim64_2021.1/win64/vopt failed.
+# Error in macro ./run.do line 5
+# Return status = 2
+#     (procedure "compile" line 1)
+#     invoked from within
+# "compile NoFilter vopt top_test_uvm -o top_optimized +acc +cover=bcefsx+ahb_lite_s3(rtl)"
+#     ("eval" body line 1)
+#     invoked from within
+# "eval compile NoFilter vopt $args"
+#     (procedure "vopt" line 9)
+#     invoked from within
+# "vopt top_test_uvm -o top_optimized +acc +cover=bcefsx+ahb_lite_s3(rtl)"

@@ -3,8 +3,7 @@ package AHB_pkg;
 	import uvm_pkg::*;
 	`include "uvm_macros.svh"
 
-	parameter CYCLE_WRITE = 5;
-	parameter CYCLE_READ  = 10;
+	parameter CLOCK_PERIOD = 5;
 	parameter NO_OF_SLAVES = 4;
 
 	typedef enum {RESETING, WORKING} HRESET_e;
@@ -73,6 +72,7 @@ package AHB_pkg;
    	//data phase signal parameters
    	parameter DATA_WIDTH = 32;
    	parameter RESP_WIDTH = 1;
+   	parameter READY_WIDTH = 0;
 
 
    	parameter P_SLAVE0_START = 16'h0000;

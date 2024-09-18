@@ -1,4 +1,4 @@
-../rtl/memory.sv
+../rtl/memory.v
 ../rtl/ahb_default_slave.v
 ../rtl/ahb_slave.v
 ../rtl/ahb_s2m_s3.v
