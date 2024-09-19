@@ -153,3 +153,121 @@ do run.do
 #     (procedure "vopt" line 9)
 #     invoked from within
 # "vopt top_test_uvm -o top_optimized +acc +cover=bcefsx+ahb_lite_s3(rtl)"
+cd ..
+cd rtl
+vlog ahb_slave.v
+# QuestaSim-64 vlog 2021.1 Compiler 2021.01 Jan 19 2021
+# Start time: 17:23:29 on Sep 19,2024
+# vlog -reportprogress 300 ahb_slave.v 
+# -- Compiling module ahb_slave
+# ** Error: (vlog-13069) ahb_slave.v(45): near "=": syntax error, unexpected '='.
+# ** Error: ahb_slave.v(45): (vlog-13205) Syntax error found in the scope following 'STH_ERROR'. Is there a missing '::'?
+# End time: 17:23:30 on Sep 19,2024, Elapsed time: 0:00:01
+# Errors: 2, Warnings: 0
+# F:/questasim/questasim64_2021.1/win64/vlog failed.
+vlog ahb_slave.v
+# QuestaSim-64 vlog 2021.1 Compiler 2021.01 Jan 19 2021
+# Start time: 17:24:33 on Sep 19,2024
+# vlog -reportprogress 300 ahb_slave.v 
+# -- Compiling module ahb_slave
+# ** Error: (vlog-13069) ahb_slave.v(45): near "=": syntax error, unexpected '='.
+# ** Error: ahb_slave.v(45): (vlog-13205) Syntax error found in the scope following 'STH_ERROR'. Is there a missing '::'?
+# End time: 17:24:33 on Sep 19,2024, Elapsed time: 0:00:00
+# Errors: 2, Warnings: 0
+# F:/questasim/questasim64_2021.1/win64/vlog failed.
+vlog ahb_slave.v
+# QuestaSim-64 vlog 2021.1 Compiler 2021.01 Jan 19 2021
+# Start time: 17:24:49 on Sep 19,2024
+# vlog -reportprogress 300 ahb_slave.v 
+# -- Compiling module ahb_slave
+# ** Error: ahb_slave.v(67): (vlog-2730) Undefined variable: 'error_wire'.
+# ** Error: (vlog-13069) ahb_slave.v(147): near "TRANS_OPERATION": syntax error, unexpected IDENTIFIER, expecting '(' or ';'.
+# End time: 17:24:49 on Sep 19,2024, Elapsed time: 0:00:00
+# Errors: 2, Warnings: 0
+# F:/questasim/questasim64_2021.1/win64/vlog failed.
+vlog ahb_slave.v
+# QuestaSim-64 vlog 2021.1 Compiler 2021.01 Jan 19 2021
+# Start time: 17:25:14 on Sep 19,2024
+# vlog -reportprogress 300 ahb_slave.v 
+# -- Compiling module ahb_slave
+# ** Error: (vlog-13069) ahb_slave.v(145): near "TRANS_OPERATION": syntax error, unexpected IDENTIFIER, expecting '(' or ';'.
+# End time: 17:25:14 on Sep 19,2024, Elapsed time: 0:00:00
+# Errors: 1, Warnings: 0
+# F:/questasim/questasim64_2021.1/win64/vlog failed.
+vlog ahb_slave.v
+# QuestaSim-64 vlog 2021.1 Compiler 2021.01 Jan 19 2021
+# Start time: 19:07:03 on Sep 19,2024
+# vlog -reportprogress 300 ahb_slave.v 
+# -- Compiling module ahb_slave
+# ** Error: ahb_slave.v(78): (vlog-2163) Macro `TRANS_OPERATION is undefined.
+# ** Error: ahb_slave.v(78): A begin/end block was found with an empty body.  This is permitted in SystemVerilog, but not permitted in Verilog.  Please look for any stray semicolons.
+# ** Error: ahb_slave.v(81): (vlog-2163) Macro `TRANS_OPERATION is undefined.
+# ** Error: ahb_slave.v(81): A begin/end block was found with an empty body.  This is permitted in SystemVerilog, but not permitted in Verilog.  Please look for any stray semicolons.
+# ** Error: ahb_slave.v(146): (vlog-2730) Undefined variable: '\ '.
+# ** Error: (vlog-13069) ahb_slave.v(148): near "2": syntax error, unexpected INTEGER NUMBER, expecting ':' or ','.
+# ** Error: (vlog-13032) ahb_slave.v(150): near "<=": Syntax error.
+# ** Error: (vlog-13032) ahb_slave.v(151): near "<=": Syntax error.
+# ** Error: ahb_slave.v(151): (vlog-13205) Syntax error found in the scope following '\ '. Is there a missing '::'?
+# End time: 19:07:03 on Sep 19,2024, Elapsed time: 0:00:00
+# Errors: 9, Warnings: 0
+# F:/questasim/questasim64_2021.1/win64/vlog failed.
+vlog ahb_slave.v
+# QuestaSim-64 vlog 2021.1 Compiler 2021.01 Jan 19 2021
+# Start time: 19:08:04 on Sep 19,2024
+# vlog -reportprogress 300 ahb_slave.v 
+# ** Error: (vlog-13069) ahb_slave.v(17): near "case": syntax error, unexpected case, expecting class.
+# End time: 19:08:04 on Sep 19,2024, Elapsed time: 0:00:00
+# Errors: 1, Warnings: 0
+# F:/questasim/questasim64_2021.1/win64/vlog failed.
+vlog ahb_slave.v
+# QuestaSim-64 vlog 2021.1 Compiler 2021.01 Jan 19 2021
+# Start time: 19:23:34 on Sep 19,2024
+# vlog -reportprogress 300 ahb_slave.v 
+# -- Compiling module ahb_slave
+# ** Error: ahb_slave.v(36): (vlog-2730) Undefined variable: '\ '.
+# ** Error: (vlog-13069) ahb_slave.v(38): near "2": syntax error, unexpected INTEGER NUMBER, expecting ':' or ','.
+# ** Error: (vlog-13032) ahb_slave.v(40): near "<=": Syntax error.
+# ** Error: (vlog-13032) ahb_slave.v(41): near "<=": Syntax error.
+# ** Error: ahb_slave.v(41): (vlog-13205) Syntax error found in the scope following '\ '. Is there a missing '::'?
+# End time: 19:23:34 on Sep 19,2024, Elapsed time: 0:00:00
+# Errors: 5, Warnings: 0
+# F:/questasim/questasim64_2021.1/win64/vlog failed.
+vlog ahb_slave.v
+# QuestaSim-64 vlog 2021.1 Compiler 2021.01 Jan 19 2021
+# Start time: 19:24:53 on Sep 19,2024
+# vlog -reportprogress 300 ahb_slave.v 
+# -- Compiling module ahb_slave
+# ** Error: ahb_slave.v(36): (vlog-2730) Undefined variable: '\ '.
+# ** Error: (vlog-13069) ahb_slave.v(38): near "2": syntax error, unexpected INTEGER NUMBER, expecting ':' or ','.
+# ** Error: (vlog-13032) ahb_slave.v(40): near "<=": Syntax error.
+# ** Error: (vlog-13032) ahb_slave.v(41): near "<=": Syntax error.
+# ** Error: ahb_slave.v(41): (vlog-13205) Syntax error found in the scope following '\ '. Is there a missing '::'?
+# End time: 19:24:53 on Sep 19,2024, Elapsed time: 0:00:00
+# Errors: 5, Warnings: 0
+# F:/questasim/questasim64_2021.1/win64/vlog failed.
+vlog ahb_slave.v
+# QuestaSim-64 vlog 2021.1 Compiler 2021.01 Jan 19 2021
+# Start time: 19:25:17 on Sep 19,2024
+# vlog -reportprogress 300 ahb_slave.v 
+# -- Compiling module ahb_slave
+# ** Error: ahb_slave.v(36): (vlog-2730) Undefined variable: '\ '.
+# ** Error: (vlog-13069) ahb_slave.v(38): near "2": syntax error, unexpected INTEGER NUMBER, expecting ':' or ','.
+# ** Error: (vlog-13032) ahb_slave.v(40): near "<=": Syntax error.
+# ** Error: (vlog-13032) ahb_slave.v(41): near "<=": Syntax error.
+# ** Error: ahb_slave.v(41): (vlog-13205) Syntax error found in the scope following '\ '. Is there a missing '::'?
+# End time: 19:25:18 on Sep 19,2024, Elapsed time: 0:00:01
+# Errors: 5, Warnings: 0
+# F:/questasim/questasim64_2021.1/win64/vlog failed.
+vlog ahb_slave.v
+# QuestaSim-64 vlog 2021.1 Compiler 2021.01 Jan 19 2021
+# Start time: 19:26:37 on Sep 19,2024
+# vlog -reportprogress 300 ahb_slave.v 
+# -- Compiling module ahb_slave
+# ** Error: ahb_slave.v(36): (vlog-2730) Undefined variable: '\ '.
+# ** Error: (vlog-13069) ahb_slave.v(37): near "2": syntax error, unexpected INTEGER NUMBER, expecting ':' or ','.
+# ** Error: (vlog-13032) ahb_slave.v(39): near "<=": Syntax error.
+# ** Error: (vlog-13032) ahb_slave.v(40): near "<=": Syntax error.
+# ** Error: ahb_slave.v(40): (vlog-13205) Syntax error found in the scope following '\ '. Is there a missing '::'?
+# End time: 19:26:37 on Sep 19,2024, Elapsed time: 0:00:00
+# Errors: 5, Warnings: 0
+# F:/questasim/questasim64_2021.1/win64/vlog failed.
