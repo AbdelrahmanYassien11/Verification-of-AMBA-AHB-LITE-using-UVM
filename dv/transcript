@@ -271,3 +271,162 @@ vlog ahb_slave.v
 # End time: 19:26:37 on Sep 19,2024, Elapsed time: 0:00:00
 # Errors: 5, Warnings: 0
 # F:/questasim/questasim64_2021.1/win64/vlog failed.
+vlog ahb_slave.v
+# QuestaSim-64 vlog 2021.1 Compiler 2021.01 Jan 19 2021
+# Start time: 08:48:36 on Sep 20,2024
+# vlog -reportprogress 300 ahb_slave.v 
+# -- Compiling module ahb_slave
+# ** Error: ahb_slave.v(35): (vlog-2730) Undefined variable: '\ '.
+# ** Error: (vlog-13069) ahb_slave.v(36): near "2": syntax error, unexpected INTEGER NUMBER, expecting ':' or ','.
+# ** Error: ahb_slave.v(38): (vlog-13205) Syntax error found in the scope following 'HRESP'. Is there a missing '::'?
+# End time: 08:48:37 on Sep 20,2024, Elapsed time: 0:00:01
+# Errors: 3, Warnings: 0
+# F:/questasim/questasim64_2021.1/win64/vlog failed.
+vlog ahb_slave.v
+# QuestaSim-64 vlog 2021.1 Compiler 2021.01 Jan 19 2021
+# Start time: 08:49:32 on Sep 20,2024
+# vlog -reportprogress 300 ahb_slave.v 
+# -- Compiling module ahb_slave
+# ** Error: (vlog-13069) ahb_slave.v(39): near "<=": syntax error, unexpected <=.
+# ** Error: ahb_slave.v(39): (vlog-13205) Syntax error found in the scope following 'state'. Is there a missing '::'?
+# End time: 08:49:32 on Sep 20,2024, Elapsed time: 0:00:00
+# Errors: 2, Warnings: 0
+# F:/questasim/questasim64_2021.1/win64/vlog failed.
+vlog ahb_slave.v
+# QuestaSim-64 vlog 2021.1 Compiler 2021.01 Jan 19 2021
+# Start time: 08:49:35 on Sep 20,2024
+# vlog -reportprogress 300 ahb_slave.v 
+# -- Compiling module ahb_slave
+# ** Error: (vlog-13069) ahb_slave.v(39): near "<=": syntax error, unexpected <=.
+# ** Error: ahb_slave.v(39): (vlog-13205) Syntax error found in the scope following 'state'. Is there a missing '::'?
+# End time: 08:49:35 on Sep 20,2024, Elapsed time: 0:00:00
+# Errors: 2, Warnings: 0
+# F:/questasim/questasim64_2021.1/win64/vlog failed.
+vlog ahb_slave.v
+# QuestaSim-64 vlog 2021.1 Compiler 2021.01 Jan 19 2021
+# Start time: 08:50:06 on Sep 20,2024
+# vlog -reportprogress 300 ahb_slave.v 
+# -- Compiling module ahb_slave
+# ** Error: (vlog-13069) ahb_slave.v(43): near "2": syntax error, unexpected INTEGER NUMBER.
+# ** Error: ahb_slave.v(44): (vlog-13205) Syntax error found in the scope following '\ '. Is there a missing '::'?
+# End time: 08:50:06 on Sep 20,2024, Elapsed time: 0:00:00
+# Errors: 2, Warnings: 0
+# F:/questasim/questasim64_2021.1/win64/vlog failed.
+vlog ahb_slave.v
+# QuestaSim-64 vlog 2021.1 Compiler 2021.01 Jan 19 2021
+# Start time: 08:50:21 on Sep 20,2024
+# vlog -reportprogress 300 ahb_slave.v 
+# -- Compiling module ahb_slave
+# ** Error: (vlog-13069) ahb_slave.v(42): near "2": syntax error, unexpected INTEGER NUMBER.
+# ** Error: ahb_slave.v(43): (vlog-13205) Syntax error found in the scope following '\ '. Is there a missing '::'?
+# End time: 08:50:21 on Sep 20,2024, Elapsed time: 0:00:00
+# Errors: 2, Warnings: 0
+# F:/questasim/questasim64_2021.1/win64/vlog failed.
+vlog ahb_slave.v
+# QuestaSim-64 vlog 2021.1 Compiler 2021.01 Jan 19 2021
+# Start time: 08:51:23 on Sep 20,2024
+# vlog -reportprogress 300 ahb_slave.v 
+# -- Compiling module ahb_slave
+# ** Error: (vlog-13069) ahb_slave.v(58): near "endcase": syntax error, unexpected endcase.
+# ** Error: ahb_slave.v(97): (vlog-2730) Undefined variable: 'HRDATA_reg'.
+# ** Error: ahb_slave.v(106): (vlog-2730) Undefined variable: '\ '.
+# ** Error: (vlog-13069) ahb_slave.v(106): near ";": syntax error, unexpected ';', expecting ':'.
+# ** Error: (vlog-13069) ahb_slave.v(109): near ";": syntax error, unexpected ';', expecting ':'.
+# End time: 08:51:23 on Sep 20,2024, Elapsed time: 0:00:00
+# Errors: 5, Warnings: 0
+# F:/questasim/questasim64_2021.1/win64/vlog failed.
+vlog ahb_slave.v
+# QuestaSim-64 vlog 2021.1 Compiler 2021.01 Jan 19 2021
+# Start time: 08:53:26 on Sep 20,2024
+# vlog -reportprogress 300 ahb_slave.v 
+# -- Compiling module ahb_slave
+# ** Error: (vlog-13069) ahb_slave.v(58): near "endcase": syntax error, unexpected endcase.
+# ** Error: ahb_slave.v(97): (vlog-2730) Undefined variable: 'HRDATA_reg'.
+# ** Error: (vlog-13069) ahb_slave.v(106): near ";": syntax error, unexpected ';'.
+# ** Error: (vlog-13069) ahb_slave.v(109): near ";": syntax error, unexpected ';'.
+# End time: 08:53:26 on Sep 20,2024, Elapsed time: 0:00:00
+# Errors: 4, Warnings: 0
+# F:/questasim/questasim64_2021.1/win64/vlog failed.
+vlog ahb_slave.v
+# QuestaSim-64 vlog 2021.1 Compiler 2021.01 Jan 19 2021
+# Start time: 08:53:49 on Sep 20,2024
+# vlog -reportprogress 300 ahb_slave.v 
+# -- Compiling module ahb_slave
+# ** Error: (vlog-13069) ahb_slave.v(37): near "<=": syntax error, unexpected <=.
+# ** Error: ahb_slave.v(37): (vlog-13205) Syntax error found in the scope following 'HREADYout'. Is there a missing '::'?
+# End time: 08:53:49 on Sep 20,2024, Elapsed time: 0:00:00
+# Errors: 2, Warnings: 0
+# F:/questasim/questasim64_2021.1/win64/vlog failed.
+vlog ahb_slave.v
+# QuestaSim-64 vlog 2021.1 Compiler 2021.01 Jan 19 2021
+# Start time: 08:55:14 on Sep 20,2024
+# vlog -reportprogress 300 ahb_slave.v 
+# -- Compiling module ahb_slave
+# ** Error: (vlog-13069) ahb_slave.v(58): near "endcase": syntax error, unexpected endcase.
+# ** Error: ahb_slave.v(97): (vlog-2730) Undefined variable: 'HRDATA_reg'.
+# ** Error: ahb_slave.v(106): (vlog-2730) Undefined variable: '\ '.
+# ** Error: (vlog-13069) ahb_slave.v(106): near ";": syntax error, unexpected ';', expecting ':'.
+# ** Error: (vlog-13069) ahb_slave.v(109): near ";": syntax error, unexpected ';', expecting ':'.
+# End time: 08:55:14 on Sep 20,2024, Elapsed time: 0:00:00
+# Errors: 5, Warnings: 0
+# F:/questasim/questasim64_2021.1/win64/vlog failed.
+vlog ahb_slave.v
+# QuestaSim-64 vlog 2021.1 Compiler 2021.01 Jan 19 2021
+# Start time: 16:38:01 on Sep 20,2024
+# vlog -reportprogress 300 ahb_slave.v 
+# -- Compiling module ahb_slave
+# ** Error: ahb_slave.v(106): A begin/end block was found with an empty body.  This is permitted in SystemVerilog, but not permitted in Verilog.  Please look for any stray semicolons.
+# ** Error: ahb_slave.v(109): A begin/end block was found with an empty body.  This is permitted in SystemVerilog, but not permitted in Verilog.  Please look for any stray semicolons.
+# End time: 16:38:02 on Sep 20,2024, Elapsed time: 0:00:01
+# Errors: 2, Warnings: 0
+# F:/questasim/questasim64_2021.1/win64/vlog failed.
+vlog ahb_slave.v
+# QuestaSim-64 vlog 2021.1 Compiler 2021.01 Jan 19 2021
+# Start time: 16:45:51 on Sep 20,2024
+# vlog -reportprogress 300 ahb_slave.v 
+# -- Compiling module ahb_slave
+# 
+# Top level modules:
+# 	ahb_slave
+# End time: 16:45:51 on Sep 20,2024, Elapsed time: 0:00:00
+# Errors: 0, Warnings: 0
+vlog ahb_slave.v
+# QuestaSim-64 vlog 2021.1 Compiler 2021.01 Jan 19 2021
+# Start time: 17:08:25 on Sep 20,2024
+# vlog -reportprogress 300 ahb_slave.v 
+# -- Compiling module ahb_slave
+# ** Error: ahb_slave.v(183): (vlog-2730) Undefined variable: 'HBRUST'.
+# End time: 17:08:25 on Sep 20,2024, Elapsed time: 0:00:00
+# Errors: 1, Warnings: 0
+# F:/questasim/questasim64_2021.1/win64/vlog failed.
+vlog ahb_slave.v
+# QuestaSim-64 vlog 2021.1 Compiler 2021.01 Jan 19 2021
+# Start time: 17:08:43 on Sep 20,2024
+# vlog -reportprogress 300 ahb_slave.v 
+# -- Compiling module ahb_slave
+# 
+# Top level modules:
+# 	ahb_slave
+# End time: 17:08:43 on Sep 20,2024, Elapsed time: 0:00:00
+# Errors: 0, Warnings: 0
+vsim -voptargs=+acc work.ahb_slave
+# vsim -voptargs="+acc" work.ahb_slave 
+# Start time: 17:09:11 on Sep 20,2024
+# ** Note: (vsim-3812) Design is being optimized...
+# ** Note: (vopt-143) Recognized 1 FSM in module "ahb_slave(fast)".
+# Loading work.ahb_slave(fast)
+add wave -position insertpoint sim:/ahb_slave/*
+force -freeze sim:/ahb_slave/HCLK 1 0, 0 {50 ns} -r 100
+force -freeze sim:/ahb_slave/HRESETn 1'h1 0
+run
+run
+run
+run
+run
+force -freeze sim:/ahb_slave/HRESETn 1'h0 0
+run
+run
+run
+run
+# End time: 20:20:46 on Sep 20,2024, Elapsed time: 3:11:35
+# Errors: 0, Warnings: 0
