@@ -4,6 +4,7 @@
 // virtual class base_test extends uvm_test;
 // `else 
 class base_test extends uvm_test;
+   `uvm_component_utils(base_test)
 // `endif
 
    // Virtual interface for connecting to the DUT
@@ -22,7 +23,7 @@ class base_test extends uvm_test;
    base_sequence base_sequence_h;
 
    // Constructor for the base_test class
-   function new (string name, uvm_component parent);
+   function new (string name = "base_test", uvm_component parent);
       super.new(name, parent);
    endfunction : new
 
