@@ -1,0 +1,193 @@
+m255
+K4
+z2
+Z0 !s99 nomlopt
+R0
+R0
+R0
+R0
+R0
+R0
+R0
+R0
+R0
+R0
+R0
+R0
+R0
+R0
+R0
+R0
+R0
+R0
+R0
+R0
+R0
+R0
+R0
+R0
+R0
+R0
+R0
+R0
+R0
+R0
+R0
+R0
+R0
+R0
+R0
+R0
+R0
+R0
+R0
+R0
+R0
+R0
+R0
+R0
+R0
+R0
+R0
+R0
+R0
+R0
+R0
+R0
+R0
+R0
+R0
+R0
+R0
+R0
+R0
+R0
+R0
+R0
+R0
+R0
+R0
+R0
+R0
+R0
+R0
+R0
+R0
+R0
+R0
+R0
+R0
+R0
+R0
+R0
+R0
+R0
+R0
+!s11f vlog 2021.1 2021.01, Jan 19 2021
+13
+!s112 1.1
+!i10d 8192
+!i10e 25
+!i10f 100
+cModel Technology
+Z1 dF:/ic_design/repos/AHB_LITE/rtl
+T_opt
+!s110 1727237714
+VLTk5425EAD^XZoXd7M_A:1
+Z2 04 11 4 work ahbslave_tb fast 0
+=46-98e743467fb1-66f38e51-303-3f88
+Z3 !s124 OEM100
+Z4 o-quiet -auto_acc_if_foreign -work work +acc
+Z5 tCvgOpt 0
+n@_opt
+Z6 OL;O;2021.1;73
+T_opt1
+!s110 1726853677
+V?Ozo_]ng<5[7TR9CEbE5P1
+R2
+=1-98e743467fb1-66edb22c-20a-331c
+R3
+R4
+R5
+n@_opt1
+R6
+R1
+T_opt2
+!s110 1726853860
+V>7]DOP4Y`ABcK?G6g[92Q2
+R2
+=1-98e743467fb1-66edb2e4-8-3b44
+R3
+R4
+R5
+n@_opt2
+R6
+R1
+vahb_decoder_s3
+!s110 1726853811
+!i10b 1
+!s100 d=6eI4dg[OR7]6LJWU^Yj1
+I4A?`Roe5ZD0MU33m74>V@1
+R1
+w1725799475
+8.\ahb_decoder_s3.v
+F.\ahb_decoder_s3.v
+!i122 4
+L0 14 92
+Z7 VDg1SIo80bB@j0V0VzS_@n1
+Z8 OL;L;2021.1;73
+r1
+!s85 0
+31
+!s108 1726853811.000000
+!s107 .\ahb_decoder_s3.v|
+!s90 .\ahb_decoder_s3.v|
+!i113 0
+Z9 o-L mtiAvm -L mtiRnm -L mtiOvm -L mtiUvm -L mtiUPF -L infact
+R5
+vahb_slave
+!s110 1727237708
+!i10b 1
+!s100 :z7DI7IG`2odl4XhfOY_22
+I7><HoJ0OQ>j4@l[g17Gdz2
+R1
+w1727237702
+8ahb_slave.v
+Fahb_slave.v
+!i122 102
+L0 17 269
+R7
+R8
+r1
+!s85 0
+31
+!s108 1727237708.000000
+!s107 ahb_slave.v|
+!s90 -reportprogress|300|ahb_slave.v|
+!i113 0
+R9
+R5
+vahbslave_tb
+DXx6 sv_std 3 std 0 22 9oUSJO;AeEaW`l:M@^WG92
+!s110 1727237710
+!i10b 1
+!s100 kn;[La1Q;;coI1U7GFS;23
+Iba3:omM<DPG<jl;D>J<5X2
+S1
+R1
+w1727237047
+8ahbs_tb.sv
+Fahbs_tb.sv
+!i122 103
+L0 3 115
+R7
+R8
+r1
+!s85 0
+31
+!s108 1727237710.000000
+!s107 ahbs_tb.sv|
+!s90 -reportprogress|300|ahbs_tb.sv|
+!i113 0
+R9
+R5
