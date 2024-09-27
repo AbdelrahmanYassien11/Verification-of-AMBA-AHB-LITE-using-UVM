@@ -1,6 +1,6 @@
 `timescale 1ns/1ns
 
-module ahbslave_tb();
+module ahb_slave_tb();
 
   logic         HRESETn;
   logic         HSEL;
