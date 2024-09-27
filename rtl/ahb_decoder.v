@@ -1,12 +1,11 @@
-module ahb_decoder #(parameter P_NUM  = 3
-					 parameter P_BITS = $clog2(P_NUM))
+module ahb_decoder #(parameter P_NUM  = 3, P_BITS = 4, ADDR_WIDTH = 32)
 (
     input   wire [31:0] HADDR,
     input   wire        HREADY, 
-    output  wire        HSELd,
-    output  wire        HSEL0,
-    output  wire        HSEL1,
-    output  wire        HSEL2
+    output  reg        	HSELd,
+    output  reg         HSEL0,
+    output  reg         HSEL1,
+    output  reg         HSEL2
 );
 
 

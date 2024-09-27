@@ -19,13 +19,13 @@ module ahb_slave #(parameter ADDR_WIDTH = 32, DATA_WIDTH = 32, ADDR_DEPTH = 16)
        input   wire         HRESETn,
        input   wire         HCLK,
        input   wire         HSEL,
-       input   wire  [31:0] HADDR,
+       input   wire  [ADDR_WIDTH-1:0] HADDR,
        input   wire  [ 1:0] HTRANS,
        input   wire         HWRITE,
        input   wire  [ 2:0] HSIZE,
        input   wire  [ 2:0] HBURST,
-       input   wire  [31:0] HWDATA,
-       output  wire  [31:0] HRDATA,
+       input   wire  [DATA_WIDTH-1:0] HWDATA,
+       output  wire  [DATA_WIDTH-1:0] HRDATA,
        output  reg   [ 1:0] HRESP,
        input   wire         HREADYin,
        output  reg          HREADYout
@@ -33,10 +33,10 @@ module ahb_slave #(parameter ADDR_WIDTH = 32, DATA_WIDTH = 32, ADDR_DEPTH = 16)
    /*********************************************************/
    /*********************************************************/ 
 
-  reg [31:0] HRDATA_reg;
-  reg [31:0] HRDATA_reg1;
-  reg [31:0] HADDR_reg;
-  reg [31:0] HWDATA_reg;
+  reg [DATA_WIDTH-1:0] HRDATA_reg;
+  reg [DATA_WIDTH-1:0] HRDATA_reg1;
+  reg [ADDR_WIDTH-1:0] HADDR_reg;
+  reg [DATA_WIDTH-1:0] HWDATA_reg;
   reg [ 1:0] HRESP_reg;
   reg        HREADYout_reg;
   reg [ 2:0] HBURST_reg;
@@ -44,9 +44,9 @@ module ahb_slave #(parameter ADDR_WIDTH = 32, DATA_WIDTH = 32, ADDR_DEPTH = 16)
   reg        HREADYin_reg;
   reg        HSEL_reg;
 
-  reg[31:0] HSIZE_reg;
+  reg[DATA_WIDTH-1:0] HSIZE_reg;
 
-  reg [DATA_WIDTH-1:0] mem [ADDR_DEPTH-1:0];
+  reg [DATA_WIDTH-1-1:0] mem [ADDR_DEPTH-1:0];
 
   integer burst_counter;
   integer burst_counter_reg;
@@ -190,7 +190,7 @@ module ahb_slave #(parameter ADDR_WIDTH = 32, DATA_WIDTH = 32, ADDR_DEPTH = 16)
                 case(HSIZE_reg) 
                   BYTE_P:     mem[HADDR_reg + burst_counter] = HWDATA_reg[7:0];
                   HALFWORD_P: mem[HADDR_reg + burst_counter] = HWDATA_reg[15:0];
-                  WORD_P:     mem[HADDR_reg + burst_counter] = HWDATA_reg[31:0];
+                  default:     mem[HADDR_reg + burst_counter] = HWDATA_reg[DATA_WIDTH-1:0];
                 endcase // HSIZE_reg
                 burst_counter_reg = burst_counter_reg + 1;
               end
@@ -198,7 +198,7 @@ module ahb_slave #(parameter ADDR_WIDTH = 32, DATA_WIDTH = 32, ADDR_DEPTH = 16)
                 case(HSIZE_reg) 
                   BYTE_P:     mem[HADDR_reg + burst_counter] = HWDATA_reg[7:0];
                   HALFWORD_P: mem[HADDR_reg + burst_counter] = HWDATA_reg[15:0];
-                  WORD_P:     mem[HADDR_reg + burst_counter] = HWDATA_reg[31:0];
+                  default:     mem[HADDR_reg + burst_counter] = HWDATA_reg[DATA_WIDTH-1:0];
                 endcase //HSIZE_reg
                 wrap_counter_reg = wrap_counter_reg - 1;
               end
@@ -206,7 +206,7 @@ module ahb_slave #(parameter ADDR_WIDTH = 32, DATA_WIDTH = 32, ADDR_DEPTH = 16)
                 case(HSIZE_reg) 
                   BYTE_P:     mem[HADDR_reg + burst_counter] = HWDATA_reg[7:0];
                   HALFWORD_P: mem[HADDR_reg + burst_counter] = HWDATA_reg[15:0];
-                  WORD_P:     mem[HADDR_reg + burst_counter] = HWDATA_reg[31:0];
+                  default:     mem[HADDR_reg + burst_counter] = HWDATA_reg[DATA_WIDTH-1:0];
                 endcase //HSIZE_reg
                 burst_counter_reg = 0 ;
               end
@@ -230,7 +230,7 @@ module ahb_slave #(parameter ADDR_WIDTH = 32, DATA_WIDTH = 32, ADDR_DEPTH = 16)
                 case(HSIZE_reg) 
                   BYTE_P:     HRDATA_reg[7:0] = mem[HADDR_reg  + burst_counter];
                   HALFWORD_P: HRDATA_reg[15:0] = mem[HADDR_reg  + burst_counter];
-                  WORD_P:     HRDATA_reg[31:0] = mem[HADDR_reg  + burst_counter];
+                  default:     HRDATA_reg[DATA_WIDTH-1:0] = mem[HADDR_reg  + burst_counter];
                 endcase //HSIZE_reg                
                 burst_counter_reg = burst_counter_reg + 1;
               end
@@ -238,7 +238,7 @@ module ahb_slave #(parameter ADDR_WIDTH = 32, DATA_WIDTH = 32, ADDR_DEPTH = 16)
                 case(HSIZE_reg) 
                   BYTE_P:     HRDATA_reg[7:0] = mem[HADDR_reg  + burst_counter];
                   HALFWORD_P: HRDATA_reg[15:0] = mem[HADDR_reg  + burst_counter];
-                  WORD_P:     HRDATA_reg[31:0] = mem[HADDR_reg  + burst_counter];
+                  default:     HRDATA_reg[DATA_WIDTH-1:0] = mem[HADDR_reg  + burst_counter];
                 endcase //HSIZE_reg     
                 wrap_counter_reg  = wrap_counter_reg - 1;
               end
@@ -246,7 +246,7 @@ module ahb_slave #(parameter ADDR_WIDTH = 32, DATA_WIDTH = 32, ADDR_DEPTH = 16)
                 case(HSIZE_reg) 
                   BYTE_P:     HRDATA_reg[7:0] = mem[HADDR_reg  + burst_counter];
                   HALFWORD_P: HRDATA_reg[15:0] = mem[HADDR_reg  + burst_counter];
-                  WORD_P:     HRDATA_reg[31:0] = mem[HADDR_reg  + burst_counter];
+                  default:     HRDATA_reg[DATA_WIDTH-1:0] = mem[HADDR_reg  + burst_counter];
                 endcase //HSIZE_reg     
                 burst_counter_reg = 0 ;
               end

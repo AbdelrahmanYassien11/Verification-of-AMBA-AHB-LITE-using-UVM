@@ -1,10 +1,6 @@
 
 `timescale 1ns/1ns
-module ahb_mux #(parameter P_NUM  = 3
-                 parameter P_BITS = $clog2(P_NUM)
-                 parameter ADDR_WIDTH = 32
-                 parameter DATA_WDITH = 32
-                )
+module ahb_mux #(parameter P_NUM  = 3, P_BITS = 4, ADDR_WIDTH = 32, DATA_WIDTH = 32)
 (
   input   wire        HRESETn,
   input   wire        HCLK,
@@ -28,11 +24,11 @@ module ahb_mux #(parameter P_NUM  = 3
 
   input   wire [DATA_WIDTH-1:0] HRDATAd,
   input   wire [1:0]            HRESPd,
-  input   wire                  HREADYd
+  input   wire                  HREADYd,
 
   output  reg  [DATA_WIDTH-1:0] HRDATA,
   output  reg  [1:0]            HRESP,
-  output  reg                   HREADY,
+  output  reg                   HREADY
 );
  /********************************************************/
   localparam P_HSEL_bus0 = 4'b0001;

@@ -21,7 +21,7 @@ module ahbslave_tb();
 		#5 clk = ~clk;
 	end
 
-	ahb_slave s0(
+	ahb_lite ahb1(
 		.HCLK(clk),
 		.HRESETn(HRESETn),
 		.HSEL(HSEL),

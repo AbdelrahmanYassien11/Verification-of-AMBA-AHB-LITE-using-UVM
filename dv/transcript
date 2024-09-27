@@ -14,27 +14,20 @@
 # //
 # do run.do
 # QuestaSim-64 vlog 2021.1 Compiler 2021.01 Jan 19 2021
-# Start time: 17:02:02 on Sep 18,2024
+# Start time: 14:36:08 on Sep 26,2024
 # vlog -reportprogress 300 -f dut.f "+cover" -covercells 
-# -- Compiling module memory
 # -- Compiling module ahb_default_slave
 # -- Compiling module ahb_slave
-# -- Compiling module ahb_s2m_s3
-# -- Compiling module ahb_decoder_s3
-# -- Compiling module ahb_decoder_s3
-# ** Warning: ** while parsing file included at ../rtl/ahb_lite_s3.v(10)
-# ** at ../rtl/ahb_decoder_s3.v(14): (vlog-2275) Existing module 'ahb_decoder_s3' at line 14 will be overwritten.
-# -- Compiling module ahb_s2m_s3
-# ** Warning: ** while parsing file included at ../rtl/ahb_lite_s3.v(11)
-# ** at ../rtl/ahb_s2m_s3.v(12): (vlog-2275) Existing module 'ahb_s2m_s3' at line 12 will be overwritten.
-# -- Compiling module ahb_lite_s3
+# -- Compiling module ahb_mux
+# -- Compiling module ahb_decoder
+# -- Compiling module ahb_lite
 # 
 # Top level modules:
-# 	ahb_lite_s3
-# End time: 17:02:02 on Sep 18,2024, Elapsed time: 0:00:00
-# Errors: 0, Warnings: 2
+# 	ahb_lite
+# End time: 14:36:08 on Sep 26,2024, Elapsed time: 0:00:00
+# Errors: 0, Warnings: 0
 # QuestaSim-64 vlog 2021.1 Compiler 2021.01 Jan 19 2021
-# Start time: 17:02:02 on Sep 18,2024
+# Start time: 14:36:08 on Sep 26,2024
 # vlog -reportprogress 300 -f tb.f "+cover" -covercells 
 # -- Compiling package AHB_pkg
 # -- Importing package mtiUvm.uvm_pkg (uvm-1.1d Built-in)
@@ -45,11 +38,11 @@
 # 
 # Top level modules:
 # 	top_test_uvm
-# End time: 17:02:02 on Sep 18,2024, Elapsed time: 0:00:00
+# End time: 14:36:08 on Sep 26,2024, Elapsed time: 0:00:00
 # Errors: 0, Warnings: 0
 # QuestaSim-64 vopt 2021.1 Compiler 2021.01 Jan 19 2021
-# Start time: 17:02:03 on Sep 18,2024
-# vopt -reportprogress 300 top_test_uvm -o top_optimized "+acc" "+cover=bcefsx+ahb_lite_s3(rtl)" 
+# Start time: 14:36:08 on Sep 26,2024
+# vopt -reportprogress 300 top_test_uvm -o top_optimized "+acc" "+cover=bcefsx+ahb_lite(rtl)" 
 # 
 # Top level modules:
 # 	top_test_uvm
@@ -60,52 +53,616 @@
 # -- Importing package AHB_pkg
 # -- Loading package mtiUvm.questa_uvm_pkg
 # -- Loading interface inf
-# -- Loading module ahb_lite_s3
-# -- Loading module ahb_decoder_s3
-# -- Loading module ahb_s2m_s3
+# -- Loading module ahb_lite
+# -- Loading module ahb_decoder
+# -- Loading module ahb_mux
 # -- Loading module ahb_default_slave
 # -- Loading module ahb_slave
-# -- Loading module memory
-# ** Error (suppressible): ../rtl/ahb_slave.v(33): (vopt-8884) Illegal output port connection for 'data_out' (6th connection) to reg type. 
-# ** Error (suppressible): ../rtl/ahb_slave.v(33): (vopt-8884) Illegal output port connection for 'invalid' (7th connection) to reg type. 
-# Optimization failed
-# End time: 17:02:03 on Sep 18,2024, Elapsed time: 0:00:00
-# Errors: 2, Warnings: 0
-# ** Error: F:/questasim/questasim64_2021.1/win64/vopt failed.
-# Error in macro ./run.do line 5
-# Return status = 2
-#     (procedure "compile" line 1)
-#     invoked from within
-# "compile NoFilter vopt top_test_uvm -o top_optimized +acc +cover=bcefsx+ahb_lite_s3(rtl)"
-#     ("eval" body line 1)
-#     invoked from within
-# "eval compile NoFilter vopt $args"
-#     (procedure "vopt" line 9)
-#     invoked from within
-# "vopt top_test_uvm -o top_optimized +acc +cover=bcefsx+ahb_lite_s3(rtl)"
+# Optimizing 11 design-units (inlining 0/9 module instances):
+# -- Optimizing package mtiUvm.uvm_pkg (uvm-1.1d Built-in)(fast)
+# -- Optimizing package mtiUvm.questa_uvm_pkg(fast)
+# -- Optimizing package AHB_pkg(fast)
+# -- Optimizing module ahb_slave(fast)
+# -- Optimizing interface inf(fast__2)
+# -- Optimizing module ahb_mux(fast)
+# -- Optimizing module ahb_lite(fast)
+# -- Optimizing module ahb_default_slave(fast)
+# -- Optimizing module ahb_decoder(fast)
+# -- Optimizing module top_test_uvm(fast)
+# -- Optimizing interface inf(fast)
+# Optimized design name is top_optimized
+# End time: 14:36:11 on Sep 26,2024, Elapsed time: 0:00:03
+# Errors: 0, Warnings: 0
+# vsim top_optimized -coverage "+UVM_TESTNAME=reset_test" 
+# Start time: 14:36:11 on Sep 26,2024
+# Loading sv_std.std
+# Loading work.inf(fast)
+# Loading mtiUvm.uvm_pkg(fast)
+# Loading work.AHB_pkg(fast)
+# Loading mtiUvm.questa_uvm_pkg(fast)
+# Loading work.top_test_uvm(fast)
+# Loading work.inf(fast__2)
+# Loading work.ahb_lite(fast)
+# Loading work.ahb_decoder(fast)
+# Loading work.ahb_mux(fast)
+# Loading work.ahb_default_slave(fast)
+# Loading work.ahb_slave(fast)
+# Loading F:/questasim/questasim64_2021.1/uvm-1.1d\win64\uvm_dpi.dll
+add wave -position insertpoint sim:/top_test_uvm/DUT/*
+run -akll
+# Unknown option: akll
+# ** UI-Msg: (vsim-4005) Invalid argument '-akll'.
+# Usage: run [<timesteps> [<time_units>]] | -all | -continue | -next | -step | -over | -out | -init | -final
+run -all
+# ----------------------------------------------------------------
+# UVM-1.1d
+# (C) 2007-2013 Mentor Graphics Corporation
+# (C) 2007-2013 Cadence Design Systems, Inc.
+# (C) 2006-2013 Synopsys, Inc.
+# (C) 2011-2013 Cypress Semiconductor Corp.
+# ----------------------------------------------------------------
+# 
+#   ***********       IMPORTANT RELEASE NOTES         ************
+# 
+#   You are using a version of the UVM library that has been compiled
+#   with `UVM_NO_DEPRECATED undefined.
+#   See http://www.eda.org/svdb/view.php?id=3313 for more details.
+# 
+#   You are using a version of the UVM library that has been compiled
+#   with `UVM_OBJECT_MUST_HAVE_CONSTRUCTOR undefined.
+#   See http://www.eda.org/svdb/view.php?id=3770 for more details.
+# 
+#       (Specify +UVM_NO_RELNOTES to turn off this notice)
+# 
+# UVM_INFO verilog_src/questa_uvm_pkg-1.2/src/questa_uvm_pkg.sv(277) @ 0: reporter [Questa UVM] QUESTA_UVM-1.2.3
+# UVM_INFO verilog_src/questa_uvm_pkg-1.2/src/questa_uvm_pkg.sv(278) @ 0: reporter [Questa UVM]  questa_uvm::init(+struct)
+# UVM_INFO @ 0: reporter [RNTST] Running test reset_test...
+# base_test build phase
+# my_test build phase
+# env build phase
+# my_active_agent build phase
+# my_driver build phase
+# Inputs monitor build phase complete.
+# UVM_INFO components/sequencer.svh(24) @ 0: uvm_test_top.env_h.active_agent_h.sequencer_h [SEQUENCER] Build phase executed
+# coverage build_phase
+# Passive agent build phase complete.
+# Outputs monitor build phase complete.
+# UVM_INFO components/scoreboard.svh(48) @ 0: uvm_test_top.env_h.scoreboard_h [SCOREBOARD] Build phase completed
+# my_comparator build phase
+# my_predictor build phase
+# my_driver connect phase
+# Inputs monitor connect phase complete.
+# UVM_INFO components/sequencer.svh(30) @ 0: uvm_test_top.env_h.active_agent_h.sequencer_h [SEQUENCER] Connect phase executed
+# my_active_agent connect phase
+# Outputs monitor connect phase complete.
+# Passive agent connect phase complete.
+# my_comparator connect phase
+# my_predictor connect phase
+# UVM_INFO components/scoreboard.svh(58) @ 0: uvm_test_top.env_h.scoreboard_h [SCOREBOARD] Connect phase completed
+# env connect phase
+# my_test connect phase
+# my_test connect phase
+# Inputs monitor end of elaboration phase complete.
+# my_monitor end_of_elaboration_phase
+# Outputs monitor end of elaboration phase complete.
+# Passive agent end of elaboration phase complete.
+# UVM_INFO components/env.svh(97) @ 0: uvm_test_top.env_h [env_h] '{"uvm_test_top.env_h.passive_agent_h.tlm_analysis_port_outputs":@uvm_port_component__5@15 }
+# UVM_INFO components/env.svh(99) @ 0: uvm_test_top.env_h [env_h] '{"uvm_test_top.env_h.active_agent_h.tlm_analysis_port_inputs":@uvm_port_component__5@13 }
+# UVM_INFO components/env.svh(101) @ 0: uvm_test_top.env_h [env_h] '{"uvm_test_top.env_h.passive_agent_h.tlm_analysis_port_outputs":@uvm_port_component__5@15 }
+# FINISHED GET_PROVIDED_TO
+# UVM_INFO components/env.svh(105) @ 0: uvm_test_top.env_h [env_h] '{ }
+# UVM_INFO components/env.svh(107) @ 0: uvm_test_top.env_h [env_h] '{"uvm_test_top.env_h.scoreboard_h.predictor_h.analysis_imp":@uvm_port_component__5@19 }
+# UVM_INFO components/env.svh(109) @ 0: uvm_test_top.env_h [env_h] '{"uvm_test_top.env_h.scoreboard_h.comparator_h.analysis_actual_outputs":@uvm_port_component__5@31 }
+# my_monitor end_of_elaboration_phase
+# env run phase
+# my_predictor run phase
+# UVM_INFO components/comparator.svh(70) @ 0: uvm_test_top.env_h.scoreboard_h.comparator_h [COMPARATOR] RUN PHASE
+# Passive agent run phase complete.
+# coverage run_phase
+# my_active_agent run phase
+# UVM_INFO components/sequencer.svh(36) @ 0: uvm_test_top.env_h.active_agent_h.sequencer_h [SEQUENCER] Run phase started
+# start of pre_body task
+# time: 10 negedge my bitchhhhhhhhhh
+# time:10 dddddddddddddddddddd
+# UVM_INFO components/predictor.svh(97) @ 10: uvm_test_top.env_h.scoreboard_h.predictor_h [PREDICTOR] WRITTEN_DATA: HRESETn:0, HWRITE:0, HTRANS:0, HSIZE:0, HBURST:0, HPROT:0, HADDR:0, HWDATA:0
+# UVM_INFO components/predictor.svh(101) @ 10: uvm_test_top.env_h.scoreboard_h.predictor_h [PREDICTOR] EXPECTED_DATA:  time:                   10  HRESETn = 0, HWRITE = 0, HTRANS =  0, HSIZE = 0, HBURST = 0, HPROT = 0, HADDR = 0, HWDATA = 0, HRDATA = x, HRESP = 0, HREADY = 1, incorrect_counter = 0
+# my_predictor run phase
+# UVM_INFO components/comparator.svh(74) @ 10: uvm_test_top.env_h.scoreboard_h.comparator_h [COMPARATOR] EXPECTED_SEQ_ITEM RECEIVED:  time:                   10  HRESETn = 0, HWRITE = 0, HTRANS =  0, HSIZE = 0, HBURST = 0, HPROT = 0, HADDR = 0, HWDATA = 0, HRDATA = x, HRESP = 0, HREADY = 1, incorrect_counter = 0
+# my_test run phase
+# UVM_INFO verilog_src/uvm-1.1d/src/base/uvm_objection.svh(1267) @ 10: reporter [TEST_DONE] 'run' phase is ready to proceed to the 'extract' phase
+# -------------------------------------------------------------------------------------------------------------------------------------------------------------
+# INCORRECT FLAG ASSERTION/DEASSERTION COUNTER = 0
+# CORRECT FLAG ASSERTION/DEASSERTION COUNTER = 0
+# -------------------------------------------------------------------------------------------------------------------------------------------------------------
+# 
+# --- UVM Report Summary ---
+# 
+# ** Report counts by severity
+# UVM_INFO :   19
+# UVM_WARNING :    0
+# UVM_ERROR :    0
+# UVM_FATAL :    0
+# ** Report counts by id
+# [COMPARATOR]     2
+# [PREDICTOR]     2
+# [Questa UVM]     2
+# [RNTST]     1
+# [SCOREBOARD]     2
+# [SEQUENCER]     3
+# [TEST_DONE]     1
+# [env_h]     6
+# ** Note: $finish    : F:/questasim/questasim64_2021.1/win64/../verilog_src/uvm-1.1d/src/base/uvm_root.svh(430)
+#    Time: 10 ns  Iteration: 61  Instance: /top_test_uvm
+# 1
+# Break in Task uvm_pkg/uvm_root::run_test at F:/questasim/questasim64_2021.1/win64/../verilog_src/uvm-1.1d/src/base/uvm_root.svh line 430
+run 20
+do run.do
+# Error 31: Unable to unlink file "F:/ic_design/repos/AHB_LITE/dv/work/top_optimized/_lib.qdb".
+# Error 31: Unable to unlink file "F:/ic_design/repos/AHB_LITE/dv/work/top_optimized/_lib3_0.qdb".
+# Error 31: Unable to unlink file "F:/ic_design/repos/AHB_LITE/dv/work/top_optimized/_lib3_0.qpg".
+# Error 31: Unable to unlink file "F:/ic_design/repos/AHB_LITE/dv/work/top_optimized/_lib3_0.qtl".
+# Error 133: Unable to remove directory "F:/ic_design/repos/AHB_LITE/dv/work/top_optimized".
+# Error 133: Unable to remove directory "F:/ic_design/repos/AHB_LITE/dv/work".
+# QuestaSim-64 vlog 2021.1 Compiler 2021.01 Jan 19 2021
+# Start time: 14:46:22 on Sep 26,2024
+# vlog -reportprogress 300 -f dut.f "+cover" -covercells 
+# -- Compiling module ahb_default_slave
+# -- Compiling module ahb_slave
+# -- Compiling module ahb_mux
+# -- Compiling module ahb_decoder
+# -- Compiling module ahb_lite
+# 
+# Top level modules:
+# 	ahb_lite
+# End time: 14:46:22 on Sep 26,2024, Elapsed time: 0:00:00
+# Errors: 0, Warnings: 0
+# QuestaSim-64 vlog 2021.1 Compiler 2021.01 Jan 19 2021
+# Start time: 14:46:22 on Sep 26,2024
+# vlog -reportprogress 300 -f tb.f "+cover" -covercells 
+# -- Compiling package AHB_pkg
+# -- Importing package mtiUvm.uvm_pkg (uvm-1.1d Built-in)
+# ** Note: (vlog-2286) AHB_lite_uvm_pkg.sv(4): Using implicit +incdir+F:/questasim/questasim64_2021.1/uvm-1.1d/../verilog_src/uvm-1.1d/src from import uvm_pkg
+# -- Compiling interface inf
+# -- Importing package AHB_pkg
+# -- Compiling module top_test_uvm
+# 
+# Top level modules:
+# 	top_test_uvm
+# End time: 14:46:23 on Sep 26,2024, Elapsed time: 0:00:01
+# Errors: 0, Warnings: 0
+# QuestaSim-64 vopt 2021.1 Compiler 2021.01 Jan 19 2021
+# Start time: 14:46:23 on Sep 26,2024
+# vopt -reportprogress 300 top_test_uvm -o top_optimized "+acc" "+cover=bcefsx+ahb_lite(rtl)" 
+# 
+# Top level modules:
+# 	top_test_uvm
+# 
+# Analyzing design...
+# -- Loading module top_test_uvm
+# -- Importing package mtiUvm.uvm_pkg (uvm-1.1d Built-in)
+# -- Importing package AHB_pkg
+# -- Loading package mtiUvm.questa_uvm_pkg
+# -- Loading interface inf
+# -- Loading module ahb_lite
+# -- Loading module ahb_decoder
+# -- Loading module ahb_mux
+# -- Loading module ahb_default_slave
+# -- Loading module ahb_slave
+# Optimizing 11 design-units (inlining 0/9 module instances):
+# -- Optimizing package mtiUvm.uvm_pkg (uvm-1.1d Built-in)(fast)
+# -- Optimizing package mtiUvm.questa_uvm_pkg(fast)
+# -- Optimizing package AHB_pkg(fast)
+# -- Optimizing module ahb_slave(fast)
+# -- Optimizing interface inf(fast__2)
+# -- Optimizing module ahb_mux(fast)
+# -- Optimizing module ahb_lite(fast)
+# -- Optimizing module ahb_default_slave(fast)
+# -- Optimizing module ahb_decoder(fast)
+# -- Optimizing module top_test_uvm(fast)
+# -- Optimizing interface inf(fast)
+# Optimized design name is top_optimized
+# End time: 14:46:25 on Sep 26,2024, Elapsed time: 0:00:02
+# Errors: 0, Warnings: 0
+# End time: 14:46:36 on Sep 26,2024, Elapsed time: 0:10:25
+# Errors: 0, Warnings: 0
+# vsim top_optimized -coverage "+UVM_TESTNAME=reset_test" 
+# Start time: 14:46:36 on Sep 26,2024
+# Loading sv_std.std
+# Loading work.inf(fast)
+# Loading mtiUvm.uvm_pkg(fast)
+# Loading work.AHB_pkg(fast)
+# Loading mtiUvm.questa_uvm_pkg(fast)
+# Loading work.top_test_uvm(fast)
+# Loading work.inf(fast__2)
+# Loading work.ahb_lite(fast)
+# Loading work.ahb_decoder(fast)
+# Loading work.ahb_mux(fast)
+# Loading work.ahb_default_slave(fast)
+# Loading work.ahb_slave(fast)
+# Loading F:/questasim/questasim64_2021.1/uvm-1.1d\win64\uvm_dpi.dll
+run -all
+# ----------------------------------------------------------------
+# UVM-1.1d
+# (C) 2007-2013 Mentor Graphics Corporation
+# (C) 2007-2013 Cadence Design Systems, Inc.
+# (C) 2006-2013 Synopsys, Inc.
+# (C) 2011-2013 Cypress Semiconductor Corp.
+# ----------------------------------------------------------------
+# 
+#   ***********       IMPORTANT RELEASE NOTES         ************
+# 
+#   You are using a version of the UVM library that has been compiled
+#   with `UVM_NO_DEPRECATED undefined.
+#   See http://www.eda.org/svdb/view.php?id=3313 for more details.
+# 
+#   You are using a version of the UVM library that has been compiled
+#   with `UVM_OBJECT_MUST_HAVE_CONSTRUCTOR undefined.
+#   See http://www.eda.org/svdb/view.php?id=3770 for more details.
+# 
+#       (Specify +UVM_NO_RELNOTES to turn off this notice)
+# 
+# UVM_INFO verilog_src/questa_uvm_pkg-1.2/src/questa_uvm_pkg.sv(277) @ 0: reporter [Questa UVM] QUESTA_UVM-1.2.3
+# UVM_INFO verilog_src/questa_uvm_pkg-1.2/src/questa_uvm_pkg.sv(278) @ 0: reporter [Questa UVM]  questa_uvm::init(+struct)
+# UVM_INFO @ 0: reporter [RNTST] Running test reset_test...
+# base_test build phase
+# my_test build phase
+# env build phase
+# my_active_agent build phase
+# my_driver build phase
+# Inputs monitor build phase complete.
+# UVM_INFO components/sequencer.svh(24) @ 0: uvm_test_top.env_h.active_agent_h.sequencer_h [SEQUENCER] Build phase executed
+# coverage build_phase
+# Passive agent build phase complete.
+# Outputs monitor build phase complete.
+# UVM_INFO components/scoreboard.svh(48) @ 0: uvm_test_top.env_h.scoreboard_h [SCOREBOARD] Build phase completed
+# my_comparator build phase
+# my_predictor build phase
+# my_driver connect phase
+# Inputs monitor connect phase complete.
+# UVM_INFO components/sequencer.svh(30) @ 0: uvm_test_top.env_h.active_agent_h.sequencer_h [SEQUENCER] Connect phase executed
+# my_active_agent connect phase
+# Outputs monitor connect phase complete.
+# Passive agent connect phase complete.
+# my_comparator connect phase
+# my_predictor connect phase
+# UVM_INFO components/scoreboard.svh(58) @ 0: uvm_test_top.env_h.scoreboard_h [SCOREBOARD] Connect phase completed
+# env connect phase
+# my_test connect phase
+# my_test connect phase
+# Inputs monitor end of elaboration phase complete.
+# my_monitor end_of_elaboration_phase
+# Outputs monitor end of elaboration phase complete.
+# Passive agent end of elaboration phase complete.
+# UVM_INFO components/env.svh(97) @ 0: uvm_test_top.env_h [env_h] '{"uvm_test_top.env_h.passive_agent_h.tlm_analysis_port_outputs":@uvm_port_component__5@15 }
+# UVM_INFO components/env.svh(99) @ 0: uvm_test_top.env_h [env_h] '{"uvm_test_top.env_h.active_agent_h.tlm_analysis_port_inputs":@uvm_port_component__5@13 }
+# UVM_INFO components/env.svh(101) @ 0: uvm_test_top.env_h [env_h] '{"uvm_test_top.env_h.passive_agent_h.tlm_analysis_port_outputs":@uvm_port_component__5@15 }
+# FINISHED GET_PROVIDED_TO
+# UVM_INFO components/env.svh(105) @ 0: uvm_test_top.env_h [env_h] '{ }
+# UVM_INFO components/env.svh(107) @ 0: uvm_test_top.env_h [env_h] '{"uvm_test_top.env_h.scoreboard_h.predictor_h.analysis_imp":@uvm_port_component__5@19 }
+# UVM_INFO components/env.svh(109) @ 0: uvm_test_top.env_h [env_h] '{"uvm_test_top.env_h.scoreboard_h.comparator_h.analysis_actual_outputs":@uvm_port_component__5@31 }
+# my_monitor end_of_elaboration_phase
+# env run phase
+# my_predictor run phase
+# UVM_INFO components/comparator.svh(70) @ 0: uvm_test_top.env_h.scoreboard_h.comparator_h [COMPARATOR] RUN PHASE
+# Passive agent run phase complete.
+# coverage run_phase
+# my_active_agent run phase
+# UVM_INFO components/sequencer.svh(36) @ 0: uvm_test_top.env_h.active_agent_h.sequencer_h [SEQUENCER] Run phase started
+# start of pre_body task
+# time: 10 negedge my bitchhhhhhhhhh
+# time:10 dddddddddddddddddddd
+# UVM_INFO components/predictor.svh(97) @ 10: uvm_test_top.env_h.scoreboard_h.predictor_h [PREDICTOR] WRITTEN_DATA: HRESETn:0, HWRITE:0, HTRANS:0, HSIZE:0, HBURST:0, HPROT:0, HADDR:0, HWDATA:0
+# UVM_INFO components/predictor.svh(101) @ 10: uvm_test_top.env_h.scoreboard_h.predictor_h [PREDICTOR] EXPECTED_DATA:  time:                   10  HRESETn = 0, HWRITE = 0, HTRANS =  0, HSIZE = 0, HBURST = 0, HPROT = 0, HADDR = 0, HWDATA = 0, HRDATA = x, HRESP = 0, HREADY = 1, incorrect_counter = 0
+# my_predictor run phase
+# UVM_INFO components/comparator.svh(74) @ 10: uvm_test_top.env_h.scoreboard_h.comparator_h [COMPARATOR] EXPECTED_SEQ_ITEM RECEIVED:  time:                   10  HRESETn = 0, HWRITE = 0, HTRANS =  0, HSIZE = 0, HBURST = 0, HPROT = 0, HADDR = 0, HWDATA = 0, HRDATA = x, HRESP = 0, HREADY = 1, incorrect_counter = 0
+# my_test run phase
+# UVM_INFO verilog_src/uvm-1.1d/src/base/uvm_objection.svh(1267) @ 10: reporter [TEST_DONE] 'run' phase is ready to proceed to the 'extract' phase
+# -------------------------------------------------------------------------------------------------------------------------------------------------------------
+# INCORRECT FLAG ASSERTION/DEASSERTION COUNTER = 0
+# CORRECT FLAG ASSERTION/DEASSERTION COUNTER = 0
+# -------------------------------------------------------------------------------------------------------------------------------------------------------------
+# 
+# --- UVM Report Summary ---
+# 
+# ** Report counts by severity
+# UVM_INFO :   19
+# UVM_WARNING :    0
+# UVM_ERROR :    0
+# UVM_FATAL :    0
+# ** Report counts by id
+# [COMPARATOR]     2
+# [PREDICTOR]     2
+# [Questa UVM]     2
+# [RNTST]     1
+# [SCOREBOARD]     2
+# [SEQUENCER]     3
+# [TEST_DONE]     1
+# [env_h]     6
+# ** Note: $finish    : F:/questasim/questasim64_2021.1/win64/../verilog_src/uvm-1.1d/src/base/uvm_root.svh(430)
+#    Time: 10 ns  Iteration: 61  Instance: /top_test_uvm
+# 1
+# Break in Task uvm_pkg/uvm_root::run_test at F:/questasim/questasim64_2021.1/win64/../verilog_src/uvm-1.1d/src/base/uvm_root.svh line 430
+do run.do
+# Error 31: Unable to unlink file "F:/ic_design/repos/AHB_LITE/dv/work/top_optimized/_lib.qdb".
+# Error 31: Unable to unlink file "F:/ic_design/repos/AHB_LITE/dv/work/top_optimized/_lib3_0.qdb".
+# Error 31: Unable to unlink file "F:/ic_design/repos/AHB_LITE/dv/work/top_optimized/_lib3_0.qpg".
+# Error 31: Unable to unlink file "F:/ic_design/repos/AHB_LITE/dv/work/top_optimized/_lib3_0.qtl".
+# Error 133: Unable to remove directory "F:/ic_design/repos/AHB_LITE/dv/work/top_optimized".
+# Error 133: Unable to remove directory "F:/ic_design/repos/AHB_LITE/dv/work".
+# QuestaSim-64 vlog 2021.1 Compiler 2021.01 Jan 19 2021
+# Start time: 14:53:11 on Sep 26,2024
+# vlog -reportprogress 300 -f dut.f "+cover" -covercells 
+# -- Compiling module ahb_default_slave
+# -- Compiling module ahb_slave
+# -- Compiling module ahb_mux
+# -- Compiling module ahb_decoder
+# -- Compiling module ahb_lite
+# 
+# Top level modules:
+# 	ahb_lite
+# End time: 14:53:11 on Sep 26,2024, Elapsed time: 0:00:00
+# Errors: 0, Warnings: 0
+# QuestaSim-64 vlog 2021.1 Compiler 2021.01 Jan 19 2021
+# Start time: 14:53:11 on Sep 26,2024
+# vlog -reportprogress 300 -f tb.f "+cover" -covercells 
+# -- Compiling package AHB_pkg
+# -- Importing package mtiUvm.uvm_pkg (uvm-1.1d Built-in)
+# ** Note: (vlog-2286) AHB_lite_uvm_pkg.sv(4): Using implicit +incdir+F:/questasim/questasim64_2021.1/uvm-1.1d/../verilog_src/uvm-1.1d/src from import uvm_pkg
+# -- Compiling interface inf
+# -- Importing package AHB_pkg
+# ** Error: (vlog-13069) interface/AHB_lite_interface.sv(57): near "automatic": syntax error, unexpected automatic.
+# -- Compiling module top_test_uvm
+# End time: 14:53:12 on Sep 26,2024, Elapsed time: 0:00:01
+# Errors: 1, Warnings: 0
+# ** Error: F:/questasim/questasim64_2021.1/win64/vlog failed.
+# Error in macro ./run.do line 4
+# F:/questasim/questasim64_2021.1/win64/vlog failed.
+#     while executing
+# "vlog -f tb.f +cover -covercells"
+do run.do
+# Error 31: Unable to unlink file "F:/ic_design/repos/AHB_LITE/dv/work/top_optimized/_lib.qdb".
+# Error 31: Unable to unlink file "F:/ic_design/repos/AHB_LITE/dv/work/top_optimized/_lib3_0.qdb".
+# Error 31: Unable to unlink file "F:/ic_design/repos/AHB_LITE/dv/work/top_optimized/_lib3_0.qpg".
+# Error 31: Unable to unlink file "F:/ic_design/repos/AHB_LITE/dv/work/top_optimized/_lib3_0.qtl".
+# Error 133: Unable to remove directory "F:/ic_design/repos/AHB_LITE/dv/work/top_optimized".
+# Error 133: Unable to remove directory "F:/ic_design/repos/AHB_LITE/dv/work".
+# QuestaSim-64 vlog 2021.1 Compiler 2021.01 Jan 19 2021
+# Start time: 15:08:01 on Sep 26,2024
+# vlog -reportprogress 300 -f dut.f "+cover" -covercells 
+# -- Compiling module ahb_default_slave
+# -- Compiling module ahb_slave
+# -- Compiling module ahb_mux
+# -- Compiling module ahb_decoder
+# -- Compiling module ahb_lite
+# 
+# Top level modules:
+# 	ahb_lite
+# End time: 15:08:01 on Sep 26,2024, Elapsed time: 0:00:00
+# Errors: 0, Warnings: 0
+# QuestaSim-64 vlog 2021.1 Compiler 2021.01 Jan 19 2021
+# Start time: 15:08:01 on Sep 26,2024
+# vlog -reportprogress 300 -f tb.f "+cover" -covercells 
+# -- Compiling package AHB_pkg
+# -- Importing package mtiUvm.uvm_pkg (uvm-1.1d Built-in)
+# ** Note: (vlog-2286) AHB_lite_uvm_pkg.sv(4): Using implicit +incdir+F:/questasim/questasim64_2021.1/uvm-1.1d/../verilog_src/uvm-1.1d/src from import uvm_pkg
+# -- Compiling interface inf
+# -- Importing package AHB_pkg
+# -- Compiling module top_test_uvm
+# 
+# Top level modules:
+# 	top_test_uvm
+# End time: 15:08:02 on Sep 26,2024, Elapsed time: 0:00:01
+# Errors: 0, Warnings: 0
+# QuestaSim-64 vopt 2021.1 Compiler 2021.01 Jan 19 2021
+# Start time: 15:08:02 on Sep 26,2024
+# vopt -reportprogress 300 top_test_uvm -o top_optimized "+acc" "+cover=bcefsx+ahb_lite(rtl)" 
+# ** Warning: (vopt-31) Unable to unlink file "F:/ic_design/repos/AHB_LITE/dv/work/top_optimized/_lib.qdb".
+# ** Warning: (vopt-31) Unable to unlink file "F:/ic_design/repos/AHB_LITE/dv/work/top_optimized/_lib3_0.qdb".
+# The process cannot access the file because it is being used by another process. (GetLastError() = 32)
+# ** Warning: (vopt-31) Unable to unlink file "F:/ic_design/repos/AHB_LITE/dv/work/top_optimized/_lib3_0.qpg".
+# The process cannot access the file because it is being used by another process. (GetLastError() = 32)
+# ** Warning: (vopt-31) Unable to unlink file "F:/ic_design/repos/AHB_LITE/dv/work/top_optimized/_lib3_0.qtl".
+# The process cannot access the file because it is being used by another process. (GetLastError() = 32)
+# ** Warning: (vopt-133) Unable to remove directory "F:/ic_design/repos/AHB_LITE/dv/work/top_optimized".
+# 
+# Top level modules:
+# 	top_test_uvm
+# 
+# Analyzing design...
+# -- Loading module top_test_uvm
+# -- Importing package mtiUvm.uvm_pkg (uvm-1.1d Built-in)
+# -- Importing package AHB_pkg
+# -- Loading package mtiUvm.questa_uvm_pkg
+# -- Loading interface inf
+# -- Loading module ahb_lite
+# -- Loading module ahb_decoder
+# -- Loading module ahb_mux
+# -- Loading module ahb_default_slave
+# -- Loading module ahb_slave
+# init_auxdbinfo(): INTERNAL ERROR: Cannot open page file "F:/ic_design/repos/AHB_LITE/dv/work/top_optimized/_lib1_0.qpg" in read mode
+# Optimizing 11 design-units (inlining 0/9 module instances):
+# -- Optimizing package mtiUvm.uvm_pkg (uvm-1.1d Built-in)(fast)
+# -- Optimizing package mtiUvm.questa_uvm_pkg(fast)
+# -- Optimizing package AHB_pkg(fast)
+# -- Optimizing module ahb_slave(fast)
+# -- Optimizing interface inf(fast__2)
+# -- Optimizing module ahb_mux(fast)
+# -- Optimizing module ahb_lite(fast)
+# -- Optimizing module ahb_default_slave(fast)
+# -- Optimizing module ahb_decoder(fast)
+# -- Optimizing module top_test_uvm(fast)
+# -- Optimizing interface inf(fast)
+# Optimized design name is top_optimized
+# End time: 15:08:04 on Sep 26,2024, Elapsed time: 0:00:02
+# Errors: 0, Warnings: 5
+# End time: 15:08:37 on Sep 26,2024, Elapsed time: 0:22:01
+# Errors: 1, Warnings: 0
+# vsim top_optimized -coverage "+UVM_TESTNAME=reset_test" 
+# Start time: 15:08:37 on Sep 26,2024
+# Loading sv_std.std
+# Loading work.inf(fast)
+# Loading mtiUvm.uvm_pkg(fast)
+# Loading work.AHB_pkg(fast)
+# Loading mtiUvm.questa_uvm_pkg(fast)
+# Loading work.top_test_uvm(fast)
+# Loading work.inf(fast__2)
+# Loading work.ahb_lite(fast)
+# Loading work.ahb_decoder(fast)
+# Loading work.ahb_mux(fast)
+# Loading work.ahb_default_slave(fast)
+# Loading work.ahb_slave(fast)
+# Loading F:/questasim/questasim64_2021.1/uvm-1.1d\win64\uvm_dpi.dll
+run -all
+# ----------------------------------------------------------------
+# UVM-1.1d
+# (C) 2007-2013 Mentor Graphics Corporation
+# (C) 2007-2013 Cadence Design Systems, Inc.
+# (C) 2006-2013 Synopsys, Inc.
+# (C) 2011-2013 Cypress Semiconductor Corp.
+# ----------------------------------------------------------------
+# 
+#   ***********       IMPORTANT RELEASE NOTES         ************
+# 
+#   You are using a version of the UVM library that has been compiled
+#   with `UVM_NO_DEPRECATED undefined.
+#   See http://www.eda.org/svdb/view.php?id=3313 for more details.
+# 
+#   You are using a version of the UVM library that has been compiled
+#   with `UVM_OBJECT_MUST_HAVE_CONSTRUCTOR undefined.
+#   See http://www.eda.org/svdb/view.php?id=3770 for more details.
+# 
+#       (Specify +UVM_NO_RELNOTES to turn off this notice)
+# 
+# UVM_INFO verilog_src/questa_uvm_pkg-1.2/src/questa_uvm_pkg.sv(277) @ 0: reporter [Questa UVM] QUESTA_UVM-1.2.3
+# UVM_INFO verilog_src/questa_uvm_pkg-1.2/src/questa_uvm_pkg.sv(278) @ 0: reporter [Questa UVM]  questa_uvm::init(+struct)
+# UVM_INFO @ 0: reporter [RNTST] Running test reset_test...
+# base_test build phase
+# my_test build phase
+# env build phase
+# my_active_agent build phase
+# my_driver build phase
+# Inputs monitor build phase complete.
+# UVM_INFO components/sequencer.svh(24) @ 0: uvm_test_top.env_h.active_agent_h.sequencer_h [SEQUENCER] Build phase executed
+# coverage build_phase
+# Passive agent build phase complete.
+# Outputs monitor build phase complete.
+# UVM_INFO components/scoreboard.svh(48) @ 0: uvm_test_top.env_h.scoreboard_h [SCOREBOARD] Build phase completed
+# my_comparator build phase
+# my_predictor build phase
+# my_driver connect phase
+# Inputs monitor connect phase complete.
+# UVM_INFO components/sequencer.svh(30) @ 0: uvm_test_top.env_h.active_agent_h.sequencer_h [SEQUENCER] Connect phase executed
+# my_active_agent connect phase
+# Outputs monitor connect phase complete.
+# Passive agent connect phase complete.
+# my_comparator connect phase
+# my_predictor connect phase
+# UVM_INFO components/scoreboard.svh(58) @ 0: uvm_test_top.env_h.scoreboard_h [SCOREBOARD] Connect phase completed
+# env connect phase
+# my_test connect phase
+# my_test connect phase
+# Inputs monitor end of elaboration phase complete.
+# my_monitor end_of_elaboration_phase
+# Outputs monitor end of elaboration phase complete.
+# Passive agent end of elaboration phase complete.
+# UVM_INFO components/env.svh(97) @ 0: uvm_test_top.env_h [env_h] '{"uvm_test_top.env_h.passive_agent_h.tlm_analysis_port_outputs":@uvm_port_component__5@15 }
+# UVM_INFO components/env.svh(99) @ 0: uvm_test_top.env_h [env_h] '{"uvm_test_top.env_h.active_agent_h.tlm_analysis_port_inputs":@uvm_port_component__5@13 }
+# UVM_INFO components/env.svh(101) @ 0: uvm_test_top.env_h [env_h] '{"uvm_test_top.env_h.passive_agent_h.tlm_analysis_port_outputs":@uvm_port_component__5@15 }
+# FINISHED GET_PROVIDED_TO
+# UVM_INFO components/env.svh(105) @ 0: uvm_test_top.env_h [env_h] '{ }
+# UVM_INFO components/env.svh(107) @ 0: uvm_test_top.env_h [env_h] '{"uvm_test_top.env_h.scoreboard_h.predictor_h.analysis_imp":@uvm_port_component__5@19 }
+# UVM_INFO components/env.svh(109) @ 0: uvm_test_top.env_h [env_h] '{"uvm_test_top.env_h.scoreboard_h.comparator_h.analysis_actual_outputs":@uvm_port_component__5@31 }
+# my_monitor end_of_elaboration_phase
+# env run phase
+# my_predictor run phase
+# UVM_INFO components/comparator.svh(70) @ 0: uvm_test_top.env_h.scoreboard_h.comparator_h [COMPARATOR] RUN PHASE
+# Passive agent run phase complete.
+# coverage run_phase
+# my_active_agent run phase
+# UVM_INFO components/sequencer.svh(36) @ 0: uvm_test_top.env_h.active_agent_h.sequencer_h [SEQUENCER] Run phase started
+# start of pre_body task
+# time: 10 negedge my bitchhhhhhhhhh
+# time:10 dddddddddddddddddddd
+# UVM_INFO components/predictor.svh(97) @ 10: uvm_test_top.env_h.scoreboard_h.predictor_h [PREDICTOR] WRITTEN_DATA: HRESETn:0, HWRITE:0, HTRANS:0, HSIZE:0, HBURST:0, HPROT:0, HADDR:0, HWDATA:0
+# UVM_INFO components/predictor.svh(101) @ 10: uvm_test_top.env_h.scoreboard_h.predictor_h [PREDICTOR] EXPECTED_DATA:  time:                   10  HRESETn = 0, HWRITE = 0, HTRANS =  0, HSIZE = 0, HBURST = 0, HPROT = 0, HADDR = 0, HWDATA = 0, HRDATA = x, HRESP = 0, HREADY = 1, incorrect_counter = 0
+# my_predictor run phase
+# UVM_INFO components/comparator.svh(74) @ 10: uvm_test_top.env_h.scoreboard_h.comparator_h [COMPARATOR] EXPECTED_SEQ_ITEM RECEIVED:  time:                   10  HRESETn = 0, HWRITE = 0, HTRANS =  0, HSIZE = 0, HBURST = 0, HPROT = 0, HADDR = 0, HWDATA = 0, HRDATA = x, HRESP = 0, HREADY = 1, incorrect_counter = 0
+# my_test run phase
+# UVM_INFO verilog_src/uvm-1.1d/src/base/uvm_objection.svh(1267) @ 10: reporter [TEST_DONE] 'run' phase is ready to proceed to the 'extract' phase
+# -------------------------------------------------------------------------------------------------------------------------------------------------------------
+# INCORRECT FLAG ASSERTION/DEASSERTION COUNTER = 0
+# CORRECT FLAG ASSERTION/DEASSERTION COUNTER = 0
+# -------------------------------------------------------------------------------------------------------------------------------------------------------------
+# 
+# --- UVM Report Summary ---
+# 
+# ** Report counts by severity
+# UVM_INFO :   19
+# UVM_WARNING :    0
+# UVM_ERROR :    0
+# UVM_FATAL :    0
+# ** Report counts by id
+# [COMPARATOR]     2
+# [PREDICTOR]     2
+# [Questa UVM]     2
+# [RNTST]     1
+# [SCOREBOARD]     2
+# [SEQUENCER]     3
+# [TEST_DONE]     1
+# [env_h]     6
+# ** Note: $finish    : F:/questasim/questasim64_2021.1/win64/../verilog_src/uvm-1.1d/src/base/uvm_root.svh(430)
+#    Time: 10 ns  Iteration: 61  Instance: /top_test_uvm
+# 1
+# Break in Task uvm_pkg/uvm_root::run_test at F:/questasim/questasim64_2021.1/win64/../verilog_src/uvm-1.1d/src/base/uvm_root.svh line 430
+run 200
+run 200
 do run.do
 # QuestaSim-64 vlog 2021.1 Compiler 2021.01 Jan 19 2021
-# Start time: 17:04:44 on Sep 18,2024
+# Start time: 15:18:42 on Sep 26,2024
 # vlog -reportprogress 300 -f dut.f "+cover" -covercells 
-# -- Compiling module memory
 # -- Compiling module ahb_default_slave
 # -- Compiling module ahb_slave
-# -- Compiling module ahb_s2m_s3
-# -- Compiling module ahb_decoder_s3
-# -- Compiling module ahb_decoder_s3
-# ** Warning: ** while parsing file included at ../rtl/ahb_lite_s3.v(10)
-# ** at ../rtl/ahb_decoder_s3.v(14): (vlog-2275) Existing module 'ahb_decoder_s3' at line 14 will be overwritten.
-# -- Compiling module ahb_s2m_s3
-# ** Warning: ** while parsing file included at ../rtl/ahb_lite_s3.v(11)
-# ** at ../rtl/ahb_s2m_s3.v(12): (vlog-2275) Existing module 'ahb_s2m_s3' at line 12 will be overwritten.
-# -- Compiling module ahb_lite_s3
+# -- Compiling module ahb_mux
+# -- Compiling module ahb_decoder
+# -- Compiling module ahb_lite
 # 
 # Top level modules:
-# 	ahb_lite_s3
-# End time: 17:04:44 on Sep 18,2024, Elapsed time: 0:00:00
-# Errors: 0, Warnings: 2
+# 	ahb_lite
+# End time: 15:18:42 on Sep 26,2024, Elapsed time: 0:00:00
+# Errors: 0, Warnings: 0
 # QuestaSim-64 vlog 2021.1 Compiler 2021.01 Jan 19 2021
-# Start time: 17:04:44 on Sep 18,2024
+# Start time: 15:18:42 on Sep 26,2024
+# vlog -reportprogress 300 -f tb.f "+cover" -covercells 
+# -- Compiling package AHB_pkg
+# -- Importing package mtiUvm.uvm_pkg (uvm-1.1d Built-in)
+# ** Note: (vlog-2286) AHB_lite_uvm_pkg.sv(4): Using implicit +incdir+F:/questasim/questasim64_2021.1/uvm-1.1d/../verilog_src/uvm-1.1d/src from import uvm_pkg
+# -- Compiling interface inf
+# -- Importing package AHB_pkg
+# ** Error: interface/AHB_lite_interface.sv(158): (vlog-2730) Undefined variable: 'iHWDATA'.
+# -- Compiling module top_test_uvm
+# End time: 15:18:42 on Sep 26,2024, Elapsed time: 0:00:00
+# Errors: 1, Warnings: 0
+# ** Error: F:/questasim/questasim64_2021.1/win64/vlog failed.
+# Error in macro ./run.do line 4
+# F:/questasim/questasim64_2021.1/win64/vlog failed.
+#     while executing
+# "vlog -f tb.f +cover -covercells"
+do run.do
+# QuestaSim-64 vlog 2021.1 Compiler 2021.01 Jan 19 2021
+# Start time: 15:19:29 on Sep 26,2024
+# vlog -reportprogress 300 -f dut.f "+cover" -covercells 
+# -- Compiling module ahb_default_slave
+# -- Compiling module ahb_slave
+# -- Compiling module ahb_mux
+# -- Compiling module ahb_decoder
+# -- Compiling module ahb_lite
+# 
+# Top level modules:
+# 	ahb_lite
+# End time: 15:19:29 on Sep 26,2024, Elapsed time: 0:00:00
+# Errors: 0, Warnings: 0
+# QuestaSim-64 vlog 2021.1 Compiler 2021.01 Jan 19 2021
+# Start time: 15:19:30 on Sep 26,2024
 # vlog -reportprogress 300 -f tb.f "+cover" -covercells 
 # -- Compiling package AHB_pkg
 # -- Importing package mtiUvm.uvm_pkg (uvm-1.1d Built-in)
@@ -116,11 +673,11 @@ do run.do
 # 
 # Top level modules:
 # 	top_test_uvm
-# End time: 17:04:44 on Sep 18,2024, Elapsed time: 0:00:00
+# End time: 15:19:30 on Sep 26,2024, Elapsed time: 0:00:00
 # Errors: 0, Warnings: 0
 # QuestaSim-64 vopt 2021.1 Compiler 2021.01 Jan 19 2021
-# Start time: 17:04:45 on Sep 18,2024
-# vopt -reportprogress 300 top_test_uvm -o top_optimized "+acc" "+cover=bcefsx+ahb_lite_s3(rtl)" 
+# Start time: 15:19:30 on Sep 26,2024
+# vopt -reportprogress 300 top_test_uvm -o top_optimized "+acc" "+cover=bcefsx+ahb_lite(rtl)" 
 # 
 # Top level modules:
 # 	top_test_uvm
@@ -131,302 +688,142 @@ do run.do
 # -- Importing package AHB_pkg
 # -- Loading package mtiUvm.questa_uvm_pkg
 # -- Loading interface inf
-# -- Loading module ahb_lite_s3
-# -- Loading module ahb_decoder_s3
-# -- Loading module ahb_s2m_s3
+# -- Loading module ahb_lite
+# -- Loading module ahb_decoder
+# -- Loading module ahb_mux
 # -- Loading module ahb_default_slave
 # -- Loading module ahb_slave
-# -- Loading module memory
-# ** Error (suppressible): ../rtl/ahb_slave.v(33): (vopt-8884) Illegal output port connection for 'invalid' (7th connection) to reg type. 
-# Optimization failed
-# End time: 17:04:45 on Sep 18,2024, Elapsed time: 0:00:00
-# Errors: 1, Warnings: 0
-# ** Error: F:/questasim/questasim64_2021.1/win64/vopt failed.
-# Error in macro ./run.do line 5
-# Return status = 2
-#     (procedure "compile" line 1)
-#     invoked from within
-# "compile NoFilter vopt top_test_uvm -o top_optimized +acc +cover=bcefsx+ahb_lite_s3(rtl)"
-#     ("eval" body line 1)
-#     invoked from within
-# "eval compile NoFilter vopt $args"
-#     (procedure "vopt" line 9)
-#     invoked from within
-# "vopt top_test_uvm -o top_optimized +acc +cover=bcefsx+ahb_lite_s3(rtl)"
-cd ..
-cd rtl
-vlog ahb_slave.v
-# QuestaSim-64 vlog 2021.1 Compiler 2021.01 Jan 19 2021
-# Start time: 17:23:29 on Sep 19,2024
-# vlog -reportprogress 300 ahb_slave.v 
-# -- Compiling module ahb_slave
-# ** Error: (vlog-13069) ahb_slave.v(45): near "=": syntax error, unexpected '='.
-# ** Error: ahb_slave.v(45): (vlog-13205) Syntax error found in the scope following 'STH_ERROR'. Is there a missing '::'?
-# End time: 17:23:30 on Sep 19,2024, Elapsed time: 0:00:01
-# Errors: 2, Warnings: 0
-# F:/questasim/questasim64_2021.1/win64/vlog failed.
-vlog ahb_slave.v
-# QuestaSim-64 vlog 2021.1 Compiler 2021.01 Jan 19 2021
-# Start time: 17:24:33 on Sep 19,2024
-# vlog -reportprogress 300 ahb_slave.v 
-# -- Compiling module ahb_slave
-# ** Error: (vlog-13069) ahb_slave.v(45): near "=": syntax error, unexpected '='.
-# ** Error: ahb_slave.v(45): (vlog-13205) Syntax error found in the scope following 'STH_ERROR'. Is there a missing '::'?
-# End time: 17:24:33 on Sep 19,2024, Elapsed time: 0:00:00
-# Errors: 2, Warnings: 0
-# F:/questasim/questasim64_2021.1/win64/vlog failed.
-vlog ahb_slave.v
-# QuestaSim-64 vlog 2021.1 Compiler 2021.01 Jan 19 2021
-# Start time: 17:24:49 on Sep 19,2024
-# vlog -reportprogress 300 ahb_slave.v 
-# -- Compiling module ahb_slave
-# ** Error: ahb_slave.v(67): (vlog-2730) Undefined variable: 'error_wire'.
-# ** Error: (vlog-13069) ahb_slave.v(147): near "TRANS_OPERATION": syntax error, unexpected IDENTIFIER, expecting '(' or ';'.
-# End time: 17:24:49 on Sep 19,2024, Elapsed time: 0:00:00
-# Errors: 2, Warnings: 0
-# F:/questasim/questasim64_2021.1/win64/vlog failed.
-vlog ahb_slave.v
-# QuestaSim-64 vlog 2021.1 Compiler 2021.01 Jan 19 2021
-# Start time: 17:25:14 on Sep 19,2024
-# vlog -reportprogress 300 ahb_slave.v 
-# -- Compiling module ahb_slave
-# ** Error: (vlog-13069) ahb_slave.v(145): near "TRANS_OPERATION": syntax error, unexpected IDENTIFIER, expecting '(' or ';'.
-# End time: 17:25:14 on Sep 19,2024, Elapsed time: 0:00:00
-# Errors: 1, Warnings: 0
-# F:/questasim/questasim64_2021.1/win64/vlog failed.
-vlog ahb_slave.v
-# QuestaSim-64 vlog 2021.1 Compiler 2021.01 Jan 19 2021
-# Start time: 19:07:03 on Sep 19,2024
-# vlog -reportprogress 300 ahb_slave.v 
-# -- Compiling module ahb_slave
-# ** Error: ahb_slave.v(78): (vlog-2163) Macro `TRANS_OPERATION is undefined.
-# ** Error: ahb_slave.v(78): A begin/end block was found with an empty body.  This is permitted in SystemVerilog, but not permitted in Verilog.  Please look for any stray semicolons.
-# ** Error: ahb_slave.v(81): (vlog-2163) Macro `TRANS_OPERATION is undefined.
-# ** Error: ahb_slave.v(81): A begin/end block was found with an empty body.  This is permitted in SystemVerilog, but not permitted in Verilog.  Please look for any stray semicolons.
-# ** Error: ahb_slave.v(146): (vlog-2730) Undefined variable: '\ '.
-# ** Error: (vlog-13069) ahb_slave.v(148): near "2": syntax error, unexpected INTEGER NUMBER, expecting ':' or ','.
-# ** Error: (vlog-13032) ahb_slave.v(150): near "<=": Syntax error.
-# ** Error: (vlog-13032) ahb_slave.v(151): near "<=": Syntax error.
-# ** Error: ahb_slave.v(151): (vlog-13205) Syntax error found in the scope following '\ '. Is there a missing '::'?
-# End time: 19:07:03 on Sep 19,2024, Elapsed time: 0:00:00
-# Errors: 9, Warnings: 0
-# F:/questasim/questasim64_2021.1/win64/vlog failed.
-vlog ahb_slave.v
-# QuestaSim-64 vlog 2021.1 Compiler 2021.01 Jan 19 2021
-# Start time: 19:08:04 on Sep 19,2024
-# vlog -reportprogress 300 ahb_slave.v 
-# ** Error: (vlog-13069) ahb_slave.v(17): near "case": syntax error, unexpected case, expecting class.
-# End time: 19:08:04 on Sep 19,2024, Elapsed time: 0:00:00
-# Errors: 1, Warnings: 0
-# F:/questasim/questasim64_2021.1/win64/vlog failed.
-vlog ahb_slave.v
-# QuestaSim-64 vlog 2021.1 Compiler 2021.01 Jan 19 2021
-# Start time: 19:23:34 on Sep 19,2024
-# vlog -reportprogress 300 ahb_slave.v 
-# -- Compiling module ahb_slave
-# ** Error: ahb_slave.v(36): (vlog-2730) Undefined variable: '\ '.
-# ** Error: (vlog-13069) ahb_slave.v(38): near "2": syntax error, unexpected INTEGER NUMBER, expecting ':' or ','.
-# ** Error: (vlog-13032) ahb_slave.v(40): near "<=": Syntax error.
-# ** Error: (vlog-13032) ahb_slave.v(41): near "<=": Syntax error.
-# ** Error: ahb_slave.v(41): (vlog-13205) Syntax error found in the scope following '\ '. Is there a missing '::'?
-# End time: 19:23:34 on Sep 19,2024, Elapsed time: 0:00:00
-# Errors: 5, Warnings: 0
-# F:/questasim/questasim64_2021.1/win64/vlog failed.
-vlog ahb_slave.v
-# QuestaSim-64 vlog 2021.1 Compiler 2021.01 Jan 19 2021
-# Start time: 19:24:53 on Sep 19,2024
-# vlog -reportprogress 300 ahb_slave.v 
-# -- Compiling module ahb_slave
-# ** Error: ahb_slave.v(36): (vlog-2730) Undefined variable: '\ '.
-# ** Error: (vlog-13069) ahb_slave.v(38): near "2": syntax error, unexpected INTEGER NUMBER, expecting ':' or ','.
-# ** Error: (vlog-13032) ahb_slave.v(40): near "<=": Syntax error.
-# ** Error: (vlog-13032) ahb_slave.v(41): near "<=": Syntax error.
-# ** Error: ahb_slave.v(41): (vlog-13205) Syntax error found in the scope following '\ '. Is there a missing '::'?
-# End time: 19:24:53 on Sep 19,2024, Elapsed time: 0:00:00
-# Errors: 5, Warnings: 0
-# F:/questasim/questasim64_2021.1/win64/vlog failed.
-vlog ahb_slave.v
-# QuestaSim-64 vlog 2021.1 Compiler 2021.01 Jan 19 2021
-# Start time: 19:25:17 on Sep 19,2024
-# vlog -reportprogress 300 ahb_slave.v 
-# -- Compiling module ahb_slave
-# ** Error: ahb_slave.v(36): (vlog-2730) Undefined variable: '\ '.
-# ** Error: (vlog-13069) ahb_slave.v(38): near "2": syntax error, unexpected INTEGER NUMBER, expecting ':' or ','.
-# ** Error: (vlog-13032) ahb_slave.v(40): near "<=": Syntax error.
-# ** Error: (vlog-13032) ahb_slave.v(41): near "<=": Syntax error.
-# ** Error: ahb_slave.v(41): (vlog-13205) Syntax error found in the scope following '\ '. Is there a missing '::'?
-# End time: 19:25:18 on Sep 19,2024, Elapsed time: 0:00:01
-# Errors: 5, Warnings: 0
-# F:/questasim/questasim64_2021.1/win64/vlog failed.
-vlog ahb_slave.v
-# QuestaSim-64 vlog 2021.1 Compiler 2021.01 Jan 19 2021
-# Start time: 19:26:37 on Sep 19,2024
-# vlog -reportprogress 300 ahb_slave.v 
-# -- Compiling module ahb_slave
-# ** Error: ahb_slave.v(36): (vlog-2730) Undefined variable: '\ '.
-# ** Error: (vlog-13069) ahb_slave.v(37): near "2": syntax error, unexpected INTEGER NUMBER, expecting ':' or ','.
-# ** Error: (vlog-13032) ahb_slave.v(39): near "<=": Syntax error.
-# ** Error: (vlog-13032) ahb_slave.v(40): near "<=": Syntax error.
-# ** Error: ahb_slave.v(40): (vlog-13205) Syntax error found in the scope following '\ '. Is there a missing '::'?
-# End time: 19:26:37 on Sep 19,2024, Elapsed time: 0:00:00
-# Errors: 5, Warnings: 0
-# F:/questasim/questasim64_2021.1/win64/vlog failed.
-vlog ahb_slave.v
-# QuestaSim-64 vlog 2021.1 Compiler 2021.01 Jan 19 2021
-# Start time: 08:48:36 on Sep 20,2024
-# vlog -reportprogress 300 ahb_slave.v 
-# -- Compiling module ahb_slave
-# ** Error: ahb_slave.v(35): (vlog-2730) Undefined variable: '\ '.
-# ** Error: (vlog-13069) ahb_slave.v(36): near "2": syntax error, unexpected INTEGER NUMBER, expecting ':' or ','.
-# ** Error: ahb_slave.v(38): (vlog-13205) Syntax error found in the scope following 'HRESP'. Is there a missing '::'?
-# End time: 08:48:37 on Sep 20,2024, Elapsed time: 0:00:01
-# Errors: 3, Warnings: 0
-# F:/questasim/questasim64_2021.1/win64/vlog failed.
-vlog ahb_slave.v
-# QuestaSim-64 vlog 2021.1 Compiler 2021.01 Jan 19 2021
-# Start time: 08:49:32 on Sep 20,2024
-# vlog -reportprogress 300 ahb_slave.v 
-# -- Compiling module ahb_slave
-# ** Error: (vlog-13069) ahb_slave.v(39): near "<=": syntax error, unexpected <=.
-# ** Error: ahb_slave.v(39): (vlog-13205) Syntax error found in the scope following 'state'. Is there a missing '::'?
-# End time: 08:49:32 on Sep 20,2024, Elapsed time: 0:00:00
-# Errors: 2, Warnings: 0
-# F:/questasim/questasim64_2021.1/win64/vlog failed.
-vlog ahb_slave.v
-# QuestaSim-64 vlog 2021.1 Compiler 2021.01 Jan 19 2021
-# Start time: 08:49:35 on Sep 20,2024
-# vlog -reportprogress 300 ahb_slave.v 
-# -- Compiling module ahb_slave
-# ** Error: (vlog-13069) ahb_slave.v(39): near "<=": syntax error, unexpected <=.
-# ** Error: ahb_slave.v(39): (vlog-13205) Syntax error found in the scope following 'state'. Is there a missing '::'?
-# End time: 08:49:35 on Sep 20,2024, Elapsed time: 0:00:00
-# Errors: 2, Warnings: 0
-# F:/questasim/questasim64_2021.1/win64/vlog failed.
-vlog ahb_slave.v
-# QuestaSim-64 vlog 2021.1 Compiler 2021.01 Jan 19 2021
-# Start time: 08:50:06 on Sep 20,2024
-# vlog -reportprogress 300 ahb_slave.v 
-# -- Compiling module ahb_slave
-# ** Error: (vlog-13069) ahb_slave.v(43): near "2": syntax error, unexpected INTEGER NUMBER.
-# ** Error: ahb_slave.v(44): (vlog-13205) Syntax error found in the scope following '\ '. Is there a missing '::'?
-# End time: 08:50:06 on Sep 20,2024, Elapsed time: 0:00:00
-# Errors: 2, Warnings: 0
-# F:/questasim/questasim64_2021.1/win64/vlog failed.
-vlog ahb_slave.v
-# QuestaSim-64 vlog 2021.1 Compiler 2021.01 Jan 19 2021
-# Start time: 08:50:21 on Sep 20,2024
-# vlog -reportprogress 300 ahb_slave.v 
-# -- Compiling module ahb_slave
-# ** Error: (vlog-13069) ahb_slave.v(42): near "2": syntax error, unexpected INTEGER NUMBER.
-# ** Error: ahb_slave.v(43): (vlog-13205) Syntax error found in the scope following '\ '. Is there a missing '::'?
-# End time: 08:50:21 on Sep 20,2024, Elapsed time: 0:00:00
-# Errors: 2, Warnings: 0
-# F:/questasim/questasim64_2021.1/win64/vlog failed.
-vlog ahb_slave.v
-# QuestaSim-64 vlog 2021.1 Compiler 2021.01 Jan 19 2021
-# Start time: 08:51:23 on Sep 20,2024
-# vlog -reportprogress 300 ahb_slave.v 
-# -- Compiling module ahb_slave
-# ** Error: (vlog-13069) ahb_slave.v(58): near "endcase": syntax error, unexpected endcase.
-# ** Error: ahb_slave.v(97): (vlog-2730) Undefined variable: 'HRDATA_reg'.
-# ** Error: ahb_slave.v(106): (vlog-2730) Undefined variable: '\ '.
-# ** Error: (vlog-13069) ahb_slave.v(106): near ";": syntax error, unexpected ';', expecting ':'.
-# ** Error: (vlog-13069) ahb_slave.v(109): near ";": syntax error, unexpected ';', expecting ':'.
-# End time: 08:51:23 on Sep 20,2024, Elapsed time: 0:00:00
-# Errors: 5, Warnings: 0
-# F:/questasim/questasim64_2021.1/win64/vlog failed.
-vlog ahb_slave.v
-# QuestaSim-64 vlog 2021.1 Compiler 2021.01 Jan 19 2021
-# Start time: 08:53:26 on Sep 20,2024
-# vlog -reportprogress 300 ahb_slave.v 
-# -- Compiling module ahb_slave
-# ** Error: (vlog-13069) ahb_slave.v(58): near "endcase": syntax error, unexpected endcase.
-# ** Error: ahb_slave.v(97): (vlog-2730) Undefined variable: 'HRDATA_reg'.
-# ** Error: (vlog-13069) ahb_slave.v(106): near ";": syntax error, unexpected ';'.
-# ** Error: (vlog-13069) ahb_slave.v(109): near ";": syntax error, unexpected ';'.
-# End time: 08:53:26 on Sep 20,2024, Elapsed time: 0:00:00
-# Errors: 4, Warnings: 0
-# F:/questasim/questasim64_2021.1/win64/vlog failed.
-vlog ahb_slave.v
-# QuestaSim-64 vlog 2021.1 Compiler 2021.01 Jan 19 2021
-# Start time: 08:53:49 on Sep 20,2024
-# vlog -reportprogress 300 ahb_slave.v 
-# -- Compiling module ahb_slave
-# ** Error: (vlog-13069) ahb_slave.v(37): near "<=": syntax error, unexpected <=.
-# ** Error: ahb_slave.v(37): (vlog-13205) Syntax error found in the scope following 'HREADYout'. Is there a missing '::'?
-# End time: 08:53:49 on Sep 20,2024, Elapsed time: 0:00:00
-# Errors: 2, Warnings: 0
-# F:/questasim/questasim64_2021.1/win64/vlog failed.
-vlog ahb_slave.v
-# QuestaSim-64 vlog 2021.1 Compiler 2021.01 Jan 19 2021
-# Start time: 08:55:14 on Sep 20,2024
-# vlog -reportprogress 300 ahb_slave.v 
-# -- Compiling module ahb_slave
-# ** Error: (vlog-13069) ahb_slave.v(58): near "endcase": syntax error, unexpected endcase.
-# ** Error: ahb_slave.v(97): (vlog-2730) Undefined variable: 'HRDATA_reg'.
-# ** Error: ahb_slave.v(106): (vlog-2730) Undefined variable: '\ '.
-# ** Error: (vlog-13069) ahb_slave.v(106): near ";": syntax error, unexpected ';', expecting ':'.
-# ** Error: (vlog-13069) ahb_slave.v(109): near ";": syntax error, unexpected ';', expecting ':'.
-# End time: 08:55:14 on Sep 20,2024, Elapsed time: 0:00:00
-# Errors: 5, Warnings: 0
-# F:/questasim/questasim64_2021.1/win64/vlog failed.
-vlog ahb_slave.v
-# QuestaSim-64 vlog 2021.1 Compiler 2021.01 Jan 19 2021
-# Start time: 16:38:01 on Sep 20,2024
-# vlog -reportprogress 300 ahb_slave.v 
-# -- Compiling module ahb_slave
-# ** Error: ahb_slave.v(106): A begin/end block was found with an empty body.  This is permitted in SystemVerilog, but not permitted in Verilog.  Please look for any stray semicolons.
-# ** Error: ahb_slave.v(109): A begin/end block was found with an empty body.  This is permitted in SystemVerilog, but not permitted in Verilog.  Please look for any stray semicolons.
-# End time: 16:38:02 on Sep 20,2024, Elapsed time: 0:00:01
-# Errors: 2, Warnings: 0
-# F:/questasim/questasim64_2021.1/win64/vlog failed.
-vlog ahb_slave.v
-# QuestaSim-64 vlog 2021.1 Compiler 2021.01 Jan 19 2021
-# Start time: 16:45:51 on Sep 20,2024
-# vlog -reportprogress 300 ahb_slave.v 
-# -- Compiling module ahb_slave
-# 
-# Top level modules:
-# 	ahb_slave
-# End time: 16:45:51 on Sep 20,2024, Elapsed time: 0:00:00
+# Optimizing 11 design-units (inlining 0/9 module instances):
+# -- Optimizing package mtiUvm.uvm_pkg (uvm-1.1d Built-in)(fast)
+# -- Optimizing package mtiUvm.questa_uvm_pkg(fast)
+# -- Optimizing package AHB_pkg(fast)
+# -- Optimizing interface inf(fast__2)
+# -- Optimizing module ahb_slave(fast)
+# -- Optimizing module ahb_mux(fast)
+# -- Optimizing module ahb_lite(fast)
+# -- Optimizing module ahb_default_slave(fast)
+# -- Optimizing module ahb_decoder(fast)
+# -- Optimizing module top_test_uvm(fast)
+# -- Optimizing interface inf(fast)
+# Optimized design name is top_optimized
+# End time: 15:19:32 on Sep 26,2024, Elapsed time: 0:00:02
 # Errors: 0, Warnings: 0
-vlog ahb_slave.v
-# QuestaSim-64 vlog 2021.1 Compiler 2021.01 Jan 19 2021
-# Start time: 17:08:25 on Sep 20,2024
-# vlog -reportprogress 300 ahb_slave.v 
-# -- Compiling module ahb_slave
-# ** Error: ahb_slave.v(183): (vlog-2730) Undefined variable: 'HBRUST'.
-# End time: 17:08:25 on Sep 20,2024, Elapsed time: 0:00:00
+# End time: 15:20:05 on Sep 26,2024, Elapsed time: 0:11:28
 # Errors: 1, Warnings: 0
-# F:/questasim/questasim64_2021.1/win64/vlog failed.
-vlog ahb_slave.v
-# QuestaSim-64 vlog 2021.1 Compiler 2021.01 Jan 19 2021
-# Start time: 17:08:43 on Sep 20,2024
-# vlog -reportprogress 300 ahb_slave.v 
-# -- Compiling module ahb_slave
-# 
-# Top level modules:
-# 	ahb_slave
-# End time: 17:08:43 on Sep 20,2024, Elapsed time: 0:00:00
-# Errors: 0, Warnings: 0
-vsim -voptargs=+acc work.ahb_slave
-# vsim -voptargs="+acc" work.ahb_slave 
-# Start time: 17:09:11 on Sep 20,2024
-# ** Note: (vsim-3812) Design is being optimized...
-# ** Note: (vopt-143) Recognized 1 FSM in module "ahb_slave(fast)".
+# vsim top_optimized -coverage "+UVM_TESTNAME=reset_test" 
+# Start time: 15:20:06 on Sep 26,2024
+# Loading sv_std.std
+# Loading work.inf(fast)
+# Loading mtiUvm.uvm_pkg(fast)
+# Loading work.AHB_pkg(fast)
+# Loading mtiUvm.questa_uvm_pkg(fast)
+# Loading work.top_test_uvm(fast)
+# Loading work.inf(fast__2)
+# Loading work.ahb_lite(fast)
+# Loading work.ahb_decoder(fast)
+# Loading work.ahb_mux(fast)
+# Loading work.ahb_default_slave(fast)
 # Loading work.ahb_slave(fast)
-add wave -position insertpoint sim:/ahb_slave/*
-force -freeze sim:/ahb_slave/HCLK 1 0, 0 {50 ns} -r 100
-force -freeze sim:/ahb_slave/HRESETn 1'h1 0
-run
-run
-run
-run
-run
-force -freeze sim:/ahb_slave/HRESETn 1'h0 0
-run
-run
-run
-run
-# End time: 20:20:46 on Sep 20,2024, Elapsed time: 3:11:35
-# Errors: 0, Warnings: 0
+# Loading F:/questasim/questasim64_2021.1/uvm-1.1d\win64\uvm_dpi.dll
+run -all
+# ----------------------------------------------------------------
+# UVM-1.1d
+# (C) 2007-2013 Mentor Graphics Corporation
+# (C) 2007-2013 Cadence Design Systems, Inc.
+# (C) 2006-2013 Synopsys, Inc.
+# (C) 2011-2013 Cypress Semiconductor Corp.
+# ----------------------------------------------------------------
+# 
+#   ***********       IMPORTANT RELEASE NOTES         ************
+# 
+#   You are using a version of the UVM library that has been compiled
+#   with `UVM_NO_DEPRECATED undefined.
+#   See http://www.eda.org/svdb/view.php?id=3313 for more details.
+# 
+#   You are using a version of the UVM library that has been compiled
+#   with `UVM_OBJECT_MUST_HAVE_CONSTRUCTOR undefined.
+#   See http://www.eda.org/svdb/view.php?id=3770 for more details.
+# 
+#       (Specify +UVM_NO_RELNOTES to turn off this notice)
+# 
+# UVM_INFO verilog_src/questa_uvm_pkg-1.2/src/questa_uvm_pkg.sv(277) @ 0: reporter [Questa UVM] QUESTA_UVM-1.2.3
+# UVM_INFO verilog_src/questa_uvm_pkg-1.2/src/questa_uvm_pkg.sv(278) @ 0: reporter [Questa UVM]  questa_uvm::init(+struct)
+# UVM_INFO @ 0: reporter [RNTST] Running test reset_test...
+# base_test build phase
+# my_test build phase
+# env build phase
+# my_active_agent build phase
+# my_driver build phase
+# Inputs monitor build phase complete.
+# UVM_INFO components/sequencer.svh(24) @ 0: uvm_test_top.env_h.active_agent_h.sequencer_h [SEQUENCER] Build phase executed
+# coverage build_phase
+# Passive agent build phase complete.
+# Outputs monitor build phase complete.
+# UVM_INFO components/scoreboard.svh(48) @ 0: uvm_test_top.env_h.scoreboard_h [SCOREBOARD] Build phase completed
+# my_comparator build phase
+# my_predictor build phase
+# my_driver connect phase
+# Inputs monitor connect phase complete.
+# UVM_INFO components/sequencer.svh(30) @ 0: uvm_test_top.env_h.active_agent_h.sequencer_h [SEQUENCER] Connect phase executed
+# my_active_agent connect phase
+# Outputs monitor connect phase complete.
+# Passive agent connect phase complete.
+# my_comparator connect phase
+# my_predictor connect phase
+# UVM_INFO components/scoreboard.svh(58) @ 0: uvm_test_top.env_h.scoreboard_h [SCOREBOARD] Connect phase completed
+# env connect phase
+# my_test connect phase
+# my_test connect phase
+# Inputs monitor end of elaboration phase complete.
+# my_monitor end_of_elaboration_phase
+# Outputs monitor end of elaboration phase complete.
+# Passive agent end of elaboration phase complete.
+# UVM_INFO components/env.svh(97) @ 0: uvm_test_top.env_h [env_h] '{"uvm_test_top.env_h.passive_agent_h.tlm_analysis_port_outputs":@uvm_port_component__5@15 }
+# UVM_INFO components/env.svh(99) @ 0: uvm_test_top.env_h [env_h] '{"uvm_test_top.env_h.active_agent_h.tlm_analysis_port_inputs":@uvm_port_component__5@13 }
+# UVM_INFO components/env.svh(101) @ 0: uvm_test_top.env_h [env_h] '{"uvm_test_top.env_h.passive_agent_h.tlm_analysis_port_outputs":@uvm_port_component__5@15 }
+# FINISHED GET_PROVIDED_TO
+# UVM_INFO components/env.svh(105) @ 0: uvm_test_top.env_h [env_h] '{ }
+# UVM_INFO components/env.svh(107) @ 0: uvm_test_top.env_h [env_h] '{"uvm_test_top.env_h.scoreboard_h.predictor_h.analysis_imp":@uvm_port_component__5@19 }
+# UVM_INFO components/env.svh(109) @ 0: uvm_test_top.env_h [env_h] '{"uvm_test_top.env_h.scoreboard_h.comparator_h.analysis_actual_outputs":@uvm_port_component__5@31 }
+# my_monitor end_of_elaboration_phase
+# env run phase
+# my_predictor run phase
+# UVM_INFO components/comparator.svh(70) @ 0: uvm_test_top.env_h.scoreboard_h.comparator_h [COMPARATOR] RUN PHASE
+# Passive agent run phase complete.
+# coverage run_phase
+# my_active_agent run phase
+# UVM_INFO components/sequencer.svh(36) @ 0: uvm_test_top.env_h.active_agent_h.sequencer_h [SEQUENCER] Run phase started
+# start of pre_body task
+# time: 10 negedge my bitchhhhhhhhhh
+# time:10 dddddddddddddddddddd
+# UVM_INFO components/predictor.svh(97) @ 10: uvm_test_top.env_h.scoreboard_h.predictor_h [PREDICTOR] WRITTEN_DATA: HRESETn:0, HWRITE:0, HTRANS:0, HSIZE:0, HBURST:0, HPROT:0, HADDR:0, HWDATA:0
+# UVM_INFO components/predictor.svh(101) @ 10: uvm_test_top.env_h.scoreboard_h.predictor_h [PREDICTOR] EXPECTED_DATA:  time:                   10  HRESETn = 0, HWRITE = 0, HTRANS =  0, HSIZE = 0, HBURST = 0, HPROT = 0, HADDR = 0, HWDATA = 0, HRDATA = x, HRESP = 0, HREADY = 1, incorrect_counter = 0
+# my_predictor run phase
+# UVM_INFO components/comparator.svh(74) @ 10: uvm_test_top.env_h.scoreboard_h.comparator_h [COMPARATOR] EXPECTED_SEQ_ITEM RECEIVED:  time:                   10  HRESETn = 0, HWRITE = 0, HTRANS =  0, HSIZE = 0, HBURST = 0, HPROT = 0, HADDR = 0, HWDATA = 0, HRDATA = x, HRESP = 0, HREADY = 1, incorrect_counter = 0
+# my_test run phase
+# UVM_INFO verilog_src/uvm-1.1d/src/base/uvm_objection.svh(1267) @ 10: reporter [TEST_DONE] 'run' phase is ready to proceed to the 'extract' phase
+# -------------------------------------------------------------------------------------------------------------------------------------------------------------
+# INCORRECT FLAG ASSERTION/DEASSERTION COUNTER = 0
+# CORRECT FLAG ASSERTION/DEASSERTION COUNTER = 0
+# -------------------------------------------------------------------------------------------------------------------------------------------------------------
+# 
+# --- UVM Report Summary ---
+# 
+# ** Report counts by severity
+# UVM_INFO :   19
+# UVM_WARNING :    0
+# UVM_ERROR :    0
+# UVM_FATAL :    0
+# ** Report counts by id
+# [COMPARATOR]     2
+# [PREDICTOR]     2
+# [Questa UVM]     2
+# [RNTST]     1
+# [SCOREBOARD]     2
+# [SEQUENCER]     3
+# [TEST_DONE]     1
+# [env_h]     6
+# ** Note: $finish    : F:/questasim/questasim64_2021.1/win64/../verilog_src/uvm-1.1d/src/base/uvm_root.svh(430)
+#    Time: 10 ns  Iteration: 61  Instance: /top_test_uvm
+# 1
+# Break in Task uvm_pkg/uvm_root::run_test at F:/questasim/questasim64_2021.1/win64/../verilog_src/uvm-1.1d/src/base/uvm_root.svh line 430

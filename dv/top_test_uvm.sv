@@ -11,19 +11,19 @@ module top_test_uvm();
 
 	inf f_if(clk);
 
-	ahb_lite_s3	 DUT(
+	ahb_lite	 DUT(
 				.HCLK(clk),
 				.HRESETn(f_if.HRESETn),
-				.M_HADDR(f_if.HADDR),
-				.M_HTRANS(f_if.HTRANS),
-				.M_HWRITE(f_if.HWRITE),
-				.M_HSIZE(f_if.HSIZE),
-				.M_HBURST(f_if.HBURST),
-				.M_HPROT(f_if.HPROT),
-				.M_HWDATA(f_if.HWDATA),
-				.M_HRDATA(f_if.HRDATA),
-				.M_HRESP(f_if.HRESP),
-				.M_HREADY(f_if.HREADY)
+				.HADDR(f_if.HADDR),
+				.HTRANS(f_if.HTRANS),
+				.HWRITE(f_if.HWRITE),
+				.HSIZE(f_if.HSIZE),
+				.HBURST(f_if.HBURST),
+				.HPROT(f_if.HPROT),
+				.HWDATA(f_if.HWDATA),
+				.HRDATA(f_if.HRDATA),
+				.HRESP(f_if.HRESP),
+				.HREADY(f_if.HREADY)
 		);
 
 	//bind fifo1 FIFO_sva sva(f_if); // bind / dut / module to be instentiated / instance name()

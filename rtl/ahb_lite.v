@@ -3,12 +3,7 @@
 // `include "ahb_default_slave.v"
 `timescale 1ns/1ns
 
-module ahb_lite_s3
-                #(parameter P_NUM  = 3
-                  parameter P_BITS = $clog2(P_NUM)
-                  parameter ADDR_WIDTH = 32
-                  parameter DATA_WDITH = 32
-                )
+module ahb_lite #(parameter P_NUM  = 3, P_BITS = 4, ADDR_WIDTH = 32, DATA_WIDTH = 32, ADDR_DEPTH = 16)
 (
       input   wire                   HRESETn,
       input   wire                   HCLK,
@@ -20,111 +15,133 @@ module ahb_lite_s3
       input   wire  [3:0]            HPROT,
       input   wire  [DATA_WIDTH-1:0] HWDATA,
 
-      input   wire                   HREADYin,
-
-      output  reg  [DATA_WIDTH-1:0]  HRDATA,
-      output  reg  [1:0]             HRESP,
-      output  reg                    HREADY
+      output    [DATA_WIDTH-1:0]  HRDATA,
+      output    [1:0]             HRESP,
+      output                      HREADY
 
 );
    /*********************************************************/
-   wire HSELd; // default slave
-   wire [DATA_WIDTH-1:0] HRDATAd;
-   wire [1:0]  HRESPd;
-   wire        HREADYd;
    /*********************************************************/
-   ahb_decoder decoder1 ( 
+   wire [3:0]            HSEL_bus;
+   wire [DATA_WIDTH-1:0] HRDATA_bus [3:0]; 
+   wire [1:0]            HRESP_bus  [3:0]; 
+   wire                  HREADY_bus [3:0]; 
+
+   wire                  HREADYin;
+   assign HREADYin = HREADY;
+   /*********************************************************/
+   ahb_decoder #(.P_NUM(P_NUM), .P_BITS(P_BITS), .ADDR_WIDTH(ADDR_WIDTH)) decoder1 
+              ( 
               .HADDR(HADDR),
-              .HREADY(HREADY)
+              .HREADY(HREADY),
+              .HSEL0(HSEL_bus[0]),
+              .HSEL1(HSEL_bus[1]),
+              .HSEL2(HSEL_bus[2]),
+              .HSELd(HSEL_bus[3])
               );
    /*********************************************************/ //MUX
-   ahb_mux mux1 (
+   ahb_mux #(.P_NUM(P_NUM), .P_BITS(P_BITS), .ADDR_WIDTH(ADDR_WIDTH), .DATA_WIDTH(DATA_WIDTH)) mux1 
+          (
           .HRESETn(HRESETn),
           .HCLK   (HCLK),
-          .HSEL0  (HSEL0),
-          .HSEL1  (HSEL1),
-          .HSEL2  (HSEL2),
-          .HSELd  (HSELd),
-          .HRDATA(M_HRDATA),
-          .HRESP (M_HRESP),
-          .HREADY(M_HREADY),
-          .HRDATA0(HRDATA0),
-          .HRESP0 (HRESP0 ),
-          .HREADY0(HREADY0),
-          .HRDATA1(HRDATA1),
-          .HRESP1 (HRESP1 ),
-          .HREADY1(HREADY1),
-          .HRDATA2(HRDATA2),
-          .HRESP2 (HRESP2 ),
-          .HREADY2(HREADY2),
-          .HRDATAd(HRDATAd),
-          .HRESPd (HRESPd ),
-          .HREADYd(HREADYd)
+
+          .HSEL0  (HSEL_bus[0]),
+          .HSEL1  (HSEL_bus[1]),
+          .HSEL2  (HSEL_bus[2]),
+          .HSELd  (HSEL_bus[3]),
+
+          .HRDATA (HRDATA),
+          .HRESP  (HRESP),
+          .HREADY (HREADY),
+
+          .HRDATA0(HRDATA_bus[0]),
+          .HRESP0 ( HRESP_bus[0]),
+          .HREADY0(HREADY_bus[0]),
+
+          .HRDATA1(HRDATA_bus[1]),
+          .HRESP1 ( HRESP_bus[1]),
+          .HREADY1(HREADY_bus[1]),
+
+          .HRDATA2(HRDATA_bus[2]),
+          .HRESP2 ( HRESP_bus[2]),
+          .HREADY2(HREADY_bus[2]),
+
+          .HRDATAd(HRDATA_bus[3]),
+          .HRESPd ( HRESP_bus[3]),
+          .HREADYd(HREADY_bus[3])
           );
 
    /*********************************************************/
-   ahb_default_slave default_slave (
-                    .HRESETn(HRESETn),
-                    .HCLK   (HCLK),
-                    .HSEL   (HSELd),
-                    .HADDR  (HADDR),
-                    .HTRANS (HTRANS),
-                    .HWRITE (HWRITE),
-                    .HSIZE  (HSIZE),
-                    .HBURST (HBURST),
-                    .HWDATA (HWDATA),
-                    .HRDATA(HRDATAd),
-                    .HRESP (HRESPd),
-                    .HREADYin(HREADY),
-                    .HREADYout(HREADYd)
+   ahb_default_slave #(.ADDR_WIDTH(ADDR_WIDTH), .DATA_WIDTH(DATA_WIDTH)) default_slave 
+                    (
+                    .HRESETn          (HRESETn),
+                    .HCLK                (HCLK),
+                    .HSEL         (HSEL_bus[3]),
+                    .HADDR              (HADDR),
+                    .HTRANS             (HTRANS),
+                    .HWRITE             (HWRITE),
+                    .HSIZE               (HSIZE),
+                    .HBURST             (HBURST),
+                    .HWDATA             (HWDATA),
+                    .HRDATA      (HRDATA_bus[3]),
+                    .HRESP        (HRESP_bus[3]),
+                    .HREADYin           (HREADY),
+                    .HREADYout   (HREADY_bus[3])
                     );
    /*********************************************************/
-   ahb_slave slave0 (
-            .HRESETn(HRESETn),
-            .HCLK   (HCLK),
-            .HSEL   (HSEL0),
-            .HADDR  (HADDR),
-            .HTRANS (HTRANS),
-            .HWRITE (HWRITE),
-            .HSIZE  (HSIZE),
-            .HBURST (HBURST),
-            .HWDATA (HWDATA),
-            .HRDATA(HRDATA0),
-            .HRESP (HRESP0),
-            .HREADYin(HREADY),
-            .HREADYout(HREADY0)
+   ahb_slave #(.ADDR_WIDTH(ADDR_WIDTH), .DATA_WIDTH(DATA_WIDTH), .ADDR_DEPTH(ADDR_DEPTH)) slave0 
+            (
+            .HRESETn               (HRESETn),
+            .HCLK                     (HCLK),
+            .HSEL              (HSEL_bus[0]),
+            .HADDR                   (HADDR),
+            .HTRANS                 (HTRANS),
+            .HWRITE                 (HWRITE),
+            .HSIZE                   (HSIZE),
+            .HBURST                 (HBURST),
+            .HWDATA                 (HWDATA),
+            .HREADYin                (HREADY),
+
+            .HRDATA           (HRDATA_bus[0]),
+            .HRESP             (HRESP_bus[0]),
+            .HREADYout        (HREADY_bus[0])
             );
    /*********************************************************/
-   ahb_slave slave1 (
+   ahb_slave #(.ADDR_WIDTH(ADDR_WIDTH), .DATA_WIDTH(DATA_WIDTH), .ADDR_DEPTH(ADDR_DEPTH)) slave1 
+            (
             .HRESETn(HRESETn),
-            .HCLK   (HCLK),
-            .HSEL   (HSEL1),
-            .HADDR  (HADDR),
-            .HTRANS (HTRANS),
-            .HWRITE (HWRITE),
-            .HSIZE  (HSIZE),
-            .HBURST (HBURST),
-            .HWDATA (HWDATA),
-            .HRDATA(HRDATA1),
-            .HRESP (HRESP1),
-            .HREADYin(HREADY),
-            .HREADYout(HREADY1)
+            .HCLK                    (HCLK),
+            .HSEL              (HSEL_bus[1]),
+            .HADDR                   (HADDR),
+            .HTRANS                 (HTRANS),
+            .HWRITE                 (HWRITE),
+            .HSIZE                   (HSIZE),
+            .HBURST                 (HBURST),
+            .HWDATA                 (HWDATA),
+            .HREADYin               (HREADY),
+
+            .HRDATA          (HRDATA_bus[1]),
+            .HRESP            (HRESP_bus[1]),
+            .HREADYout       (HREADY_bus[1])
+
             );
    /*********************************************************/
-   ahb_slave slave2 (
+   ahb_slave #(.ADDR_WIDTH(ADDR_WIDTH), .DATA_WIDTH(DATA_WIDTH), .ADDR_DEPTH(ADDR_DEPTH)) slave2 
+            (
             .HRESETn(HRESETn),
-            .HCLK   (HCLK),
-            .HSEL   (HSEL2),
-            .HADDR  (HADDR),
-            .HTRANS (HTRANS),
-            .HWRITE (HWRITE),
-            .HSIZE  (HSIZE),
-            .HBURST (HBURST),
-            .HWDATA (HWDATA),
-            .HRDATA(HRDATA2),
-            .HRESP (HRESP2),
-            .HREADYin(HREADY),
-            .HREADYout(HREADY2)
+            .HCLK                    (HCLK),
+            .HSEL              (HSEL_bus[2]),
+            .HADDR                   (HADDR),
+            .HTRANS                 (HTRANS),
+            .HWRITE                 (HWRITE),
+            .HSIZE                   (HSIZE),
+            .HBURST                 (HBURST),
+            .HWDATA                 (HWDATA),
+            .HREADYin               (HREADY),
+
+            .HRDATA          (HRDATA_bus[2]),
+            .HRESP            (HRESP_bus[2]),
+            .HREADYout       (HREADY_bus[2])
             );
 
 endmodule

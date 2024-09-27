@@ -2,7 +2,7 @@ if [file exists "work"] {vdel -all}
 vlib work
 vlog -f dut.f +cover -covercells
 vlog -f tb.f +cover -covercells
-vopt top_test_uvm -o top_optimized +acc +cover=bcefsx+ahb_lite_s3(rtl)
+vopt top_test_uvm -o top_optimized +acc +cover=bcefsx+ahb_lite(rtl)
 
 
 
