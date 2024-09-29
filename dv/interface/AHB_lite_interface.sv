@@ -13,15 +13,16 @@
  * 
  * Copyright (c) 2024 Abdelrahman Mohamad Yassien. All Rights Reserved.
  ******************************************************************/
+`timescale 1ns/1ns
 
 interface inf (input bit clk);
 
 import AHB_pkg::*;                  // Import AHB package for AHB constants
 
 // AHB lite Control Signals
-bit   HRESETn;    // reset (active low)
+logic   HRESETn;    // reset (active low)
 
-bit   HWRITE;
+logic   HWRITE;
 
 bit   [TRANS_WIDTH:0]  HTRANS; 
 bit   [SIZE_WIDTH:0]  HSIZE;
@@ -34,15 +35,34 @@ bit   [DATA_WIDTH-1:0]  HWDATA;
 // AHB lite output Signals
 logic   [DATA_WIDTH-1:0]  HRDATA;
 logic   [RESP_WIDTH:0]  HRESP; 
-logic   [READY_WIDTH:0]  HREADY;   
+logic   [READY_WIDTH:0]  HREADY;  
 
 
-event control_phase_finished;
+logic   HRESETn_reg;    // reset (active low)
+
+logic   HWRITE_reg;
+
+bit   [TRANS_WIDTH:0]  HTRANS_reg; 
+bit   [SIZE_WIDTH:0]  HSIZE_reg;
+bit   [BURST_WIDTH:0]  HBURST_reg;
+bit   [PROT_WIDTH:0]  HPROT_reg; 
+
+bit   [ADDR_WIDTH-1:0]  HADDR_reg;     
+bit   [DATA_WIDTH-1:0]  HWDATA_reg; 
+
+// AHB lite output Signals
+logic   [DATA_WIDTH-1:0]  HRDATA_reg;
+logic   [RESP_WIDTH:0]  HRESP_reg; 
+logic   [READY_WIDTH:0]  HREADY_reg; 
+
+event transaction_finished;
 event interconnect_is_resetting;
 
 // Monitor handles
 inputs_monitor inputs_monitor_h;    // Handle to input monitor
 outputs_monitor outputs_monitor_h;  // Handle to output monitor
+
+logic HRESETn_global;
 
 HRESET_e     RESET_op;
 HWRITE_e     WRITE_op;
@@ -51,7 +71,7 @@ HTRANS_e     TRANS_op;
 HBURST_e     BURST_op;
 HSIZE_e      SIZE_op;
 
-sequence_item previous_seq_item;
+sequence_item previous_seq_item, seq_item;
 
 // Task: Handle generic receiving operations based on reset and enable signals
 task generic_reciever( input bit iHRESETn, input bit   iHWRITE, input bit  [TRANS_WIDTH:0] iHTRANS, 
@@ -61,9 +81,9 @@ task generic_reciever( input bit iHRESETn, input bit   iHWRITE, input bit  [TRAN
                         input HWRITE_e iWRITE_op, input HTRANS_e iTRANS_op,
                         input HBURST_e iBURST_op, input HSIZE_e iSIZE_op
 );
-
-
-    @(negedge clk);//like an always block @negedge,
+    //-> transaction_finished;
+    #12ns;
+    //@(negedge clk);//like an always block @negedge,
     $display("time: %0t negedge my bitchhhhhhhhhh", $time());
     if(HRESP === RETRY) begin
         iHRESETn    = previous_seq_item.HRESETn;
@@ -81,7 +101,7 @@ task generic_reciever( input bit iHRESETn, input bit   iHWRITE, input bit  [TRAN
         iBURST_op = previous_seq_item.BURST_op;
         iSIZE_op  = previous_seq_item.SIZE_op;
     end
-    if(HREADY === 1'b1  || iHRESETn_t === 1'b0) begin
+    if(HREADY === 1'b1  || iHRESETn === 1'b0) begin
         
         seq_item.RESET_op = iRESET_op;
         seq_item.WRITE_op = iWRITE_op;
@@ -98,13 +118,16 @@ task generic_reciever( input bit iHRESETn, input bit   iHWRITE, input bit  [TRAN
         seq_item.HADDR      = iHADDR; 
         seq_item.HWDATA     = iHWDATA;
 
+        HRESETn_global      = iHRESETn;
+
         seq_item.RESET_op = previous_seq_item.RESET_op;
         seq_item.WRITE_op = previous_seq_item.WRITE_op;
         seq_item.TRANS_op = previous_seq_item.TRANS_op;
         seq_item.BURST_op = previous_seq_item.BURST_op;
         seq_item.SIZE_op  = previous_seq_item.SIZE_op;
 
-        // send_inputs(iHRESETn, iHWRITE, iHTRANS, iHSIZE, iHBURST, iHPROT, iHADDR, iHWDATA, iRESET_op, iWRITE_op, iTRANS_op, iBURST_op, iSIZE_op);
+        send_inputs(iHRESETn, iHWRITE, iHTRANS, iHSIZE, iHBURST, iHPROT, iHADDR, iHWDATA, iRESET_op, iWRITE_op, iTRANS_op, iBURST_op, iSIZE_op);
+        wait(HRESETn); //so the driver doesnt keep driving when the sequence is already driven to the interface/dut
         // fork
         //     begin
         //         control_phase(iHRESETn, iHWRITE, iHTRANS, iHSIZE, iHBURST, iHPROT, iHADDR, iHWDATA);
@@ -116,9 +139,10 @@ task generic_reciever( input bit iHRESETn, input bit   iHWRITE, input bit  [TRAN
     end
 endtask : generic_reciever
 
-    always@(negedge clk or negedge ) begin
- 		HRESETn <= seq_item.iHRESETn_t;
-        wait(HREADY === 1'b1);
+    always@(negedge clk or negedge HRESETn_global ) begin //CONTROL_PHASE
+        @(transaction_finished);
+ 		HRESETn <= seq_item.HRESETn;
+        wait(HREADY == 1'b1);
         HWRITE  <= seq_item.HWRITE;
         HTRANS  <= seq_item.HTRANS;
         HSIZE   <= seq_item.HSIZE;
@@ -126,78 +150,110 @@ endtask : generic_reciever
         HPROT   <= seq_item.HPROT;
         HADDR   <= seq_item.HADDR;
 
+        HRESETn_reg <= seq_item.HRESETn;
+        HWRITE_reg  <= seq_item.HWRITE;
+        HTRANS_reg  <= seq_item.HTRANS;
+        HSIZE_reg   <= seq_item.HSIZE;
+        HBURST_reg  <= seq_item.HBURST;
+        HPROT_reg   <= seq_item.HPROT;
+        HADDR_reg   <= seq_item.HADDR;
+        //@(transaction_finished);
     end
 
-
-    // always(@negedge clk) begin
-    //     if(HREADY === 1'b1 || iHRESETn === 1'b0) begin
-
-
-
-    task automatic control_phase( input bit iHRESETn, input bit   iHWRITE, input bit  [TRANS_WIDTH:0] iHTRANS, 
-                        input bit  [SIZE_WIDTH:0] iHSIZE, input bit  [BURST_WIDTH:0] iHBURST,
-                        input bit  [PROT_WIDTH:0] iHPROT, input bit  [ADDR_WIDTH-1:0] iHADDR,     
-                        input bit  [DATA_WIDTH-1:0] iHWDATA     
-                        );
-
-        //@(negedge clk); //added it in the generic_reciever, not here cause I dont want the inputs to both function calls to somehow be overwritten (being cautious)
-        HRESETn <= iHRESETn_t;
-        // if(HREADY === 1'b1) begin
-            HWRITE  <= iHWRITE;
-            HTRANS  <= iHTRANS;
-            HSIZE   <= iHSIZE;
-            HBURST  <= iHBURST;
-            HPROT   <= iHPROT;
-            HADDR   <= iHADDR;
-            @(negedge clk);
-            $display("time:%0t AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA", $time());
-            -> control_phase_finished;
-            $display("time:%0t AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA", $time());
-        //end
-    endtask : control_phase
-
-
-
-
-    task automatic data_phase(input bit iHRESETn, input bit   iHWRITE, input bit  [TRANS_WIDTH:0] iHTRANS, 
-                    input bit  [SIZE_WIDTH:0] iHSIZE, input bit  [BURST_WIDTH:0] iHBURST,
-                    input bit  [PROT_WIDTH:0] iHPROT, input bit  [ADDR_WIDTH-1:0] iHADDR,
-                    input bit [DATA_WIDTH-1:0] iHWDATA  
-                        );
-
-        $display("time:%0t dddddddddddddddddddd", $time());
-        //@(control_phase_finished);
-        wait(control_phase_finished.triggered());
-        $display("iHRESETn = %0d time:%0t ddddddddddddddddddddd",iHRESETn_t, $time());
-        @(negedge clk);
-        $display("time:%0t qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq", $time());
-        if(iHRESETn === 1'b0) begin
-        	$display("time:%0t ddddddddddddddddddddddddddd", $time());
+    always@(negedge HRESETn_global or negedge clk) begin
+        if(~HRESETn) begin
+            $display("time:%0t starting_reset_task", $time());
             reset_AHB();
+            send_outputs();
         end
-        else if(HWRITE === 1'b1) begin
-            write_AHB(iHWDATA);
+        else if(HREADY)begin
+            wait(HREADY);
+            write_AHB(HWDATA_reg);
         end
-        else if(HWRITE === 1'b0) begin
-            read_AHB();
+    end
+
+    always@(negedge clk) begin //DATA_PHASE
+        @(transaction_finished);
+        if(HRESETn) begin
+            wait(HREADY == 1'b1);
+            if(HWRITE_reg == 1'b1) begin
+                write_AHB(HWDATA_reg);
+            end
+            else if(HWRITE_reg == 1'b0) begin
+                read_AHB();
+            end
+            $display("time:%0t send_outputs HWRITE = %0d", $time(), HWRITE);
+            send_outputs();
         end
-        $display("time:%0t ddddddddddddddddddddddddddd", $time());
-        send_outputs();
-    endtask : data_phase
+    end
+
+    // task automatic control_phase( input bit iHRESETn, input bit   iHWRITE, input bit  [TRANS_WIDTH:0] iHTRANS, 
+    //                     input bit  [SIZE_WIDTH:0] iHSIZE, input bit  [BURST_WIDTH:0] iHBURST,
+    //                     input bit  [PROT_WIDTH:0] iHPROT, input bit  [ADDR_WIDTH-1:0] iHADDR,     
+    //                     input bit  [DATA_WIDTH-1:0] iHWDATA     
+    //                     );
+
+    //     //@(negedge clk); //added it in the generic_reciever, not here cause I dont want the inputs to both function calls to somehow be overwritten (being cautious)
+    //     HRESETn <= iHRESETn_t;
+    //     // if(HREADY === 1'b1) begin
+    //         HWRITE  <= iHWRITE;
+    //         HTRANS  <= iHTRANS;
+    //         HSIZE   <= iHSIZE;
+    //         HBURST  <= iHBURST;
+    //         HPROT   <= iHPROT;
+    //         HADDR   <= iHADDR;
+    //         @(negedge clk);
+    //         $display("time:%0t AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA", $time());
+    //         -> control_phase_finished;
+    //         $display("time:%0t AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA", $time());
+    //     //end
+    // endtask : control_phase
+
+
+
+
+    // task automatic data_phase(input bit iHRESETn, input bit   iHWRITE, input bit  [TRANS_WIDTH:0] iHTRANS, 
+    //                 input bit  [SIZE_WIDTH:0] iHSIZE, input bit  [BURST_WIDTH:0] iHBURST,
+    //                 input bit  [PROT_WIDTH:0] iHPROT, input bit  [ADDR_WIDTH-1:0] iHADDR,
+    //                 input bit [DATA_WIDTH-1:0] iHWDATA  
+    //                     );
+
+    //     $display("time:%0t dddddddddddddddddddd", $time());
+    //     //@(control_phase_finished);
+    //     wait(control_phase_finished.triggered());
+    //     $display("iHRESETn = %0d time:%0t ddddddddddddddddddddd",iHRESETn_t, $time());
+    //     @(negedge clk);
+    //     $display("time:%0t qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq", $time());
+    //     if(iHRESETn === 1'b0) begin
+    //     	$display("time:%0t ddddddddddddddddddddddddddd", $time());
+    //         reset_AHB();
+    //     end
+    //     else if(HWRITE === 1'b1) begin
+    //         write_AHB(iHWDATA);
+    //     end
+    //     else if(HWRITE === 1'b0) begin
+    //         read_AHB();
+    //     end
+    //     $display("time:%0t ddddddddddddddddddddddddddd", $time());
+    //     send_outputs();
+    // endtask : data_phase
 
 
     // Task: Reset AHB pointers and flags
     task reset_AHB();
-    	$display("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
-        repeat(15)
+    	$display("time :%0t resetting the interconnect", $time());
+        repeat(15) begin
             @(negedge clk);
-        //HRESETn <= 1'b1
+        end
+        HRESETn <= 1'b1;
+        #1step;
+        $display("time:%0t HRESETn: %0d RESET DE-ASSERTED", $time(), HRESETn);
     endtask : reset_AHB
 
 
     // Task: Write data into the AHB and handle pointer updates
     task write_AHB(input bit [ADDR_WIDTH-1:0] iHWDATA);
-        case(HTRANS)
+        case(HTRANS_reg)
             IDLE, BUSY: begin
             end
 
@@ -211,19 +267,13 @@ endtask : generic_reciever
     task read_AHB();
         case(HTRANS)
             IDLE, BUSY: begin
-
             end
+
             NONSEQ, SEQ: begin
                 wait(HREADY === 1'b1);
             end
         endcase // HTRANS
     endtask : read_AHB
-
-    // Task to send sequence item
-    task create_sequence_item();
-    	seq_item = sequence_item::type_id::create("seq_item");
-        previous_seq_item = sequence_item::type_id::create("previous_seq_item");
-    endtask
 
     // Function to send inputs to the input monitor
     function void send_inputs( input bit iHRESETn, input bit   iHWRITE, input bit  [TRANS_WIDTH:0] iHTRANS, 
@@ -253,20 +303,21 @@ endtask : generic_reciever
 
     // Function to send outputs to the output monitor
     function void send_outputs();
-
         outputs_monitor_h.write_to_monitor(HRDATA, HRESP, HREADY);
     endfunction : send_outputs
 
 
-    always@(negedge clk) begin
-        if(HREADY === 1'b1 && HRESETn === 1'b1) begin
-            send_outputs();
-        end
-    end
+    // always@(negedge clk) begin
+    //     if(HREADY === 1'b1 && HRESETn === 1'b1) begin
+    //         send_outputs();
+    //     end
+    // end
 
 
-    initial begin
-        create_sequence_item();
-    end
+    // initial begin
+    //     create_sequence_item();
+    // end
+
+    //assign HRESETn_global = (seq_item.HRESETn)? 1:0;
 
 endinterface : inf

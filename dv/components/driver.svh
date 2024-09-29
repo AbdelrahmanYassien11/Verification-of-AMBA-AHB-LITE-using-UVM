@@ -44,6 +44,13 @@ class driver extends uvm_driver #(sequence_item);
     $display("my_driver connect phase");
   endfunction
 
+  // function to create interface sequence items
+  function void create_sequence_item();
+    $display("CREATEDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD");
+    my_vif.seq_item = sequence_item::type_id::create("seq_item");
+    my_vif.previous_seq_item = sequence_item::type_id::create("previous_seq_item");
+  endfunction
+
   // Run phase where the driver executes and interacts with the DUT
   task run_phase(uvm_phase phase);
     super.run_phase(phase);
@@ -51,10 +58,15 @@ class driver extends uvm_driver #(sequence_item);
       // Get the next sequence item from the sequence
       seq_item_port.get_next_item(seq_item);
 
+      create_sequence_item();
+
+      #1ps
+      $display("HWRITE ========================================================== HWRITE = %0d", seq_item.HWRITE);
       // Send the sequence item data to the DUT via the virtual interface
       my_vif.generic_reciever( seq_item.HRESETn, seq_item.HWRITE, seq_item.HTRANS, seq_item.HSIZE, seq_item.HBURST, seq_item.HPROT,
                                seq_item.HADDR, seq_item.HWDATA, seq_item.RESET_op, seq_item.WRITE_op, seq_item.TRANS_op, seq_item.BURST_op, 
                                seq_item.SIZE_op );
+      -> my_vif.transaction_finished;
 
       // Indicate that the item has been processed
       seq_item_port.item_done();

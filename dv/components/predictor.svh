@@ -35,7 +35,7 @@ class predictor extends uvm_subscriber #(sequence_item);
 
   // AHB lite Control Signals
   bit                   HRESETn;    // reset (active low)
-  bit   HWRITE;
+  logic   HWRITE;
 
   bit   [TRANS_WIDTH:0]  HTRANS; 
   bit   [SIZE_WIDTH:0]  HSIZE;
@@ -185,6 +185,7 @@ endtask : generic_predictor
     task reset_AHB();
       HRESP_expected = OKAY;
       HREADY_expected = READY;
+      HRDATA_expected = 0;
       HTRANS = IDLE;
     endtask : reset_AHB
 

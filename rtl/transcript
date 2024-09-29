@@ -12,141 +12,104 @@
 # //  is prohibited from disclosure under the Trade Secrets Act,
 # //  18 U.S.C. Section 1905.
 # //
-# Loading project assa
-pwd
-# C:/Users/darkl/OneDrive/Desktop/code_files
-cd F:\ic_design\repos\AHB_LITE\rtl
-# reading F:/questasim/questasim64_2021.1/win64/../modelsim.ini
-# couldn't change working directory to "F:ic_designeposAHB_LITEtl": no such file or directory
-cd F\ic_design\repos\AHB_LITE\rtl
-# couldn't change working directory to "Fic_designeposAHB_LITEtl": no such file or directory
-cd F/ic_design/repos/AHB_LITE/rtl
-# couldn't change working directory to "F/ic_design/repos/AHB_LITE/rtl": no such file or directory
-cd F
-# couldn't change working directory to "F": no such file or directory
-cd ..
-pwd
-# C:/Users/darkl/OneDrive/Desktop
-cd ..
-cd ..
-pwd
-# C:/Users/darkl
-cd ..
-cd ..
-pwd
-# C:/
-cd f
-# couldn't change working directory to "f": no such file or directory
-cd F:
-cd ic_design/repos/AHB_LITE/rtl
-# couldn't change working directory to "ic_design/repos/AHB_LITE/rtl": no such file or directory
-cd ic_design/repos
-# couldn't change working directory to "ic_design/repos": no such file or directory
-cd ic_design\repos
-# couldn't change working directory to "ic_designepos": no such file or directory
-cd ic_design
-# couldn't change working directory to "ic_design": no such file or directory
-pwd
-# F:/
-cd ic_design
-# couldn't change working directory to "ic_design": no such file or directory
-cd Git
-# couldn't change working directory to "Git": no such file or directory
-cd /ic_design
-cd /repos/AHB_LITE/rtl
-# couldn't change working directory to "/repos/AHB_LITE/rtl": no such file or directory
-cd /repos
-# couldn't change working directory to "/repos": no such file or directory
-pwd
-# F:/ic_design
-cd /repost
-# couldn't change working directory to "/repost": no such file or directory
-cd /repos
-# couldn't change working directory to "/repos": no such file or directory
-cd repos
-cd AHB_LITE/rtl
-vlog ahb_lite_tb.sv
+# OpenFile ahb_lite.v
+vlog ahb_lite.v
 # QuestaSim-64 vlog 2021.1 Compiler 2021.01 Jan 19 2021
-# Start time: 08:04:29 on Sep 26,2024
-# vlog -reportprogress 300 ahb_lite_tb.sv 
-# -- Compiling module ahb_lite_tb
+# Start time: 02:12:21 on Sep 28,2024
+# vlog -reportprogress 300 ahb_lite.v 
+# -- Compiling module ahb_lite
 # 
 # Top level modules:
-# 	ahb_lite_tb
-# End time: 08:04:29 on Sep 26,2024, Elapsed time: 0:00:00
+# 	ahb_lite
+# End time: 02:12:21 on Sep 28,2024, Elapsed time: 0:00:00
 # Errors: 0, Warnings: 0
-vsim -voptargs=+acc work.ahb_lite_tb
-# vsim -voptargs="+acc" work.ahb_lite_tb 
-# Start time: 08:04:50 on Sep 26,2024
+vlog ahb_decoder.v
+# QuestaSim-64 vlog 2021.1 Compiler 2021.01 Jan 19 2021
+# Start time: 02:12:31 on Sep 28,2024
+# vlog -reportprogress 300 ahb_decoder.v 
+# -- Compiling module ahb_decoder
+# 
+# Top level modules:
+# 	ahb_decoder
+# End time: 02:12:31 on Sep 28,2024, Elapsed time: 0:00:00
+# Errors: 0, Warnings: 0
+vlog ahb_default_slave.v
+# QuestaSim-64 vlog 2021.1 Compiler 2021.01 Jan 19 2021
+# Start time: 02:12:38 on Sep 28,2024
+# vlog -reportprogress 300 ahb_default_slave.v 
+# -- Compiling module ahb_default_slave
+# 
+# Top level modules:
+# 	ahb_default_slave
+# End time: 02:12:38 on Sep 28,2024, Elapsed time: 0:00:00
+# Errors: 0, Warnings: 0
+vlog ahb_mux.v
+# QuestaSim-64 vlog 2021.1 Compiler 2021.01 Jan 19 2021
+# Start time: 02:13:00 on Sep 28,2024
+# vlog -reportprogress 300 ahb_mux.v 
+# -- Compiling module ahb_mux
+# 
+# Top level modules:
+# 	ahb_mux
+# End time: 02:13:00 on Sep 28,2024, Elapsed time: 0:00:00
+# Errors: 0, Warnings: 0
+vlog ahb_mux.v
+# QuestaSim-64 vlog 2021.1 Compiler 2021.01 Jan 19 2021
+# Start time: 02:13:03 on Sep 28,2024
+# vlog -reportprogress 300 ahb_mux.v 
+# -- Compiling module ahb_mux
+# 
+# Top level modules:
+# 	ahb_mux
+# End time: 02:13:03 on Sep 28,2024, Elapsed time: 0:00:00
+# Errors: 0, Warnings: 0
+vsim -voptargs=+acc work.ahb_lite
+# vsim -voptargs="+acc" work.ahb_lite 
+# Start time: 02:13:12 on Sep 28,2024
 # ** Note: (vsim-3812) Design is being optimized...
-# ** Error (suppressible): ahb_lite_tb.sv(24): (vopt-2912) Port 'HSEL' not found in module 'ahb_lite' (3rd connection).
+# ** Note: (vsim-8611) Generating debug db.
+# ** Error: ahb_lite.v(92): Module 'ahb_slave' is not defined.
+# ** Error: ahb_lite.v(110): Module 'ahb_slave' is not defined.
+# ** Error: ahb_lite.v(129): Module 'ahb_slave' is not defined.
 # Optimization failed
-# ** Note: (vsim-12126) Error and warning message counts have been restored: Errors=1, Warnings=0.
+# ** Note: (vsim-12126) Error and warning message counts have been restored: Errors=3, Warnings=0.
 # Error loading design
-# End time: 08:04:51 on Sep 26,2024, Elapsed time: 0:00:01
-# Errors: 1, Warnings: 0
-vlog ahb_lite_tb.sv
+# End time: 02:13:15 on Sep 28,2024, Elapsed time: 0:00:03
+# Errors: 3, Warnings: 0
+vlog ahb_slave.v
 # QuestaSim-64 vlog 2021.1 Compiler 2021.01 Jan 19 2021
-# Start time: 08:05:54 on Sep 26,2024
-# vlog -reportprogress 300 ahb_lite_tb.sv 
-# -- Compiling module ahb_lite_tb
-# ** Error: (vlog-13069) ahb_lite_tb.sv(28): near ".": syntax error, unexpected '.', expecting IDENTIFIER or TYPE_IDENTIFIER or NETTYPE_IDENTIFIER or '*'.
-# End time: 08:05:54 on Sep 26,2024, Elapsed time: 0:00:00
-# Errors: 1, Warnings: 0
-# F:/questasim/questasim64_2021.1/win64/vlog failed.
-vlog ahb_lite_tb.sv
-# QuestaSim-64 vlog 2021.1 Compiler 2021.01 Jan 19 2021
-# Start time: 08:06:05 on Sep 26,2024
-# vlog -reportprogress 300 ahb_lite_tb.sv 
-# -- Compiling module ahb_lite_tb
+# Start time: 02:13:23 on Sep 28,2024
+# vlog -reportprogress 300 ahb_slave.v 
+# -- Compiling module ahb_slave
 # 
 # Top level modules:
-# 	ahb_lite_tb
-# End time: 08:06:05 on Sep 26,2024, Elapsed time: 0:00:00
+# 	ahb_slave
+# End time: 02:13:24 on Sep 28,2024, Elapsed time: 0:00:01
 # Errors: 0, Warnings: 0
-vsim -voptargs=+acc work.ahb_lite_tb
-# vsim -voptargs="+acc" work.ahb_lite_tb 
-# Start time: 08:06:07 on Sep 26,2024
+vsim -voptargs=+acc work.ahb_lite
+# vsim -voptargs="+acc" work.ahb_lite 
+# Start time: 02:13:33 on Sep 28,2024
 # ** Note: (vsim-3812) Design is being optimized...
-# Loading sv_std.std
-# Loading work.ahb_lite_tb(fast)
 # Loading work.ahb_lite(fast)
 # Loading work.ahb_decoder(fast)
 # Loading work.ahb_mux(fast)
 # Loading work.ahb_default_slave(fast)
 # Loading work.ahb_slave(fast)
-run -all
-# time :70 HRDATA = x
-# time :80 HRDATA = x
-# time :90 HRDATA = x
-# time :100 HRDATA = x
-# time :110 HRDATA = x
-# time :120 HRDATA = x
-# ** Note: $stop    : ahb_lite_tb.sv(114)
-#    Time: 380 ns  Iteration: 0  Instance: /ahb_lite_tb
-# Break in Module ahb_lite_tb at ahb_lite_tb.sv line 114
-restart
-# ** Note: (vsim-8009) Loading existing optimized design _opt
-# Loading work.ahb_lite_tb(fast)
+vsim -voptargs=+acc -debugDB ahb_lite
+# End time: 02:14:22 on Sep 28,2024, Elapsed time: 0:00:49
+# Errors: 0, Warnings: 0
+# vsim -voptargs="+acc" -debugDB ahb_lite 
+# Start time: 02:14:22 on Sep 28,2024
+# ** Note: (vsim-3812) Design is being optimized...
+# ** Note: (vsim-8611) Generating debug db.
+# ** Note: (vopt-4301) Memory core inferred for signal 'mem' width=31, depth=16, type=RAM at location ahb_slave.v:49
 # Loading work.ahb_lite(fast)
 # Loading work.ahb_decoder(fast)
 # Loading work.ahb_mux(fast)
 # Loading work.ahb_default_slave(fast)
 # Loading work.ahb_slave(fast)
-add wave -position insertpoint sim:/ahb_lite_tb/ahb1/*
-add wave -position insertpoint sim:/ahb_lite_tb/ahb1/default_slave/*
-add wave -position insertpoint sim:/ahb_lite_tb/ahb1/mux1/*
-add wave -position insertpoint sim:/ahb_lite_tb/ahb1/decoder1/*
-add wave -position insertpoint sim:/ahb_lite_tb/ahb1/slave0/*
+# ** Note: (vsim-8900) Creating design debug database vsim.dbg.
 run -all
-# time :70 HRDATA = x
-# time :80 HRDATA = x
-# time :90 HRDATA = x
-# time :100 HRDATA = x
-# time :110 HRDATA = x
-# time :120 HRDATA = x
-# ** Note: $stop    : ahb_lite_tb.sv(114)
-#    Time: 380 ns  Iteration: 0  Instance: /ahb_lite_tb
-# Break in Module ahb_lite_tb at ahb_lite_tb.sv line 114
-# End time: 10:28:46 on Sep 26,2024, Elapsed time: 2:22:39
+
+# End time: 11:59:02 on Sep 28,2024, Elapsed time: 9:44:40
 # Errors: 0, Warnings: 0

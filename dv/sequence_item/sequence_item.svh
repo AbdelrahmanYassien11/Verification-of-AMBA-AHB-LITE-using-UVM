@@ -19,11 +19,11 @@ rand HSIZE_e      SIZE_op;
   // AHB lite Control Signals
   rand  bit   HRESETn;    // reset (active low)
 
-        bit   HWRITE;
+        logic   HWRITE;
 
-        bit   [TRANS_WIDTH:0]  HTRANS; 
+        bit   [TRANS_WIDTH:0] HTRANS; 
         bit   [SIZE_WIDTH:0]  HSIZE;
-        bit   [BURST_WIDTH:0]  HBURST;
+        bit   [BURST_WIDTH:0] HBURST;
         bit   [PROT_WIDTH:0]  HPROT; 
 
   rand  bit   [ADDR_WIDTH-1:0]  HADDR;     
@@ -38,8 +38,8 @@ rand HSIZE_e      SIZE_op;
       //rand bit [FIFO_WIDTH-1:0] data_to_write;
       // active low synchronous reset
 
-       constraint HWRITE_rand_c { HWRITE dist { 1:=50, 0:=50 };
-       }
+       // constraint HWRITE_rand_c { HWRITE dist { 1:=50, 0:=50 };
+       // }
 
 
       constraint HWDATA_c { HSIZE == BYTE     -> HWDATA dist {'h00000000:/1, 'h000000FF:/1, ['h01 : 'h000000FE]:/40};
@@ -57,9 +57,10 @@ rand HSIZE_e      SIZE_op;
                           RESET_op == WORKING  -> HRESETn == 1'b1; 
       }
 
-      constraint WRITE_c {WRITE_op == READ   -> HWRITE == 1'b0;
-                          WRITE_op == WRITE  -> HWRITE  == 1'b1; 
-      }
+      // constraint WRITE_c {WRITE_op == 'hx    -> HWRITE == 1'bx;
+      //                     WRITE_op == READ   -> HWRITE == 1'b0;
+      //                     WRITE_op == WRITE  -> HWRITE  == 1'b1; 
+      // }
 
       constraint TRANS_c {TRANS_op == IDLE    -> HTRANS == 2'b00;
                           TRANS_op == BUSY    -> HTRANS == 2'b01;
@@ -151,23 +152,23 @@ rand HSIZE_e      SIZE_op;
     function string convert2string();
       string s;
 
-      s = $sformatf(" time: %t  HRESETn = %0d, HWRITE = %0d, HTRANS =  %0d, HSIZE = %0d, HBURST = %0d, HPROT = %0d, HADDR = %0d, HWDATA = %0d, HRDATA = %0d, HRESP = %0d, HREADY = %0d, incorrect_counter = %0d",
-                    $time, HRESETn, HWRITE, HTRANS, HSIZE, HBURST, HPROT, HADDR, HWDATA, HRDATA, HRESP, HREADY, incorrect_counter);
+      s = $sformatf(" time: %0t  HRESETn = %0d, HSEL= %0d, HWRITE = %0d, HTRANS =  %0d, HSIZE = %0d, HBURST = %0d, HPROT = %0d, HADDR = %0d, HWDATA = %0d, HRDATA = %0d, HRESP = %0d, HREADY = %0d",
+                    $time, HRESETn, HADDR[ADDR_WIDTH-1:ADDR_WIDTH-$clog2(NO_OF_SLAVES)], HWRITE, HTRANS, HSIZE, HBURST, HPROT, HADDR, HWDATA, HRDATA, HRESP, HREADY);
       return s;
     endfunction : convert2string
 
 
     function string input2string();
       string s;
-      s= $sformatf(" time: %t HRESETn = %0d, HWRITE = %0d, HTRANS =  %0d, HSIZE = %0d, HBURST = %0d, HPROT = %0d, HADDR = %0d, HWDATA = %0d",
-                    $time, HRESETn, HWRITE, HTRANS, HSIZE, HBURST, HPROT, HADDR, HWDATA);
+      s= $sformatf(" time: %0t HRESETn = %0d, HSEL= %0d, HWRITE = %0d, HTRANS =  %0d, HSIZE = %0d, HBURST = %0d, HPROT = %0d, HADDR = %0d, HWDATA = %0d",
+                    $time, HRESETn, HADDR[ADDR_WIDTH-1:ADDR_WIDTH-$clog2(NO_OF_SLAVES)], HWRITE, HTRANS, HSIZE, HBURST, HPROT, HADDR, HWDATA);
       return s;
     endfunction
 
     function string output2string();
       string s;
-      s= $sformatf(" time: %t  HRDATA: %0d  HRESP: %0d   HREADY: %0d",
-                    $time, HRDATA, HRESP, HREADY);
+      s= $sformatf(" time: %0t HSEL: %0d  HRDATA: %0d  HRESP: %0d   HREADY: %0d",
+                    $time, HADDR[ADDR_WIDTH-1:ADDR_WIDTH-$clog2(NO_OF_SLAVES)], HRDATA, HRESP, HREADY);
       return s;
     endfunction
 

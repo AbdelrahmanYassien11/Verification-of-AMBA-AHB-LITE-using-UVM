@@ -1,0 +1,144 @@
+m255
+K4
+z2
+Z0 !s99 nomlopt
+R0
+!s11f vlog 2021.1 2021.01, Jan 19 2021
+13
+!s112 1.1
+!i10d 8192
+!i10e 25
+!i10f 100
+cModel Technology
+Z1 dF:/ic_design/repos/AHB_LITE/rtl
+T_opt
+!s110 1727478814
+VQOC<XW=jae6X9Dl9R]KSA3
+Z2 04 8 4 work ahb_lite fast 0
+=1-98e743467fb1-66f73c1e-10-32c
+Z3 !s124 OEM100
+o-quiet -auto_acc_if_foreign -work work +acc
+Z4 tCvgOpt 0
+n@_opt
+Z5 OL;O;2021.1;73
+R1
+T_opt1
+!s110 1727478862
+VOF:VD0laB^YDmA<lNf7UG0
+R2
+=1-98e743467fb1-66f73c4e-1ca-26fc
+R3
+o-quiet -auto_acc_if_foreign -work work -debugdb +acc
+R4
+n@_opt1
+R5
+vahb_decoder
+!s110 1727478751
+!i10b 1
+!s100 m^h^m4fK<7^WDIE7dPjm;3
+Ij>gMTBl:n^WXll1ZjMz>f0
+R1
+w1727309796
+8ahb_decoder.v
+Fahb_decoder.v
+!i122 1
+L0 1 53
+Z6 VDg1SIo80bB@j0V0VzS_@n1
+Z7 OL;L;2021.1;73
+r1
+!s85 0
+31
+!s108 1727478751.000000
+!s107 ahb_decoder.v|
+!s90 -reportprogress|300|ahb_decoder.v|
+!i113 0
+Z8 o-L mtiAvm -L mtiRnm -L mtiOvm -L mtiUvm -L mtiUPF -L infact
+R4
+vahb_default_slave
+!s110 1727478758
+!i10b 1
+!s100 ]iT2enB<51TLYDAXbOb832
+Ic@LAV<jda3@lF3V>9X9Vb3
+R1
+w1727325298
+8ahb_default_slave.v
+Fahb_default_slave.v
+!i122 2
+L0 2 58
+R6
+R7
+r1
+!s85 0
+31
+!s108 1727478758.000000
+!s107 ahb_default_slave.v|
+!s90 -reportprogress|300|ahb_default_slave.v|
+!i113 0
+R8
+R4
+vahb_lite
+!s110 1727478741
+!i10b 1
+!s100 e2iM6>5QWjW]XaBze`SzX2
+I]<83HAIE_NGUDfiFO[@d82
+R1
+w1727327366
+8ahb_lite.v
+Fahb_lite.v
+!i122 0
+L0 6 142
+R6
+R7
+r1
+!s85 0
+31
+!s108 1727478741.000000
+!s107 ahb_lite.v|
+!s90 -reportprogress|300|ahb_lite.v|
+!i113 0
+R8
+R4
+vahb_mux
+!s110 1727478783
+!i10b 1
+!s100 Yb@Y66Til`[QRCamhX3jM3
+IQSQnF@>dlSgR0ikaW7;c12
+R1
+w1727310241
+8ahb_mux.v
+Fahb_mux.v
+!i122 4
+L0 3 84
+R6
+R7
+r1
+!s85 0
+31
+!s108 1727478783.000000
+!s107 ahb_mux.v|
+!s90 -reportprogress|300|ahb_mux.v|
+!i113 0
+R8
+R4
+vahb_slave
+!s110 1727478803
+!i10b 1
+!s100 YW`34HCMeP7bWk=7_S5=i2
+IIKQeb@Hf`z7;Lj1Vj8]PA3
+R1
+w1727324599
+8ahb_slave.v
+Fahb_slave.v
+!i122 5
+L0 17 262
+R6
+R7
+r1
+!s85 0
+31
+!s108 1727478803.000000
+!s107 ahb_slave.v|
+!s90 -reportprogress|300|ahb_slave.v|
+!i113 0
+R8
+R4
