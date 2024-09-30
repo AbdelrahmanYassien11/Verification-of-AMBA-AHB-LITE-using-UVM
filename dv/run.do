@@ -6,7 +6,8 @@ vopt top_test_uvm -o top_optimized +acc +cover=bcefsx+ahb_lite(rtl)
 
 
 
-vsim top_optimized -cover +UVM_TESTNAME=reset_test
+vsim top_optimized -cover -solvefaildebug=2 +UVM_TESTNAME=write_once_test
+run -all
 #set NoQuitOnFinish 1
 #onbreak {resume}
 #log /* -r

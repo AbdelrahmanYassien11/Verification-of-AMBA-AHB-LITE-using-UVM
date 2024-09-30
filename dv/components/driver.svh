@@ -61,12 +61,12 @@ class driver extends uvm_driver #(sequence_item);
       create_sequence_item();
 
       #1ps
+      `uvm_info(get_full_name(), { "DRIVEN_ITEM:", seq_item.input2string} , UVM_LOW)
       $display("HWRITE ========================================================== HWRITE = %0d", seq_item.HWRITE);
       // Send the sequence item data to the DUT via the virtual interface
       my_vif.generic_reciever( seq_item.HRESETn, seq_item.HWRITE, seq_item.HTRANS, seq_item.HSIZE, seq_item.HBURST, seq_item.HPROT,
                                seq_item.HADDR, seq_item.HWDATA, seq_item.RESET_op, seq_item.WRITE_op, seq_item.TRANS_op, seq_item.BURST_op, 
                                seq_item.SIZE_op );
-      -> my_vif.transaction_finished;
 
       // Indicate that the item has been processed
       seq_item_port.item_done();

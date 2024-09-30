@@ -10,20 +10,21 @@ rand int unsigned randomized_number_of_tests;
 
 rand HRESET_e     RESET_op;
 rand HWRITE_e     WRITE_op;
-     HRESP_e      RESP_op;
 rand HTRANS_e     TRANS_op;
 rand HBURST_e     BURST_op;
 rand HSIZE_e      SIZE_op;
+     HRESP_e      RESP_op;
+
 
 
   // AHB lite Control Signals
   rand  bit   HRESETn;    // reset (active low)
 
-        logic   HWRITE;
+  rand  bit   HWRITE;
 
-        bit   [TRANS_WIDTH:0] HTRANS; 
-        bit   [SIZE_WIDTH:0]  HSIZE;
-        bit   [BURST_WIDTH:0] HBURST;
+  rand  bit   [TRANS_WIDTH:0] HTRANS; 
+  rand  bit   [SIZE_WIDTH:0]  HSIZE;
+  rand  bit   [BURST_WIDTH:0] HBURST;
         bit   [PROT_WIDTH:0]  HPROT; 
 
   rand  bit   [ADDR_WIDTH-1:0]  HADDR;     
@@ -38,7 +39,7 @@ rand HSIZE_e      SIZE_op;
       //rand bit [FIFO_WIDTH-1:0] data_to_write;
       // active low synchronous reset
 
-       // constraint HWRITE_rand_c { HWRITE dist { 1:=50, 0:=50 };
+       // constraint HWRITE_rand_c { WRITE_op dist { WRITE:=50, READ:=50 };
        // }
 
 
@@ -57,10 +58,9 @@ rand HSIZE_e      SIZE_op;
                           RESET_op == WORKING  -> HRESETn == 1'b1; 
       }
 
-      // constraint WRITE_c {WRITE_op == 'hx    -> HWRITE == 1'bx;
-      //                     WRITE_op == READ   -> HWRITE == 1'b0;
-      //                     WRITE_op == WRITE  -> HWRITE  == 1'b1; 
-      // }
+      constraint WRITE_c {WRITE_op == READ   -> HWRITE == 1'b0;
+                          WRITE_op == WRITE  -> HWRITE  == 1'b1; 
+      }
 
       constraint TRANS_c {TRANS_op == IDLE    -> HTRANS == 2'b00;
                           TRANS_op == BUSY    -> HTRANS == 2'b01;

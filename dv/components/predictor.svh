@@ -104,6 +104,7 @@ class predictor extends uvm_subscriber #(sequence_item);
 
   // Write method for processing sequence items
   function void write(sequence_item t);
+    HRESETn = t.HRESETn;
     HWRITE  = t.HWRITE;
     HTRANS  = t.HTRANS;
     HSIZE   = t.HSIZE;

@@ -22,7 +22,7 @@ import AHB_pkg::*;                  // Import AHB package for AHB constants
 // AHB lite Control Signals
 logic   HRESETn;    // reset (active low)
 
-logic   HWRITE;
+bit   HWRITE;
 
 bit   [TRANS_WIDTH:0]  HTRANS; 
 bit   [SIZE_WIDTH:0]  HSIZE;
@@ -40,7 +40,7 @@ logic   [READY_WIDTH:0]  HREADY;
 
 logic   HRESETn_reg;    // reset (active low)
 
-logic   HWRITE_reg;
+bit   HWRITE_reg;
 
 bit   [TRANS_WIDTH:0]  HTRANS_reg; 
 bit   [SIZE_WIDTH:0]  HSIZE_reg;
@@ -56,8 +56,14 @@ logic   [RESP_WIDTH:0]  HRESP_reg;
 logic   [READY_WIDTH:0]  HREADY_reg; 
 
 event transaction_finished;
+event starting_phases;
 event interconnect_is_resetting;
 
+bit flag_f;
+bit flag_c;
+bit flag_d;
+
+mailbox mbx = new(1);
 // Monitor handles
 inputs_monitor inputs_monitor_h;    // Handle to input monitor
 outputs_monitor outputs_monitor_h;  // Handle to output monitor
@@ -74,170 +80,120 @@ HSIZE_e      SIZE_op;
 sequence_item previous_seq_item, seq_item;
 
 // Task: Handle generic receiving operations based on reset and enable signals
-task generic_reciever( input bit iHRESETn, input bit   iHWRITE, input bit  [TRANS_WIDTH:0] iHTRANS, 
-                        input bit  [SIZE_WIDTH:0] iHSIZE, input bit  [BURST_WIDTH:0] iHBURST,
-                        input bit  [PROT_WIDTH:0] iHPROT, input bit  [ADDR_WIDTH-1:0] iHADDR,     
-                        input bit  [DATA_WIDTH-1:0] iHWDATA, input HRESET_e iRESET_op,
-                        input HWRITE_e iWRITE_op, input HTRANS_e iTRANS_op,
-                        input HBURST_e iBURST_op, input HSIZE_e iSIZE_op
-);
-    //-> transaction_finished;
-    #12ns;
-    //@(negedge clk);//like an always block @negedge,
-    $display("time: %0t negedge my bitchhhhhhhhhh", $time());
-    if(HRESP === RETRY) begin
-        iHRESETn    = previous_seq_item.HRESETn;
-        iHWRITE     = previous_seq_item.HWRITE;
-        iHTRANS     = previous_seq_item.HTRANS;
-        iHSIZE      = previous_seq_item.HSIZE;  
-        iHBURST     = previous_seq_item.HBURST; 
-        iHPROT      = previous_seq_item.HPROT;  
-        iHADDR     = previous_seq_item.HADDR; 
-        iHWDATA     = previous_seq_item.HWDATA;
+    task generic_reciever( input bit iHRESETn, input bit   iHWRITE, input bit  [TRANS_WIDTH:0] iHTRANS, 
+                            input bit  [SIZE_WIDTH:0] iHSIZE, input bit  [BURST_WIDTH:0] iHBURST,
+                            input bit  [PROT_WIDTH:0] iHPROT, input bit  [ADDR_WIDTH-1:0] iHADDR,     
+                            input bit  [DATA_WIDTH-1:0] iHWDATA, input HRESET_e iRESET_op,
+                            input HWRITE_e iWRITE_op, input HTRANS_e iTRANS_op,
+                            input HBURST_e iBURST_op, input HSIZE_e iSIZE_op
+    );  
+        if(!flag_f && !flag_c) begin
+            #1step;
+            //@(negedge clk);//like an always block @negedge,
+            $display("time: %0t negedge my bitchhhhhhhhhh", $time());
+            if(HRESP === RETRY) begin
+                iHRESETn    = previous_seq_item.HRESETn;
+                iHWRITE     = previous_seq_item.HWRITE;
+                iHTRANS     = previous_seq_item.HTRANS;
+                iHSIZE      = previous_seq_item.HSIZE;  
+                iHBURST     = previous_seq_item.HBURST; 
+                iHPROT      = previous_seq_item.HPROT;  
+                iHADDR     = previous_seq_item.HADDR; 
+                iHWDATA     = previous_seq_item.HWDATA;
 
-        iRESET_op = previous_seq_item.RESET_op;
-        iWRITE_op = previous_seq_item.WRITE_op;
-        iTRANS_op = previous_seq_item.TRANS_op;
-        iBURST_op = previous_seq_item.BURST_op;
-        iSIZE_op  = previous_seq_item.SIZE_op;
-    end
-    if(HREADY === 1'b1  || iHRESETn === 1'b0) begin
-        
-        seq_item.RESET_op = iRESET_op;
-        seq_item.WRITE_op = iWRITE_op;
-        seq_item.TRANS_op = iTRANS_op;
-        seq_item.BURST_op = iBURST_op;
-        seq_item.SIZE_op  = iSIZE_op;
+                iRESET_op = previous_seq_item.RESET_op;
+                iWRITE_op = previous_seq_item.WRITE_op;
+                iTRANS_op = previous_seq_item.TRANS_op;
+                iBURST_op = previous_seq_item.BURST_op;
+                iSIZE_op  = previous_seq_item.SIZE_op;
+            end
+            if(HREADY === 1'b1  || iHRESETn === 1'b0) begin
+                $display("ASSSINGING RANDOMIZED VALUES");
+                
+                seq_item.RESET_op = iRESET_op;
+                seq_item.WRITE_op = iWRITE_op;
+                seq_item.TRANS_op = iTRANS_op;
+                seq_item.BURST_op = iBURST_op;
+                seq_item.SIZE_op  = iSIZE_op;
 
-        seq_item.HRESETn    = iHRESETn;
-        seq_item.HWRITE     = iHWRITE;
-        seq_item.HTRANS     = iHTRANS;
-        seq_item.HSIZE      = iHSIZE;  
-        seq_item.HBURST     = iHBURST; 
-        seq_item.HPROT      = iHPROT;  
-        seq_item.HADDR      = iHADDR; 
-        seq_item.HWDATA     = iHWDATA;
+                seq_item.HRESETn    = iHRESETn;
+                seq_item.HWRITE     = iHWRITE;
+                seq_item.HTRANS     = iHTRANS;
+                seq_item.HSIZE      = iHSIZE;  
+                seq_item.HBURST     = iHBURST; 
+                seq_item.HPROT      = iHPROT;  
+                seq_item.HADDR      = iHADDR; 
+                seq_item.HWDATA     = iHWDATA;
 
-        HRESETn_global      = iHRESETn;
+                HRESETn_global      = iHRESETn;
 
-        seq_item.RESET_op = previous_seq_item.RESET_op;
-        seq_item.WRITE_op = previous_seq_item.WRITE_op;
-        seq_item.TRANS_op = previous_seq_item.TRANS_op;
-        seq_item.BURST_op = previous_seq_item.BURST_op;
-        seq_item.SIZE_op  = previous_seq_item.SIZE_op;
-
-        send_inputs(iHRESETn, iHWRITE, iHTRANS, iHSIZE, iHBURST, iHPROT, iHADDR, iHWDATA, iRESET_op, iWRITE_op, iTRANS_op, iBURST_op, iSIZE_op);
-        wait(HRESETn); //so the driver doesnt keep driving when the sequence is already driven to the interface/dut
-        // fork
-        //     begin
-        //         control_phase(iHRESETn, iHWRITE, iHTRANS, iHSIZE, iHBURST, iHPROT, iHADDR, iHWDATA);
-        //     end
-        //     begin
-        //     data_phase(iHRESETn, iHWRITE_t, iHTRANS_t, iHSIZE_t, iHBURST_t, iHPROT_t, iHADDR_t, iHWDATA_t);
-        //     end
-        // join_none
-    end
-endtask : generic_reciever
+                flag_f = 1'b1;
+                // @(starting_phases); // to stop the always blocks from continously running without new sequences being driven
+                // -> transaction_finished;
+                $display("RESETTTTTTTTTTTTTTTTTTTTT VALUE %0d", iHRESETn);
+                send_inputs(iHRESETn, iHWRITE, iHTRANS, iHSIZE, iHBURST, iHPROT, iHADDR, iHWDATA, iRESET_op, iWRITE_op, iTRANS_op, iBURST_op, iSIZE_op);
+                wait(!flag_f && !flag_c);
+                wait(HRESETn); //so the driver doesnt keep driving when the sequence is already driven to the interface/dut
+            end
+        end
+    endtask : generic_reciever
 
     always@(negedge clk or negedge HRESETn_global ) begin //CONTROL_PHASE
-        @(transaction_finished);
- 		HRESETn <= seq_item.HRESETn;
-        wait(HREADY == 1'b1);
-        HWRITE  <= seq_item.HWRITE;
-        HTRANS  <= seq_item.HTRANS;
-        HSIZE   <= seq_item.HSIZE;
-        HBURST  <= seq_item.HBURST;
-        HPROT   <= seq_item.HPROT;
-        HADDR   <= seq_item.HADDR;
+        $display("BEFORE EVENTSSSSSSSSS");
+        // -> starting_phases;
+        // @(transaction_finished);
+        if(flag_f) begin
+            $display("time :%0t AFTER EVENTSSSSSSSSS", $time());
+     		HRESETn <= seq_item.HRESETn;
+            wait(HREADY == 1'b1);
+            HWRITE  <= seq_item.HWRITE;
+            HTRANS  <= seq_item.HTRANS;
+            HSIZE   <= seq_item.HSIZE;
+            HBURST  <= seq_item.HBURST;
+            HPROT   <= seq_item.HPROT;
+            HADDR   <= seq_item.HADDR;
 
-        HRESETn_reg <= seq_item.HRESETn;
-        HWRITE_reg  <= seq_item.HWRITE;
-        HTRANS_reg  <= seq_item.HTRANS;
-        HSIZE_reg   <= seq_item.HSIZE;
-        HBURST_reg  <= seq_item.HBURST;
-        HPROT_reg   <= seq_item.HPROT;
-        HADDR_reg   <= seq_item.HADDR;
-        //@(transaction_finished);
+            // HRESETn_reg <= seq_item.HRESETn;
+            HWRITE_reg  <= seq_item.HWRITE;
+            HTRANS_reg  <= seq_item.HTRANS;
+            HSIZE_reg   <= seq_item.HSIZE;
+            HBURST_reg  <= seq_item.HBURST;
+            HPROT_reg   <= seq_item.HPROT;
+            HADDR_reg   <= seq_item.HADDR;
+            HWDATA_reg  <= seq_item.HADDR;
+            flag_f = 0;
+            flag_c = 1;
+        end
     end
 
     always@(negedge HRESETn_global or negedge clk) begin
-        if(~HRESETn) begin
-            $display("time:%0t starting_reset_task", $time());
-            reset_AHB();
-            send_outputs();
-        end
-        else if(HREADY)begin
-            wait(HREADY);
-            write_AHB(HWDATA_reg);
-        end
+        //if(flag_f) begin
+            if(~HRESETn) begin
+                $display("time:%0t starting_reset_task", $time());
+                reset_AHB();
+                flag_c = 0;
+            end
+        //end
     end
 
-    always@(negedge clk) begin //DATA_PHASE
-        @(transaction_finished);
-        if(HRESETn) begin
-            wait(HREADY == 1'b1);
-            if(HWRITE_reg == 1'b1) begin
-                write_AHB(HWDATA_reg);
+    always@(HWRITE_reg or HTRANS_reg or HSIZE_reg or HBURST_reg or HPROT_reg or HADDR_reg or HWDATA_reg) begin //DATA_PHASE
+        // -> starting_phases;
+        // @(transaction_finished);
+        if(flag_f || flag_c) begin
+            //@(negedge clk);
+            if(HRESETn) begin
+                wait(HREADY == 1'b1);
+                if(HWRITE_reg == 1'b1) begin
+                    write_AHB(HWDATA_reg);
+                end
+                else if(HWRITE_reg == 1'b0) begin
+                    read_AHB();
+                end
+                $display("time:%0t send_outputs HWRITE = %0d", $time(), HWRITE);
             end
-            else if(HWRITE_reg == 1'b0) begin
-                read_AHB();
-            end
-            $display("time:%0t send_outputs HWRITE = %0d", $time(), HWRITE);
-            send_outputs();
+            flag_c = 0;
         end
     end
-
-    // task automatic control_phase( input bit iHRESETn, input bit   iHWRITE, input bit  [TRANS_WIDTH:0] iHTRANS, 
-    //                     input bit  [SIZE_WIDTH:0] iHSIZE, input bit  [BURST_WIDTH:0] iHBURST,
-    //                     input bit  [PROT_WIDTH:0] iHPROT, input bit  [ADDR_WIDTH-1:0] iHADDR,     
-    //                     input bit  [DATA_WIDTH-1:0] iHWDATA     
-    //                     );
-
-    //     //@(negedge clk); //added it in the generic_reciever, not here cause I dont want the inputs to both function calls to somehow be overwritten (being cautious)
-    //     HRESETn <= iHRESETn_t;
-    //     // if(HREADY === 1'b1) begin
-    //         HWRITE  <= iHWRITE;
-    //         HTRANS  <= iHTRANS;
-    //         HSIZE   <= iHSIZE;
-    //         HBURST  <= iHBURST;
-    //         HPROT   <= iHPROT;
-    //         HADDR   <= iHADDR;
-    //         @(negedge clk);
-    //         $display("time:%0t AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA", $time());
-    //         -> control_phase_finished;
-    //         $display("time:%0t AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA", $time());
-    //     //end
-    // endtask : control_phase
-
-
-
-
-    // task automatic data_phase(input bit iHRESETn, input bit   iHWRITE, input bit  [TRANS_WIDTH:0] iHTRANS, 
-    //                 input bit  [SIZE_WIDTH:0] iHSIZE, input bit  [BURST_WIDTH:0] iHBURST,
-    //                 input bit  [PROT_WIDTH:0] iHPROT, input bit  [ADDR_WIDTH-1:0] iHADDR,
-    //                 input bit [DATA_WIDTH-1:0] iHWDATA  
-    //                     );
-
-    //     $display("time:%0t dddddddddddddddddddd", $time());
-    //     //@(control_phase_finished);
-    //     wait(control_phase_finished.triggered());
-    //     $display("iHRESETn = %0d time:%0t ddddddddddddddddddddd",iHRESETn_t, $time());
-    //     @(negedge clk);
-    //     $display("time:%0t qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq", $time());
-    //     if(iHRESETn === 1'b0) begin
-    //     	$display("time:%0t ddddddddddddddddddddddddddd", $time());
-    //         reset_AHB();
-    //     end
-    //     else if(HWRITE === 1'b1) begin
-    //         write_AHB(iHWDATA);
-    //     end
-    //     else if(HWRITE === 1'b0) begin
-    //         read_AHB();
-    //     end
-    //     $display("time:%0t ddddddddddddddddddddddddddd", $time());
-    //     send_outputs();
-    // endtask : data_phase
-
 
     // Task: Reset AHB pointers and flags
     task reset_AHB();
@@ -245,8 +201,8 @@ endtask : generic_reciever
         repeat(15) begin
             @(negedge clk);
         end
+        send_outputs();
         HRESETn <= 1'b1;
-        #1step;
         $display("time:%0t HRESETn: %0d RESET DE-ASSERTED", $time(), HRESETn);
     endtask : reset_AHB
 
@@ -258,9 +214,11 @@ endtask : generic_reciever
             end
 
             NONSEQ, SEQ: begin
-                HWDATA = iHWDATA;
+                HWDATA <= iHWDATA;
             end
         endcase // HTRANS
+        @(negedge clk);
+        send_outputs();
     endtask : write_AHB
 
     // Task: Read data from the AHB and handle pointer updates
@@ -273,6 +231,7 @@ endtask : generic_reciever
                 wait(HREADY === 1'b1);
             end
         endcase // HTRANS
+        send_outputs();
     endtask : read_AHB
 
     // Function to send inputs to the input monitor
@@ -313,10 +272,16 @@ endtask : generic_reciever
     //     end
     // end
 
+    function void create_sequence_item();
+        $display("CREATEDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD");
+        seq_item = sequence_item::type_id::create("seq_item");
+        previous_seq_item = sequence_item::type_id::create("previous_seq_item");
+    endfunction
 
-    // initial begin
-    //     create_sequence_item();
-    // end
+    initial begin
+        $monitor(" RESET VALUE ----------> HRESETn = %0d", HRESETn);
+        create_sequence_item();
+    end
 
     //assign HRESETn_global = (seq_item.HRESETn)? 1:0;
 

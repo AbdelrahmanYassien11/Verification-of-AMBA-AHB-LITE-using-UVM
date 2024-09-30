@@ -58,6 +58,11 @@ class scoreboard extends uvm_scoreboard;
     `uvm_info("SCOREBOARD", "Connect phase completed", UVM_MEDIUM)
   endfunction
 
+  function void final_phase(uvm_phase phase);
+    super.final_phase(phase);
+    `uvm_info("SCOREBOARD", "Scoreboard is stopping.", UVM_MEDIUM)
+  endfunction
+
 endclass
 
 

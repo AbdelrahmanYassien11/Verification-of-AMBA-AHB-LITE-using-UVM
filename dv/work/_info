@@ -11,7 +11,7 @@ z2
 cModel Technology
 Z0 dF:/ic_design/repos/AHB_LITE/dv
 vahb_decoder
-Z1 !s110 1727642124
+Z1 !s110 1727728238
 !i10b 1
 !s100 `=MB;AN<<EEeAJf95d9790
 IiC[UR3jz2CFMNMJgPki;Q3
@@ -26,7 +26,7 @@ Z3 OL;L;2021.1;73
 r1
 !s85 0
 31
-Z4 !s108 1727642124.000000
+Z4 !s108 1727728238.000000
 Z5 !s107 ../rtl/ahb_lite.v|../rtl/ahb_decoder.v|../rtl/ahb_mux.v|../rtl/ahb_slave.v|../rtl/ahb_default_slave.v|
 Z6 !s90 -reportprogress|300|-f|dut.f|+cover|-covercells|
 !i113 0
@@ -82,14 +82,14 @@ R9
 vahb_mux
 R1
 !i10b 1
-!s100 Yb@Y66Til`[QRCamhX3jM3
-I1mLKS5JnkDnYnN>3T>2z:2
+!s100 T?an4@>@22alGmWh9KI[03
+I5VLHR=aEG=I^jC<_N[0i:0
 R0
-w1727310241
+w1727697773
 8../rtl/ahb_mux.v
 F../rtl/ahb_mux.v
 !i122 0
-L0 3 84
+L0 3 88
 R2
 R3
 r1
@@ -106,13 +106,13 @@ XAHB_pkg
 !s115 inf
 Z10 DXx6 sv_std 3 std 0 22 9oUSJO;AeEaW`l:M@^WG92
 Z11 DXx6 mtiUvm 7 uvm_pkg 0 22 8V[`8]Q0W57le7Z>zYaAj1
-R1
+Z12 !s110 1727728239
 !i10b 1
-!s100 AmU@lTzjjaER]JamHE5EV3
-I3NLl4o8d`A]M]Y2bND<cl0
+!s100 YD<CYdEC^<Bf=<^PCCLgf0
+IiU>`R4?hL9W4eR4OAY0m^3
 S1
 R0
-w1727633353
+w1727727100
 8AHB_lite_uvm_pkg.sv
 FAHB_lite_uvm_pkg.sv
 FF:/questasim/questasim64_2021.1/uvm-1.1d/../verilog_src/uvm-1.1d/src/uvm_macros.svh
@@ -136,6 +136,7 @@ Fcomponents/predictor.svh
 Fcomponents/comparator.svh
 Fsequence/base_sequence.svh
 Fsequence/reset_sequence.svh
+Fsequence/write_once_sequence.svh
 Fcomponents/driver.svh
 Fcomponents/inputs_monitor.svh
 Fcomponents/outputs_monitor.svh
@@ -146,20 +147,21 @@ Fcomponents/coverage.svh
 Fcomponents/env.svh
 Ftests/base_test.svh
 Ftests/reset_test.svh
+Ftests/write_once_test.svh
 !i122 1
 L0 1 0
-V3NLl4o8d`A]M]Y2bND<cl0
+ViU>`R4?hL9W4eR4OAY0m^3
 R3
 r1
 !s85 0
 31
 R4
-Z12 !s107 tests/reset_test.svh|tests/base_test.svh|components/env.svh|components/coverage.svh|components/scoreboard.svh|components/passive_agent.svh|components/active_agent.svh|components/outputs_monitor.svh|components/inputs_monitor.svh|components/driver.svh|sequence/reset_sequence.svh|sequence/base_sequence.svh|components/comparator.svh|components/predictor.svh|components/env_config.svh|components/active_agent_config.svh|components/passive_agent_config.svh|components/sequencer.svh|sequence_item/sequence_item.svh|F:/questasim/questasim64_2021.1/uvm-1.1d/../verilog_src/uvm-1.1d/src/macros/uvm_deprecated_defines.svh|F:/questasim/questasim64_2021.1/uvm-1.1d/../verilog_src/uvm-1.1d/src/macros/uvm_reg_defines.svh|F:/questasim/questasim64_2021.1/uvm-1.1d/../verilog_src/uvm-1.1d/src/macros/uvm_callback_defines.svh|F:/questasim/questasim64_2021.1/uvm-1.1d/../verilog_src/uvm-1.1d/src/macros/uvm_sequence_defines.svh|F:/questasim/questasim64_2021.1/uvm-1.1d/../verilog_src/uvm-1.1d/src/tlm1/uvm_tlm_imps.svh|F:/questasim/questasim64_2021.1/uvm-1.1d/../verilog_src/uvm-1.1d/src/macros/uvm_tlm_defines.svh|F:/questasim/questasim64_2021.1/uvm-1.1d/../verilog_src/uvm-1.1d/src/macros/uvm_printer_defines.svh|F:/questasim/questasim64_2021.1/uvm-1.1d/../verilog_src/uvm-1.1d/src/macros/uvm_object_defines.svh|F:/questasim/questasim64_2021.1/uvm-1.1d/../verilog_src/uvm-1.1d/src/macros/uvm_phase_defines.svh|F:/questasim/questasim64_2021.1/uvm-1.1d/../verilog_src/uvm-1.1d/src/macros/uvm_message_defines.svh|F:/questasim/questasim64_2021.1/uvm-1.1d/../verilog_src/uvm-1.1d/src/macros/uvm_version_defines.svh|F:/questasim/questasim64_2021.1/uvm-1.1d/../verilog_src/uvm-1.1d/src/uvm_macros.svh|top_test_uvm.sv|interface/AHB_lite_interface.sv|AHB_lite_uvm_pkg.sv|
-Z13 !s90 -reportprogress|300|-f|tb.f|+cover|-covercells|
+Z13 !s107 tests/write_once_test.svh|tests/reset_test.svh|tests/base_test.svh|components/env.svh|components/coverage.svh|components/scoreboard.svh|components/passive_agent.svh|components/active_agent.svh|components/outputs_monitor.svh|components/inputs_monitor.svh|components/driver.svh|sequence/write_once_sequence.svh|sequence/reset_sequence.svh|sequence/base_sequence.svh|components/comparator.svh|components/predictor.svh|components/env_config.svh|components/active_agent_config.svh|components/passive_agent_config.svh|components/sequencer.svh|sequence_item/sequence_item.svh|F:/questasim/questasim64_2021.1/uvm-1.1d/../verilog_src/uvm-1.1d/src/macros/uvm_deprecated_defines.svh|F:/questasim/questasim64_2021.1/uvm-1.1d/../verilog_src/uvm-1.1d/src/macros/uvm_reg_defines.svh|F:/questasim/questasim64_2021.1/uvm-1.1d/../verilog_src/uvm-1.1d/src/macros/uvm_callback_defines.svh|F:/questasim/questasim64_2021.1/uvm-1.1d/../verilog_src/uvm-1.1d/src/macros/uvm_sequence_defines.svh|F:/questasim/questasim64_2021.1/uvm-1.1d/../verilog_src/uvm-1.1d/src/tlm1/uvm_tlm_imps.svh|F:/questasim/questasim64_2021.1/uvm-1.1d/../verilog_src/uvm-1.1d/src/macros/uvm_tlm_defines.svh|F:/questasim/questasim64_2021.1/uvm-1.1d/../verilog_src/uvm-1.1d/src/macros/uvm_printer_defines.svh|F:/questasim/questasim64_2021.1/uvm-1.1d/../verilog_src/uvm-1.1d/src/macros/uvm_object_defines.svh|F:/questasim/questasim64_2021.1/uvm-1.1d/../verilog_src/uvm-1.1d/src/macros/uvm_phase_defines.svh|F:/questasim/questasim64_2021.1/uvm-1.1d/../verilog_src/uvm-1.1d/src/macros/uvm_message_defines.svh|F:/questasim/questasim64_2021.1/uvm-1.1d/../verilog_src/uvm-1.1d/src/macros/uvm_version_defines.svh|F:/questasim/questasim64_2021.1/uvm-1.1d/../verilog_src/uvm-1.1d/src/uvm_macros.svh|top_test_uvm.sv|interface/AHB_lite_interface.sv|AHB_lite_uvm_pkg.sv|
+Z14 !s90 -reportprogress|300|-f|tb.f|+cover|-covercells|
 !i113 0
 R7
 R8
-Z14 !s92 +incdir+sequence +incdir+sequence_item +incdir+tests +incdir+components +cover -covercells -L mtiAvm -L mtiRnm -L mtiOvm -L mtiUvm -L mtiUPF -L infact
+Z15 !s92 +incdir+sequence +incdir+sequence_item +incdir+tests +incdir+components +cover -covercells -L mtiAvm -L mtiRnm -L mtiOvm -L mtiUvm -L mtiUPF -L infact
 R9
 n@a@h@b_pkg
 vahb_slave
@@ -188,14 +190,14 @@ R9
 Yinf
 R10
 R11
-Z15 DXx4 work 7 AHB_pkg 0 22 3NLl4o8d`A]M]Y2bND<cl0
-R1
+Z16 DXx4 work 7 AHB_pkg 0 22 iU>`R4?hL9W4eR4OAY0m^3
+R12
 !i10b 1
-!s100 WIiODD:Gb6Ic9d:jfk`253
-IBIAiMzkD9C@mHX32;5ei`1
+!s100 1fNUJAWENLGZ7JT9O82A^1
+IGYzei[QH[_W9YiHfTV>Lj0
 S1
 R0
-w1727642116
+w1727728228
 8interface/AHB_lite_interface.sv
 Finterface/AHB_lite_interface.sv
 !i122 1
@@ -206,17 +208,17 @@ r1
 !s85 0
 31
 R4
-R12
 R13
+R14
 !i113 0
 R7
 R8
-R14
+R15
 R9
 Ttop_optimized
 !s11d AHB_pkg F:/ic_design/repos/AHB_LITE/dv/work 1 inf 1 F:/ic_design/repos/AHB_LITE/dv/work 
-!s110 1727642125
-V;AfAOO2giA8U_HlJQm2bC1
+!s110 1727728241
+VE^T_;gKYUgMm[Gc4:3deJ1
 04 12 4 work top_test_uvm fast 0
 !s124 OEM100
 o+acc +cover=bcefsx+ahb_lite(rtl)
@@ -226,8 +228,8 @@ OL;O;2021.1;73
 vtop_test_uvm
 R10
 R11
-R15
-R1
+R16
+R12
 !i10b 1
 !s100 Lm1l;=7=615Q7o0N4WITZ0
 IZaB`g3E66G8:j[PiVGz?l3
@@ -244,10 +246,10 @@ r1
 !s85 0
 31
 R4
-R12
 R13
+R14
 !i113 0
 R7
 R8
-R14
+R15
 R9

@@ -29,7 +29,7 @@ class write_once_sequence extends base_sequence;
     $display("start of pre_body task");
     super.pre_body();
     // Handle for reset sequence creation is commented out here
-    // reset_sequence_h = reset_sequence::type_id::create("reset_sequence_h");
+    //reset_sequence_h = reset_sequence::type_id::create("reset_sequence_h");
   endtask : pre_body
 
   // Main task body where the sequence execution occurs

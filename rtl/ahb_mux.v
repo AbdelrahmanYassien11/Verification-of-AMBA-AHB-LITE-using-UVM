@@ -31,10 +31,11 @@ module ahb_mux #(parameter P_NUM  = 3, P_BITS = 4, ADDR_WIDTH = 32, DATA_WIDTH =
   output  reg                   HREADY
 );
  /********************************************************/
-  localparam P_HSEL_bus0 = 4'b0001;
-  localparam P_HSEL_bus1 = 4'b0010;
-  localparam P_HSEL_bus2 = 4'b0100;
-  localparam P_HSEL_busd = 4'b1000;
+  localparam P_HSEL_bus0      = 4'b0001;
+  localparam P_HSEL_bus1      = 4'b0010;
+  localparam P_HSEL_bus2      = 4'b0100;
+  localparam P_HSEL_busd      = 4'b1000;
+  localparam P_HSEL_bus_reset = 4'b0000;
 
   wire [3:0] HSEL_bus      = {HSELd,HSEL2,HSEL1,HSEL0};
   reg  [3:0] HSEL_bus_reg;
@@ -59,6 +60,7 @@ module ahb_mux #(parameter P_NUM  = 3, P_BITS = 4, ADDR_WIDTH = 32, DATA_WIDTH =
       P_HSEL_bus1: HREADY = HREADY1;
       P_HSEL_bus2: HREADY = HREADY2;
       P_HSEL_busd: HREADY = HREADYd;
+      P_HSEL_bus_reset: HREADY = 1'b1;
       default: HREADY = 1'b1;
     endcase
   end
@@ -69,6 +71,7 @@ module ahb_mux #(parameter P_NUM  = 3, P_BITS = 4, ADDR_WIDTH = 32, DATA_WIDTH =
       P_HSEL_bus1: HRDATA = HRDATA1;
       P_HSEL_bus2: HRDATA = HRDATA2;
       P_HSEL_busd: HRDATA = HRDATAd;
+      P_HSEL_bus_reset: HRDATA = 0;
       default: HRDATA = HRDATA;
     endcase
   end
@@ -79,6 +82,7 @@ module ahb_mux #(parameter P_NUM  = 3, P_BITS = 4, ADDR_WIDTH = 32, DATA_WIDTH =
       P_HSEL_bus1: HRESP = HRESP1;
       P_HSEL_bus2: HRESP = HRESP2;
       P_HSEL_busd: HRESP = HRESPd;
+      P_HSEL_bus_reset: HRESP = 2'b00;
       default: HRESP = 2'b01; 
     endcase
   end

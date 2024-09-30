@@ -39,20 +39,27 @@ class write_once_sequence extends base_sequence;
 
     // If reset_flag is not set, start the reset sequence
     if (!reset_flag)
-      reset_sequence_h.start(m_sequencer);
+      reset_sequence_h.start(sequencer_h);
 
     // Configure the sequence item for the write operation
-    seq_item.operation.rand_mode(0); // Set the randomization mode to constrained random
+    seq_item.RESET_op.rand_mode(0);
+    seq_item.WRITE_op.rand_mode(0);
+    seq_item.TRANS_op.rand_mode(0);
+    seq_item.BURST_op.rand_mode(0);
+    seq_item.SIZE_op.rand_mode(0);
+    //seq_item.HWRITE_rand_c.constraint_mode(0);
+
     start_item(seq_item); // Start the sequence item
     
     // Set the operation type to WRITE
-    seq_item.operation = WRITE;
+    seq_item.RESET_op = WORKING;
+    seq_item.WRITE_op = WRITE;
+    seq_item.TRANS_op = NONSEQ;
+    seq_item.BURST_op = SINGLE;
+    seq_item.SIZE_op  = BYTE;
+
     assert(seq_item.randomize()); // Randomize the sequence item
     // Set the control signals for writing
-    seq_item.rrst_n = 1'b1;
-    seq_item.wrst_n = 1'b1;
-    seq_item.w_en = 1'b1;
-    seq_item.r_en = 1'b0;
 
     // Finish the sequence item
     finish_item(seq_item);
