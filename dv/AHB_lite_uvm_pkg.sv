@@ -111,6 +111,7 @@ package AHB_pkg;
 	`include "reset_sequence.svh"
 
 	`include "write_once_sequence.svh"
+	`include "write_twice_sequence.svh"
 	// `include "read_once_sequence.svh"
 	
 	// `include "write_all_sequence.svh"
@@ -139,6 +140,7 @@ package AHB_pkg;
 	`include "base_test.svh"
 	`include "reset_test.svh"
 	`include "write_once_test.svh"
+	`include "write_twice_test.svh"
 	// `include "read_once_test.svh"
 
 	// `include "write_all_test.svh"

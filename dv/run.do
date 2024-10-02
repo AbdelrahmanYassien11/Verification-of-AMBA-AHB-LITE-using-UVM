@@ -7,7 +7,12 @@ vopt top_test_uvm -o top_optimized +acc +cover=bcefsx+ahb_lite(rtl)
 
 
 vsim top_optimized -cover -solvefaildebug=2 +UVM_TESTNAME=write_once_test
-run -all
+#add wave -position insertpoint sim:/top_test_uvm/DUT/*
+#add wave -position insertpoint  \
+#sim:/top_test_uvm/f_if/counter
+#add wave -position insertpoint  \
+#sim:/top_test_uvm/f_if/RECIEVING_PHASE_FLAG
+run 300
 #set NoQuitOnFinish 1
 #onbreak {resume}
 #log /* -r

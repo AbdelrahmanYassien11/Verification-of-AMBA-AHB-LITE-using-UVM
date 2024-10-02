@@ -76,6 +76,8 @@ class base_test extends uvm_test;
       // Start the base sequence
       base_sequence_h.start(sequencer_h);
 
+      my_vif.last_test = 1;
+
       // Drop the objection to allow the phase to end
       phase.drop_objection(this);
 
