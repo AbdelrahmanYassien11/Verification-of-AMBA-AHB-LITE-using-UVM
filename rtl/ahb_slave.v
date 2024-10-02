@@ -178,79 +178,90 @@ module ahb_slave #(parameter ADDR_WIDTH = 32, DATA_WIDTH = 32, ADDR_DEPTH = 16)
       end
 
       WRITE: begin     
-        HRESP_reg = 2'b00;
         HREADYout_reg = 1'b1;
         case(HTRANS_reg)
           2'b00, 2'b01: begin
+            HRESP_reg = 2'b00;
             burst_counter_reg = 0 ;
           end
           2'b10, 2'b11: begin
-            case(HBURST_reg)
-              INCR, INCR4, INCR8, INCR16: begin
-                case(HSIZE_reg) 
-                  BYTE_P:     mem[HADDR_reg + burst_counter] = HWDATA_reg[7:0];
-                  HALFWORD_P: mem[HADDR_reg + burst_counter] = HWDATA_reg[15:0];
-                  default:     mem[HADDR_reg + burst_counter] = HWDATA_reg[DATA_WIDTH-1:0];
-                endcase // HSIZE_reg
-                burst_counter_reg = burst_counter_reg + 1;
-              end
-              WRAP4, WRAP8, WRAP16: begin
-                case(HSIZE_reg) 
-                  BYTE_P:     mem[HADDR_reg + burst_counter] = HWDATA_reg[7:0];
-                  HALFWORD_P: mem[HADDR_reg + burst_counter] = HWDATA_reg[15:0];
-                  default:     mem[HADDR_reg + burst_counter] = HWDATA_reg[DATA_WIDTH-1:0];
-                endcase //HSIZE_reg
-                wrap_counter_reg = wrap_counter_reg - 1;
-              end
-              default: begin
-                case(HSIZE_reg) 
-                  BYTE_P:     mem[HADDR_reg + burst_counter] = HWDATA_reg[7:0];
-                  HALFWORD_P: mem[HADDR_reg + burst_counter] = HWDATA_reg[15:0];
-                  default:     mem[HADDR_reg + burst_counter] = HWDATA_reg[DATA_WIDTH-1:0];
-                endcase //HSIZE_reg
-                burst_counter_reg = 0 ;
-              end
-            endcase // HBURST_reg
+            if(HADDR_reg < ADDR_DEPTH) begin
+              HRESP_reg = 2'b00;
+              case(HBURST_reg)
+                INCR, INCR4, INCR8, INCR16: begin
+                  case(HSIZE_reg) 
+                    BYTE_P:     mem[HADDR_reg + burst_counter] = HWDATA_reg[7:0];
+                    HALFWORD_P: mem[HADDR_reg + burst_counter] = HWDATA_reg[15:0];
+                    default:     mem[HADDR_reg + burst_counter] = HWDATA_reg[DATA_WIDTH-1:0];
+                  endcase // HSIZE_reg
+                  burst_counter_reg = burst_counter_reg + 1;
+                end
+                WRAP4, WRAP8, WRAP16: begin
+                  case(HSIZE_reg) 
+                    BYTE_P:     mem[HADDR_reg + burst_counter] = HWDATA_reg[7:0];
+                    HALFWORD_P: mem[HADDR_reg + burst_counter] = HWDATA_reg[15:0];
+                    default:     mem[HADDR_reg + burst_counter] = HWDATA_reg[DATA_WIDTH-1:0];
+                  endcase //HSIZE_reg
+                  wrap_counter_reg = wrap_counter_reg - 1;
+                end
+                default: begin
+                  case(HSIZE_reg) 
+                    BYTE_P:     mem[HADDR_reg + burst_counter] = HWDATA_reg[7:0];
+                    HALFWORD_P: mem[HADDR_reg + burst_counter] = HWDATA_reg[15:0];
+                    default:     mem[HADDR_reg + burst_counter] = HWDATA_reg[DATA_WIDTH-1:0];
+                  endcase //HSIZE_reg
+                  burst_counter_reg = 0 ;
+                end
+              endcase // HBURST_reg
+            end
+            else begin
+              HRESP_reg = 2'b01; //error
+            end
           end
         endcase // HTRANS_reg                    
       end
 
       READ: begin
-        HRESP_reg                  = 2'b00; //`HRESP_OKAY;
         HREADYout_reg              = 1'b1;
         HRDATA_reg                 = mem[HADDR_reg  +burst_counter_reg];
 
         case(HTRANS_reg)
           2'b00, 2'b01: begin
+            HRESP_reg         = 2'b00; //`HRESP_OKAY;
             burst_counter_reg = 0 ;
           end
           2'b10, 2'b11: begin
-            case(HBURST_reg)
-              INCR, INCR4, INCR8, INCR16: begin
-                case(HSIZE_reg) 
-                  BYTE_P:     HRDATA_reg[7:0] = mem[HADDR_reg  + burst_counter];
-                  HALFWORD_P: HRDATA_reg[15:0] = mem[HADDR_reg  + burst_counter];
-                  default:     HRDATA_reg[DATA_WIDTH-1:0] = mem[HADDR_reg  + burst_counter];
-                endcase //HSIZE_reg                
-                burst_counter_reg = burst_counter_reg + 1;
-              end
-              WRAP4, WRAP8, WRAP16: begin
-                case(HSIZE_reg) 
-                  BYTE_P:     HRDATA_reg[7:0] = mem[HADDR_reg  + burst_counter];
-                  HALFWORD_P: HRDATA_reg[15:0] = mem[HADDR_reg  + burst_counter];
-                  default:     HRDATA_reg[DATA_WIDTH-1:0] = mem[HADDR_reg  + burst_counter];
-                endcase //HSIZE_reg     
-                wrap_counter_reg  = wrap_counter_reg - 1;
-              end
-              default: begin
-                case(HSIZE_reg) 
-                  BYTE_P:     HRDATA_reg[7:0] = mem[HADDR_reg  + burst_counter];
-                  HALFWORD_P: HRDATA_reg[15:0] = mem[HADDR_reg  + burst_counter];
-                  default:     HRDATA_reg[DATA_WIDTH-1:0] = mem[HADDR_reg  + burst_counter];
-                endcase //HSIZE_reg     
-                burst_counter_reg = 0 ;
-              end
-            endcase // HBURST_reg
+            if(HADDR_reg < ADDR_DEPTH) begin
+              case(HBURST_reg)
+                INCR, INCR4, INCR8, INCR16: begin
+                  case(HSIZE_reg) 
+                    BYTE_P:     HRDATA_reg[7:0] = mem[HADDR_reg  + burst_counter];
+                    HALFWORD_P: HRDATA_reg[15:0] = mem[HADDR_reg  + burst_counter];
+                    default:     HRDATA_reg[DATA_WIDTH-1:0] = mem[HADDR_reg  + burst_counter];
+                  endcase //HSIZE_reg                
+                  burst_counter_reg = burst_counter_reg + 1;
+                end
+                WRAP4, WRAP8, WRAP16: begin
+                  case(HSIZE_reg) 
+                    BYTE_P:     HRDATA_reg[7:0] = mem[HADDR_reg  + burst_counter];
+                    HALFWORD_P: HRDATA_reg[15:0] = mem[HADDR_reg  + burst_counter];
+                    default:     HRDATA_reg[DATA_WIDTH-1:0] = mem[HADDR_reg  + burst_counter];
+                  endcase //HSIZE_reg     
+                  wrap_counter_reg  = wrap_counter_reg - 1;
+                end
+                default: begin
+                  case(HSIZE_reg) 
+                    BYTE_P:     HRDATA_reg[7:0] = mem[HADDR_reg  + burst_counter];
+                    HALFWORD_P: HRDATA_reg[15:0] = mem[HADDR_reg  + burst_counter];
+                    default:     HRDATA_reg[DATA_WIDTH-1:0] = mem[HADDR_reg  + burst_counter];
+                  endcase //HSIZE_reg     
+                  burst_counter_reg = 0 ;
+                end
+              endcase // HBURST_reg
+            end 
+            else begin
+              HRESP_reg = 2'b01;
+            end
           end
         endcase // HTRANS_reg  
       end
