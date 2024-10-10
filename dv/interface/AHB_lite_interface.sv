@@ -137,8 +137,8 @@ sequence_item previous_seq_item, seq_item;
             $display("RESETTTTTTTTTTTTTTTTTTTTT VALUE %0d", iHRESETn);
             send_inputs(iHRESETn, iHWRITE, iHTRANS, iHSIZE, iHBURST, iHPROT, iHADDR, iHWDATA, iRESET_op, iWRITE_op, iTRANS_op, iBURST_op, iSIZE_op);
         end
-        // if()begin
-            wait(HRESETn && !RECEIVING_PHASE_FLAG && !OUTPUTS_PHASE_FLAG && DATA_PHASE); //so the driver doesnt keep driving when the sequence is already driven to the interface/dut
+         //if(last_test)begin
+            wait(HRESETn && !RECEIVING_PHASE_FLAG /*&& !OUTPUTS_PHASE_FLAG && !DATA_PHASE_FLAG*/); //so the driver doesnt keep driving when the sequence is already driven to the interface/dut
         // end
         // else begin
         //     wait(HRESETn && !RECEIVING_PHASE_FLAG && OUTPUTS_PHASE_FLAG);
@@ -178,7 +178,7 @@ sequence_item previous_seq_item, seq_item;
             RECEIVING_PHASE_FLAG = 0;
         end
         else begin
-            HRESETn <= seq_item.HRESETn;
+            HRESETn <= seq_item.HRESETn; //forced design reset at the start of any sim
             CONTROL_PHASE_FLAG = 1;
         end
     end
@@ -207,7 +207,7 @@ sequence_item previous_seq_item, seq_item;
     end
 
     always@(negedge clk) begin //DATA_PHASE //DATA_PHASE_FLAG might be obselete
-        if((counter >= 2) && HRESETn && DATA_PHASE_FLAG ) begin // HRESETn to make it work after the reset cycle is done
+        if((counter >= 2) && HRESETn /*&& DATA_PHASE_FLAG*/ ) begin // HRESETn to make it work after the reset cycle is done
             wait(HREADY == 1'b1);                               // The counter & data_phase_flag to make it work after a transaction is sent after reset cycle is done
             if(HWRITE_reg == 1'b1) begin
                 write_AHB(HWDATA_reg);
@@ -217,6 +217,7 @@ sequence_item previous_seq_item, seq_item;
             end
             counter <= counter + 1;
             $display("time:%0t send_outputs HWRITE = %0d", $time(), HWRITE);
+            DATA_PHASE_FLAG = 0;
             OUTPUTS_PHASE_FLAG = 1;
         end
     end

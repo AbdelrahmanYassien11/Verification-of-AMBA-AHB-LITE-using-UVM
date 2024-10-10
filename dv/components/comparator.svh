@@ -72,10 +72,11 @@ class comparator extends uvm_component;
       // Get sequence items from FIFOs
       fifo_expected_outputs.get(seq_item_expected);
       `uvm_info("COMPARATOR", {"EXPECTED_SEQ_ITEM RECEIVED: ", 
-                      seq_item_expected.convert2string()}, UVM_HIGH)
+                      seq_item_expected.output2string()}, UVM_HIGH)
       fifo_actual_outputs.get(seq_item_actual);
+      sequence_item::COMPARATOR_transaction_counter = sequence_item::COMPARATOR_transaction_counter + 1;
       `uvm_info("COMPARATOR", {"ACTUAL_SEQ_ITEM RECEIVED: ", 
-                      seq_item_actual.convert2string()}, UVM_HIGH)
+                      seq_item_actual.output2string()}, UVM_HIGH)
 
       // Compare the actual and expected sequence items
       if (seq_item_actual.do_compare(seq_item_expected, comparer_h)) begin

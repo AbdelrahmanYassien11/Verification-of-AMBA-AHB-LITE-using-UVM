@@ -15,6 +15,10 @@ rand HBURST_e     BURST_op;
 rand HSIZE_e      SIZE_op;
      HRESP_e      RESP_op;
 
+static bit last_item;
+static int PREDICTOR_transaction_counter;
+static int COMPARATOR_transaction_counter;
+
 
 
   // AHB lite Control Signals
@@ -106,7 +110,8 @@ rand HSIZE_e      SIZE_op;
       end
       else begin
         same = super.do_compare(rhs, comparer) && 
-               (tested.HRDATA === HRDATA);
+               (tested.HRDATA === HRDATA) &&
+               (tested.HRESP  === HRESP);
                //(tested.HREADY == HREADY) &&
       end
       return same;
@@ -152,23 +157,23 @@ rand HSIZE_e      SIZE_op;
     function string convert2string();
       string s;
 
-      s = $sformatf(" time: %0t  HRESETn = %0d, HSEL= %0d, HWRITE = %0d, HTRANS =  %0d, HSIZE = %0d, HBURST = %0d, HPROT = %0d, HADDR = %0d, HWDATA = %0d, HRDATA = %0d, HRESP = %0d, HREADY = %0d",
-                    $time, HRESETn, HADDR[ADDR_WIDTH-1:ADDR_WIDTH-$clog2(NO_OF_SLAVES)], HWRITE, HTRANS, HSIZE, HBURST, HPROT, HADDR, HWDATA, HRDATA, HRESP, HREADY);
+      s = $sformatf(" time: %0t  HRESETn = %0d, HSEL= %0d, HWRITE = %0d, HTRANS =  %0d, HSIZE = %0d, HBURST = %0d, HPROT = %0d, HADDR = %0d, HWDATA = %0d, HRDATA = %0d, HRESP = %0d, HREADY = %0d, PREDICTOR_transaction_counter = %0d, COMPARATOR_transaction_counter= %0d",
+                    $time, HRESETn, HADDR[ADDR_WIDTH-1:ADDR_WIDTH-$clog2(NO_OF_SLAVES)], HWRITE, HTRANS, HSIZE, HBURST, HPROT, HADDR, HWDATA, HRDATA, HRESP, HREADY, PREDICTOR_transaction_counter, COMPARATOR_transaction_counter);
       return s;
     endfunction : convert2string
 
 
     function string input2string();
       string s;
-      s= $sformatf(" time: %0t HRESETn = %0d, HSEL= %0d, HWRITE = %0d, HTRANS =  %0d, HSIZE = %0d, HBURST = %0d, HPROT = %0d, HADDR = %0d, HWDATA = %0d",
-                    $time, HRESETn, HADDR[ADDR_WIDTH-1:ADDR_WIDTH-$clog2(NO_OF_SLAVES)], HWRITE, HTRANS, HSIZE, HBURST, HPROT, HADDR, HWDATA);
+      s= $sformatf(" time: %0t HRESETn = %0d, HSEL= %0d, HWRITE = %0d, HTRANS =  %0d, HSIZE = %0d, HBURST = %0d, HPROT = %0d, HADDR = %0d, HWDATA = %0d, PREDICTOR_transaction_counter = %0d, COMPARATOR_transaction_counter= %0d",
+                    $time, HRESETn, HADDR[ADDR_WIDTH-1:ADDR_WIDTH-$clog2(NO_OF_SLAVES)], HWRITE, HTRANS, HSIZE, HBURST, HPROT, HADDR, HWDATA, PREDICTOR_transaction_counter, COMPARATOR_transaction_counter);
       return s;
     endfunction
 
     function string output2string();
       string s;
-      s= $sformatf(" time: %0t HSEL: %0d  HRDATA: %0d  HRESP: %0d   HREADY: %0d",
-                    $time, HADDR[ADDR_WIDTH-1:ADDR_WIDTH-$clog2(NO_OF_SLAVES)], HRDATA, HRESP, HREADY);
+      s= $sformatf(" time: %0t HSEL: %0d  HRDATA: %0d  HRESP: %0d   HREADY: %0d, PREDICTOR_transaction_counter = %0d, COMPARATOR_transaction_counter= %0d",
+                    $time, HADDR[ADDR_WIDTH-1:ADDR_WIDTH-$clog2(NO_OF_SLAVES)], HRDATA, HRESP, HREADY, PREDICTOR_transaction_counter, COMPARATOR_transaction_counter);
       return s;
     endfunction
 

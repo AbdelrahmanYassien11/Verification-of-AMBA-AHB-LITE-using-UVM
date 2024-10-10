@@ -29,6 +29,7 @@ class predictor extends uvm_subscriber #(sequence_item);
   event inputs_written;
   event expected_outputs_written;
 
+
   // logic [DATA_WIDTH-1:0] slave0 [P_SLAVE0_START:P_SLAVE0_END];
   // logic [DATA_WIDTH-1:0] slave1 [P_SLAVE1_START:P_SLAVE1_END];
   // logic [DATA_WIDTH-1:0] slave2 [P_SLAVE2_START:P_SLAVE2_END];
@@ -95,10 +96,11 @@ class predictor extends uvm_subscriber #(sequence_item);
       $display("my_predictor run phase");
       @(inputs_written);
       `uvm_info("PREDICTOR", {"WRITTEN_DATA: ", data_str}, UVM_HIGH)
+      sequence_item::PREDICTOR_transaction_counter = sequence_item::PREDICTOR_transaction_counter + 1;
       generic_predictor();
       wait(expected_outputs_written.triggered);
       analysis_port_expected_outputs.write(seq_item_expected);
-      `uvm_info("PREDICTOR", {"EXPECTED_DATA: ", seq_item_expected.convert2string()}, UVM_HIGH)
+      `uvm_info("PREDICTOR", {"EXPECTED_DATA: ", seq_item_expected.input2string()}, UVM_HIGH)
     end
   endtask
 
@@ -119,9 +121,10 @@ class predictor extends uvm_subscriber #(sequence_item);
     BURST_op   = t.BURST_op;          
     SIZE_op    = t.SIZE_op;
 
+
     //HREADY  <= t.HREADY;
-    data_str   = $sformatf("HRESETn:%0d, HWRITE:%0d, HTRANS:%0d, HSIZE:%0d, HBURST:%0d, HPROT:%0d, HADDR:%0d, HWDATA:%0d",
-                            HRESETn, HWRITE, HTRANS, HSIZE, HBURST, HPROT, HADDR, HWDATA);
+     data_str   = $sformatf("HRESETn:%0d, HWRITE:%0d, HTRANS:%0d, HSIZE:%0d, HBURST:%0d, HPROT:%0d, HADDR:%0d, HWDATA:%0d",
+                             HRESETn, HWRITE, HTRANS, HSIZE, HBURST, HPROT, HADDR, HWDATA);
     -> inputs_written;
   endfunction
 
