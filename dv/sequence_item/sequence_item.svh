@@ -52,10 +52,10 @@ static int COMPARATOR_transaction_counter;
                             HSIZE == HALFWORD -> HWDATA dist {'h00000000:/1, 'hFFFFFFFF:/1, ['h01 : 'hFFFFFFFE]:/40};
       }
 
-      constraint HWADDR_SEL_c { HADDR[ADDR_WIDTH-1:(ADDR_WIDTH-$clog2(NO_OF_SLAVES))] inside {[0:2]};
+      constraint HWADDR_SEL_c { HADDR[ADDR_WIDTH-1:(ADDR_WIDTH-$clog2(NO_OF_SLAVES))] dist {0:/30, NO_OF_SLAVES-NO_OF_SLAVES+1:/30, NO_OF_SLAVES-NO_OF_SLAVES+2:/30, NO_OF_SLAVES-NO_OF_SLAVES+3:/10};
       }
 
-      constraint HADDR_c { HADDR[(ADDR_WIDTH-$clog2(NO_OF_SLAVES))-1:0] dist {'h00000000:/1, 'h000000FF:/1, ['h00000001 : 'h000000FE]:/40};
+      constraint HADDR_c { HADDR[(ADDR_WIDTH-$clog2(NO_OF_SLAVES))-1:0] dist {'h00000000:/1, 'h0000000F:/1, ['h00000001 : 'h0000000E]:/40};
       }
 
       constraint RESET_c {RESET_op == RESETING -> HRESETn == 1'b0;

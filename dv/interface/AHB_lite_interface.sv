@@ -90,8 +90,10 @@ sequence_item previous_seq_item, seq_item;
                             input bit  [PROT_WIDTH:0] iHPROT, input bit  [ADDR_WIDTH-1:0] iHADDR,     
                             input bit  [DATA_WIDTH-1:0] iHWDATA, input HRESET_e iRESET_op,
                             input HWRITE_e iWRITE_op, input HTRANS_e iTRANS_op,
-                            input HBURST_e iBURST_op, input HSIZE_e iSIZE_op
-    );  wait((counter == 0 || counter >= 2) && CONTROL_PHASE_FLAG );
+                            input HBURST_e iBURST_op, input HSIZE_e iSIZE_op, input bit last_item
+    );  
+
+        wait((counter == 0 || counter >= 2) && CONTROL_PHASE_FLAG );
         //#1step;
         if(HRESP === RETRY) begin
             iHRESETn    = previous_seq_item.HRESETn;
@@ -110,7 +112,7 @@ sequence_item previous_seq_item, seq_item;
             iSIZE_op  = previous_seq_item.SIZE_op;
         end
         if(HREADY === 1'b1  || iHRESETn === 1'b0) begin
-            $display("ASSSINGING RANDOMIZED VALUES");
+            $display("RECIEVING PHASE: ASSSINGING RANDOMIZED VALUES");
             
             seq_item.RESET_op = iRESET_op;
             seq_item.WRITE_op = iWRITE_op;
@@ -134,23 +136,24 @@ sequence_item previous_seq_item, seq_item;
             end
 
             RECEIVING_PHASE_FLAG = 1;
-            $display("RESETTTTTTTTTTTTTTTTTTTTT VALUE %0d", iHRESETn);
+            
             send_inputs(iHRESETn, iHWRITE, iHTRANS, iHSIZE, iHBURST, iHPROT, iHADDR, iHWDATA, iRESET_op, iWRITE_op, iTRANS_op, iBURST_op, iSIZE_op);
         end
-         //if(last_test)begin
-            wait(HRESETn && !RECEIVING_PHASE_FLAG /*&& !OUTPUTS_PHASE_FLAG && !DATA_PHASE_FLAG*/); //so the driver doesnt keep driving when the sequence is already driven to the interface/dut
-        // end
-        // else begin
-        //     wait(HRESETn && !RECEIVING_PHASE_FLAG && OUTPUTS_PHASE_FLAG);
-        // end
-        $display("THE TEST SHOULD STOP NOW!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+         if(last_item)begin
+            $display("RECIEVING PHASE: TIME: %0t WAITING FOR COUNTERS ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~",$time());
+            wait(HRESETn && !RECEIVING_PHASE_FLAG && (sequence_item::COMPARATOR_transaction_counter == sequence_item::PREDICTOR_transaction_counter) /*&& !OUTPUTS_PHASE_FLAG && !DATA_PHASE_FLAG*/); //so the driver doesnt keep driving when the sequence is already driven to the interface/dut
+        end
+        else begin
+            $display("RECIEVING PHASE: TIME: %0t WAITING FOR CONTROL PHASE TO transaction_finished",$time());
+             wait(HRESETn && !RECEIVING_PHASE_FLAG);
+        end
     endtask : generic_reciever
 
 
     always@(negedge clk or negedge HRESETn_global ) begin //CONTROL_PHASE
         if(HRESETn_global)begin
             if(counter >= 1 && RECEIVING_PHASE_FLAG) begin
-                $display("time :%0t AFTER EVENTSSSSSSSSS", $time());
+                $display("CONTROL PHASE: TIME:%0t ASSIGINING SIGNALS", $time());
          		HRESETn <= seq_item.HRESETn;
                 wait(HREADY == 1'b1);
                 HWRITE  <= seq_item.HWRITE;
@@ -159,6 +162,7 @@ sequence_item previous_seq_item, seq_item;
                 HBURST  <= seq_item.HBURST;
                 HPROT   <= seq_item.HPROT;
                 HADDR   <= seq_item.HADDR;
+                HWDATA  <= seq_item.HWDATA;
 
                 HRESETn_reg <= seq_item.HRESETn;
                 HWRITE_reg  <= seq_item.HWRITE;
@@ -166,8 +170,8 @@ sequence_item previous_seq_item, seq_item;
                 HSIZE_reg   <= seq_item.HSIZE;
                 HBURST_reg  <= seq_item.HBURST;
                 HPROT_reg   <= seq_item.HPROT;
-                HADDR_reg   <= seq_item.HWDATA;
-                HWDATA_reg  <= seq_item.HADDR;
+                HADDR_reg   <= seq_item.HADDR;
+                HWDATA_reg  <= seq_item.HWDATA;
 
                 if(seq_item.HRESETn) begin
                     counter <= counter + 1;
@@ -184,39 +188,39 @@ sequence_item previous_seq_item, seq_item;
     end
 
     always@(negedge HRESETn_global) begin
-        $display("time:%0t starting_reset_task", $time());
+        $display("DATA_PHASE: TIME:%0t ASSERTING RESET", $time());
         reset_AHB();
     end
 
     // Task: Reset AHB pointers and flags
     task reset_AHB();
-        $display("time :%0t resetting the interconnect", $time());
         repeat(15) begin
             @(negedge clk);
         end
         HRESETn_global = 1'b1; //to prevent the control phase always block from re-itterating right after finishing the reset_task & before a new sequence is driven (it causes an endless)
         HRESETn <= 1'b1;
         counter = 0;
-        $display("time:%0t HRESETn: %0d RESET DE-ASSERTED", $time(), HRESETn);
     endtask : reset_AHB
 
     always@(posedge HRESETn_global) begin
-        $display("SENDING_OUTPUT_AFTER_RESET DE-ASSERTION");
+        $display("OUTPUT_PHASE_RESET: TIME:%0t SENDING OUTPUTS", $time());
         send_outputs();
         OUTPUTS_PHASE_FLAG = 0;
     end
 
     always@(negedge clk) begin //DATA_PHASE //DATA_PHASE_FLAG might be obselete
         if((counter >= 2) && HRESETn /*&& DATA_PHASE_FLAG*/ ) begin // HRESETn to make it work after the reset cycle is done
+            $display("DATA_PHASE: TIME:%0t ASSIGNING SIGNALS", $time());
             wait(HREADY == 1'b1);                               // The counter & data_phase_flag to make it work after a transaction is sent after reset cycle is done
             if(HWRITE_reg == 1'b1) begin
+                $display("DATA_PHASE_WRITE: TIME:%0t ASSIGNING SIGNALS", $time());
                 write_AHB(HWDATA_reg);
             end
             else if(HWRITE_reg == 1'b0) begin
+                $display("DATA_PHASE_READ: TIME:%0t ASSIGNING SIGNALS", $time());
                 read_AHB();
             end
             counter <= counter + 1;
-            $display("time:%0t send_outputs HWRITE = %0d", $time(), HWRITE);
             DATA_PHASE_FLAG = 0;
             OUTPUTS_PHASE_FLAG = 1;
         end
@@ -224,10 +228,12 @@ sequence_item previous_seq_item, seq_item;
 
     always@(negedge clk) begin
         if(HRESETn && counter >= 3 && OUTPUTS_PHASE_FLAG) begin
+            $display("OUTPUT_PHASE_SIGNALS: TIME:%0t SENDING OUTPUTS", $time());
             send_outputs();
             OUTPUTS_PHASE_FLAG = 0;
+            $display("time:%0t send_outputs ", $time());
         end
-        wait(RECEIVING_PHASE_FLAG);
+        //wait(RECEIVING_PHASE_FLAG);
     end
 
     // Task: Write data into the AHB 
@@ -237,7 +243,8 @@ sequence_item previous_seq_item, seq_item;
             end
 
             NONSEQ, SEQ: begin
-                HWDATA <= iHWDATA;
+                wait(HREADY == 1'b1);
+                //HWDATA <= iHWDATA;
             end
         endcase // HTRANS
     endtask : write_AHB

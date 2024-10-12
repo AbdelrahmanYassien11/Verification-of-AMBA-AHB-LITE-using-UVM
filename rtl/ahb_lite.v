@@ -3,7 +3,7 @@
 // `include "ahb_default_slave.v"
 `timescale 1ns/1ns
 
-module ahb_lite #(parameter P_NUM  = 3, P_BITS = 4, ADDR_WIDTH = 32, DATA_WIDTH = 32, ADDR_DEPTH = 16)
+module ahb_lite #(parameter P_BITS = $clog2(NO_OF_PERIPHERALS), ADDR_WIDTH = 32, DATA_WIDTH = 32, ADDR_DEPTH = 16, NO_OF_PERIPHERALS = 4)
 (
       input   wire                   HRESETn,
       input   wire                   HCLK,
@@ -30,7 +30,7 @@ module ahb_lite #(parameter P_NUM  = 3, P_BITS = 4, ADDR_WIDTH = 32, DATA_WIDTH 
    wire                  HREADYin;
    assign HREADYin = HREADY;
    /*********************************************************/
-   ahb_decoder #(.P_NUM(P_NUM), .P_BITS(P_BITS), .ADDR_WIDTH(ADDR_WIDTH)) decoder1 
+   ahb_decoder #(.NO_OF_PERIPHERALS(NO_OF_PERIPHERALS), .P_BITS(P_BITS), .ADDR_WIDTH(ADDR_WIDTH)) decoder1 
               ( 
               .HADDR(HADDR),
               .HREADY(HREADY),
@@ -40,7 +40,7 @@ module ahb_lite #(parameter P_NUM  = 3, P_BITS = 4, ADDR_WIDTH = 32, DATA_WIDTH 
               .HSELd(HSEL_bus[3])
               );
    /*********************************************************/ //MUX
-   ahb_mux #(.P_NUM(P_NUM), .P_BITS(P_BITS), .ADDR_WIDTH(ADDR_WIDTH), .DATA_WIDTH(DATA_WIDTH)) mux1 
+   ahb_mux #(.NO_OF_PERIPHERALS(NO_OF_PERIPHERALS), .P_BITS(P_BITS), .ADDR_WIDTH(ADDR_WIDTH), .DATA_WIDTH(DATA_WIDTH)) mux1 
           (
           .HRESETn(HRESETn),
           .HCLK   (HCLK),
@@ -109,8 +109,8 @@ module ahb_lite #(parameter P_NUM  = 3, P_BITS = 4, ADDR_WIDTH = 32, DATA_WIDTH 
    /*********************************************************/
    ahb_slave #(.ADDR_WIDTH(ADDR_WIDTH), .DATA_WIDTH(DATA_WIDTH), .ADDR_DEPTH(ADDR_DEPTH)) slave1 
             (
-            .HRESETn(HRESETn),
-            .HCLK                    (HCLK),
+            .HRESETn               (HRESETn),
+            .HCLK                     (HCLK),
             .HSEL              (HSEL_bus[1]),
             .HADDR                   (HADDR),
             .HTRANS                 (HTRANS),

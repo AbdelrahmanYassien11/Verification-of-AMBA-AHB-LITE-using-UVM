@@ -17,7 +17,7 @@ class write_once_sequence extends base_sequence;
 
   // Static flag to determine if reset is needed
   static bit reset_flag;
-
+  static bit last_test;
   // Handle to the reset sequence
   reset_sequence reset_sequence_h;
 
@@ -60,6 +60,9 @@ class write_once_sequence extends base_sequence;
 
     assert(seq_item.randomize()); // Randomize the sequence item
     // Set the control signals for writing
+
+    if(last_test)
+      seq_item.last_item = 1'b1;
 
     // Finish the sequence item
     finish_item(seq_item);

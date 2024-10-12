@@ -14,7 +14,7 @@
 `timescale 1ns/1ns
 
 
-module ahb_slave #(parameter ADDR_WIDTH = 32, DATA_WIDTH = 32, ADDR_DEPTH = 16)
+module ahb_slave #(parameter ADDR_WIDTH = 32, DATA_WIDTH = 32, ADDR_DEPTH = 16, NO_OF_SLAVES = 4)
   (
        input   wire         HRESETn,
        input   wire         HCLK,
@@ -83,6 +83,9 @@ module ahb_slave #(parameter ADDR_WIDTH = 32, DATA_WIDTH = 32, ADDR_DEPTH = 16)
       localparam WORD16_P   = 3'b110;
       localparam WORD32_P   = 3'b111;
    /*********************************************************/
+
+
+
     always @ (posedge HCLK or negedge HRESETn) begin
       if (HRESETn==0) begin
         HRESP         <= 2'b00; 
@@ -103,15 +106,16 @@ module ahb_slave #(parameter ADDR_WIDTH = 32, DATA_WIDTH = 32, ADDR_DEPTH = 16)
         HBURST_reg     <= HBURST;
         HTRANS_reg     <= HTRANS;
         HSEL_reg       <= HSEL;
-        HADDR_reg      <= HADDR;
+        HADDR_reg      <= HADDR[ADDR_WIDTH-$clog2(NO_OF_SLAVES)-1:0];
         HREADYin_reg   <= HREADYin;
         HWDATA_reg     <= HWDATA;
         HSIZE_reg      <= HSIZE;
       end 
    end 
 
-  always@(*) begin //next_state logic
 
+
+  always@(*) begin //next_state logic
     if (HSEL && HREADYin) begin
       //$display("time: %0t aaaaaaaaaaaaaaaaaaaaa", $time());
       case(HBURST)
@@ -119,159 +123,162 @@ module ahb_slave #(parameter ADDR_WIDTH = 32, DATA_WIDTH = 32, ADDR_DEPTH = 16)
         //$display("time: %0t xxxxxxxxxxxxxxxxxxxxxxxxxxxxx", $time());
           case (HTRANS) 
             2'b00: begin 
-              next_state    = IDLE; 
+              next_state    <= IDLE; 
             end 
             2'b01: begin 
-              next_state    = BUSY; 
+              next_state    <= BUSY; 
             end 
             2'b10, 2'b11: begin 
-              //HREADYout = 1'b0; 
-              if((HADDR + burst_counter) < ADDR_DEPTH) begin 
+              //HREADYout <= 1'b0; 
+              if((HADDR[ADDR_WIDTH-$clog2(NO_OF_SLAVES)-1:0] + burst_counter) < ADDR_DEPTH) begin 
                 if (HWRITE) begin 
-                  next_state = WRITE; 
+                  next_state <= WRITE; 
                 end 
                 else if(!HWRITE) begin 
-                  next_state = READ; 
+                  next_state <= READ; 
                 end
                 else begin 
-                  next_state = ERROR; 
+                  next_state <= ERROR; 
                 end 
               end 
               else begin 
-                next_state = ERROR; 
+                next_state <= ERROR; 
               end
+            end
+            default: begin
+              next_state <= IDLE;
             end 
-          endcase
+          endcase //HTRANS
         end
         default: begin
-          next_state = IDLE;
+          next_state <= IDLE;
         end
       endcase // HBURST
     end
     else if(HSEL && !HREADYin)begin
-      next_state = ERROR;
+      next_state <= ERROR;
     end 
     else begin
-      next_state = IDLE;
+      next_state <= IDLE;
     end
   end
 
 
   always@(*) begin //output logic
-    case(state)
+      case(state)
 
-      IDLE: begin
-        burst_counter_reg = 0;        
-        HRDATA_reg = HRDATA;
-        if(HSEL_reg && HREADYin_reg) begin
-          HRESP_reg = 2'b00;
-          HREADYout_reg = 1'b1;
-        end
-        else if (HSEL_reg && !HREADYin_reg) begin
-          HRESP_reg = 2'b01;
-          HREADYout_reg = 1'b0;
-        end
-        else begin
-          HRESP_reg = 2'b00;
-          HREADYout_reg = 1'b1;
-        end
-      end
-
-      WRITE: begin     
-        HREADYout_reg = 1'b1;
-        case(HTRANS_reg)
-          2'b00, 2'b01: begin
+        IDLE: begin
+          burst_counter_reg = 0;        
+          HRDATA_reg = HRDATA;
+          if(HSEL_reg && HREADYin_reg) begin
             HRESP_reg = 2'b00;
-            burst_counter_reg = 0 ;
+            HREADYout_reg = 1'b1;
           end
-          2'b10, 2'b11: begin
-            if(HADDR_reg < ADDR_DEPTH) begin
+          else if (HSEL_reg && !HREADYin_reg) begin
+            HRESP_reg = 2'b01;
+            HREADYout_reg = 1'b0;
+          end
+          else begin
+            HRESP_reg = 2'b00;
+            HREADYout_reg = 1'b1;
+          end
+        end
+
+        WRITE: begin     
+          HREADYout_reg = 1'b1;
+          case(HTRANS_reg)
+            2'b00, 2'b01: begin
               HRESP_reg = 2'b00;
-              case(HBURST_reg)
-                INCR, INCR4, INCR8, INCR16: begin
-                  case(HSIZE_reg) 
-                    BYTE_P:     mem[HADDR_reg + burst_counter] = HWDATA_reg[7:0];
-                    HALFWORD_P: mem[HADDR_reg + burst_counter] = HWDATA_reg[15:0];
-                    default:     mem[HADDR_reg + burst_counter] = HWDATA_reg[DATA_WIDTH-1:0];
-                  endcase // HSIZE_reg
-                  burst_counter_reg = burst_counter_reg + 1;
-                end
-                WRAP4, WRAP8, WRAP16: begin
-                  case(HSIZE_reg) 
-                    BYTE_P:     mem[HADDR_reg + burst_counter] = HWDATA_reg[7:0];
-                    HALFWORD_P: mem[HADDR_reg + burst_counter] = HWDATA_reg[15:0];
-                    default:     mem[HADDR_reg + burst_counter] = HWDATA_reg[DATA_WIDTH-1:0];
-                  endcase //HSIZE_reg
-                  wrap_counter_reg = wrap_counter_reg - 1;
-                end
-                default: begin
-                  case(HSIZE_reg) 
-                    BYTE_P:     mem[HADDR_reg + burst_counter] = HWDATA_reg[7:0];
-                    HALFWORD_P: mem[HADDR_reg + burst_counter] = HWDATA_reg[15:0];
-                    default:     mem[HADDR_reg + burst_counter] = HWDATA_reg[DATA_WIDTH-1:0];
-                  endcase //HSIZE_reg
-                  burst_counter_reg = 0 ;
-                end
-              endcase // HBURST_reg
+              burst_counter_reg = 0 ;
             end
-            else begin
-              HRESP_reg = 2'b01; //error
+            2'b10, 2'b11: begin
+              if(HADDR_reg < ADDR_DEPTH) begin
+                HRESP_reg = 2'b00;
+                case(HBURST_reg)
+                  INCR, INCR4, INCR8, INCR16: begin
+                    case(HSIZE_reg) 
+                      BYTE_P:     mem[HADDR_reg + burst_counter] = HWDATA_reg[7:0];
+                      HALFWORD_P: mem[HADDR_reg + burst_counter] = HWDATA_reg[15:0];
+                      default:     mem[HADDR_reg + burst_counter] = HWDATA_reg[DATA_WIDTH-1:0];
+                    endcase // HSIZE_reg
+                    burst_counter_reg = burst_counter_reg + 1;
+                  end
+                  WRAP4, WRAP8, WRAP16: begin
+                    case(HSIZE_reg) 
+                      BYTE_P:     mem[HADDR_reg + burst_counter] = HWDATA_reg[7:0];
+                      HALFWORD_P: mem[HADDR_reg + burst_counter] = HWDATA_reg[15:0];
+                      default:     mem[HADDR_reg + burst_counter] = HWDATA_reg[DATA_WIDTH-1:0];
+                    endcase //HSIZE_reg
+                    wrap_counter_reg = wrap_counter_reg - 1;
+                  end
+                  default: begin
+                    case(HSIZE_reg) 
+                      BYTE_P:     mem[HADDR_reg + burst_counter] = HWDATA_reg[7:0];
+                      HALFWORD_P: mem[HADDR_reg + burst_counter] = HWDATA_reg[15:0];
+                      default:     mem[HADDR_reg + burst_counter] = HWDATA_reg[DATA_WIDTH-1:0];
+                    endcase //HSIZE_reg
+                    burst_counter_reg = 0 ;
+                  end
+                endcase // HBURST_reg
+              end
+              else begin
+                HRESP_reg = 2'b01; //error
+              end
             end
-          end
-        endcase // HTRANS_reg                    
-      end
+          endcase // HTRANS_reg                    
+        end
 
-      READ: begin
-        HREADYout_reg              = 1'b1;
-        HRDATA_reg                 = mem[HADDR_reg  +burst_counter_reg];
+        READ: begin
+          HREADYout_reg              = 1'b1;
+          //HRDATA_reg                 = mem[HADDR_reg  +burst_counter_reg];
 
-        case(HTRANS_reg)
-          2'b00, 2'b01: begin
-            HRESP_reg         = 2'b00; //`HRESP_OKAY;
-            burst_counter_reg = 0 ;
-          end
-          2'b10, 2'b11: begin
-            if(HADDR_reg < ADDR_DEPTH) begin
-              case(HBURST_reg)
-                INCR, INCR4, INCR8, INCR16: begin
-                  case(HSIZE_reg) 
-                    BYTE_P:     HRDATA_reg[7:0] = mem[HADDR_reg  + burst_counter];
-                    HALFWORD_P: HRDATA_reg[15:0] = mem[HADDR_reg  + burst_counter];
-                    default:     HRDATA_reg[DATA_WIDTH-1:0] = mem[HADDR_reg  + burst_counter];
-                  endcase //HSIZE_reg                
-                  burst_counter_reg = burst_counter_reg + 1;
-                end
-                WRAP4, WRAP8, WRAP16: begin
-                  case(HSIZE_reg) 
-                    BYTE_P:     HRDATA_reg[7:0] = mem[HADDR_reg  + burst_counter];
-                    HALFWORD_P: HRDATA_reg[15:0] = mem[HADDR_reg  + burst_counter];
-                    default:     HRDATA_reg[DATA_WIDTH-1:0] = mem[HADDR_reg  + burst_counter];
-                  endcase //HSIZE_reg     
-                  wrap_counter_reg  = wrap_counter_reg - 1;
-                end
-                default: begin
-                  case(HSIZE_reg) 
-                    BYTE_P:     HRDATA_reg[7:0] = mem[HADDR_reg  + burst_counter];
-                    HALFWORD_P: HRDATA_reg[15:0] = mem[HADDR_reg  + burst_counter];
-                    default:     HRDATA_reg[DATA_WIDTH-1:0] = mem[HADDR_reg  + burst_counter];
-                  endcase //HSIZE_reg     
-                  burst_counter_reg = 0 ;
-                end
-              endcase // HBURST_reg
-            end 
-            else begin
-              HRESP_reg = 2'b01;
+          case(HTRANS_reg)
+            2'b00, 2'b01: begin
+              HRESP_reg         = 2'b00; //`HRESP_OKAY;
+              burst_counter_reg = 0 ;
             end
-          end
-        endcase // HTRANS_reg  
-      end
+            2'b10, 2'b11: begin
+              if(HADDR_reg < ADDR_DEPTH) begin
+                case(HBURST_reg)
+                  INCR, INCR4, INCR8, INCR16: begin
+                    case(HSIZE_reg) 
+                      BYTE_P:     HRDATA_reg[7:0] = mem[HADDR_reg  + burst_counter];
+                      HALFWORD_P: HRDATA_reg[15:0] = mem[HADDR_reg  + burst_counter];
+                      default:     HRDATA_reg[DATA_WIDTH-1:0] = mem[HADDR_reg  + burst_counter];
+                    endcase //HSIZE_reg                
+                    burst_counter_reg = burst_counter_reg + 1;
+                  end
+                  WRAP4, WRAP8, WRAP16: begin
+                    case(HSIZE_reg) 
+                      BYTE_P:     HRDATA_reg[7:0] = mem[HADDR_reg  + burst_counter];
+                      HALFWORD_P: HRDATA_reg[15:0] = mem[HADDR_reg  + burst_counter];
+                      default:     HRDATA_reg[DATA_WIDTH-1:0] = mem[HADDR_reg  + burst_counter];
+                    endcase //HSIZE_reg     
+                    wrap_counter_reg  = wrap_counter_reg - 1;
+                  end
+                  default: begin
+                    case(HSIZE_reg) 
+                      BYTE_P:     HRDATA_reg[7:0] = mem[HADDR_reg  + burst_counter];
+                      HALFWORD_P: HRDATA_reg[15:0] = mem[HADDR_reg  + burst_counter];
+                      default:     HRDATA_reg[DATA_WIDTH-1:0] = mem[HADDR_reg  + burst_counter];
+                    endcase //HSIZE_reg     
+                    burst_counter_reg = 0 ;
+                  end
+                endcase // HBURST_reg
+              end 
+              else begin
+                HRESP_reg = 2'b01;
+              end
+            end
+          endcase // HTRANS_reg  
+        end
 
-      ERROR: begin
-        HRESP_reg     = 2'b01;
-        HREADYout_reg =  1'b1;
-        HRDATA_reg    = HRDATA;
-      end
-    endcase // state
+        ERROR: begin
+          HRESP_reg     = 2'b01;
+          HREADYout_reg =  1'b1;
+          HRDATA_reg    = HRDATA;
+        end
+      endcase // state
   end
 
   always @(HBURST) begin 

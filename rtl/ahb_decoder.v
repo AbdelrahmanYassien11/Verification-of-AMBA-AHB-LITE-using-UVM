@@ -1,4 +1,4 @@
-module ahb_decoder #(parameter P_NUM  = 3, P_BITS = 4, ADDR_WIDTH = 32)
+module ahb_decoder #(parameter ADDR_WIDTH = 32, NO_OF_PERIPHERALS = 4, P_BITS = $clog2(NO_OF_PERIPHERALS))
 (
     input   wire [31:0] HADDR,
     input   wire        HREADY, 
@@ -34,11 +34,18 @@ module ahb_decoder #(parameter P_NUM  = 3, P_BITS = 4, ADDR_WIDTH = 32)
 					HSELd = 0;
 				end
 
-				default: begin
+				'h3: begin
 					HSEL0 = 0;
 					HSEL1 = 0;
 					HSEL2 = 0;
 					HSELd = 1;
+				end
+
+				default: begin
+					HSEL0 = 0;
+					HSEL1 = 0;
+					HSEL2 = 0;
+					HSELd = 0;
 				end	
 			endcase // HADDR
 		end

@@ -74,7 +74,6 @@ class comparator extends uvm_component;
       `uvm_info("COMPARATOR", {"EXPECTED_SEQ_ITEM RECEIVED: ", 
                       seq_item_expected.output2string()}, UVM_HIGH)
       fifo_actual_outputs.get(seq_item_actual);
-      sequence_item::COMPARATOR_transaction_counter = sequence_item::COMPARATOR_transaction_counter + 1;
       `uvm_info("COMPARATOR", {"ACTUAL_SEQ_ITEM RECEIVED: ", 
                       seq_item_actual.output2string()}, UVM_HIGH)
 
@@ -85,6 +84,7 @@ class comparator extends uvm_component;
       else begin
         `uvm_error("SCOREBOARD", "FAIL")
       end
+      sequence_item::COMPARATOR_transaction_counter = sequence_item::COMPARATOR_transaction_counter + 1;
     end
   endtask
 

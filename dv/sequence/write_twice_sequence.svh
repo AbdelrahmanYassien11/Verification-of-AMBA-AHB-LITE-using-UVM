@@ -41,9 +41,68 @@ class write_twice_sequence extends base_sequence;
 
     write_once_sequence::reset_flag = 1'b1;
 
+
     reset_sequence_h.start(sequencer_h);
     write_once_sequence_h.start(sequencer_h);
     write_once_sequence_h.start(sequencer_h);
+    write_once_sequence_h.start(sequencer_h);
+    write_once_sequence_h.start(sequencer_h);
+    write_once_sequence_h.start(sequencer_h);
+    write_once_sequence_h.start(sequencer_h);
+    write_once_sequence_h.start(sequencer_h);
+    write_once_sequence_h.start(sequencer_h);
+    write_once_sequence_h.start(sequencer_h);
+    write_once_sequence_h.start(sequencer_h);
+
+    seq_item.RESET_op.rand_mode(0);
+    seq_item.WRITE_op.rand_mode(0);
+    seq_item.TRANS_op.rand_mode(0);
+    seq_item.BURST_op.rand_mode(0);
+    seq_item.SIZE_op.rand_mode(0);
+    //seq_item.HWRITE_rand_c.constraint_mode(0);
+
+    start_item(seq_item); // Start the sequence item
+    
+    // Set the operation type to WRITE
+    seq_item.RESET_op = WORKING;
+    seq_item.WRITE_op = WRITE;
+    seq_item.TRANS_op = NONSEQ;
+    seq_item.BURST_op = INCR4;
+    seq_item.SIZE_op  = BYTE;
+
+    assert(seq_item.randomize()); // Randomize the sequence item
+    // Set the control signals for writing
+
+    finish_item(seq_item);
+
+    for (int i = 0; i < 3; i++) begin
+      seq_item.RESET_op.rand_mode(0);
+      seq_item.WRITE_op.rand_mode(0);
+      seq_item.TRANS_op.rand_mode(0);
+      seq_item.BURST_op.rand_mode(0);
+      seq_item.SIZE_op.rand_mode(0);
+      seq_item.HADDR.rand_mode(0);
+      //seq_item.HWRITE_rand_c.constraint_mode(0);
+
+      start_item(seq_item); // Start the sequence item
+      
+      // Set the operation type to WRITE
+      seq_item.RESET_op = WORKING;
+      seq_item.WRITE_op = WRITE;
+      seq_item.TRANS_op = SEQ;
+      seq_item.BURST_op = INCR4;
+      seq_item.SIZE_op  = BYTE;
+
+      assert(seq_item.randomize()); // Randomize the sequence item
+      // Set the control signals for writing
+
+      finish_item(seq_item);
+    end
+
+    sequence_item::last_item = 1'b1;
+    write_once_sequence_h.start(sequencer_h);
+
+
 
     // Log the operation for debugging
     `uvm_info("write_twice_SEQUENCE", $sformatf("write_twice only: %s", seq_item.convert2string()), UVM_HIGH)
