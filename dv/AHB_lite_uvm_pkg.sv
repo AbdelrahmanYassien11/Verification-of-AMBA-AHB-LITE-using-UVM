@@ -6,6 +6,13 @@ package AHB_pkg;
 	parameter CLOCK_PERIOD = 5;
 	parameter NO_OF_SLAVES = 4;
 
+	parameter ADDR_DEPTH = 16;
+	// parameter DATA_WIDTH = 32;
+	// parameter ADDR_WIDTH = 32;
+
+	parameter NO_OF_PERIPHERALS = 4;
+	parameter BITS_FOR_P = $clog2(NO_OF_PERIPHERALS);
+
 	typedef enum {RESETING, WORKING} HRESET_e;
 
 	typedef enum {READ, WRITE} HWRITE_e;

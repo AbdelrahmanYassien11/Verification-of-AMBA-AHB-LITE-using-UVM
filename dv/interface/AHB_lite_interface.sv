@@ -162,7 +162,6 @@ sequence_item previous_seq_item, seq_item;
                 HBURST  <= seq_item.HBURST;
                 HPROT   <= seq_item.HPROT;
                 HADDR   <= seq_item.HADDR;
-                HWDATA  <= seq_item.HWDATA;
 
                 HRESETn_reg <= seq_item.HRESETn;
                 HWRITE_reg  <= seq_item.HWRITE;
@@ -243,8 +242,8 @@ sequence_item previous_seq_item, seq_item;
             end
 
             NONSEQ, SEQ: begin
-                wait(HREADY == 1'b1);
-                //HWDATA <= iHWDATA;
+                //wait(HREADY == 1'b1);
+                HWDATA <= iHWDATA;
             end
         endcase // HTRANS
     endtask : write_AHB

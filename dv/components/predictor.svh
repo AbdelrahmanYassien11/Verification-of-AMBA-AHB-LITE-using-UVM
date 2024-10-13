@@ -60,7 +60,10 @@ class predictor extends uvm_subscriber #(sequence_item);
   HWRITE_e     WRITE_op;
   HTRANS_e     TRANS_op;
   HBURST_e     BURST_op;
-  HSIZE_e      SIZE_op;  
+  HSIZE_e      SIZE_op;
+
+  int burst_counter;
+  int wrap_counter;  
 
   HRESP_e      RESP_op;
   string data_str;
@@ -121,7 +124,6 @@ class predictor extends uvm_subscriber #(sequence_item);
     BURST_op   = t.BURST_op;          
     SIZE_op    = t.SIZE_op;
 
-
     //HREADY  <= t.HREADY;
      data_str   = $sformatf("HRESETn:%0d, HWRITE:%0d, HTRANS:%0d, HSIZE:%0d, HBURST:%0d, HPROT:%0d, HADDR:%0d, HWDATA:%0d",
                              HRESETn, HWRITE, HTRANS, HSIZE, HBURST, HPROT, HADDR, HWDATA);
@@ -130,12 +132,8 @@ class predictor extends uvm_subscriber #(sequence_item);
 
   // Task for processing AHB operations based on inputs
   task generic_predictor();
-        //fork
-            //control_phase(iHRESETn, iHWRITE, iHTRANS, iHSIZE, iHBURST, iHPROT, iHADDR, iHWDATA);
-            data_phase();
-        //join_any
-
-endtask : generic_predictor
+    data_phase();
+  endtask : generic_predictor
 
   // Send expected results to the analysis port
   function void send_results();
@@ -153,24 +151,6 @@ endtask : generic_predictor
     seq_item_expected.HRDATA      = HRDATA_expected;
     -> expected_outputs_written;
   endfunction : send_results
-
-
-    // task control_phase( input bit iHRESETn, input bit   iHWRITE, input bit  [TRANS_WIDTH:0] iHTRANS, 
-    //                     input bit  [SIZE_WIDTH:0] iHSIZE, input bit  [BURST_WIDTH:0] iHBURST,
-    //                     input bit  [PROT_WIDTH:0] iHPROT, input bit  [ADDR_WIDTH-1:0] iHADDR     
-    //                     );
-    //     //@(negedge clk);
-    //     HRESETn <= iHRESETn;
-    //     if(/*HREADY === 1'b1 &&*/ iHRESETn == 1'b1) begin
-    //         HWRITE  <= iHWRITE;
-    //         HTRANS  <= iHTRANS;
-    //         HSIZE   <= iHSIZE;
-    //         HBURST  <= iHBURST;
-    //         HPROT   <= iHPROT;
-    //         HADDR   <= iHADDR;
-    //         -> control_phase_finished;
-    //     end
-    // endtask : control_phase
 
     task data_phase();
         if(HRESETn === 1'b0)
@@ -191,8 +171,9 @@ endtask : generic_predictor
       HREADY_expected = READY;
       HRDATA_expected = 0;
       HTRANS = IDLE;
+      wrap_counter = 0;
+      burst_counter = 0;
     endtask : reset_AHB
-
 
     // Task: Write data into the AHB and handle pointer updates
   task write_AHB();
@@ -200,38 +181,121 @@ endtask : generic_predictor
     HREADY_expected = READY;
     case(HTRANS)
       IDLE, BUSY: begin
+        wrap_counter = 10;
+        burst_counter = 0;
       end
       NONSEQ, SEQ:  begin
-        if(HADDR[31:30] == 2'b00)
-          slave0[HADDR] = HWDATA;
-        else if(HADDR[31:30] == 2'b01)
-          slave1[HADDR] = HWDATA;
-        else if(HADDR[31:30] == 2'b10)
-          slave2[HADDR] = HWDATA;
-        else
-          HRESP_expected = ERROR;
+        case(HBURST)
+
+          INCR, INCR4, INCR8, INCR16: begin
+            write_process(burst_counter);
+            burst_counter = burst_counter +1;
+          end
+
+          WRAP4, WRAP8, WRAP16: begin
+            if(wrap_counter == 10) begin
+              case(HBURST)
+                WRAP4:  wrap_counter = 1;
+                WRAP8:  wrap_counter = 3;
+                WRAP16: wrap_counter = 7;
+              endcase // HBURST
+            end
+            write_process(wrap_counter);
+            wrap_counter = wrap_counter -1;
+          end
+
+          default: begin
+            write_process(0);
+          end
+
+        endcase // HBURST
       end
     endcase // HTRANS
   endtask : write_AHB
+
+    task write_process(input int counter);
+      if(HADDR[ADDR_WIDTH-NO_OF_SLAVES-1:0] + counter < ADDR_DEPTH) begin
+        case(HADDR[ADDR_WIDTH-NO_OF_SLAVES-1:0])
+          2'b00: begin
+            slave0[HADDR + counter] = HWDATA;
+          end
+          2'b01: begin
+            slave0[HADDR + counter] = HWDATA;
+          end
+          2'b10: begin
+            slave0[HADDR + counter] = HWDATA;
+          end
+          default: begin
+            HRESP_expected = ERROR;
+          end
+        endcase
+      end
+      else begin
+        HRESP_expected = ERROR;
+      end
+    endtask : write_process
 
     // Task: Read data from the AHB and handle pointer updates
   task read_AHB();
     HRESP_expected = OKAY;
     HREADY_expected = READY;
     case(HTRANS)
+
       IDLE, BUSY: begin
+        wrap_counter = 10;
+        burst_counter = 0;
       end
+
       NONSEQ, SEQ: begin
-        if(HADDR[31:30] == 2'b00)
-          HRDATA_expected = slave0[HADDR];
-        else if(HADDR[31:30] == 2'b01)
-          HRDATA_expected = slave1[HADDR];
-        else if(HADDR[31:30] == 2'b10)
-          HRDATA_expected = slave2[HADDR];
-        else
-          HRESP_expected = ERROR;
+        case(HBURST)
+
+          INCR, INCR4, INCR8, INCR16: begin
+            read_process(burst_counter);
+            burst_counter = burst_counter +1;
+          end
+
+          WRAP4, WRAP8, WRAP16: begin
+            if(wrap_counter == 10) begin
+              case(HBURST)
+                WRAP4:  wrap_counter = 1;
+                WRAP8:  wrap_counter = 3;
+                WRAP16: wrap_counter = 7;
+              endcase // HBURST
+            read_process(wrap_counter);
+            wrap_counter = wrap_counter -1;
+            end
+          end
+
+          default: begin
+            read_process(0);
+          end
+
+        endcase // HBURST
       end
     endcase // HTRANS
   endtask : read_AHB
+
+
+    task read_process(input int counter);
+      if(HADDR[ADDR_WIDTH-NO_OF_SLAVES-1:0] + counter < ADDR_DEPTH) begin
+        case(HADDR[ADDR_WIDTH-NO_OF_SLAVES-1:0])
+          2'b00: begin
+            HRDATA_expected = slave0[HADDR+counter];
+          end
+          2'b01: begin
+            HRDATA_expected = slave1[HADDR+counter];
+          end
+          2'b10: begin
+            HRDATA_expected = slave2[HADDR+counter];
+          end
+          default: begin
+            HRESP_expected = ERROR;
+          end
+        endcase
+      end
+      else begin
+        HRESP_expected = ERROR;
+      end
+    endtask : read_process
 
 endclass : predictor
