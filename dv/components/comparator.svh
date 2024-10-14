@@ -18,7 +18,7 @@ class comparator extends uvm_component;
   // Sequence items to be compared
   sequence_item seq_item_actual;
   sequence_item seq_item_expected;
-
+  sequence_item seq_item_expected_unchanged;
   // Handle for the comparer component
   uvm_comparer comparer_h;
 
@@ -38,6 +38,10 @@ class comparator extends uvm_component;
   // Build phase for component creation and initialization
   function void build_phase (uvm_phase phase);
     super.build_phase(phase);
+
+    // seq_item_actual = sequence_item::type_id::create("seq_item_actual");
+    // seq_item_expected = sequence_item::type_id::create("seq_item_expected");
+    seq_item_expected_unchanged = sequence_item::type_id::create("seq_item_expected_unchanged");
 
     // Create FIFOs for actual and expected sequence items
     fifo_expected_outputs = new("fifo_expected_outputs", this);
@@ -65,25 +69,35 @@ class comparator extends uvm_component;
 
   // Run phase for performing comparisons
   task run_phase(uvm_phase phase);
-    super.run_phase(phase);
     forever begin
-      `uvm_info("COMPARATOR", "RUN PHASE", UVM_HIGH)  
+      `uvm_info("COMPARATOR", "RUN PHASE", UVM_HIGH)
     
       // Get sequence items from FIFOs
+      //$display("fifo_expected_outputs.ITEM_NUMBERS: %0d", fifo_expected_outputs.size());
       fifo_expected_outputs.get(seq_item_expected);
       `uvm_info("COMPARATOR", {"EXPECTED_SEQ_ITEM RECEIVED: ", 
-                      seq_item_expected.output2string()}, UVM_HIGH)
+                      seq_item_expected.convert2string()}, UVM_HIGH)
+      seq_item_expected_unchanged = seq_item_expected.clone_me();
+      //$display("fifo_expected_outputs.ITEM_NUMBERS: %0d", fifo_expected_outputs.size());
       fifo_actual_outputs.get(seq_item_actual);
       `uvm_info("COMPARATOR", {"ACTUAL_SEQ_ITEM RECEIVED: ", 
                       seq_item_actual.output2string()}, UVM_HIGH)
 
       // Compare the actual and expected sequence items
-      if (seq_item_actual.do_compare(seq_item_expected, comparer_h)) begin
+      if (seq_item_actual.do_compare(seq_item_expected_unchanged, comparer_h)) begin
         `uvm_info("SCOREBOARD", "PASS", UVM_HIGH)
       end
       else begin
         `uvm_error("SCOREBOARD", "FAIL")
+              `uvm_info("COMPARATOR_CHECK", {"EXPECTED_SEQ_ITEM RECEIVED: ", 
+                      seq_item_expected.output2string()}, UVM_HIGH)
+              `uvm_info("COMPARATOR_CHECK", {"ACTUAL_SEQ_ITEM RECEIVED: ", 
+                      seq_item_actual.output2string()}, UVM_HIGH)
+
+
       end
+      //$display("fifo_expected_outputs.ITEM_NUMBERS: %0d", fifo_expected_outputs.size());
+
       sequence_item::COMPARATOR_transaction_counter = sequence_item::COMPARATOR_transaction_counter + 1;
     end
   endtask

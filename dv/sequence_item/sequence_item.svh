@@ -52,10 +52,10 @@ static int COMPARATOR_transaction_counter;
                             HSIZE == HALFWORD -> HWDATA dist {'h00000000:/1, 'hFFFFFFFF:/1, ['h01 : 'hFFFFFFFE]:/40};
       }
 
-      constraint HWADDR_SEL_c { HADDR[ADDR_WIDTH-1:(ADDR_WIDTH-$clog2(NO_OF_SLAVES))] dist {0:/30, NO_OF_SLAVES-NO_OF_SLAVES+1:/30, NO_OF_SLAVES-NO_OF_SLAVES+2:/30, NO_OF_SLAVES-NO_OF_SLAVES+3:/10};
+      constraint HWADDR_SEL_c { HADDR[ADDR_WIDTH-1:(ADDR_WIDTH-BITS_FOR_PERIPHERALS)] dist {0:/30, NO_OF_PERIPHERALS-NO_OF_PERIPHERALS+1:/30, NO_OF_PERIPHERALS-NO_OF_PERIPHERALS+2:/30, NO_OF_PERIPHERALS-NO_OF_PERIPHERALS+3:/10};
       }
 
-      constraint HADDR_c { HADDR[(ADDR_WIDTH-$clog2(NO_OF_SLAVES))-1:0] dist {'h00000000:/1, 'h0000000F:/1, ['h00000001 : 'h0000000E]:/40};
+      constraint HADDR_c { HADDR[(ADDR_WIDTH-BITS_FOR_PERIPHERALS)-1:0] dist {'h00000000:/1, 'h0000000F:/1, ['h00000001 : 'h0000000E]:/40};
       }
 
       constraint RESET_c {RESET_op == RESETING -> HRESETn == 1'b0;
@@ -157,29 +157,59 @@ static int COMPARATOR_transaction_counter;
     function string convert2string();
       string s;
 
-      s = $sformatf(" time: %0t  HRESETn = %0d, HSEL= %0d, HWRITE = %0d, HTRANS =  %0d, HSIZE = %0d, HBURST = %0d, HPROT = %0d, HADDR = %0d, HWDATA = %0d, HRDATA = %0d, HRESP = %0d, HREADY = %0d, PREDICTOR_transaction_counter = %0d, COMPARATOR_transaction_counter= %0d",
-                    $time, HRESETn, HADDR[ADDR_WIDTH-1:ADDR_WIDTH-$clog2(NO_OF_SLAVES)], HWRITE, HTRANS, HSIZE, HBURST, HPROT, HADDR, HWDATA, HRDATA, HRESP, HREADY, PREDICTOR_transaction_counter, COMPARATOR_transaction_counter);
+      s = $sformatf("-----------------------------------------------------------------------------------------------------------------------------------------
+                     time: %0t  HRESETn = %0d, HSEL= %0d, HWRITE = %0d, HTRANS =  %0d, HSIZE = %0d, HBURST = %0d, HPROT = %0d, HADDR = %0h, HWDATA = %0h, HRDATA = %0h, HRESP = %0d, HREADY = %0d, PREDICTOR_transaction_counter = %0d, COMPARATOR_transaction_counter= %0d",
+                     $time, HRESETn, HADDR[ADDR_WIDTH-1:ADDR_WIDTH-BITS_FOR_PERIPHERALS], HWRITE, HTRANS, HSIZE, HBURST, HPROT, HADDR, HWDATA, HRDATA, HRESP, HREADY, PREDICTOR_transaction_counter, COMPARATOR_transaction_counter);
       return s;
     endfunction : convert2string
 
 
     function string input2string();
       string s;
-      s= $sformatf(" time: %0t HRESETn = %0d, HSEL= %0d, HWRITE = %0d, HTRANS =  %0d, HSIZE = %0d, HBURST = %0d, HPROT = %0d, HADDR = %0d, HWDATA = %0d, PREDICTOR_transaction_counter = %0d, COMPARATOR_transaction_counter= %0d",
-                    $time, HRESETn, HADDR[ADDR_WIDTH-1:ADDR_WIDTH-$clog2(NO_OF_SLAVES)], HWRITE, HTRANS, HSIZE, HBURST, HPROT, HADDR, HWDATA, PREDICTOR_transaction_counter, COMPARATOR_transaction_counter);
+      s= $sformatf("-----------------------------------------------------------------------------------------------------------------------------------------
+                    time: %0t HRESETn = %0d, HSEL= %0d, HWRITE = %0d, HTRANS =  %0d, HSIZE = %0d, HBURST = %0d, HPROT = %0d, HADDR = %0h, HWDATA = %0h, PREDICTOR_transaction_counter = %0d, COMPARATOR_transaction_counter= %0d",
+                    $time, HRESETn, HADDR[ADDR_WIDTH-1:ADDR_WIDTH-BITS_FOR_PERIPHERALS], HWRITE, HTRANS, HSIZE, HBURST, HPROT, HADDR, HWDATA, PREDICTOR_transaction_counter, COMPARATOR_transaction_counter);
       return s;
     endfunction
 
     function string output2string();
       string s;
-      s= $sformatf(" time: %0t HSEL: %0d  HRDATA: %0d  HRESP: %0d   HREADY: %0d, PREDICTOR_transaction_counter = %0d, COMPARATOR_transaction_counter= %0d",
-                    $time, HADDR[ADDR_WIDTH-1:ADDR_WIDTH-$clog2(NO_OF_SLAVES)], HRDATA, HRESP, HREADY, PREDICTOR_transaction_counter, COMPARATOR_transaction_counter);
+      s= $sformatf("-----------------------------------------------------------------------------------------------------------------------------------------
+                    time: %0t HSEL: %0d  HRDATA: %0h  HRESP: %0d   HREADY: %0d, PREDICTOR_transaction_counter = %0d, COMPARATOR_transaction_counter= %0d",
+                    $time, HADDR[ADDR_WIDTH-1:ADDR_WIDTH-BITS_FOR_PERIPHERALS], HRDATA, HRESP, HREADY, PREDICTOR_transaction_counter, COMPARATOR_transaction_counter);
       return s;
     endfunction
 
 
 
+    // function string convert2string();
+    //   string s;
 
+    //   s = $sformatf("  \n 
+    //                 time: %0t  HRESETn = %0d, HSEL= %0d, HWRITE = %0d, HTRANS =  %0d, HSIZE = %0d, HBURST = %0d, HPROT = %0d, HADDR = %0h, HWDATA = %0h, HRDATA = %0h, HRESP = %0d, HREADY = %0d, PREDICTOR_transaction_counter = %0d, COMPARATOR_transaction_counter= %0d  \n
+    //                 ******************************************************************************************************************************************************************************************************************",
+    //                 $time, HRESETn, HADDR[ADDR_WIDTH-1:ADDR_WIDTH-BITS_FOR_PERIPHERALS], HWRITE, HTRANS, HSIZE, HBURST, HPROT, HADDR, HWDATA, HRDATA, HRESP, HREADY, PREDICTOR_transaction_counter, COMPARATOR_transaction_counter);
+    //   return s;
+    // endfunction : convert2string
+
+
+    // function string input2string();
+    //   string s;
+    //   s= $sformatf(" \n
+    //                 time: %0t HRESETn = %0d, HSEL= %0d, HWRITE = %0d, HTRANS =  %0d, HSIZE = %0d, HBURST = %0d, HPROT = %0d, HADDR = %0h, HWDATA = %0h, PREDICTOR_transaction_counter = %0d, COMPARATOR_transaction_counter= %0d \n
+    //                 --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------",
+    //                 $time, HRESETn, HADDR[ADDR_WIDTH-1:ADDR_WIDTH-BITS_FOR_PERIPHERALS], HWRITE, HTRANS, HSIZE, HBURST, HPROT, HADDR, HWDATA, PREDICTOR_transaction_counter, COMPARATOR_transaction_counter);
+    //   return s;
+    // endfunction
+
+    // function string output2string();
+    //   string s;
+    //   s= $sformatf("  \m
+    //                 time: %0t HSEL: %0d  HRDATA: %0h  HRESP: %0d   HREADY: %0d, PREDICTOR_transaction_counter = %0d, COMPARATOR_transaction_counter= %0d \n
+    //                 ====================================================================================================================================================================================================================",
+    //                 $time, HADDR[ADDR_WIDTH-1:ADDR_WIDTH-BITS_FOR_PERIPHERALS], HRDATA, HRESP, HREADY, PREDICTOR_transaction_counter, COMPARATOR_transaction_counter);
+    //   return s;
+    // endfunction
 
 
  endclass

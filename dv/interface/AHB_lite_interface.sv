@@ -112,7 +112,7 @@ sequence_item previous_seq_item, seq_item;
             iSIZE_op  = previous_seq_item.SIZE_op;
         end
         if(HREADY === 1'b1  || iHRESETn === 1'b0) begin
-            $display("RECIEVING PHASE: ASSSINGING RANDOMIZED VALUES");
+            //$display("RECIEVING PHASE: ASSSINGING RANDOMIZED VALUES");
             
             seq_item.RESET_op = iRESET_op;
             seq_item.WRITE_op = iWRITE_op;
@@ -140,11 +140,11 @@ sequence_item previous_seq_item, seq_item;
             send_inputs(iHRESETn, iHWRITE, iHTRANS, iHSIZE, iHBURST, iHPROT, iHADDR, iHWDATA, iRESET_op, iWRITE_op, iTRANS_op, iBURST_op, iSIZE_op);
         end
          if(last_item)begin
-            $display("RECIEVING PHASE: TIME: %0t WAITING FOR COUNTERS ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~",$time());
+            //$display("RECIEVING PHASE: TIME: %0t WAITING FOR COUNTERS ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~",$time());
             wait(HRESETn && !RECEIVING_PHASE_FLAG && (sequence_item::COMPARATOR_transaction_counter == sequence_item::PREDICTOR_transaction_counter) /*&& !OUTPUTS_PHASE_FLAG && !DATA_PHASE_FLAG*/); //so the driver doesnt keep driving when the sequence is already driven to the interface/dut
         end
         else begin
-            $display("RECIEVING PHASE: TIME: %0t WAITING FOR CONTROL PHASE TO transaction_finished",$time());
+            //$display("RECIEVING PHASE: TIME: %0t WAITING FOR CONTROL PHASE TO transaction_finished",$time());
              wait(HRESETn && !RECEIVING_PHASE_FLAG);
         end
     endtask : generic_reciever
@@ -187,7 +187,7 @@ sequence_item previous_seq_item, seq_item;
     end
 
     always@(negedge HRESETn_global) begin
-        $display("DATA_PHASE: TIME:%0t ASSERTING RESET", $time());
+        //$display("DATA_PHASE: TIME:%0t ASSERTING RESET", $time());
         reset_AHB();
     end
 
@@ -202,21 +202,21 @@ sequence_item previous_seq_item, seq_item;
     endtask : reset_AHB
 
     always@(posedge HRESETn_global) begin
-        $display("OUTPUT_PHASE_RESET: TIME:%0t SENDING OUTPUTS", $time());
+        //$display("OUTPUT_PHASE_RESET: TIME:%0t SENDING OUTPUTS", $time());
         send_outputs();
         OUTPUTS_PHASE_FLAG = 0;
     end
 
     always@(negedge clk) begin //DATA_PHASE //DATA_PHASE_FLAG might be obselete
         if((counter >= 2) && HRESETn /*&& DATA_PHASE_FLAG*/ ) begin // HRESETn to make it work after the reset cycle is done
-            $display("DATA_PHASE: TIME:%0t ASSIGNING SIGNALS", $time());
+            //$display("DATA_PHASE: TIME:%0t ASSIGNING SIGNALS", $time());
             wait(HREADY == 1'b1);                               // The counter & data_phase_flag to make it work after a transaction is sent after reset cycle is done
             if(HWRITE_reg == 1'b1) begin
-                $display("DATA_PHASE_WRITE: TIME:%0t ASSIGNING SIGNALS", $time());
+                //$display("DATA_PHASE_WRITE: TIME:%0t ASSIGNING SIGNALS", $time());
                 write_AHB(HWDATA_reg);
             end
             else if(HWRITE_reg == 1'b0) begin
-                $display("DATA_PHASE_READ: TIME:%0t ASSIGNING SIGNALS", $time());
+                //$display("DATA_PHASE_READ: TIME:%0t ASSIGNING SIGNALS", $time());
                 read_AHB();
             end
             counter <= counter + 1;
@@ -227,10 +227,10 @@ sequence_item previous_seq_item, seq_item;
 
     always@(negedge clk) begin
         if(HRESETn && counter >= 3 && OUTPUTS_PHASE_FLAG) begin
-            $display("OUTPUT_PHASE_SIGNALS: TIME:%0t SENDING OUTPUTS", $time());
+            //$display("OUTPUT_PHASE_SIGNALS: TIME:%0t SENDING OUTPUTS", $time());
             send_outputs();
             OUTPUTS_PHASE_FLAG = 0;
-            $display("time:%0t send_outputs ", $time());
+            //$display("time:%0t send_outputs ", $time());
         end
         //wait(RECEIVING_PHASE_FLAG);
     end
@@ -301,13 +301,13 @@ sequence_item previous_seq_item, seq_item;
     // end
 
     function void create_sequence_item();
-        $display("CREATEDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD");
+        //$display("CREATEDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD");
         seq_item = sequence_item::type_id::create("seq_item");
         previous_seq_item = sequence_item::type_id::create("previous_seq_item");
     endfunction
 
     initial begin
-        $monitor(" RESET VALUE ----------> HRESETn = %0d", HRESETn);
+        //$monitor(" RESET VALUE ----------> HRESETn = %0d", HRESETn);
         create_sequence_item();
         HRESETn <= 1'b1;
         // HRESETn_global = 1'b1;

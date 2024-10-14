@@ -249,7 +249,7 @@ class coverage extends uvm_subscriber #(sequence_item);
   covergroup SLAVE_SELECT_covgrp;
 
     /* --------------------------------------------------------------------------------------Data Frame coverage of the current operation (either write or read)---------------------------------------------------------------------------------------------- */
-    df_operation: coverpoint HADDR_cov[ADDR_WIDTH-1:(ADDR_WIDTH-($clog2(NO_OF_SLAVES)))] iff (HRESETn_cov) {
+    df_operation: coverpoint HADDR_cov[ADDR_WIDTH-1:(ADDR_WIDTH-(BITS_FOR_PERIPHERALS))] iff (HRESETn_cov) {
       bins SLAVE0_Operation             =  {'b00};
       bins SLAVE1_Operation             =  {'b01};
       bins SLAVE2_Operation             =  {'b10};
@@ -257,7 +257,7 @@ class coverage extends uvm_subscriber #(sequence_item);
     }
 
     /* -------------------------------------------------------------------------------Data Transition coverage of the current operation (from write to read and vice versa)---------------------------------------------------------------------------------------------- */
-    dt_operation: coverpoint HADDR_cov[ADDR_WIDTH-1:(ADDR_WIDTH-($clog2(NO_OF_SLAVES)))] iff(HRESETn_cov)  {
+    dt_operation: coverpoint HADDR_cov[ADDR_WIDTH-1:(ADDR_WIDTH-(BITS_FOR_PERIPHERALS))] iff(HRESETn_cov)  {
       bins SLAVE0_SLAVE0_Transition          = (2'b00 => 2'b00);
       bins SLAVE0_SLAVE1_Transition          = (2'b00 => 2'b01);
       bins SLAVE0_SLAVE2_Transition          = (2'b00 => 2'b10);
@@ -282,7 +282,7 @@ class coverage extends uvm_subscriber #(sequence_item);
 
   covergroup ADDR_covgrp;
     /* --------------------------------------------------------------------------------------Data Frame coverage of the current operation (either write or read)---------------------------------------------------------------------------------------------- */
-    df_operation: coverpoint HADDR_cov[(ADDR_WIDTH-($clog2(NO_OF_SLAVES)))-1: 0] iff ( HRESETn_cov ) {
+    df_operation: coverpoint HADDR_cov[(ADDR_WIDTH-(BITS_FOR_PERIPHERALS))-1: 0] iff ( HRESETn_cov ) {
       bins ADDR_values_others          =  {['hE:'h1]};
       bins ADDR_values_zeros           =  {'h0};
       bins ADDR_values_ones            =  {'hF};

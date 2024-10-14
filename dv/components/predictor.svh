@@ -98,7 +98,7 @@ class predictor extends uvm_subscriber #(sequence_item);
     forever begin      
       $display("my_predictor run phase");
       @(inputs_written);
-      `uvm_info("PREDICTOR", {"WRITTEN_DATA: ", data_str}, UVM_HIGH)
+      // `uvm_info("PREDICTOR", {"WRITTEN_DATA: ", data_str}, UVM_HIGH)
       sequence_item::PREDICTOR_transaction_counter = sequence_item::PREDICTOR_transaction_counter + 1;
       generic_predictor();
       wait(expected_outputs_written.triggered);
@@ -214,8 +214,8 @@ class predictor extends uvm_subscriber #(sequence_item);
   endtask : write_AHB
 
     task write_process(input int counter);
-      if(HADDR[ADDR_WIDTH-NO_OF_SLAVES-1:0] + counter < ADDR_DEPTH) begin
-        case(HADDR[ADDR_WIDTH-NO_OF_SLAVES-1:0])
+      if(HADDR[ADDR_WIDTH-BITS_FOR_PERIPHERALS-1:0] + counter < ADDR_DEPTH) begin
+        case(HADDR[ADDR_WIDTH-1:ADDR_WIDTH-BITS_FOR_PERIPHERALS])
           2'b00: begin
             slave0[HADDR + counter] = HWDATA;
           end
@@ -277,8 +277,8 @@ class predictor extends uvm_subscriber #(sequence_item);
 
 
     task read_process(input int counter);
-      if(HADDR[ADDR_WIDTH-NO_OF_SLAVES-1:0] + counter < ADDR_DEPTH) begin
-        case(HADDR[ADDR_WIDTH-NO_OF_SLAVES-1:0])
+      if(HADDR[ADDR_WIDTH-BITS_FOR_PERIPHERALS-1:0] + counter < ADDR_DEPTH) begin
+        case(HADDR[ADDR_WIDTH-1:ADDR_WIDTH-BITS_FOR_PERIPHERALS])
           2'b00: begin
             HRDATA_expected = slave0[HADDR+counter];
           end
