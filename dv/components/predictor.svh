@@ -77,7 +77,6 @@ class predictor extends uvm_subscriber #(sequence_item);
     super.build_phase(phase);
 
     analysis_port_expected_outputs = new("analysis_port_expected_outputs", this);
-    seq_item_expected = sequence_item::type_id::create("seq_item_expected");
 
     if(!uvm_config_db#(virtual inf)::get(this,"","my_vif",my_vif)) begin
       `uvm_fatal(get_full_name(),"Error");
@@ -97,6 +96,7 @@ class predictor extends uvm_subscriber #(sequence_item);
     super.run_phase(phase);
     forever begin      
       $display("my_predictor run phase");
+      seq_item_expected = sequence_item::type_id::create("seq_item_expected");
       @(inputs_written);
       // `uvm_info("PREDICTOR", {"WRITTEN_DATA: ", data_str}, UVM_HIGH)
       sequence_item::PREDICTOR_transaction_counter = sequence_item::PREDICTOR_transaction_counter + 1;

@@ -166,7 +166,7 @@ static int COMPARATOR_transaction_counter;
 
     function string input2string();
       string s;
-      s= $sformatf("-----------------------------------------------------------------------------------------------------------------------------------------
+      s = $sformatf("-----------------------------------------------------------------------------------------------------------------------------------------
                     time: %0t HRESETn = %0d, HSEL= %0d, HWRITE = %0d, HTRANS =  %0d, HSIZE = %0d, HBURST = %0d, HPROT = %0d, HADDR = %0h, HWDATA = %0h, PREDICTOR_transaction_counter = %0d, COMPARATOR_transaction_counter= %0d",
                     $time, HRESETn, HADDR[ADDR_WIDTH-1:ADDR_WIDTH-BITS_FOR_PERIPHERALS], HWRITE, HTRANS, HSIZE, HBURST, HPROT, HADDR, HWDATA, PREDICTOR_transaction_counter, COMPARATOR_transaction_counter);
       return s;
@@ -174,7 +174,7 @@ static int COMPARATOR_transaction_counter;
 
     function string output2string();
       string s;
-      s= $sformatf("-----------------------------------------------------------------------------------------------------------------------------------------
+      s = $sformatf("-----------------------------------------------------------------------------------------------------------------------------------------
                     time: %0t HSEL: %0d  HRDATA: %0h  HRESP: %0d   HREADY: %0d, PREDICTOR_transaction_counter = %0d, COMPARATOR_transaction_counter= %0d",
                     $time, HADDR[ADDR_WIDTH-1:ADDR_WIDTH-BITS_FOR_PERIPHERALS], HRDATA, HRESP, HREADY, PREDICTOR_transaction_counter, COMPARATOR_transaction_counter);
       return s;

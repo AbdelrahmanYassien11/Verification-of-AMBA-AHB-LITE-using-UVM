@@ -13381,3 +13381,712 @@ run -all
 #    Time: 340 ns  Iteration: 68  Instance: /top_test_uvm
 # 1
 # Break in Task uvm_pkg/uvm_root::run_test at F:/questasim/questasim64_2021.1/win64/../verilog_src/uvm-1.1d/src/base/uvm_root.svh line 430
+do run.do
+# Error 31: Unable to unlink file "F:/ic_design/repos/AHB_LITE/dv/work/top_optimized/_lib.qdb".
+# Error 31: Unable to unlink file "F:/ic_design/repos/AHB_LITE/dv/work/top_optimized/_lib3_0.qdb".
+# Error 31: Unable to unlink file "F:/ic_design/repos/AHB_LITE/dv/work/top_optimized/_lib3_0.qpg".
+# Error 31: Unable to unlink file "F:/ic_design/repos/AHB_LITE/dv/work/top_optimized/_lib3_0.qtl".
+# Error 133: Unable to remove directory "F:/ic_design/repos/AHB_LITE/dv/work/top_optimized".
+# Error 133: Unable to remove directory "F:/ic_design/repos/AHB_LITE/dv/work".
+# QuestaSim-64 vlog 2021.1 Compiler 2021.01 Jan 19 2021
+# Start time: 20:50:50 on Oct 14,2024
+# vlog -reportprogress 300 -f dut.f "+cover" -covercells 
+# -- Compiling module ahb_default_slave
+# -- Compiling module ahb_slave
+# -- Compiling module ahb_mux
+# -- Compiling module ahb_decoder
+# -- Compiling module ahb_lite
+# 
+# Top level modules:
+# 	ahb_lite
+# End time: 20:50:50 on Oct 14,2024, Elapsed time: 0:00:00
+# Errors: 0, Warnings: 0
+# QuestaSim-64 vlog 2021.1 Compiler 2021.01 Jan 19 2021
+# Start time: 20:50:50 on Oct 14,2024
+# vlog -reportprogress 300 -f tb.f "+cover" -covercells 
+# -- Compiling package AHB_pkg
+# -- Importing package mtiUvm.uvm_pkg (uvm-1.1d Built-in)
+# ** Note: (vlog-2286) AHB_lite_uvm_pkg.sv(4): Using implicit +incdir+F:/questasim/questasim64_2021.1/uvm-1.1d/../verilog_src/uvm-1.1d/src from import uvm_pkg
+# ** Warning: ** while parsing file included at AHB_lite_uvm_pkg.sv(106)
+# ** at sequence_item/sequence_item.svh(160): (vlog-2643) Unterminated string literal continues onto next line.
+# ** Warning: ** while parsing file included at AHB_lite_uvm_pkg.sv(106)
+# ** at sequence_item/sequence_item.svh(169): (vlog-2643) Unterminated string literal continues onto next line.
+# ** Warning: ** while parsing file included at AHB_lite_uvm_pkg.sv(106)
+# ** at sequence_item/sequence_item.svh(177): (vlog-2643) Unterminated string literal continues onto next line.
+# ** Error: (vlog-13069) ** while parsing file included at AHB_lite_uvm_pkg.sv(142)
+# ** at components/coverage.svh(12): near "ref": syntax error, unexpected "SystemVerilog keyword 'ref'".
+# -- Compiling interface inf
+# ** Error: ** while parsing file included at AHB_lite_uvm_pkg.sv(142)
+# ** at interface/AHB_lite_interface.sv(18): Illegal use of 'automatic' for variable declaration (clk).
+# ** Error: ** while parsing file included at AHB_lite_uvm_pkg.sv(142)
+# ** at interface/AHB_lite_interface.sv(20): (vlog-13006) Could not find the package (AHB_pkg).  Design read will continue, but expect a cascade of errors after this failure.  Furthermore if you experience a vopt-7 error immediately before this error then please check the package names or the library search paths on the command line.
+# ** Error: ** while parsing file included at AHB_lite_uvm_pkg.sv(142)
+# ** at interface/AHB_lite_interface.sv(23): Illegal use of 'automatic' for variable declaration (HRESETn).
+# ** Error: ** while parsing file included at AHB_lite_uvm_pkg.sv(144)
+# ** at components/env.svh(27): Invalid type 'coverage'. Please check the type of the variable 'coverage_h'.
+# ** Error: ** while parsing file included at AHB_lite_uvm_pkg.sv(144)
+# ** at components/env.svh(71): (vlog-2730) Undefined variable: 'coverage_h'.
+# ** Error: ** while parsing file included at AHB_lite_uvm_pkg.sv(144)
+# ** at components/env.svh(71): (vlog-2164) Class or package 'coverage' not found.
+# ** Error: ** while parsing file included at AHB_lite_uvm_pkg.sv(144)
+# ** at components/env.svh(71): (vlog-2730) Undefined variable: 'coverage'.
+# ** Error: (vlog-13069) ** while parsing file included at AHB_lite_uvm_pkg.sv(144)
+# ** at components/env.svh(71): near "::": syntax error, unexpected ::, expecting ';'.
+# ** Error: (vlog-13069) AHB_lite_uvm_pkg.sv(163): near "endpackage": syntax error, unexpected "SystemVerilog keyword 'endpackage'", expecting class.
+# -- Compiling module top_test_uvm
+# ** Error: top_test_uvm.sv(7): Illegal use of 'automatic' for variable declaration (clk).
+# ** Warning: (vlog-2051) coverage is still off at the end of file 'AHB_lite_uvm_pkg.sv'.
+# End time: 20:50:52 on Oct 14,2024, Elapsed time: 0:00:02
+# Errors: 11, Warnings: 4
+# ** Error: F:/questasim/questasim64_2021.1/win64/vlog failed.
+# Error in macro ./run.do line 4
+# F:/questasim/questasim64_2021.1/win64/vlog failed.
+#     while executing
+# "vlog -f tb.f +cover -covercells"
+do run.do
+# Error 31: Unable to unlink file "F:/ic_design/repos/AHB_LITE/dv/work/top_optimized/_lib.qdb".
+# Error 31: Unable to unlink file "F:/ic_design/repos/AHB_LITE/dv/work/top_optimized/_lib3_0.qdb".
+# Error 31: Unable to unlink file "F:/ic_design/repos/AHB_LITE/dv/work/top_optimized/_lib3_0.qpg".
+# Error 31: Unable to unlink file "F:/ic_design/repos/AHB_LITE/dv/work/top_optimized/_lib3_0.qtl".
+# Error 133: Unable to remove directory "F:/ic_design/repos/AHB_LITE/dv/work/top_optimized".
+# Error 133: Unable to remove directory "F:/ic_design/repos/AHB_LITE/dv/work".
+# QuestaSim-64 vlog 2021.1 Compiler 2021.01 Jan 19 2021
+# Start time: 21:02:07 on Oct 14,2024
+# vlog -reportprogress 300 -f dut.f "+cover" -covercells 
+# -- Compiling module ahb_default_slave
+# -- Compiling module ahb_slave
+# -- Compiling module ahb_mux
+# -- Compiling module ahb_decoder
+# -- Compiling module ahb_lite
+# 
+# Top level modules:
+# 	ahb_lite
+# End time: 21:02:07 on Oct 14,2024, Elapsed time: 0:00:00
+# Errors: 0, Warnings: 0
+# QuestaSim-64 vlog 2021.1 Compiler 2021.01 Jan 19 2021
+# Start time: 21:02:08 on Oct 14,2024
+# vlog -reportprogress 300 -f tb.f "+cover" -covercells 
+# -- Compiling package AHB_pkg
+# -- Importing package mtiUvm.uvm_pkg (uvm-1.1d Built-in)
+# ** Note: (vlog-2286) AHB_lite_uvm_pkg.sv(4): Using implicit +incdir+F:/questasim/questasim64_2021.1/uvm-1.1d/../verilog_src/uvm-1.1d/src from import uvm_pkg
+# ** Warning: ** while parsing file included at AHB_lite_uvm_pkg.sv(106)
+# ** at sequence_item/sequence_item.svh(160): (vlog-2643) Unterminated string literal continues onto next line.
+# ** Warning: ** while parsing file included at AHB_lite_uvm_pkg.sv(106)
+# ** at sequence_item/sequence_item.svh(169): (vlog-2643) Unterminated string literal continues onto next line.
+# ** Warning: ** while parsing file included at AHB_lite_uvm_pkg.sv(106)
+# ** at sequence_item/sequence_item.svh(177): (vlog-2643) Unterminated string literal continues onto next line.
+# ** Error: (vlog-13069) ** while parsing file included at AHB_lite_uvm_pkg.sv(142)
+# ** at components/coverage.svh(12): near "ref": syntax error, unexpected "SystemVerilog keyword 'ref'".
+# -- Compiling interface inf
+# ** Error: ** while parsing file included at AHB_lite_uvm_pkg.sv(142)
+# ** at interface/AHB_lite_interface.sv(18): Illegal use of 'automatic' for variable declaration (clk).
+# ** Error: ** while parsing file included at AHB_lite_uvm_pkg.sv(142)
+# ** at interface/AHB_lite_interface.sv(20): (vlog-13006) Could not find the package (AHB_pkg).  Design read will continue, but expect a cascade of errors after this failure.  Furthermore if you experience a vopt-7 error immediately before this error then please check the package names or the library search paths on the command line.
+# ** Error: ** while parsing file included at AHB_lite_uvm_pkg.sv(142)
+# ** at interface/AHB_lite_interface.sv(23): Illegal use of 'automatic' for variable declaration (HRESETn).
+# ** Error: ** while parsing file included at AHB_lite_uvm_pkg.sv(144)
+# ** at components/env.svh(27): Invalid type 'coverage'. Please check the type of the variable 'coverage_h'.
+# ** Error: ** while parsing file included at AHB_lite_uvm_pkg.sv(144)
+# ** at components/env.svh(71): (vlog-2730) Undefined variable: 'coverage_h'.
+# ** Error: ** while parsing file included at AHB_lite_uvm_pkg.sv(144)
+# ** at components/env.svh(71): (vlog-2164) Class or package 'coverage' not found.
+# ** Error: ** while parsing file included at AHB_lite_uvm_pkg.sv(144)
+# ** at components/env.svh(71): (vlog-2730) Undefined variable: 'coverage'.
+# ** Error: (vlog-13069) ** while parsing file included at AHB_lite_uvm_pkg.sv(144)
+# ** at components/env.svh(71): near "::": syntax error, unexpected ::, expecting ';'.
+# ** Error: (vlog-13069) AHB_lite_uvm_pkg.sv(163): near "endpackage": syntax error, unexpected "SystemVerilog keyword 'endpackage'", expecting class.
+# -- Compiling module top_test_uvm
+# ** Error: top_test_uvm.sv(7): Illegal use of 'automatic' for variable declaration (clk).
+# ** Warning: (vlog-2051) coverage is still off at the end of file 'AHB_lite_uvm_pkg.sv'.
+# End time: 21:02:08 on Oct 14,2024, Elapsed time: 0:00:00
+# Errors: 11, Warnings: 4
+# ** Error: F:/questasim/questasim64_2021.1/win64/vlog failed.
+# Error in macro ./run.do line 4
+# F:/questasim/questasim64_2021.1/win64/vlog failed.
+#     while executing
+# "vlog -f tb.f +cover -covercells"
+do run.do
+# Error 31: Unable to unlink file "F:/ic_design/repos/AHB_LITE/dv/work/top_optimized/_lib.qdb".
+# Error 31: Unable to unlink file "F:/ic_design/repos/AHB_LITE/dv/work/top_optimized/_lib3_0.qdb".
+# Error 31: Unable to unlink file "F:/ic_design/repos/AHB_LITE/dv/work/top_optimized/_lib3_0.qpg".
+# Error 31: Unable to unlink file "F:/ic_design/repos/AHB_LITE/dv/work/top_optimized/_lib3_0.qtl".
+# Error 133: Unable to remove directory "F:/ic_design/repos/AHB_LITE/dv/work/top_optimized".
+# Error 133: Unable to remove directory "F:/ic_design/repos/AHB_LITE/dv/work".
+# QuestaSim-64 vlog 2021.1 Compiler 2021.01 Jan 19 2021
+# Start time: 21:04:48 on Oct 14,2024
+# vlog -reportprogress 300 -f dut.f "+cover" -covercells 
+# -- Compiling module ahb_default_slave
+# -- Compiling module ahb_slave
+# -- Compiling module ahb_mux
+# -- Compiling module ahb_decoder
+# -- Compiling module ahb_lite
+# 
+# Top level modules:
+# 	ahb_lite
+# End time: 21:04:48 on Oct 14,2024, Elapsed time: 0:00:00
+# Errors: 0, Warnings: 0
+# QuestaSim-64 vlog 2021.1 Compiler 2021.01 Jan 19 2021
+# Start time: 21:04:48 on Oct 14,2024
+# vlog -reportprogress 300 -f tb.f "+cover" -covercells 
+# -- Compiling package AHB_pkg
+# -- Importing package mtiUvm.uvm_pkg (uvm-1.1d Built-in)
+# ** Note: (vlog-2286) AHB_lite_uvm_pkg.sv(4): Using implicit +incdir+F:/questasim/questasim64_2021.1/uvm-1.1d/../verilog_src/uvm-1.1d/src from import uvm_pkg
+# ** Warning: ** while parsing file included at AHB_lite_uvm_pkg.sv(106)
+# ** at sequence_item/sequence_item.svh(160): (vlog-2643) Unterminated string literal continues onto next line.
+# ** Warning: ** while parsing file included at AHB_lite_uvm_pkg.sv(106)
+# ** at sequence_item/sequence_item.svh(169): (vlog-2643) Unterminated string literal continues onto next line.
+# ** Warning: ** while parsing file included at AHB_lite_uvm_pkg.sv(106)
+# ** at sequence_item/sequence_item.svh(177): (vlog-2643) Unterminated string literal continues onto next line.
+# ** Error: (vlog-13069) ** while parsing file included at AHB_lite_uvm_pkg.sv(142)
+# ** at components/coverage.svh(12): near "ref": syntax error, unexpected "SystemVerilog keyword 'ref'".
+# -- Compiling interface inf
+# ** Error: ** while parsing file included at AHB_lite_uvm_pkg.sv(142)
+# ** at interface/AHB_lite_interface.sv(18): Illegal use of 'automatic' for variable declaration (clk).
+# ** Error: ** while parsing file included at AHB_lite_uvm_pkg.sv(142)
+# ** at interface/AHB_lite_interface.sv(20): (vlog-13006) Could not find the package (AHB_pkg).  Design read will continue, but expect a cascade of errors after this failure.  Furthermore if you experience a vopt-7 error immediately before this error then please check the package names or the library search paths on the command line.
+# ** Error: ** while parsing file included at AHB_lite_uvm_pkg.sv(142)
+# ** at interface/AHB_lite_interface.sv(23): Illegal use of 'automatic' for variable declaration (HRESETn).
+# ** Error: ** while parsing file included at AHB_lite_uvm_pkg.sv(144)
+# ** at components/env.svh(27): Invalid type 'coverage'. Please check the type of the variable 'coverage_h'.
+# ** Error: ** while parsing file included at AHB_lite_uvm_pkg.sv(144)
+# ** at components/env.svh(71): (vlog-2730) Undefined variable: 'coverage_h'.
+# ** Error: ** while parsing file included at AHB_lite_uvm_pkg.sv(144)
+# ** at components/env.svh(71): (vlog-2164) Class or package 'coverage' not found.
+# ** Error: ** while parsing file included at AHB_lite_uvm_pkg.sv(144)
+# ** at components/env.svh(71): (vlog-2730) Undefined variable: 'coverage'.
+# ** Error: (vlog-13069) ** while parsing file included at AHB_lite_uvm_pkg.sv(144)
+# ** at components/env.svh(71): near "::": syntax error, unexpected ::, expecting ';'.
+# ** Error: (vlog-13069) AHB_lite_uvm_pkg.sv(163): near "endpackage": syntax error, unexpected "SystemVerilog keyword 'endpackage'", expecting class.
+# -- Compiling module top_test_uvm
+# ** Error: top_test_uvm.sv(7): Illegal use of 'automatic' for variable declaration (clk).
+# ** Warning: (vlog-2051) coverage is still off at the end of file 'AHB_lite_uvm_pkg.sv'.
+# End time: 21:04:48 on Oct 14,2024, Elapsed time: 0:00:00
+# Errors: 11, Warnings: 4
+# ** Error: F:/questasim/questasim64_2021.1/win64/vlog failed.
+# Error in macro ./run.do line 4
+# F:/questasim/questasim64_2021.1/win64/vlog failed.
+#     while executing
+# "vlog -f tb.f +cover -covercells"
+do run.do
+# Error 31: Unable to unlink file "F:/ic_design/repos/AHB_LITE/dv/work/top_optimized/_lib.qdb".
+# Error 31: Unable to unlink file "F:/ic_design/repos/AHB_LITE/dv/work/top_optimized/_lib3_0.qdb".
+# Error 31: Unable to unlink file "F:/ic_design/repos/AHB_LITE/dv/work/top_optimized/_lib3_0.qpg".
+# Error 31: Unable to unlink file "F:/ic_design/repos/AHB_LITE/dv/work/top_optimized/_lib3_0.qtl".
+# Error 133: Unable to remove directory "F:/ic_design/repos/AHB_LITE/dv/work/top_optimized".
+# Error 133: Unable to remove directory "F:/ic_design/repos/AHB_LITE/dv/work".
+# QuestaSim-64 vlog 2021.1 Compiler 2021.01 Jan 19 2021
+# Start time: 21:05:24 on Oct 14,2024
+# vlog -reportprogress 300 -f dut.f "+cover" -covercells 
+# -- Compiling module ahb_default_slave
+# -- Compiling module ahb_slave
+# -- Compiling module ahb_mux
+# -- Compiling module ahb_decoder
+# -- Compiling module ahb_lite
+# 
+# Top level modules:
+# 	ahb_lite
+# End time: 21:05:24 on Oct 14,2024, Elapsed time: 0:00:00
+# Errors: 0, Warnings: 0
+# QuestaSim-64 vlog 2021.1 Compiler 2021.01 Jan 19 2021
+# Start time: 21:05:25 on Oct 14,2024
+# vlog -reportprogress 300 -f tb.f "+cover" -covercells 
+# -- Compiling package AHB_pkg
+# -- Importing package mtiUvm.uvm_pkg (uvm-1.1d Built-in)
+# ** Note: (vlog-2286) AHB_lite_uvm_pkg.sv(4): Using implicit +incdir+F:/questasim/questasim64_2021.1/uvm-1.1d/../verilog_src/uvm-1.1d/src from import uvm_pkg
+# ** Warning: ** while parsing file included at AHB_lite_uvm_pkg.sv(106)
+# ** at sequence_item/sequence_item.svh(160): (vlog-2643) Unterminated string literal continues onto next line.
+# ** Warning: ** while parsing file included at AHB_lite_uvm_pkg.sv(106)
+# ** at sequence_item/sequence_item.svh(169): (vlog-2643) Unterminated string literal continues onto next line.
+# ** Warning: ** while parsing file included at AHB_lite_uvm_pkg.sv(106)
+# ** at sequence_item/sequence_item.svh(177): (vlog-2643) Unterminated string literal continues onto next line.
+# -- Compiling interface inf
+# -- Importing package AHB_pkg
+# -- Compiling module top_test_uvm
+# 
+# Top level modules:
+# 	top_test_uvm
+# End time: 21:05:25 on Oct 14,2024, Elapsed time: 0:00:00
+# Errors: 0, Warnings: 3
+# QuestaSim-64 vopt 2021.1 Compiler 2021.01 Jan 19 2021
+# Start time: 21:05:30 on Oct 14,2024
+# vopt -reportprogress 300 top_test_uvm -o top_optimized "+acc" "+cover=bcefsx+ahb_lite(rtl)" 
+# ** Warning: (vopt-31) Unable to unlink file "F:/ic_design/repos/AHB_LITE/dv/work/top_optimized/_lib.qdb".
+# ** Warning: (vopt-31) Unable to unlink file "F:/ic_design/repos/AHB_LITE/dv/work/top_optimized/_lib3_0.qdb".
+# The process cannot access the file because it is being used by another process. (GetLastError() = 32)
+# ** Warning: (vopt-31) Unable to unlink file "F:/ic_design/repos/AHB_LITE/dv/work/top_optimized/_lib3_0.qpg".
+# The process cannot access the file because it is being used by another process. (GetLastError() = 32)
+# ** Warning: (vopt-31) Unable to unlink file "F:/ic_design/repos/AHB_LITE/dv/work/top_optimized/_lib3_0.qtl".
+# The process cannot access the file because it is being used by another process. (GetLastError() = 32)
+# ** Warning: (vopt-133) Unable to remove directory "F:/ic_design/repos/AHB_LITE/dv/work/top_optimized".
+# 
+# Top level modules:
+# 	top_test_uvm
+# 
+# Analyzing design...
+# -- Loading module top_test_uvm
+# -- Importing package mtiUvm.uvm_pkg (uvm-1.1d Built-in)
+# -- Importing package AHB_pkg
+# -- Loading package mtiUvm.questa_uvm_pkg
+# -- Loading interface inf
+# -- Loading module ahb_lite
+# -- Loading module ahb_decoder
+# -- Loading module ahb_mux
+# -- Loading module ahb_default_slave
+# -- Loading module ahb_slave
+# init_auxdbinfo(): INTERNAL ERROR: Cannot open page file "F:/ic_design/repos/AHB_LITE/dv/work/top_optimized/_lib1_0.qpg" in read mode
+# Optimizing 11 design-units (inlining 0/9 module instances):
+# -- Optimizing package mtiUvm.uvm_pkg (uvm-1.1d Built-in)(fast)
+# -- Optimizing package mtiUvm.questa_uvm_pkg(fast)
+# -- Optimizing package AHB_pkg(fast)
+# -- Optimizing interface inf(fast__2)
+# -- Optimizing module ahb_slave(fast)
+# -- Optimizing module ahb_mux(fast)
+# -- Optimizing module ahb_lite(fast)
+# -- Optimizing module ahb_decoder(fast)
+# -- Optimizing module ahb_default_slave(fast)
+# -- Optimizing module top_test_uvm(fast)
+# -- Optimizing interface inf(fast)
+# Optimized design name is top_optimized
+# End time: 21:05:34 on Oct 14,2024, Elapsed time: 0:00:04
+# Errors: 0, Warnings: 5
+# End time: 21:06:16 on Oct 14,2024, Elapsed time: 2:37:19
+# Errors: 3, Warnings: 0
+# vsim top_optimized -coverage -solvefaildebug=2 "+UVM_TESTNAME=write_twice_test" 
+# Start time: 21:06:20 on Oct 14,2024
+# Loading sv_std.std
+# Loading work.inf(fast)
+# Loading mtiUvm.uvm_pkg(fast)
+# Loading work.AHB_pkg(fast)
+# Loading mtiUvm.questa_uvm_pkg(fast)
+# Loading work.top_test_uvm(fast)
+# Loading work.inf(fast__2)
+# Loading work.ahb_lite(fast)
+# Loading work.ahb_decoder(fast)
+# Loading work.ahb_mux(fast)
+# Loading work.ahb_default_slave(fast)
+# Loading work.ahb_slave(fast)
+# Loading F:/questasim/questasim64_2021.1/uvm-1.1d\win64\uvm_dpi.dll
+# ----------------------------------------------------------------
+# UVM-1.1d
+# (C) 2007-2013 Mentor Graphics Corporation
+# (C) 2007-2013 Cadence Design Systems, Inc.
+# (C) 2006-2013 Synopsys, Inc.
+# (C) 2011-2013 Cypress Semiconductor Corp.
+# ----------------------------------------------------------------
+# 
+#   ***********       IMPORTANT RELEASE NOTES         ************
+# 
+#   You are using a version of the UVM library that has been compiled
+#   with `UVM_NO_DEPRECATED undefined.
+#   See http://www.eda.org/svdb/view.php?id=3313 for more details.
+# 
+#   You are using a version of the UVM library that has been compiled
+#   with `UVM_OBJECT_MUST_HAVE_CONSTRUCTOR undefined.
+#   See http://www.eda.org/svdb/view.php?id=3770 for more details.
+# 
+#       (Specify +UVM_NO_RELNOTES to turn off this notice)
+# 
+# UVM_INFO verilog_src/questa_uvm_pkg-1.2/src/questa_uvm_pkg.sv(277) @ 0: reporter [Questa UVM] QUESTA_UVM-1.2.3
+# UVM_INFO verilog_src/questa_uvm_pkg-1.2/src/questa_uvm_pkg.sv(278) @ 0: reporter [Questa UVM]  questa_uvm::init(+struct)
+# UVM_INFO @ 0: reporter [RNTST] Running test write_twice_test...
+# base_test build phase
+# my_test build phase
+# env build phase
+# my_active_agent build phase
+# my_driver build phase
+# Inputs monitor build phase complete.
+# UVM_INFO components/sequencer.svh(24) @ 0: uvm_test_top.env_h.active_agent_h.sequencer_h [SEQUENCER] Build phase executed
+# coverage build_phase
+# Passive agent build phase complete.
+# Outputs monitor build phase complete.
+# UVM_INFO components/scoreboard.svh(48) @ 0: uvm_test_top.env_h.scoreboard_h [SCOREBOARD] Build phase completed
+# my_comparator build phase
+# my_predictor build phase
+# my_driver connect phase
+# Inputs monitor connect phase complete.
+# UVM_INFO components/sequencer.svh(30) @ 0: uvm_test_top.env_h.active_agent_h.sequencer_h [SEQUENCER] Connect phase executed
+# my_active_agent connect phase
+# Outputs monitor connect phase complete.
+# Passive agent connect phase complete.
+# my_comparator connect phase
+# my_predictor connect phase
+# UVM_INFO components/scoreboard.svh(58) @ 0: uvm_test_top.env_h.scoreboard_h [SCOREBOARD] Connect phase completed
+# env connect phase
+# my_test connect phase
+# my_test connect phase
+# Inputs monitor end of elaboration phase complete.
+# my_monitor end_of_elaboration_phase
+# Outputs monitor end of elaboration phase complete.
+# Passive agent end of elaboration phase complete.
+# UVM_INFO components/env.svh(97) @ 0: uvm_test_top.env_h [env_h] '{"uvm_test_top.env_h.passive_agent_h.tlm_analysis_port_outputs":@uvm_port_component__5@15 }
+# UVM_INFO components/env.svh(99) @ 0: uvm_test_top.env_h [env_h] '{"uvm_test_top.env_h.active_agent_h.tlm_analysis_port_inputs":@uvm_port_component__5@13 }
+# UVM_INFO components/env.svh(101) @ 0: uvm_test_top.env_h [env_h] '{"uvm_test_top.env_h.passive_agent_h.tlm_analysis_port_outputs":@uvm_port_component__5@15 }
+# FINISHED GET_PROVIDED_TO
+# UVM_INFO components/env.svh(105) @ 0: uvm_test_top.env_h [env_h] '{ }
+# UVM_INFO components/env.svh(107) @ 0: uvm_test_top.env_h [env_h] '{"uvm_test_top.env_h.scoreboard_h.predictor_h.analysis_imp":@uvm_port_component__5@19 }
+# UVM_INFO components/env.svh(109) @ 0: uvm_test_top.env_h [env_h] '{"uvm_test_top.env_h.scoreboard_h.comparator_h.analysis_actual_outputs":@uvm_port_component__5@31 }
+# my_monitor end_of_elaboration_phase
+# env run phase
+# my_predictor run phase
+# UVM_INFO components/comparator.svh(73) @ 0: uvm_test_top.env_h.scoreboard_h.comparator_h [COMPARATOR] RUN PHASE
+# Passive agent run phase complete.
+# coverage run_phase
+# my_active_agent run phase
+# UVM_INFO components/sequencer.svh(36) @ 0: uvm_test_top.env_h.active_agent_h.sequencer_h [SEQUENCER] Run phase started
+# start of pre_body task
+# start of pre_body task
+# start of pre_body task
+# UVM_INFO components/driver.svh(64) @ 0: uvm_test_top.env_h.active_agent_h.driver_h [uvm_test_top.env_h.active_agent_h.driver_h] DRIVEN_ITEM:-----------------------------------------------------------------------------------------------------------------------------------------
+# 
+#                     time: 0 HRESETn = 0, HSEL= 0, HWRITE = 0, HTRANS =  0, HSIZE = 0, HBURST = 0, HPROT = 0, HADDR = 0, HWDATA = 0, PREDICTOR_transaction_counter = 0, COMPARATOR_transaction_counter= 0
+# UVM_INFO components/predictor.svh(106) @ 10: uvm_test_top.env_h.scoreboard_h.predictor_h [PREDICTOR] EXPECTED_DATA: -----------------------------------------------------------------------------------------------------------------------------------------
+# 
+#                     time: 10 HRESETn = 0, HSEL= 0, HWRITE = 0, HTRANS =  0, HSIZE = 0, HBURST = 0, HPROT = 0, HADDR = 0, HWDATA = 0, PREDICTOR_transaction_counter = 1, COMPARATOR_transaction_counter= 0
+# my_predictor run phase
+# UVM_INFO components/comparator.svh(77) @ 10: uvm_test_top.env_h.scoreboard_h.comparator_h [COMPARATOR] EXPECTED_SEQ_ITEM RECEIVED: -----------------------------------------------------------------------------------------------------------------------------------------
+# 
+#                      time: 10  HRESETn = 0, HSEL= 0, HWRITE = 0, HTRANS =  0, HSIZE = 0, HBURST = 0, HPROT = 0, HADDR = 0, HWDATA = 0, HRDATA = 0, HRESP = 0, HREADY = 1, PREDICTOR_transaction_counter = 1, COMPARATOR_transaction_counter= 0
+# UVM_INFO components/outputs_monitor.svh(75) @ 160: uvm_test_top.env_h.passive_agent_h.outputs_monitor_h [uvm_test_top.env_h.passive_agent_h.outputs_monitor_h] OUTPUTS SENT TO THE COMPARATOR
+# UVM_INFO components/comparator.svh(82) @ 160: uvm_test_top.env_h.scoreboard_h.comparator_h [COMPARATOR] ACTUAL_SEQ_ITEM RECEIVED: -----------------------------------------------------------------------------------------------------------------------------------------
+# 
+#                     time: 160 HSEL: 0  HRDATA: 0  HRESP: 0   HREADY: 1, PREDICTOR_transaction_counter = 1, COMPARATOR_transaction_counter= 0
+# UVM_INFO components/comparator.svh(87) @ 160: uvm_test_top.env_h.scoreboard_h.comparator_h [SCOREBOARD] PASS
+# UVM_INFO components/comparator.svh(73) @ 160: uvm_test_top.env_h.scoreboard_h.comparator_h [COMPARATOR] RUN PHASE
+# start of pre_body task
+# start of pre_body task
+# UVM_INFO components/driver.svh(64) @ 160: uvm_test_top.env_h.active_agent_h.driver_h [uvm_test_top.env_h.active_agent_h.driver_h] DRIVEN_ITEM:-----------------------------------------------------------------------------------------------------------------------------------------
+# 
+#                     time: 160 HRESETn = 1, HSEL= 2, HWRITE = 1, HTRANS =  2, HSIZE = 0, HBURST = 0, HPROT = 0, HADDR = 80000002, HWDATA = 7a, PREDICTOR_transaction_counter = 1, COMPARATOR_transaction_counter= 1
+# UVM_INFO components/predictor.svh(106) @ 160: uvm_test_top.env_h.scoreboard_h.predictor_h [PREDICTOR] EXPECTED_DATA: -----------------------------------------------------------------------------------------------------------------------------------------
+# 
+#                     time: 160 HRESETn = 1, HSEL= 2, HWRITE = 1, HTRANS =  2, HSIZE = 0, HBURST = 0, HPROT = 0, HADDR = 80000002, HWDATA = 7a, PREDICTOR_transaction_counter = 2, COMPARATOR_transaction_counter= 1
+# my_predictor run phase
+# UVM_INFO components/comparator.svh(77) @ 160: uvm_test_top.env_h.scoreboard_h.comparator_h [COMPARATOR] EXPECTED_SEQ_ITEM RECEIVED: -----------------------------------------------------------------------------------------------------------------------------------------
+# 
+#                      time: 160  HRESETn = 1, HSEL= 2, HWRITE = 1, HTRANS =  2, HSIZE = 0, HBURST = 0, HPROT = 0, HADDR = 80000002, HWDATA = 7a, HRDATA = 0, HRESP = 0, HREADY = 1, PREDICTOR_transaction_counter = 2, COMPARATOR_transaction_counter= 1
+# CONTROL PHASE: TIME:170 ASSIGINING SIGNALS
+# start of pre_body task
+# start of pre_body task
+# UVM_INFO components/driver.svh(64) @ 170: uvm_test_top.env_h.active_agent_h.driver_h [uvm_test_top.env_h.active_agent_h.driver_h] DRIVEN_ITEM:-----------------------------------------------------------------------------------------------------------------------------------------
+# 
+#                     time: 170 HRESETn = 1, HSEL= 1, HWRITE = 1, HTRANS =  2, HSIZE = 0, HBURST = 0, HPROT = 0, HADDR = 40000000, HWDATA = 80, PREDICTOR_transaction_counter = 2, COMPARATOR_transaction_counter= 1
+# UVM_INFO components/predictor.svh(106) @ 170: uvm_test_top.env_h.scoreboard_h.predictor_h [PREDICTOR] EXPECTED_DATA: -----------------------------------------------------------------------------------------------------------------------------------------
+# 
+#                     time: 170 HRESETn = 1, HSEL= 1, HWRITE = 1, HTRANS =  2, HSIZE = 0, HBURST = 0, HPROT = 0, HADDR = 40000000, HWDATA = 80, PREDICTOR_transaction_counter = 3, COMPARATOR_transaction_counter= 1
+# my_predictor run phase
+# CONTROL PHASE: TIME:180 ASSIGINING SIGNALS
+# start of pre_body task
+# start of pre_body task
+# UVM_INFO components/driver.svh(64) @ 180: uvm_test_top.env_h.active_agent_h.driver_h [uvm_test_top.env_h.active_agent_h.driver_h] DRIVEN_ITEM:-----------------------------------------------------------------------------------------------------------------------------------------
+# 
+#                     time: 180 HRESETn = 1, HSEL= 0, HWRITE = 1, HTRANS =  2, HSIZE = 0, HBURST = 0, HPROT = 0, HADDR = b, HWDATA = 21, PREDICTOR_transaction_counter = 3, COMPARATOR_transaction_counter= 1
+# UVM_INFO components/predictor.svh(106) @ 180: uvm_test_top.env_h.scoreboard_h.predictor_h [PREDICTOR] EXPECTED_DATA: -----------------------------------------------------------------------------------------------------------------------------------------
+# 
+#                     time: 180 HRESETn = 1, HSEL= 0, HWRITE = 1, HTRANS =  2, HSIZE = 0, HBURST = 0, HPROT = 0, HADDR = b, HWDATA = 21, PREDICTOR_transaction_counter = 4, COMPARATOR_transaction_counter= 1
+# my_predictor run phase
+# UVM_INFO components/outputs_monitor.svh(75) @ 190: uvm_test_top.env_h.passive_agent_h.outputs_monitor_h [uvm_test_top.env_h.passive_agent_h.outputs_monitor_h] OUTPUTS SENT TO THE COMPARATOR
+# CONTROL PHASE: TIME:190 ASSIGINING SIGNALS
+# UVM_INFO components/comparator.svh(82) @ 190: uvm_test_top.env_h.scoreboard_h.comparator_h [COMPARATOR] ACTUAL_SEQ_ITEM RECEIVED: -----------------------------------------------------------------------------------------------------------------------------------------
+# 
+#                     time: 190 HSEL: 0  HRDATA: 0  HRESP: 0   HREADY: 1, PREDICTOR_transaction_counter = 4, COMPARATOR_transaction_counter= 1
+# UVM_INFO components/comparator.svh(87) @ 190: uvm_test_top.env_h.scoreboard_h.comparator_h [SCOREBOARD] PASS
+# UVM_INFO components/comparator.svh(73) @ 190: uvm_test_top.env_h.scoreboard_h.comparator_h [COMPARATOR] RUN PHASE
+# UVM_INFO components/comparator.svh(77) @ 190: uvm_test_top.env_h.scoreboard_h.comparator_h [COMPARATOR] EXPECTED_SEQ_ITEM RECEIVED: -----------------------------------------------------------------------------------------------------------------------------------------
+# 
+#                      time: 190  HRESETn = 1, HSEL= 1, HWRITE = 1, HTRANS =  2, HSIZE = 0, HBURST = 0, HPROT = 0, HADDR = 40000000, HWDATA = 80, HRDATA = 0, HRESP = 0, HREADY = 1, PREDICTOR_transaction_counter = 4, COMPARATOR_transaction_counter= 2
+# start of pre_body task
+# start of pre_body task
+# UVM_INFO components/driver.svh(64) @ 190: uvm_test_top.env_h.active_agent_h.driver_h [uvm_test_top.env_h.active_agent_h.driver_h] DRIVEN_ITEM:-----------------------------------------------------------------------------------------------------------------------------------------
+# 
+#                     time: 190 HRESETn = 1, HSEL= 2, HWRITE = 1, HTRANS =  2, HSIZE = 0, HBURST = 0, HPROT = 0, HADDR = 8000000a, HWDATA = 6b, PREDICTOR_transaction_counter = 4, COMPARATOR_transaction_counter= 2
+# UVM_INFO components/predictor.svh(106) @ 190: uvm_test_top.env_h.scoreboard_h.predictor_h [PREDICTOR] EXPECTED_DATA: -----------------------------------------------------------------------------------------------------------------------------------------
+# 
+#                     time: 190 HRESETn = 1, HSEL= 2, HWRITE = 1, HTRANS =  2, HSIZE = 0, HBURST = 0, HPROT = 0, HADDR = 8000000a, HWDATA = 6b, PREDICTOR_transaction_counter = 5, COMPARATOR_transaction_counter= 2
+# my_predictor run phase
+# UVM_INFO components/outputs_monitor.svh(75) @ 200: uvm_test_top.env_h.passive_agent_h.outputs_monitor_h [uvm_test_top.env_h.passive_agent_h.outputs_monitor_h] OUTPUTS SENT TO THE COMPARATOR
+# CONTROL PHASE: TIME:200 ASSIGINING SIGNALS
+# UVM_INFO components/comparator.svh(82) @ 200: uvm_test_top.env_h.scoreboard_h.comparator_h [COMPARATOR] ACTUAL_SEQ_ITEM RECEIVED: -----------------------------------------------------------------------------------------------------------------------------------------
+# 
+#                     time: 200 HSEL: 0  HRDATA: 0  HRESP: 0   HREADY: 1, PREDICTOR_transaction_counter = 5, COMPARATOR_transaction_counter= 2
+# UVM_INFO components/comparator.svh(87) @ 200: uvm_test_top.env_h.scoreboard_h.comparator_h [SCOREBOARD] PASS
+# UVM_INFO components/comparator.svh(73) @ 200: uvm_test_top.env_h.scoreboard_h.comparator_h [COMPARATOR] RUN PHASE
+# UVM_INFO components/comparator.svh(77) @ 200: uvm_test_top.env_h.scoreboard_h.comparator_h [COMPARATOR] EXPECTED_SEQ_ITEM RECEIVED: -----------------------------------------------------------------------------------------------------------------------------------------
+# 
+#                      time: 200  HRESETn = 1, HSEL= 0, HWRITE = 1, HTRANS =  2, HSIZE = 0, HBURST = 0, HPROT = 0, HADDR = b, HWDATA = 21, HRDATA = 0, HRESP = 0, HREADY = 1, PREDICTOR_transaction_counter = 5, COMPARATOR_transaction_counter= 3
+# start of pre_body task
+# start of pre_body task
+# UVM_INFO components/driver.svh(64) @ 200: uvm_test_top.env_h.active_agent_h.driver_h [uvm_test_top.env_h.active_agent_h.driver_h] DRIVEN_ITEM:-----------------------------------------------------------------------------------------------------------------------------------------
+# 
+#                     time: 200 HRESETn = 1, HSEL= 0, HWRITE = 1, HTRANS =  2, HSIZE = 0, HBURST = 0, HPROT = 0, HADDR = 9, HWDATA = 67, PREDICTOR_transaction_counter = 5, COMPARATOR_transaction_counter= 3
+# UVM_INFO components/predictor.svh(106) @ 200: uvm_test_top.env_h.scoreboard_h.predictor_h [PREDICTOR] EXPECTED_DATA: -----------------------------------------------------------------------------------------------------------------------------------------
+# 
+#                     time: 200 HRESETn = 1, HSEL= 0, HWRITE = 1, HTRANS =  2, HSIZE = 0, HBURST = 0, HPROT = 0, HADDR = 9, HWDATA = 67, PREDICTOR_transaction_counter = 6, COMPARATOR_transaction_counter= 3
+# my_predictor run phase
+# UVM_INFO components/outputs_monitor.svh(75) @ 210: uvm_test_top.env_h.passive_agent_h.outputs_monitor_h [uvm_test_top.env_h.passive_agent_h.outputs_monitor_h] OUTPUTS SENT TO THE COMPARATOR
+# CONTROL PHASE: TIME:210 ASSIGINING SIGNALS
+# UVM_INFO components/comparator.svh(82) @ 210: uvm_test_top.env_h.scoreboard_h.comparator_h [COMPARATOR] ACTUAL_SEQ_ITEM RECEIVED: -----------------------------------------------------------------------------------------------------------------------------------------
+# 
+#                     time: 210 HSEL: 0  HRDATA: 0  HRESP: 0   HREADY: 1, PREDICTOR_transaction_counter = 6, COMPARATOR_transaction_counter= 3
+# UVM_INFO components/comparator.svh(87) @ 210: uvm_test_top.env_h.scoreboard_h.comparator_h [SCOREBOARD] PASS
+# UVM_INFO components/comparator.svh(73) @ 210: uvm_test_top.env_h.scoreboard_h.comparator_h [COMPARATOR] RUN PHASE
+# UVM_INFO components/comparator.svh(77) @ 210: uvm_test_top.env_h.scoreboard_h.comparator_h [COMPARATOR] EXPECTED_SEQ_ITEM RECEIVED: -----------------------------------------------------------------------------------------------------------------------------------------
+# 
+#                      time: 210  HRESETn = 1, HSEL= 2, HWRITE = 1, HTRANS =  2, HSIZE = 0, HBURST = 0, HPROT = 0, HADDR = 8000000a, HWDATA = 6b, HRDATA = 0, HRESP = 0, HREADY = 1, PREDICTOR_transaction_counter = 6, COMPARATOR_transaction_counter= 4
+# start of pre_body task
+# start of pre_body task
+# UVM_INFO components/driver.svh(64) @ 210: uvm_test_top.env_h.active_agent_h.driver_h [uvm_test_top.env_h.active_agent_h.driver_h] DRIVEN_ITEM:-----------------------------------------------------------------------------------------------------------------------------------------
+# 
+#                     time: 210 HRESETn = 1, HSEL= 3, HWRITE = 1, HTRANS =  2, HSIZE = 0, HBURST = 0, HPROT = 0, HADDR = c000000d, HWDATA = 13, PREDICTOR_transaction_counter = 6, COMPARATOR_transaction_counter= 4
+# UVM_INFO components/predictor.svh(106) @ 210: uvm_test_top.env_h.scoreboard_h.predictor_h [PREDICTOR] EXPECTED_DATA: -----------------------------------------------------------------------------------------------------------------------------------------
+# 
+#                     time: 210 HRESETn = 1, HSEL= 3, HWRITE = 1, HTRANS =  2, HSIZE = 0, HBURST = 0, HPROT = 0, HADDR = c000000d, HWDATA = 13, PREDICTOR_transaction_counter = 7, COMPARATOR_transaction_counter= 4
+# my_predictor run phase
+# UVM_INFO components/outputs_monitor.svh(75) @ 220: uvm_test_top.env_h.passive_agent_h.outputs_monitor_h [uvm_test_top.env_h.passive_agent_h.outputs_monitor_h] OUTPUTS SENT TO THE COMPARATOR
+# CONTROL PHASE: TIME:220 ASSIGINING SIGNALS
+# UVM_INFO components/comparator.svh(82) @ 220: uvm_test_top.env_h.scoreboard_h.comparator_h [COMPARATOR] ACTUAL_SEQ_ITEM RECEIVED: -----------------------------------------------------------------------------------------------------------------------------------------
+# 
+#                     time: 220 HSEL: 0  HRDATA: 0  HRESP: 0   HREADY: 1, PREDICTOR_transaction_counter = 7, COMPARATOR_transaction_counter= 4
+# UVM_INFO components/comparator.svh(87) @ 220: uvm_test_top.env_h.scoreboard_h.comparator_h [SCOREBOARD] PASS
+# UVM_INFO components/comparator.svh(73) @ 220: uvm_test_top.env_h.scoreboard_h.comparator_h [COMPARATOR] RUN PHASE
+# UVM_INFO components/comparator.svh(77) @ 220: uvm_test_top.env_h.scoreboard_h.comparator_h [COMPARATOR] EXPECTED_SEQ_ITEM RECEIVED: -----------------------------------------------------------------------------------------------------------------------------------------
+# 
+#                      time: 220  HRESETn = 1, HSEL= 0, HWRITE = 1, HTRANS =  2, HSIZE = 0, HBURST = 0, HPROT = 0, HADDR = 9, HWDATA = 67, HRDATA = 0, HRESP = 0, HREADY = 1, PREDICTOR_transaction_counter = 7, COMPARATOR_transaction_counter= 5
+# start of pre_body task
+# start of pre_body task
+# UVM_INFO components/driver.svh(64) @ 220: uvm_test_top.env_h.active_agent_h.driver_h [uvm_test_top.env_h.active_agent_h.driver_h] DRIVEN_ITEM:-----------------------------------------------------------------------------------------------------------------------------------------
+# 
+#                     time: 220 HRESETn = 1, HSEL= 1, HWRITE = 1, HTRANS =  2, HSIZE = 0, HBURST = 0, HPROT = 0, HADDR = 40000008, HWDATA = 71, PREDICTOR_transaction_counter = 7, COMPARATOR_transaction_counter= 5
+# UVM_INFO components/predictor.svh(106) @ 220: uvm_test_top.env_h.scoreboard_h.predictor_h [PREDICTOR] EXPECTED_DATA: -----------------------------------------------------------------------------------------------------------------------------------------
+# 
+#                     time: 220 HRESETn = 1, HSEL= 1, HWRITE = 1, HTRANS =  2, HSIZE = 0, HBURST = 0, HPROT = 0, HADDR = 40000008, HWDATA = 71, PREDICTOR_transaction_counter = 8, COMPARATOR_transaction_counter= 5
+# my_predictor run phase
+# UVM_INFO components/outputs_monitor.svh(75) @ 230: uvm_test_top.env_h.passive_agent_h.outputs_monitor_h [uvm_test_top.env_h.passive_agent_h.outputs_monitor_h] OUTPUTS SENT TO THE COMPARATOR
+# CONTROL PHASE: TIME:230 ASSIGINING SIGNALS
+# UVM_INFO components/comparator.svh(82) @ 230: uvm_test_top.env_h.scoreboard_h.comparator_h [COMPARATOR] ACTUAL_SEQ_ITEM RECEIVED: -----------------------------------------------------------------------------------------------------------------------------------------
+# 
+#                     time: 230 HSEL: 0  HRDATA: 0  HRESP: 0   HREADY: 1, PREDICTOR_transaction_counter = 8, COMPARATOR_transaction_counter= 5
+# UVM_INFO components/comparator.svh(87) @ 230: uvm_test_top.env_h.scoreboard_h.comparator_h [SCOREBOARD] PASS
+# UVM_INFO components/comparator.svh(73) @ 230: uvm_test_top.env_h.scoreboard_h.comparator_h [COMPARATOR] RUN PHASE
+# UVM_INFO components/comparator.svh(77) @ 230: uvm_test_top.env_h.scoreboard_h.comparator_h [COMPARATOR] EXPECTED_SEQ_ITEM RECEIVED: -----------------------------------------------------------------------------------------------------------------------------------------
+# 
+#                      time: 230  HRESETn = 1, HSEL= 3, HWRITE = 1, HTRANS =  2, HSIZE = 0, HBURST = 0, HPROT = 0, HADDR = c000000d, HWDATA = 13, HRDATA = 0, HRESP = 1, HREADY = 1, PREDICTOR_transaction_counter = 8, COMPARATOR_transaction_counter= 6
+# start of pre_body task
+# start of pre_body task
+# UVM_INFO components/driver.svh(64) @ 230: uvm_test_top.env_h.active_agent_h.driver_h [uvm_test_top.env_h.active_agent_h.driver_h] DRIVEN_ITEM:-----------------------------------------------------------------------------------------------------------------------------------------
+# 
+#                     time: 230 HRESETn = 1, HSEL= 2, HWRITE = 1, HTRANS =  2, HSIZE = 0, HBURST = 0, HPROT = 0, HADDR = 80000005, HWDATA = 57, PREDICTOR_transaction_counter = 8, COMPARATOR_transaction_counter= 6
+# UVM_INFO components/predictor.svh(106) @ 230: uvm_test_top.env_h.scoreboard_h.predictor_h [PREDICTOR] EXPECTED_DATA: -----------------------------------------------------------------------------------------------------------------------------------------
+# 
+#                     time: 230 HRESETn = 1, HSEL= 2, HWRITE = 1, HTRANS =  2, HSIZE = 0, HBURST = 0, HPROT = 0, HADDR = 80000005, HWDATA = 57, PREDICTOR_transaction_counter = 9, COMPARATOR_transaction_counter= 6
+# my_predictor run phase
+# UVM_INFO components/outputs_monitor.svh(75) @ 240: uvm_test_top.env_h.passive_agent_h.outputs_monitor_h [uvm_test_top.env_h.passive_agent_h.outputs_monitor_h] OUTPUTS SENT TO THE COMPARATOR
+# CONTROL PHASE: TIME:240 ASSIGINING SIGNALS
+# UVM_INFO components/comparator.svh(82) @ 240: uvm_test_top.env_h.scoreboard_h.comparator_h [COMPARATOR] ACTUAL_SEQ_ITEM RECEIVED: -----------------------------------------------------------------------------------------------------------------------------------------
+# 
+#                     time: 240 HSEL: 0  HRDATA: 0  HRESP: 0   HREADY: 1, PREDICTOR_transaction_counter = 9, COMPARATOR_transaction_counter= 6
+# UVM_ERROR components/comparator.svh(90) @ 240: uvm_test_top.env_h.scoreboard_h.comparator_h [SCOREBOARD] FAIL
+# UVM_INFO components/comparator.svh(91) @ 240: uvm_test_top.env_h.scoreboard_h.comparator_h [COMPARATOR_CHECK] EXPECTED_SEQ_ITEM RECEIVED: -----------------------------------------------------------------------------------------------------------------------------------------
+# 
+#                     time: 240 HSEL: 3  HRDATA: 0  HRESP: 1   HREADY: 1, PREDICTOR_transaction_counter = 9, COMPARATOR_transaction_counter= 6
+# UVM_INFO components/comparator.svh(93) @ 240: uvm_test_top.env_h.scoreboard_h.comparator_h [COMPARATOR_CHECK] ACTUAL_SEQ_ITEM RECEIVED: -----------------------------------------------------------------------------------------------------------------------------------------
+# 
+#                     time: 240 HSEL: 0  HRDATA: 0  HRESP: 0   HREADY: 1, PREDICTOR_transaction_counter = 9, COMPARATOR_transaction_counter= 6
+# UVM_INFO components/comparator.svh(73) @ 240: uvm_test_top.env_h.scoreboard_h.comparator_h [COMPARATOR] RUN PHASE
+# UVM_INFO components/comparator.svh(77) @ 240: uvm_test_top.env_h.scoreboard_h.comparator_h [COMPARATOR] EXPECTED_SEQ_ITEM RECEIVED: -----------------------------------------------------------------------------------------------------------------------------------------
+# 
+#                      time: 240  HRESETn = 1, HSEL= 1, HWRITE = 1, HTRANS =  2, HSIZE = 0, HBURST = 0, HPROT = 0, HADDR = 40000008, HWDATA = 71, HRDATA = 0, HRESP = 0, HREADY = 1, PREDICTOR_transaction_counter = 9, COMPARATOR_transaction_counter= 7
+# start of pre_body task
+# start of pre_body task
+# UVM_INFO components/driver.svh(64) @ 240: uvm_test_top.env_h.active_agent_h.driver_h [uvm_test_top.env_h.active_agent_h.driver_h] DRIVEN_ITEM:-----------------------------------------------------------------------------------------------------------------------------------------
+# 
+#                     time: 240 HRESETn = 1, HSEL= 3, HWRITE = 1, HTRANS =  2, HSIZE = 0, HBURST = 0, HPROT = 0, HADDR = c0000006, HWDATA = 9f, PREDICTOR_transaction_counter = 9, COMPARATOR_transaction_counter= 7
+# UVM_INFO components/predictor.svh(106) @ 240: uvm_test_top.env_h.scoreboard_h.predictor_h [PREDICTOR] EXPECTED_DATA: -----------------------------------------------------------------------------------------------------------------------------------------
+# 
+#                     time: 240 HRESETn = 1, HSEL= 3, HWRITE = 1, HTRANS =  2, HSIZE = 0, HBURST = 0, HPROT = 0, HADDR = c0000006, HWDATA = 9f, PREDICTOR_transaction_counter = 10, COMPARATOR_transaction_counter= 7
+# my_predictor run phase
+# UVM_INFO components/outputs_monitor.svh(75) @ 250: uvm_test_top.env_h.passive_agent_h.outputs_monitor_h [uvm_test_top.env_h.passive_agent_h.outputs_monitor_h] OUTPUTS SENT TO THE COMPARATOR
+# CONTROL PHASE: TIME:250 ASSIGINING SIGNALS
+# UVM_INFO components/comparator.svh(82) @ 250: uvm_test_top.env_h.scoreboard_h.comparator_h [COMPARATOR] ACTUAL_SEQ_ITEM RECEIVED: -----------------------------------------------------------------------------------------------------------------------------------------
+# 
+#                     time: 250 HSEL: 0  HRDATA: 0  HRESP: 0   HREADY: 1, PREDICTOR_transaction_counter = 10, COMPARATOR_transaction_counter= 7
+# UVM_INFO components/comparator.svh(87) @ 250: uvm_test_top.env_h.scoreboard_h.comparator_h [SCOREBOARD] PASS
+# UVM_INFO components/comparator.svh(73) @ 250: uvm_test_top.env_h.scoreboard_h.comparator_h [COMPARATOR] RUN PHASE
+# UVM_INFO components/comparator.svh(77) @ 250: uvm_test_top.env_h.scoreboard_h.comparator_h [COMPARATOR] EXPECTED_SEQ_ITEM RECEIVED: -----------------------------------------------------------------------------------------------------------------------------------------
+# 
+#                      time: 250  HRESETn = 1, HSEL= 2, HWRITE = 1, HTRANS =  2, HSIZE = 0, HBURST = 0, HPROT = 0, HADDR = 80000005, HWDATA = 57, HRDATA = 0, HRESP = 0, HREADY = 1, PREDICTOR_transaction_counter = 10, COMPARATOR_transaction_counter= 8
+# start of pre_body task
+# start of pre_body task
+# UVM_INFO components/driver.svh(64) @ 250: uvm_test_top.env_h.active_agent_h.driver_h [uvm_test_top.env_h.active_agent_h.driver_h] DRIVEN_ITEM:-----------------------------------------------------------------------------------------------------------------------------------------
+# 
+#                     time: 250 HRESETn = 1, HSEL= 1, HWRITE = 1, HTRANS =  2, HSIZE = 0, HBURST = 0, HPROT = 0, HADDR = 4000000b, HWDATA = d2, PREDICTOR_transaction_counter = 10, COMPARATOR_transaction_counter= 8
+# UVM_INFO components/predictor.svh(106) @ 250: uvm_test_top.env_h.scoreboard_h.predictor_h [PREDICTOR] EXPECTED_DATA: -----------------------------------------------------------------------------------------------------------------------------------------
+# 
+#                     time: 250 HRESETn = 1, HSEL= 1, HWRITE = 1, HTRANS =  2, HSIZE = 0, HBURST = 0, HPROT = 0, HADDR = 4000000b, HWDATA = d2, PREDICTOR_transaction_counter = 11, COMPARATOR_transaction_counter= 8
+# my_predictor run phase
+# UVM_INFO components/outputs_monitor.svh(75) @ 260: uvm_test_top.env_h.passive_agent_h.outputs_monitor_h [uvm_test_top.env_h.passive_agent_h.outputs_monitor_h] OUTPUTS SENT TO THE COMPARATOR
+# CONTROL PHASE: TIME:260 ASSIGINING SIGNALS
+# UVM_INFO components/comparator.svh(82) @ 260: uvm_test_top.env_h.scoreboard_h.comparator_h [COMPARATOR] ACTUAL_SEQ_ITEM RECEIVED: -----------------------------------------------------------------------------------------------------------------------------------------
+# 
+#                     time: 260 HSEL: 0  HRDATA: 0  HRESP: 0   HREADY: 1, PREDICTOR_transaction_counter = 11, COMPARATOR_transaction_counter= 8
+# UVM_INFO components/comparator.svh(87) @ 260: uvm_test_top.env_h.scoreboard_h.comparator_h [SCOREBOARD] PASS
+# UVM_INFO components/comparator.svh(73) @ 260: uvm_test_top.env_h.scoreboard_h.comparator_h [COMPARATOR] RUN PHASE
+# UVM_INFO components/comparator.svh(77) @ 260: uvm_test_top.env_h.scoreboard_h.comparator_h [COMPARATOR] EXPECTED_SEQ_ITEM RECEIVED: -----------------------------------------------------------------------------------------------------------------------------------------
+# 
+#                      time: 260  HRESETn = 1, HSEL= 3, HWRITE = 1, HTRANS =  2, HSIZE = 0, HBURST = 0, HPROT = 0, HADDR = c0000006, HWDATA = 9f, HRDATA = 0, HRESP = 1, HREADY = 1, PREDICTOR_transaction_counter = 11, COMPARATOR_transaction_counter= 9
+# UVM_INFO components/driver.svh(64) @ 260: uvm_test_top.env_h.active_agent_h.driver_h [uvm_test_top.env_h.active_agent_h.driver_h] DRIVEN_ITEM:-----------------------------------------------------------------------------------------------------------------------------------------
+# 
+#                     time: 260 HRESETn = 1, HSEL= 1, HWRITE = 1, HTRANS =  2, HSIZE = 0, HBURST = 3, HPROT = 0, HADDR = 4000000f, HWDATA = ac, PREDICTOR_transaction_counter = 11, COMPARATOR_transaction_counter= 9
+# UVM_INFO components/predictor.svh(106) @ 260: uvm_test_top.env_h.scoreboard_h.predictor_h [PREDICTOR] EXPECTED_DATA: -----------------------------------------------------------------------------------------------------------------------------------------
+# 
+#                     time: 260 HRESETn = 1, HSEL= 1, HWRITE = 1, HTRANS =  2, HSIZE = 0, HBURST = 3, HPROT = 0, HADDR = 4000000f, HWDATA = ac, PREDICTOR_transaction_counter = 12, COMPARATOR_transaction_counter= 9
+# my_predictor run phase
+# UVM_INFO components/outputs_monitor.svh(75) @ 270: uvm_test_top.env_h.passive_agent_h.outputs_monitor_h [uvm_test_top.env_h.passive_agent_h.outputs_monitor_h] OUTPUTS SENT TO THE COMPARATOR
+# CONTROL PHASE: TIME:270 ASSIGINING SIGNALS
+# UVM_INFO components/comparator.svh(82) @ 270: uvm_test_top.env_h.scoreboard_h.comparator_h [COMPARATOR] ACTUAL_SEQ_ITEM RECEIVED: -----------------------------------------------------------------------------------------------------------------------------------------
+# 
+#                     time: 270 HSEL: 0  HRDATA: 0  HRESP: 0   HREADY: 1, PREDICTOR_transaction_counter = 12, COMPARATOR_transaction_counter= 9
+# UVM_ERROR components/comparator.svh(90) @ 270: uvm_test_top.env_h.scoreboard_h.comparator_h [SCOREBOARD] FAIL
+# UVM_INFO components/comparator.svh(91) @ 270: uvm_test_top.env_h.scoreboard_h.comparator_h [COMPARATOR_CHECK] EXPECTED_SEQ_ITEM RECEIVED: -----------------------------------------------------------------------------------------------------------------------------------------
+# 
+#                     time: 270 HSEL: 3  HRDATA: 0  HRESP: 1   HREADY: 1, PREDICTOR_transaction_counter = 12, COMPARATOR_transaction_counter= 9
+# UVM_INFO components/comparator.svh(93) @ 270: uvm_test_top.env_h.scoreboard_h.comparator_h [COMPARATOR_CHECK] ACTUAL_SEQ_ITEM RECEIVED: -----------------------------------------------------------------------------------------------------------------------------------------
+# 
+#                     time: 270 HSEL: 0  HRDATA: 0  HRESP: 0   HREADY: 1, PREDICTOR_transaction_counter = 12, COMPARATOR_transaction_counter= 9
+# UVM_INFO components/comparator.svh(73) @ 270: uvm_test_top.env_h.scoreboard_h.comparator_h [COMPARATOR] RUN PHASE
+# UVM_INFO components/comparator.svh(77) @ 270: uvm_test_top.env_h.scoreboard_h.comparator_h [COMPARATOR] EXPECTED_SEQ_ITEM RECEIVED: -----------------------------------------------------------------------------------------------------------------------------------------
+# 
+#                      time: 270  HRESETn = 1, HSEL= 1, HWRITE = 1, HTRANS =  2, HSIZE = 0, HBURST = 0, HPROT = 0, HADDR = 4000000b, HWDATA = d2, HRDATA = 0, HRESP = 0, HREADY = 1, PREDICTOR_transaction_counter = 12, COMPARATOR_transaction_counter= 10
+# UVM_INFO components/driver.svh(64) @ 270: uvm_test_top.env_h.active_agent_h.driver_h [uvm_test_top.env_h.active_agent_h.driver_h] DRIVEN_ITEM:-----------------------------------------------------------------------------------------------------------------------------------------
+# 
+#                     time: 270 HRESETn = 1, HSEL= 1, HWRITE = 1, HTRANS =  3, HSIZE = 0, HBURST = 3, HPROT = 0, HADDR = 4000000f, HWDATA = 63, PREDICTOR_transaction_counter = 12, COMPARATOR_transaction_counter= 10
+# UVM_INFO components/predictor.svh(106) @ 270: uvm_test_top.env_h.scoreboard_h.predictor_h [PREDICTOR] EXPECTED_DATA: -----------------------------------------------------------------------------------------------------------------------------------------
+# 
+#                     time: 270 HRESETn = 1, HSEL= 1, HWRITE = 1, HTRANS =  3, HSIZE = 0, HBURST = 3, HPROT = 0, HADDR = 4000000f, HWDATA = 63, PREDICTOR_transaction_counter = 13, COMPARATOR_transaction_counter= 10
+# my_predictor run phase
+# UVM_INFO components/outputs_monitor.svh(75) @ 280: uvm_test_top.env_h.passive_agent_h.outputs_monitor_h [uvm_test_top.env_h.passive_agent_h.outputs_monitor_h] OUTPUTS SENT TO THE COMPARATOR
+# CONTROL PHASE: TIME:280 ASSIGINING SIGNALS
+# UVM_INFO components/comparator.svh(82) @ 280: uvm_test_top.env_h.scoreboard_h.comparator_h [COMPARATOR] ACTUAL_SEQ_ITEM RECEIVED: -----------------------------------------------------------------------------------------------------------------------------------------
+# 
+#                     time: 280 HSEL: 0  HRDATA: 0  HRESP: 0   HREADY: 1, PREDICTOR_transaction_counter = 13, COMPARATOR_transaction_counter= 10
+# UVM_INFO components/comparator.svh(87) @ 280: uvm_test_top.env_h.scoreboard_h.comparator_h [SCOREBOARD] PASS
+# UVM_INFO components/comparator.svh(73) @ 280: uvm_test_top.env_h.scoreboard_h.comparator_h [COMPARATOR] RUN PHASE
+# UVM_INFO components/comparator.svh(77) @ 280: uvm_test_top.env_h.scoreboard_h.comparator_h [COMPARATOR] EXPECTED_SEQ_ITEM RECEIVED: -----------------------------------------------------------------------------------------------------------------------------------------
+# 
+#                      time: 280  HRESETn = 1, HSEL= 1, HWRITE = 1, HTRANS =  2, HSIZE = 0, HBURST = 3, HPROT = 0, HADDR = 4000000f, HWDATA = ac, HRDATA = 0, HRESP = 0, HREADY = 1, PREDICTOR_transaction_counter = 13, COMPARATOR_transaction_counter= 11
+# UVM_INFO components/driver.svh(64) @ 280: uvm_test_top.env_h.active_agent_h.driver_h [uvm_test_top.env_h.active_agent_h.driver_h] DRIVEN_ITEM:-----------------------------------------------------------------------------------------------------------------------------------------
+# 
+#                     time: 280 HRESETn = 1, HSEL= 1, HWRITE = 1, HTRANS =  3, HSIZE = 0, HBURST = 3, HPROT = 0, HADDR = 4000000f, HWDATA = 22, PREDICTOR_transaction_counter = 13, COMPARATOR_transaction_counter= 11
+# UVM_INFO components/predictor.svh(106) @ 280: uvm_test_top.env_h.scoreboard_h.predictor_h [PREDICTOR] EXPECTED_DATA: -----------------------------------------------------------------------------------------------------------------------------------------
+# 
+#                     time: 280 HRESETn = 1, HSEL= 1, HWRITE = 1, HTRANS =  3, HSIZE = 0, HBURST = 3, HPROT = 0, HADDR = 4000000f, HWDATA = 22, PREDICTOR_transaction_counter = 14, COMPARATOR_transaction_counter= 11
+# my_predictor run phase
+# UVM_INFO components/outputs_monitor.svh(75) @ 290: uvm_test_top.env_h.passive_agent_h.outputs_monitor_h [uvm_test_top.env_h.passive_agent_h.outputs_monitor_h] OUTPUTS SENT TO THE COMPARATOR
+# CONTROL PHASE: TIME:290 ASSIGINING SIGNALS
+# UVM_INFO components/comparator.svh(82) @ 290: uvm_test_top.env_h.scoreboard_h.comparator_h [COMPARATOR] ACTUAL_SEQ_ITEM RECEIVED: -----------------------------------------------------------------------------------------------------------------------------------------
+# 
+#                     time: 290 HSEL: 0  HRDATA: 0  HRESP: 0   HREADY: 1, PREDICTOR_transaction_counter = 14, COMPARATOR_transaction_counter= 11
+# UVM_INFO components/comparator.svh(87) @ 290: uvm_test_top.env_h.scoreboard_h.comparator_h [SCOREBOARD] PASS
+# UVM_INFO components/comparator.svh(73) @ 290: uvm_test_top.env_h.scoreboard_h.comparator_h [COMPARATOR] RUN PHASE
+# UVM_INFO components/comparator.svh(77) @ 290: uvm_test_top.env_h.scoreboard_h.comparator_h [COMPARATOR] EXPECTED_SEQ_ITEM RECEIVED: -----------------------------------------------------------------------------------------------------------------------------------------
+# 
+#                      time: 290  HRESETn = 1, HSEL= 1, HWRITE = 1, HTRANS =  3, HSIZE = 0, HBURST = 3, HPROT = 0, HADDR = 4000000f, HWDATA = 63, HRDATA = 0, HRESP = 1, HREADY = 1, PREDICTOR_transaction_counter = 14, COMPARATOR_transaction_counter= 12
+# UVM_INFO components/driver.svh(64) @ 290: uvm_test_top.env_h.active_agent_h.driver_h [uvm_test_top.env_h.active_agent_h.driver_h] DRIVEN_ITEM:-----------------------------------------------------------------------------------------------------------------------------------------
+# 
+#                     time: 290 HRESETn = 1, HSEL= 1, HWRITE = 1, HTRANS =  3, HSIZE = 0, HBURST = 3, HPROT = 0, HADDR = 4000000f, HWDATA = 68, PREDICTOR_transaction_counter = 14, COMPARATOR_transaction_counter= 12
+# UVM_INFO components/predictor.svh(106) @ 290: uvm_test_top.env_h.scoreboard_h.predictor_h [PREDICTOR] EXPECTED_DATA: -----------------------------------------------------------------------------------------------------------------------------------------
+# 
+#                     time: 290 HRESETn = 1, HSEL= 1, HWRITE = 1, HTRANS =  3, HSIZE = 0, HBURST = 3, HPROT = 0, HADDR = 4000000f, HWDATA = 68, PREDICTOR_transaction_counter = 15, COMPARATOR_transaction_counter= 12
+# my_predictor run phase
+# UVM_INFO components/outputs_monitor.svh(75) @ 300: uvm_test_top.env_h.passive_agent_h.outputs_monitor_h [uvm_test_top.env_h.passive_agent_h.outputs_monitor_h] OUTPUTS SENT TO THE COMPARATOR
+# CONTROL PHASE: TIME:300 ASSIGINING SIGNALS
+# UVM_INFO components/comparator.svh(82) @ 300: uvm_test_top.env_h.scoreboard_h.comparator_h [COMPARATOR] ACTUAL_SEQ_ITEM RECEIVED: -----------------------------------------------------------------------------------------------------------------------------------------
+# 
+#                     time: 300 HSEL: 0  HRDATA: 0  HRESP: 1   HREADY: 1, PREDICTOR_transaction_counter = 15, COMPARATOR_transaction_counter= 12
+# UVM_INFO components/comparator.svh(87) @ 300: uvm_test_top.env_h.scoreboard_h.comparator_h [SCOREBOARD] PASS
+# UVM_INFO components/comparator.svh(73) @ 300: uvm_test_top.env_h.scoreboard_h.comparator_h [COMPARATOR] RUN PHASE
+# UVM_INFO components/comparator.svh(77) @ 300: uvm_test_top.env_h.scoreboard_h.comparator_h [COMPARATOR] EXPECTED_SEQ_ITEM RECEIVED: -----------------------------------------------------------------------------------------------------------------------------------------
+# 
+#                      time: 300  HRESETn = 1, HSEL= 1, HWRITE = 1, HTRANS =  3, HSIZE = 0, HBURST = 3, HPROT = 0, HADDR = 4000000f, HWDATA = 22, HRDATA = 0, HRESP = 1, HREADY = 1, PREDICTOR_transaction_counter = 15, COMPARATOR_transaction_counter= 13
+# UVM_INFO components/driver.svh(64) @ 300: uvm_test_top.env_h.active_agent_h.driver_h [uvm_test_top.env_h.active_agent_h.driver_h] DRIVEN_ITEM:-----------------------------------------------------------------------------------------------------------------------------------------
+# 
+#                     time: 300 HRESETn = 1, HSEL= 1, HWRITE = 1, HTRANS =  0, HSIZE = 0, HBURST = 0, HPROT = 0, HADDR = 4000000f, HWDATA = ba, PREDICTOR_transaction_counter = 15, COMPARATOR_transaction_counter= 13
+# UVM_INFO components/predictor.svh(106) @ 300: uvm_test_top.env_h.scoreboard_h.predictor_h [PREDICTOR] EXPECTED_DATA: -----------------------------------------------------------------------------------------------------------------------------------------
+# 
+#                     time: 300 HRESETn = 1, HSEL= 1, HWRITE = 1, HTRANS =  0, HSIZE = 0, HBURST = 0, HPROT = 0, HADDR = 4000000f, HWDATA = ba, PREDICTOR_transaction_counter = 16, COMPARATOR_transaction_counter= 13
+# my_predictor run phase
+run
+# UVM_INFO components/outputs_monitor.svh(75) @ 310: uvm_test_top.env_h.passive_agent_h.outputs_monitor_h [uvm_test_top.env_h.passive_agent_h.outputs_monitor_h] OUTPUTS SENT TO THE COMPARATOR
+# CONTROL PHASE: TIME:310 ASSIGINING SIGNALS
+# UVM_INFO components/comparator.svh(82) @ 310: uvm_test_top.env_h.scoreboard_h.comparator_h [COMPARATOR] ACTUAL_SEQ_ITEM RECEIVED: -----------------------------------------------------------------------------------------------------------------------------------------
+# 
+#                     time: 310 HSEL: 0  HRDATA: 0  HRESP: 1   HREADY: 1, PREDICTOR_transaction_counter = 16, COMPARATOR_transaction_counter= 13
+# UVM_INFO components/comparator.svh(87) @ 310: uvm_test_top.env_h.scoreboard_h.comparator_h [SCOREBOARD] PASS
+# UVM_INFO components/comparator.svh(73) @ 310: uvm_test_top.env_h.scoreboard_h.comparator_h [COMPARATOR] RUN PHASE
+# UVM_INFO components/comparator.svh(77) @ 310: uvm_test_top.env_h.scoreboard_h.comparator_h [COMPARATOR] EXPECTED_SEQ_ITEM RECEIVED: -----------------------------------------------------------------------------------------------------------------------------------------
+# 
+#                      time: 310  HRESETn = 1, HSEL= 1, HWRITE = 1, HTRANS =  3, HSIZE = 0, HBURST = 3, HPROT = 0, HADDR = 4000000f, HWDATA = 68, HRDATA = 0, HRESP = 1, HREADY = 1, PREDICTOR_transaction_counter = 16, COMPARATOR_transaction_counter= 14
+# start of pre_body task
+# start of pre_body task
+# UVM_INFO components/driver.svh(64) @ 310: uvm_test_top.env_h.active_agent_h.driver_h [uvm_test_top.env_h.active_agent_h.driver_h] DRIVEN_ITEM:-----------------------------------------------------------------------------------------------------------------------------------------
+# 
+#                     time: 310 HRESETn = 1, HSEL= 1, HWRITE = 1, HTRANS =  2, HSIZE = 0, HBURST = 0, HPROT = 0, HADDR = 4000000d, HWDATA = 34, PREDICTOR_transaction_counter = 16, COMPARATOR_transaction_counter= 14
+# UVM_INFO components/predictor.svh(106) @ 310: uvm_test_top.env_h.scoreboard_h.predictor_h [PREDICTOR] EXPECTED_DATA: -----------------------------------------------------------------------------------------------------------------------------------------
+# 
+#                     time: 310 HRESETn = 1, HSEL= 1, HWRITE = 1, HTRANS =  2, HSIZE = 0, HBURST = 0, HPROT = 0, HADDR = 4000000d, HWDATA = 34, PREDICTOR_transaction_counter = 17, COMPARATOR_transaction_counter= 14
+# my_predictor run phase
+# UVM_INFO components/outputs_monitor.svh(75) @ 320: uvm_test_top.env_h.passive_agent_h.outputs_monitor_h [uvm_test_top.env_h.passive_agent_h.outputs_monitor_h] OUTPUTS SENT TO THE COMPARATOR
+# CONTROL PHASE: TIME:320 ASSIGINING SIGNALS
+# UVM_INFO components/comparator.svh(82) @ 320: uvm_test_top.env_h.scoreboard_h.comparator_h [COMPARATOR] ACTUAL_SEQ_ITEM RECEIVED: -----------------------------------------------------------------------------------------------------------------------------------------
+# 
+#                     time: 320 HSEL: 0  HRDATA: 0  HRESP: 1   HREADY: 1, PREDICTOR_transaction_counter = 17, COMPARATOR_transaction_counter= 14
+# UVM_INFO components/comparator.svh(87) @ 320: uvm_test_top.env_h.scoreboard_h.comparator_h [SCOREBOARD] PASS
+# UVM_INFO components/comparator.svh(73) @ 320: uvm_test_top.env_h.scoreboard_h.comparator_h [COMPARATOR] RUN PHASE
+# UVM_INFO components/comparator.svh(77) @ 320: uvm_test_top.env_h.scoreboard_h.comparator_h [COMPARATOR] EXPECTED_SEQ_ITEM RECEIVED: -----------------------------------------------------------------------------------------------------------------------------------------
+# 
+#                      time: 320  HRESETn = 1, HSEL= 1, HWRITE = 1, HTRANS =  0, HSIZE = 0, HBURST = 0, HPROT = 0, HADDR = 4000000f, HWDATA = ba, HRDATA = 0, HRESP = 0, HREADY = 1, PREDICTOR_transaction_counter = 17, COMPARATOR_transaction_counter= 15
+# UVM_INFO components/outputs_monitor.svh(75) @ 330: uvm_test_top.env_h.passive_agent_h.outputs_monitor_h [uvm_test_top.env_h.passive_agent_h.outputs_monitor_h] OUTPUTS SENT TO THE COMPARATOR
+# UVM_INFO components/comparator.svh(82) @ 330: uvm_test_top.env_h.scoreboard_h.comparator_h [COMPARATOR] ACTUAL_SEQ_ITEM RECEIVED: -----------------------------------------------------------------------------------------------------------------------------------------
+# 
+#                     time: 330 HSEL: 0  HRDATA: 0  HRESP: 0   HREADY: 1, PREDICTOR_transaction_counter = 17, COMPARATOR_transaction_counter= 15
+# UVM_INFO components/comparator.svh(87) @ 330: uvm_test_top.env_h.scoreboard_h.comparator_h [SCOREBOARD] PASS
+# UVM_INFO components/comparator.svh(73) @ 330: uvm_test_top.env_h.scoreboard_h.comparator_h [COMPARATOR] RUN PHASE
+# UVM_INFO components/comparator.svh(77) @ 330: uvm_test_top.env_h.scoreboard_h.comparator_h [COMPARATOR] EXPECTED_SEQ_ITEM RECEIVED: -----------------------------------------------------------------------------------------------------------------------------------------
+# 
+#                      time: 330  HRESETn = 1, HSEL= 1, HWRITE = 1, HTRANS =  2, HSIZE = 0, HBURST = 0, HPROT = 0, HADDR = 4000000d, HWDATA = 34, HRDATA = 0, HRESP = 0, HREADY = 1, PREDICTOR_transaction_counter = 17, COMPARATOR_transaction_counter= 16
+# UVM_INFO components/outputs_monitor.svh(75) @ 340: uvm_test_top.env_h.passive_agent_h.outputs_monitor_h [uvm_test_top.env_h.passive_agent_h.outputs_monitor_h] OUTPUTS SENT TO THE COMPARATOR
+# UVM_INFO components/comparator.svh(82) @ 340: uvm_test_top.env_h.scoreboard_h.comparator_h [COMPARATOR] ACTUAL_SEQ_ITEM RECEIVED: -----------------------------------------------------------------------------------------------------------------------------------------
+# 
+#                     time: 340 HSEL: 0  HRDATA: 0  HRESP: 0   HREADY: 1, PREDICTOR_transaction_counter = 17, COMPARATOR_transaction_counter= 16
+# UVM_INFO components/comparator.svh(87) @ 340: uvm_test_top.env_h.scoreboard_h.comparator_h [SCOREBOARD] PASS
+# UVM_INFO components/comparator.svh(73) @ 340: uvm_test_top.env_h.scoreboard_h.comparator_h [COMPARATOR] RUN PHASE
+# my_test run phase
+# UVM_INFO verilog_src/uvm-1.1d/src/base/uvm_objection.svh(1267) @ 340: reporter [TEST_DONE] 'run' phase is ready to proceed to the 'extract' phase
+# -------------------------------------------------------------------------------------------------------------------------------------------------------------
+# INCORRECT FLAG ASSERTION/DEASSERTION COUNTER = 0
+# CORRECT FLAG ASSERTION/DEASSERTION COUNTER = 0
+# -------------------------------------------------------------------------------------------------------------------------------------------------------------
+# UVM_INFO components/scoreboard.svh(63) @ 340: uvm_test_top.env_h.scoreboard_h [SCOREBOARD] Scoreboard is stopping.
+# 
+# --- UVM Report Summary ---
+# 
+# ** Report counts by severity
+# UVM_INFO :  138
+# UVM_WARNING :    0
+# UVM_ERROR :    2
+# UVM_FATAL :    0
+# ** Report counts by id
+# [COMPARATOR]    52
+# [COMPARATOR_CHECK]     4
+# [PREDICTOR]    17
+# [Questa UVM]     2
+# [RNTST]     1
+# [SCOREBOARD]    20
+# [SEQUENCER]     3
+# [TEST_DONE]     1
+# [env_h]     6
+# [uvm_test_top.env_h.active_agent_h.driver_h]    17
+# [uvm_test_top.env_h.passive_agent_h.outputs_monitor_h]    17
+# ** Note: $finish    : F:/questasim/questasim64_2021.1/win64/../verilog_src/uvm-1.1d/src/base/uvm_root.svh(430)
+#    Time: 340 ns  Iteration: 68  Instance: /top_test_uvm
+# 1
+# Break in Task uvm_pkg/uvm_root::run_test at F:/questasim/questasim64_2021.1/win64/../verilog_src/uvm-1.1d/src/base/uvm_root.svh line 430

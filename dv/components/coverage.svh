@@ -9,6 +9,20 @@
  * 
  * Copyright (c) 2024 Abdelrahman Mohamad Yassien. All Rights Reserved.
  ******************************************************************/
+ // covergroup HWDATA_df_cg(input bit [DATA_WIDTH-1:0] position, input ref [DATA_WIDTH-1:0] vector);
+ //    df: coverpoint (vector & position) != 0;
+ //    option.per_instance = 1;
+ // endgroup : HWDATA_df_cg
+
+ // covergroup HWDATA_dt_cf(input bit [DATA_WIDTH-1:0] position, input ref [DATA_WIDTH-1:0] vector);
+ //    dt: coverpoint (0 => 1, 1 => 0);
+ //    option.per_instance = 1;
+ // endgroup : HWDATA_dt_cg
+
+ // covergroup HADDR_dt_cf(input bit [DATA_WIDTH-1:0] position, input ref [DATA_WIDTH-1:0] vector);
+ //    df: coverpoint (vector & postion) != 0;
+ //    option.per_instance = 1;
+ // endgroup : HADDR
 
 class coverage extends uvm_subscriber #(sequence_item);
   `uvm_component_utils(coverage);
