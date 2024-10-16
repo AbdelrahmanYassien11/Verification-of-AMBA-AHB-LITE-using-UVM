@@ -62,7 +62,8 @@ event interconnect_is_resetting;
 bit RECEIVING_PHASE_FLAG;
 bit CONTROL_PHASE_FLAG;
 bit DATA_PHASE_FLAG;
-bit OUTPUTS_PHASE_FLAG;
+bit OUTPUTS_PHASE_FLAG_1;
+bit OUTPUTS_PHASE_FLAG_2;
 
 bit last_test;
 
@@ -204,7 +205,8 @@ sequence_item previous_seq_item, seq_item;
     always@(posedge HRESETn_global) begin
         //$display("OUTPUT_PHASE_RESET: TIME:%0t SENDING OUTPUTS", $time());
         send_outputs();
-        OUTPUTS_PHASE_FLAG = 0;
+        OUTPUTS_PHASE_FLAG_1 = 0;
+        OUTPUTS_PHASE_FLAG_2 = 0;
     end
 
     always@(negedge clk) begin //DATA_PHASE //DATA_PHASE_FLAG might be obselete
@@ -221,15 +223,26 @@ sequence_item previous_seq_item, seq_item;
             end
             counter <= counter + 1;
             DATA_PHASE_FLAG = 0;
-            OUTPUTS_PHASE_FLAG = 1;
+            OUTPUTS_PHASE_FLAG_1 = 1;
         end
     end
 
     always@(negedge clk) begin
-        if(HRESETn && counter >= 3 && OUTPUTS_PHASE_FLAG) begin
-            //$display("OUTPUT_PHASE_SIGNALS: TIME:%0t SENDING OUTPUTS", $time());
+        if(HRESETn && counter >= 3 && OUTPUTS_PHASE_FLAG_1) begin
+            $display("OUTPUT_1_PHASE_SIGNALS: TIME:%0t SENDING OUTPUTS", $time());
+            counter = counter + 1;
+            OUTPUTS_PHASE_FLAG_1 = 0;
+            OUTPUTS_PHASE_FLAG_2 <= 1;
+            //$display("time:%0t send_outputs ", $time());
+        end
+        //wait(RECEIVING_PHASE_FLAG);
+    end
+
+    always@(negedge clk) begin
+        if(HRESETn && counter >= 4 && OUTPUTS_PHASE_FLAG_2) begin
+            $display("OUTPUT_2_PHASE_SIGNALS: TIME:%0t SENDING OUTPUTS", $time());
             send_outputs();
-            OUTPUTS_PHASE_FLAG = 0;
+            OUTPUTS_PHASE_FLAG_2 = 0;
             //$display("time:%0t send_outputs ", $time());
         end
         //wait(RECEIVING_PHASE_FLAG);

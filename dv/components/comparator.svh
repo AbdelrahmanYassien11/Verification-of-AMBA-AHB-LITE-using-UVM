@@ -88,12 +88,10 @@ class comparator extends uvm_component;
       end
       else begin
         `uvm_error("SCOREBOARD", "FAIL")
-              `uvm_info("COMPARATOR_CHECK", {"EXPECTED_SEQ_ITEM RECEIVED: ", 
-                      seq_item_expected.output2string()}, UVM_HIGH)
-              `uvm_info("COMPARATOR_CHECK", {"ACTUAL_SEQ_ITEM RECEIVED: ", 
-                      seq_item_actual.output2string()}, UVM_HIGH)
-
-
+              // `uvm_info("COMPARATOR_CHECK", {"EXPECTED_SEQ_ITEM RECEIVED: ", 
+              //         seq_item_expected.output2string()}, UVM_HIGH)
+              // `uvm_info("COMPARATOR_CHECK", {"ACTUAL_SEQ_ITEM RECEIVED: ", 
+              //         seq_item_actual.output2string()}, UVM_HIGH)
       end
 
       sequence_item::COMPARATOR_transaction_counter = sequence_item::COMPARATOR_transaction_counter + 1;

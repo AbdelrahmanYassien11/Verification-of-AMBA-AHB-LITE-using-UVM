@@ -40,8 +40,8 @@ module ahb_slave #(parameter ADDR_WIDTH = 32, DATA_WIDTH = 32, ADDR_DEPTH = 16, 
 
   reg [ADDR_WIDTH-1:0] HADDR_reg0;
   //reg [DATA_WIDTH-1:0] HWDATA_reg0;
-  //reg [ 1:0] HRESP_reg0;
-  reg        HREADYout_reg0;
+  reg [ 1:0] HRESP_reg0;
+  //reg        HREADYout_reg0;
   reg [ 2:0] HBURST_reg0;
   reg [ 1:0] HTRANS_reg0;
   reg        HREADYin_reg0;
@@ -137,6 +137,8 @@ module ahb_slave #(parameter ADDR_WIDTH = 32, DATA_WIDTH = 32, ADDR_DEPTH = 16, 
         HREADYin_reg1   <= HREADYin_reg0;
         HSIZE_reg1      <= HSIZE_reg0;
 
+        HRESP_reg1      <= HRESP_reg0;
+
         HWDATA_reg1     <= HWDATA;
       end 
    end
@@ -144,10 +146,8 @@ module ahb_slave #(parameter ADDR_WIDTH = 32, DATA_WIDTH = 32, ADDR_DEPTH = 16, 
 
   always@(*) begin //next_state logic
     if (HSEL_reg0 && HREADYin_reg0) begin
-      //$display("time: %0t aaaaaaaaaaaaaaaaaaaaa", $time());
       case(HBURST_reg0)
         SINGLE, INCR, INCR4, INCR8, INCR16, WRAP4, WRAP8, WRAP16: begin
-        //$display("time: %0t xxxxxxxxxxxxxxxxxxxxxxxxxxxxx", $time());
           case (HTRANS_reg0) 
             2'b00: begin 
               next_state    <= IDLE; 
@@ -198,15 +198,15 @@ module ahb_slave #(parameter ADDR_WIDTH = 32, DATA_WIDTH = 32, ADDR_DEPTH = 16, 
           burst_counter_reg = 0;        
           HRDATA_reg1 = HRDATA;
           if(HSEL_reg1 && HREADYin_reg1) begin
-            HRESP = 2'b00;
+            HRESP_reg0 = 2'b00;
             HREADYout_reg1 = 1'b1;
           end
           else if (HSEL_reg1 && !HREADYin_reg1) begin
-            HRESP = 2'b01;
+            HRESP_reg0 = 2'b01;
             HREADYout_reg1 = 1'b0;
           end
           else begin
-            HRESP = 2'b00;
+            HRESP_reg0 = 2'b00;
             HREADYout_reg1 = 1'b1;
           end
         end
@@ -215,7 +215,7 @@ module ahb_slave #(parameter ADDR_WIDTH = 32, DATA_WIDTH = 32, ADDR_DEPTH = 16, 
           HREADYout_reg1 = 1'b1;
           case(HTRANS_reg1)
             2'b00, 2'b01: begin
-              HRESP = 2'b00;
+              HRESP_reg0 = 2'b00;
               burst_counter_reg = 0 ;
             end
             2'b10, 2'b11: begin
@@ -249,7 +249,7 @@ module ahb_slave #(parameter ADDR_WIDTH = 32, DATA_WIDTH = 32, ADDR_DEPTH = 16, 
                 endcase // HBURST_reg1
               end
               else begin
-                HRESP = 2'b01; //error
+                HRESP_reg0 = 2'b01; //error
               end
             end
           endcase // HTRANS_reg1                    
@@ -261,7 +261,7 @@ module ahb_slave #(parameter ADDR_WIDTH = 32, DATA_WIDTH = 32, ADDR_DEPTH = 16, 
 
           case(HTRANS_reg1)
             2'b00, 2'b01: begin
-              HRESP         = 2'b00; //`HRESP_OKAY;
+              HRESP_reg0         = 2'b00; //`HRESP_OKAY;
               burst_counter_reg = 0 ;
             end
             2'b10, 2'b11: begin
@@ -294,14 +294,14 @@ module ahb_slave #(parameter ADDR_WIDTH = 32, DATA_WIDTH = 32, ADDR_DEPTH = 16, 
                 endcase // HBURST_reg1
               end 
               else begin
-                HRESP = 2'b01;
+                HRESP_reg0 = 2'b01;
               end
             end
           endcase // HTRANS_reg1  
         end
 
         ERROR: begin
-          HRESP     = 2'b01;
+          HRESP_reg0     = 2'b01;
           HREADYout_reg1 =  1'b1;
           HRDATA_reg1    = HRDATA;
         end
