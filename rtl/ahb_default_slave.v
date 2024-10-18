@@ -24,9 +24,14 @@ module ahb_default_slave #(parameter ADDR_WIDTH = 32, DATA_WIDTH = 32)
     reg [1:0] HRESP_reg;
     reg  HSEL_reg;
 
+  always @(negedge HCLK) begin
+    if(HRESETn) begin
+      HRESP <= HRESP_reg;
+    end 
+  end
 
   always @ (posedge HCLK or negedge HRESETn) begin
-    if (HRESETn==0) begin 
+    if (~HRESETn) begin 
       HREADYout     <= 1'b1;
       HRDATA        <= 'b0;
       state         <= IDLE;
@@ -34,7 +39,6 @@ module ahb_default_slave #(parameter ADDR_WIDTH = 32, DATA_WIDTH = 32)
     end 
     else begin 
       HSEL_reg      <= HSEL;
-      HRESP         <= HRESP_reg;
       state         <= next_state;
     end 
   end 

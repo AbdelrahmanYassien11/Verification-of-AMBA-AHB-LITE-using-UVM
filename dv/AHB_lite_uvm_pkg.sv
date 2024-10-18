@@ -117,8 +117,9 @@ package AHB_pkg;
 	`include "reset_sequence.svh"
 
 	`include "write_once_sequence.svh"
+	`include "read_once_sequence.svh"
 	`include "write_twice_sequence.svh"
-	// `include "read_once_sequence.svh"
+	
 	
 	// `include "write_all_sequence.svh"
 	// `include "read_all_sequence.svh"

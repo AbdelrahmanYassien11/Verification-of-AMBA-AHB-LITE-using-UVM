@@ -11,7 +11,7 @@ z2
 cModel Technology
 Z0 dF:/ic_design/repos/AHB_LITE/dv
 vahb_decoder
-Z1 !s110 1729041921
+Z1 !s110 1729282787
 !i10b 1
 !s100 ZKfnjcQcgA>S1`ES@7RU=1
 IOFETeeFh@CM7hn1G?k@N91
@@ -26,7 +26,7 @@ Z3 OL;L;2021.1;73
 r1
 !s85 0
 31
-Z4 !s108 1729041921.000000
+Z4 !s108 1729282787.000000
 Z5 !s107 ../rtl/ahb_lite.v|../rtl/ahb_decoder.v|../rtl/ahb_mux.v|../rtl/ahb_slave.v|../rtl/ahb_default_slave.v|
 Z6 !s90 -reportprogress|300|-f|dut.f|+cover|-covercells|
 !i113 0
@@ -36,14 +36,14 @@ Z9 tCvgOpt 0
 vahb_default_slave
 R1
 !i10b 1
-!s100 K3>jEAXW[`R=CZ4KLo7V82
-IT<@GBdKaQF`:L_Am_4RUm2
+!s100 ]_6nL>GIh3>?MWSac_<^11
+I371?TA7n>de8FeRIlKg<m2
 R0
-w1729041056
+w1729171541
 8../rtl/ahb_default_slave.v
 F../rtl/ahb_default_slave.v
 !i122 0
-L0 2 60
+L0 2 64
 R2
 R3
 r1
@@ -82,14 +82,14 @@ R9
 vahb_mux
 R1
 !i10b 1
-!s100 9kcWVHcGCNAzXS9Ej?YSK0
-I79H<W5nlQ5_f7?:[3T`mN3
+!s100 L@;_CeRb@ALTD=Ke[hEgL2
+I_]2fQ`g]_nI8hCQf0LHLX1
 R0
-w1728993738
+w1729260666
 8../rtl/ahb_mux.v
 F../rtl/ahb_mux.v
 !i122 0
-L0 3 124
+L0 3 127
 R2
 R3
 r1
@@ -106,13 +106,13 @@ XAHB_pkg
 !s115 inf
 Z10 DXx6 sv_std 3 std 0 22 9oUSJO;AeEaW`l:M@^WG92
 Z11 DXx6 mtiUvm 7 uvm_pkg 0 22 8V[`8]Q0W57le7Z>zYaAj1
-Z12 !s110 1729041922
+Z12 !s110 1729282788
 !i10b 1
-!s100 P`jVXYI?m;2jV0dnO_0KI3
-I?ANb2gVB;dYg2k3iW?89P3
+!s100 8N2KOhG_G2ZiF2h=X=4b]2
+I5GJ9WoT`]iOnWW344^cFT0
 S1
 R0
-w1729041916
+w1729282783
 8AHB_lite_uvm_pkg.sv
 FAHB_lite_uvm_pkg.sv
 FF:/questasim/questasim64_2021.1/uvm-1.1d/../verilog_src/uvm-1.1d/src/uvm_macros.svh
@@ -137,6 +137,7 @@ Fcomponents/comparator.svh
 Fsequence/base_sequence.svh
 Fsequence/reset_sequence.svh
 Fsequence/write_once_sequence.svh
+Fsequence/read_once_sequence.svh
 Fsequence/write_twice_sequence.svh
 Fcomponents/driver.svh
 Fcomponents/inputs_monitor.svh
@@ -152,13 +153,13 @@ Ftests/write_once_test.svh
 Ftests/write_twice_test.svh
 !i122 1
 L0 1 0
-V?ANb2gVB;dYg2k3iW?89P3
+V5GJ9WoT`]iOnWW344^cFT0
 R3
 r1
 !s85 0
 31
 R4
-Z13 !s107 tests/write_twice_test.svh|tests/write_once_test.svh|tests/reset_test.svh|tests/base_test.svh|components/env.svh|components/coverage.svh|components/scoreboard.svh|components/passive_agent.svh|components/active_agent.svh|components/outputs_monitor.svh|components/inputs_monitor.svh|components/driver.svh|sequence/write_twice_sequence.svh|sequence/write_once_sequence.svh|sequence/reset_sequence.svh|sequence/base_sequence.svh|components/comparator.svh|components/predictor.svh|components/env_config.svh|components/active_agent_config.svh|components/passive_agent_config.svh|components/sequencer.svh|sequence_item/sequence_item.svh|F:/questasim/questasim64_2021.1/uvm-1.1d/../verilog_src/uvm-1.1d/src/macros/uvm_deprecated_defines.svh|F:/questasim/questasim64_2021.1/uvm-1.1d/../verilog_src/uvm-1.1d/src/macros/uvm_reg_defines.svh|F:/questasim/questasim64_2021.1/uvm-1.1d/../verilog_src/uvm-1.1d/src/macros/uvm_callback_defines.svh|F:/questasim/questasim64_2021.1/uvm-1.1d/../verilog_src/uvm-1.1d/src/macros/uvm_sequence_defines.svh|F:/questasim/questasim64_2021.1/uvm-1.1d/../verilog_src/uvm-1.1d/src/tlm1/uvm_tlm_imps.svh|F:/questasim/questasim64_2021.1/uvm-1.1d/../verilog_src/uvm-1.1d/src/macros/uvm_tlm_defines.svh|F:/questasim/questasim64_2021.1/uvm-1.1d/../verilog_src/uvm-1.1d/src/macros/uvm_printer_defines.svh|F:/questasim/questasim64_2021.1/uvm-1.1d/../verilog_src/uvm-1.1d/src/macros/uvm_object_defines.svh|F:/questasim/questasim64_2021.1/uvm-1.1d/../verilog_src/uvm-1.1d/src/macros/uvm_phase_defines.svh|F:/questasim/questasim64_2021.1/uvm-1.1d/../verilog_src/uvm-1.1d/src/macros/uvm_message_defines.svh|F:/questasim/questasim64_2021.1/uvm-1.1d/../verilog_src/uvm-1.1d/src/macros/uvm_version_defines.svh|F:/questasim/questasim64_2021.1/uvm-1.1d/../verilog_src/uvm-1.1d/src/uvm_macros.svh|top_test_uvm.sv|interface/AHB_lite_interface.sv|AHB_lite_uvm_pkg.sv|
+Z13 !s107 tests/write_twice_test.svh|tests/write_once_test.svh|tests/reset_test.svh|tests/base_test.svh|components/env.svh|components/coverage.svh|components/scoreboard.svh|components/passive_agent.svh|components/active_agent.svh|components/outputs_monitor.svh|components/inputs_monitor.svh|components/driver.svh|sequence/write_twice_sequence.svh|sequence/read_once_sequence.svh|sequence/write_once_sequence.svh|sequence/reset_sequence.svh|sequence/base_sequence.svh|components/comparator.svh|components/predictor.svh|components/env_config.svh|components/active_agent_config.svh|components/passive_agent_config.svh|components/sequencer.svh|sequence_item/sequence_item.svh|F:/questasim/questasim64_2021.1/uvm-1.1d/../verilog_src/uvm-1.1d/src/macros/uvm_deprecated_defines.svh|F:/questasim/questasim64_2021.1/uvm-1.1d/../verilog_src/uvm-1.1d/src/macros/uvm_reg_defines.svh|F:/questasim/questasim64_2021.1/uvm-1.1d/../verilog_src/uvm-1.1d/src/macros/uvm_callback_defines.svh|F:/questasim/questasim64_2021.1/uvm-1.1d/../verilog_src/uvm-1.1d/src/macros/uvm_sequence_defines.svh|F:/questasim/questasim64_2021.1/uvm-1.1d/../verilog_src/uvm-1.1d/src/tlm1/uvm_tlm_imps.svh|F:/questasim/questasim64_2021.1/uvm-1.1d/../verilog_src/uvm-1.1d/src/macros/uvm_tlm_defines.svh|F:/questasim/questasim64_2021.1/uvm-1.1d/../verilog_src/uvm-1.1d/src/macros/uvm_printer_defines.svh|F:/questasim/questasim64_2021.1/uvm-1.1d/../verilog_src/uvm-1.1d/src/macros/uvm_object_defines.svh|F:/questasim/questasim64_2021.1/uvm-1.1d/../verilog_src/uvm-1.1d/src/macros/uvm_phase_defines.svh|F:/questasim/questasim64_2021.1/uvm-1.1d/../verilog_src/uvm-1.1d/src/macros/uvm_message_defines.svh|F:/questasim/questasim64_2021.1/uvm-1.1d/../verilog_src/uvm-1.1d/src/macros/uvm_version_defines.svh|F:/questasim/questasim64_2021.1/uvm-1.1d/../verilog_src/uvm-1.1d/src/uvm_macros.svh|top_test_uvm.sv|interface/AHB_lite_interface.sv|AHB_lite_uvm_pkg.sv|
 Z14 !s90 -reportprogress|300|-f|tb.f|+cover|-covercells|
 !i113 0
 R7
@@ -169,14 +170,14 @@ n@a@h@b_pkg
 vahb_slave
 R1
 !i10b 1
-!s100 ;e6@YBDc32`bX^lXg[CmD1
-I`7f_C@UNfo80S?XY<YcUO1
+!s100 1@I?V`QD2N?7`lMPWTGeK1
+I2Li[f[Nk5o1ga6K[>l3=k0
 R0
-w1729034335
+w1729276594
 8../rtl/ahb_slave.v
 F../rtl/ahb_slave.v
 !i122 0
-L0 17 307
+L0 17 308
 R2
 R3
 r1
@@ -192,14 +193,14 @@ R9
 Yinf
 R10
 R11
-Z16 DXx4 work 7 AHB_pkg 0 22 ?ANb2gVB;dYg2k3iW?89P3
+Z16 DXx4 work 7 AHB_pkg 0 22 5GJ9WoT`]iOnWW344^cFT0
 R12
 !i10b 1
-!s100 C;G5U>Ue4nVSj77AlFfHb1
-ITZaJe5?_VLmPg4U]]jO4C1
+!s100 >@]bzEUcAcn1S9WHC4W^S0
+ITUlooQoK>VKneWX8hlnHO3
 S1
 R0
-w1729040678
+w1729187568
 8interface/AHB_lite_interface.sv
 Finterface/AHB_lite_interface.sv
 !i122 1
@@ -219,8 +220,8 @@ R15
 R9
 Ttop_optimized
 !s11d AHB_pkg F:/ic_design/repos/AHB_LITE/dv/work 1 inf 1 F:/ic_design/repos/AHB_LITE/dv/work 
-!s110 1729041924
-V2`=65LmaeE0QP0EN3K:9M3
+!s110 1729282790
+V^MCCSXRKz6cYFfO`>4d``0
 04 12 4 work top_test_uvm fast 0
 !s124 OEM100
 o+acc +cover=bcefsx+ahb_lite(rtl)

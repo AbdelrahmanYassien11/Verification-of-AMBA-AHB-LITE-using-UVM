@@ -38,24 +38,27 @@ module ahb_mux #(parameter ADDR_WIDTH = 32, NO_OF_PERIPHERALS = 4, P_BITS = $clo
   localparam P_HSEL_bus_reset = 4'b0000;
 
   wire [3:0] HSEL_bus      = {HSELd,HSEL2,HSEL1,HSEL0};
-  reg  [3:0] HSEL_bus_reg;
+  reg  [3:0] HSEL_bus_reg_c, HSEL_bus_reg_d;
 
   always @ (negedge HRESETn or posedge HCLK) begin
     if (~HRESETn) begin
-      HSEL_bus_reg <= 'h0;
+      HSEL_bus_reg_c <= 'h0;
+      HSEL_bus_reg_d <= 'h0;
     end
     else begin
       if(HREADY0 && HREADY1 && HREADY2 && HREADYd) begin
-        HSEL_bus_reg <= HSEL_bus; // default HREADY must be 1'b1
+        HSEL_bus_reg_c <= HSEL_bus; // default HREADY must be 1'b1
+        HSEL_bus_reg_d <= HSEL_bus_reg_c;
       end
       else begin
-        HSEL_bus_reg <= HSEL_bus_reg;
+        HSEL_bus_reg_c <= HSEL_bus_reg_c;
+        HSEL_bus_reg_d <= HSEL_bus_reg_d;
       end
     end
   end
 
-  always @ (posedge HCLK) begin
-    case(HSEL_bus_reg) 
+  always @ (*) begin
+    case(HSEL_bus_reg_d) 
       P_HSEL_bus0: HREADY <= HREADY0; 
       P_HSEL_bus1: HREADY <= HREADY1;
       P_HSEL_bus2: HREADY <= HREADY2;
@@ -65,8 +68,8 @@ module ahb_mux #(parameter ADDR_WIDTH = 32, NO_OF_PERIPHERALS = 4, P_BITS = $clo
     endcase
   end
 
-  always @ (posedge HCLK) begin
-    case(HSEL_bus_reg) 
+  always @ (*) begin
+    case(HSEL_bus_reg_d) 
       P_HSEL_bus0: HRDATA <= HRDATA0;
       P_HSEL_bus1: HRDATA <= HRDATA1;
       P_HSEL_bus2: HRDATA <= HRDATA2;
@@ -76,8 +79,8 @@ module ahb_mux #(parameter ADDR_WIDTH = 32, NO_OF_PERIPHERALS = 4, P_BITS = $clo
     endcase
   end
 
-  always @ (posedge HCLK) begin
-    case(HSEL_bus_reg) 
+  always @ (*) begin
+    case(HSEL_bus_reg_d) 
       P_HSEL_bus0: HRESP <= HRESP0;
       P_HSEL_bus1: HRESP <= HRESP1;
       P_HSEL_bus2: HRESP <= HRESP2;
@@ -90,8 +93,8 @@ module ahb_mux #(parameter ADDR_WIDTH = 32, NO_OF_PERIPHERALS = 4, P_BITS = $clo
 
 
 
-  // always @ (HSEL_bus_reg or HREADY0 or HREADY1 or HREADY2 or HREADYd) begin
-  //   case(HSEL_bus_reg) 
+  // always @ (HSEL_bus_reg_c or HREADY0 or HREADY1 or HREADY2 or HREADYd) begin
+  //   case(HSEL_bus_reg_c) 
   //     P_HSEL_bus0: HREADY = HREADY0; 
   //     P_HSEL_bus1: HREADY = HREADY1;
   //     P_HSEL_bus2: HREADY = HREADY2;
@@ -101,8 +104,8 @@ module ahb_mux #(parameter ADDR_WIDTH = 32, NO_OF_PERIPHERALS = 4, P_BITS = $clo
   //   endcase
   // end
 
-  // always @ (HSEL_bus_reg or HRDATA0 or HRDATA1 or HRDATA2 or HRDATAd) begin
-  //   case(HSEL_bus_reg) 
+  // always @ (HSEL_bus_reg_c or HRDATA0 or HRDATA1 or HRDATA2 or HRDATAd) begin
+  //   case(HSEL_bus_reg_c) 
   //     P_HSEL_bus0: HRDATA = HRDATA0;
   //     P_HSEL_bus1: HRDATA = HRDATA1;
   //     P_HSEL_bus2: HRDATA = HRDATA2;
@@ -112,8 +115,8 @@ module ahb_mux #(parameter ADDR_WIDTH = 32, NO_OF_PERIPHERALS = 4, P_BITS = $clo
   //   endcase
   // end
 
-  // always @ (HSEL_bus_reg or HRESP0 or HRESP1 or HRESP2 or HRESPd) begin
-  //   case(HSEL_bus_reg) 
+  // always @ (HSEL_bus_reg_c or HRESP0 or HRESP1 or HRESP2 or HRESPd) begin
+  //   case(HSEL_bus_reg_c) 
   //     P_HSEL_bus0: HRESP = HRESP0;
   //     P_HSEL_bus1: HRESP = HRESP1;
   //     P_HSEL_bus2: HRESP = HRESP2;

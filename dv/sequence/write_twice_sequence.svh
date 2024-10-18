@@ -21,6 +21,7 @@ class write_twice_sequence extends base_sequence;
   // Handle to the reset sequence
   reset_sequence reset_sequence_h;
   write_once_sequence write_once_sequence_h;
+  read_once_sequence read_once_sequence_h;
 
   // Constructor
   function new(string name = "write_twice_sequence");
@@ -34,12 +35,14 @@ class write_twice_sequence extends base_sequence;
     // Create an instance of the reset sequence
     reset_sequence_h = reset_sequence::type_id::create("reset_sequence_h");
     write_once_sequence_h = write_once_sequence::type_id::create("write_once_sequence_h");
+    read_once_sequence_h = read_once_sequence::type_id::create("read_once_sequence_h");
   endtask : pre_body
 
   // Main task body for executing the write operation
   virtual task body();
 
     write_once_sequence::reset_flag = 1'b1;
+    read_once_sequence::reset_flag = 1'b1;
 
 
     reset_sequence_h.start(sequencer_h);
@@ -121,9 +124,15 @@ class write_twice_sequence extends base_sequence;
 
     finish_item(seq_item);
 
-    sequence_item::last_item = 1'b1;
+    write_once_sequence_h.start(sequencer_h);
+    write_once_sequence_h.start(sequencer_h);
     write_once_sequence_h.start(sequencer_h);
 
+    for(int i = 0; i<10; i++) begin
+      read_once_sequence_h.start(sequencer_h);
+    end
+            sequence_item::last_item = 1'b1;
+    read_once_sequence_h.start(sequencer_h);
 
 
     // Log the operation for debugging

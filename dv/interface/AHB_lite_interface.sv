@@ -156,7 +156,6 @@ sequence_item previous_seq_item, seq_item;
             if(counter >= 1 && RECEIVING_PHASE_FLAG) begin
                 $display("CONTROL PHASE: TIME:%0t ASSIGINING SIGNALS", $time());
          		HRESETn <= seq_item.HRESETn;
-                wait(HREADY == 1'b1);
                 HWRITE  <= seq_item.HWRITE;
                 HTRANS  <= seq_item.HTRANS;
                 HSIZE   <= seq_item.HSIZE;
@@ -173,6 +172,7 @@ sequence_item previous_seq_item, seq_item;
                 HADDR_reg   <= seq_item.HADDR;
                 HWDATA_reg  <= seq_item.HWDATA;
 
+                wait(HREADY == 1'b1);
                 if(seq_item.HRESETn) begin
                     counter <= counter + 1;
                     DATA_PHASE_FLAG = 1;
@@ -212,7 +212,7 @@ sequence_item previous_seq_item, seq_item;
     always@(negedge clk) begin //DATA_PHASE //DATA_PHASE_FLAG might be obselete
         if((counter >= 2) && HRESETn /*&& DATA_PHASE_FLAG*/ ) begin // HRESETn to make it work after the reset cycle is done
             //$display("DATA_PHASE: TIME:%0t ASSIGNING SIGNALS", $time());
-            wait(HREADY == 1'b1);                               // The counter & data_phase_flag to make it work after a transaction is sent after reset cycle is done
+            //wait(HREADY == 1'b1);                               // The counter & data_phase_flag to make it work after a transaction is sent after reset cycle is done
             if(HWRITE_reg == 1'b1) begin
                 //$display("DATA_PHASE_WRITE: TIME:%0t ASSIGNING SIGNALS", $time());
                 write_AHB(HWDATA_reg);
@@ -238,7 +238,7 @@ sequence_item previous_seq_item, seq_item;
         //wait(RECEIVING_PHASE_FLAG);
     end
 
-    always@(negedge clk) begin
+    always@(posedge clk) begin
         if(HRESETn && counter >= 4 && OUTPUTS_PHASE_FLAG_2) begin
             $display("OUTPUT_2_PHASE_SIGNALS: TIME:%0t SENDING OUTPUTS", $time());
             send_outputs();
@@ -247,6 +247,7 @@ sequence_item previous_seq_item, seq_item;
         end
         //wait(RECEIVING_PHASE_FLAG);
     end
+
 
     // Task: Write data into the AHB 
     task write_AHB(input bit [ADDR_WIDTH-1:0] iHWDATA);
@@ -268,7 +269,7 @@ sequence_item previous_seq_item, seq_item;
             end
 
             NONSEQ, SEQ: begin
-                wait(HREADY === 1'b1);
+                wait(HREADY == 1'b1);
             end
         endcase // HTRANS
     endtask : read_AHB
@@ -306,12 +307,6 @@ sequence_item previous_seq_item, seq_item;
         outputs_monitor_h.write_to_monitor(HRDATA, HRESP, HREADY);
     endfunction : send_outputs
 
-
-    // always@(negedge clk) begin
-    //     if(HREADY === 1'b1 && HRESETn === 1'b1) begin
-    //         send_outputs();
-    //     end
-    // end
 
     function void create_sequence_item();
         //$display("CREATEDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD");

@@ -12,7 +12,7 @@ vsim top_optimized -cover -solvefaildebug=2 +UVM_TESTNAME=write_twice_test
 #sim:/top_test_uvm/f_if/counter
 #add wave -position insertpoint  \
 #sim:/top_test_uvm/f_if/RECIEVING_PHASE_FLAG
-run 300
+run -all
 #set NoQuitOnFinish 1
 #onbreak {resume}
 #log /* -r
