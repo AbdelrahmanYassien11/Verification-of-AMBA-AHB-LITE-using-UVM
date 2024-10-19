@@ -99,19 +99,21 @@ module ahb_slave #(parameter ADDR_WIDTH = 32, DATA_WIDTH = 32, ADDR_DEPTH = 16, 
    /*********************************************************/
 
 
-    always@(negedge HCLK) begin
-      if(HRESETn) begin
+    always@(negedge HCLK or negedge HRESETn) begin
+      if (HRESETn==0) begin
+        HRESP         <= 2'b00; 
+        HREADYout     <= 1'b1;
+        HRDATA_reg_s    <= 'b0;
+      end 
+      else begin
         HREADYout                 <= HREADYout_reg_d;
         HRDATA_reg_s              <= HRDATA_reg_d;
-        HRESP                     <= HRESP_reg_d;
+        HRESP                     <= HRESP_reg_d;        
       end
     end
 
     always @ (posedge HCLK or negedge HRESETn) begin
       if (HRESETn==0) begin
-        HRESP         <= 2'b00; 
-        HREADYout     <= 1'b1;
-        HRDATA_reg_s    <= 'b0;
         state         <= IDLE;
         burst_counter_reg <= 0;
         wrap_counter_reg <= 0;
@@ -139,6 +141,11 @@ module ahb_slave #(parameter ADDR_WIDTH = 32, DATA_WIDTH = 32, ADDR_DEPTH = 16, 
         HSIZE_reg_d      <= HSIZE_reg_c;
 
         HWDATA_reg_d     <= HWDATA;
+
+
+        // HREADYout                 <= HREADYout_reg_d;
+        // HRDATA_reg_s              <= HRDATA_reg_d;
+        // HRESP                     <= HRESP_reg_d;
       end 
    end
 

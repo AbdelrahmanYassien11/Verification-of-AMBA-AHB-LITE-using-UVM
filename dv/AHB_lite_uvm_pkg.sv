@@ -52,15 +52,25 @@ package AHB_pkg;
 	// parameter WRAP16 		= 3'b110;
 	// parameter INCR16 		= 3'b111;
 
-	// //HSIZE PARAMETERS
-	// parameter BYTE_P		= 3'b000;
-	// parameter HALFWORD_P	= 3'b001;
-	// parameter WORD_P		= 3'b010;
-	// parameter 2WORD_P		= 3'b011;
-	// parameter 4WORD_P		= 3'b100;
-	// parameter 8WORD_P		= 3'b101;
-	// parameter 16WORD_P		= 3'b110;
-	// parameter 32WORD_P		= 3'b111;
+	//HSIZE PARAMETERS
+	parameter BYTE_P		= 3'b000;
+	parameter HALFWORD_P	= 3'b001;
+	parameter WORD_P		= 3'b010;
+	parameter WORD2_P		= 3'b011;
+	parameter WORD4_P		= 3'b100;
+	parameter WORD8_P		= 3'b101;
+	parameter WORD16_P		= 3'b110;
+	parameter WORD32_P		= 3'b111;
+
+
+	parameter BYTE_WIDTH		= 8;
+	parameter HALFWORD_WIDTH	= 16;
+	parameter WORD_WIDTH		= 32;
+	parameter WORD2_WIDTH		= 64;
+	parameter WORD4_WIDTH		= 128;
+	parameter WORD8_WIDTH		= 256;
+	parameter WORD16_WIDTH		= 512;
+	parameter WORD32_WIDTH		= 1024;
 
 
 	//HPROT PARAMETERS

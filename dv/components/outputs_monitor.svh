@@ -61,7 +61,7 @@ class outputs_monitor extends uvm_monitor;
   endfunction
 
   // Virtual function to write data to the monitor
-  virtual function void write_to_monitor ( input bit[DATA_WIDTH-1:0] iHRDATA, input bit [RESP_WIDTH:0] iHRESP, input bit iHREADY );
+  virtual function void write_to_monitor ( input logic [DATA_WIDTH-1:0] iHRDATA, input logic [RESP_WIDTH:0] iHRESP, input logic iHREADY );
 
     // Create a new sequence item and populate it with data
     sequence_item seq_item;
