@@ -152,42 +152,37 @@ module ahb_slave #(parameter ADDR_WIDTH = 32, DATA_WIDTH = 32, ADDR_DEPTH = 16, 
 
   always@(*) begin //next_state logic
     if (HSEL_reg_c && HREADYin_reg_c) begin
-      case(HBURST_reg_c)
-        SINGLE, INCR, INCR4, INCR8, INCR16, WRAP4, WRAP8, WRAP16: begin
-          case (HTRANS_reg_c) 
-            2'b00: begin 
-              next_state    <= IDLE; 
+
+      case (HTRANS_reg_c) 
+        2'b00: begin 
+          next_state    <= IDLE; 
+        end 
+        2'b01: begin 
+          next_state    <= BUSY; 
+        end 
+        2'b10, 2'b11: begin 
+          //HREADYout <= 1'b0; 
+          if((HADDR_reg_c + burst_counter < ADDR_DEPTH) & (HADDR_reg_c + wrap_counter < ADDR_DEPTH)) begin 
+            if (HWRITE_reg_c) begin 
+              next_state <= WRITE; 
             end 
-            2'b01: begin 
-              next_state    <= BUSY; 
-            end 
-            2'b10, 2'b11: begin 
-              //HREADYout <= 1'b0; 
-              if((HADDR_reg_c + burst_counter < ADDR_DEPTH) & (HADDR_reg_c + wrap_counter < ADDR_DEPTH)) begin 
-                if (HWRITE_reg_c) begin 
-                  next_state <= WRITE; 
-                end 
-                else if(~HWRITE_reg_c) begin 
-                  next_state <= READ; 
-                end
-                else begin 
-                  next_state <= ERROR; 
-                end 
-              end 
-              else begin 
-                next_state <= ERROR; 
-              end
+            else if(~HWRITE_reg_c) begin 
+              next_state <= READ; 
             end
-            default: begin
-              next_state <= IDLE;
+            else begin 
+              next_state <= ERROR; 
             end 
-          endcase //HTRANS
+          end 
+          else begin 
+            next_state <= ERROR; 
+          end
         end
         default: begin
           next_state <= IDLE;
-        end
-      endcase // HBURST
+        end 
+      endcase //HTRANS_reg_c
     end
+    
     else if(HSEL_reg_c && !HREADYin_reg_c)begin
       next_state <= ERROR;
     end 
@@ -257,6 +252,7 @@ module ahb_slave #(parameter ADDR_WIDTH = 32, DATA_WIDTH = 32, ADDR_DEPTH = 16, 
               else begin
                 HRESP_reg_d = 2'b01; //error
                 HRDATA_reg_d = HRDATA;
+                HREADYout_reg_d = 0;
               end
             end
           endcase // HTRANS_reg_d                    
@@ -303,15 +299,23 @@ module ahb_slave #(parameter ADDR_WIDTH = 32, DATA_WIDTH = 32, ADDR_DEPTH = 16, 
               else begin
                 HRESP_reg_d = 2'b01;
                 HRDATA_reg_d = HRDATA;
+                HREADYout_reg_d = 0;
               end
             end
           endcase // HTRANS_reg_d  
         end
 
         ERROR: begin
-          HRESP_reg_d     = 2'b01;
-          HREADYout_reg_d =  1'b1;
-          HRDATA_reg_d    = HRDATA;
+          if(HREADYin_reg_d) begin
+            HRESP_reg_d     = 2'b01;
+            HREADYout_reg_d =  1'b1;
+            HRDATA_reg_d    = HRDATA;
+          end
+          else begin
+            HRESP_reg_d     = 2'b01;
+            HREADYout_reg_d =  1'b1;
+            HRDATA_reg_d    = HRDATA;
+          end
         end
       endcase // state
   end

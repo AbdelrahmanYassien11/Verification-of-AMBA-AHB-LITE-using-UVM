@@ -190,7 +190,8 @@ class predictor extends uvm_subscriber #(sequence_item);
         case(HBURST)
           INCR, INCR4, INCR8, INCR16: begin
             write_process(burst_counter);
-            burst_counter = burst_counter +1;
+            if(HADDR_VALID + burst_counter < ADDR_DEPTH)
+              burst_counter = burst_counter +1;
           end
 
           WRAP4, WRAP8, WRAP16: begin
@@ -202,7 +203,8 @@ class predictor extends uvm_subscriber #(sequence_item);
               endcase // HBURST
             end
             write_process(wrap_counter);
-            wrap_counter = wrap_counter -1;
+            if(HADDR_VALID + wrap_counter < ADDR_DEPTH)
+              wrap_counter = wrap_counter -1;
           end
 
           default: begin
@@ -306,7 +308,8 @@ class predictor extends uvm_subscriber #(sequence_item);
 
           INCR, INCR4, INCR8, INCR16: begin
             read_process(burst_counter);
-            burst_counter = burst_counter +1;
+            if(HADDR_VALID + burst_counter < ADDR_DEPTH)
+              burst_counter = burst_counter +1;
           end
 
           WRAP4, WRAP8, WRAP16: begin
@@ -318,7 +321,8 @@ class predictor extends uvm_subscriber #(sequence_item);
               endcase // HBURST
             end
             read_process(wrap_counter);
-            wrap_counter = wrap_counter -1;
+            if(HADDR_VALID + wrap_counter < ADDR_DEPTH)
+              wrap_counter = wrap_counter -1;
           end
 
           default: begin
