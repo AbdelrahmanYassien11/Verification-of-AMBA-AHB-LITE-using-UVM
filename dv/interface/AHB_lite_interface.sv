@@ -37,7 +37,7 @@ logic   [DATA_WIDTH-1:0]  HRDATA;
 logic   [RESP_WIDTH:0]  HRESP; 
 logic   [READY_WIDTH:0]  HREADY;  
 
-
+bit     [BITS_FOR_PERIPHERALS-1:0]  error_to_idle;
 logic   HRESETn_reg;    // reset (active low)
 
 bit   HWRITE_reg;
@@ -138,7 +138,6 @@ sequence_item previous_seq_item, seq_item;
 
             RECEIVING_PHASE_FLAG = 1;
             
-            send_inputs(iHRESETn, iHWRITE, iHTRANS, iHSIZE, iHBURST, iHPROT, iHADDR, iHWDATA, iRESET_op, iWRITE_op, iTRANS_op, iBURST_op, iSIZE_op);
         end
          if(last_item)begin
             //$display("RECIEVING PHASE: TIME: %0t WAITING FOR COUNTERS ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~",$time());
@@ -154,25 +153,37 @@ sequence_item previous_seq_item, seq_item;
     always@(negedge clk or negedge HRESETn_global ) begin //CONTROL_PHASE
         if(HRESETn_global)begin
             if(counter >= 1 && RECEIVING_PHASE_FLAG) begin
+                if(counter > 1) begin
+                    wait(HREADY == 1);
+                    $display("CONTROL PHASE: TIME:%0t WAITING HREADY", $time());
+                end
                 $display("CONTROL PHASE: TIME:%0t ASSIGINING SIGNALS", $time());
-         		HRESETn <= seq_item.HRESETn;
-                HWRITE  <= seq_item.HWRITE;
-                HTRANS  <= seq_item.HTRANS;
-                HSIZE   <= seq_item.HSIZE;
-                HBURST  <= seq_item.HBURST;
-                HPROT   <= seq_item.HPROT;
-                HADDR   <= seq_item.HADDR;
+                if(~error_to_idle) begin
+             		HRESETn <= seq_item.HRESETn;
+                    HWRITE  <= seq_item.HWRITE;
+                    HTRANS  <= seq_item.HTRANS;
+                    HSIZE   <= seq_item.HSIZE;
+                    HBURST  <= seq_item.HBURST;
+                    HPROT   <= seq_item.HPROT;
+                    HADDR   <= seq_item.HADDR;
 
-                HRESETn_reg <= seq_item.HRESETn;
-                HWRITE_reg  <= seq_item.HWRITE;
-                HTRANS_reg  <= seq_item.HTRANS;
-                HSIZE_reg   <= seq_item.HSIZE;
-                HBURST_reg  <= seq_item.HBURST;
-                HPROT_reg   <= seq_item.HPROT;
-                HADDR_reg   <= seq_item.HADDR;
-                HWDATA_reg  <= seq_item.HWDATA;
+                    HRESETn_reg <= seq_item.HRESETn;
+                    HWRITE_reg  <= seq_item.HWRITE;
+                    HTRANS_reg  <= seq_item.HTRANS;
+                    HSIZE_reg   <= seq_item.HSIZE;
+                    HBURST_reg  <= seq_item.HBURST;
+                    HPROT_reg   <= seq_item.HPROT;
+                    HADDR_reg   <= seq_item.HADDR;
+                    HWDATA_reg  <= seq_item.HWDATA;
 
-                wait(HREADY == 1'b1);
+                    send_inputs(seq_item.HRESETn, seq_item.HWRITE, seq_item.HTRANS, seq_item.HSIZE, seq_item.HBURST, seq_item.HPROT, seq_item.HADDR, seq_item.HWDATA, seq_item.RESET_op, seq_item.WRITE_op, seq_item.TRANS_op, seq_item.BURST_op, seq_item.SIZE_op);
+                end
+                else begin
+                    HTRANS  <= 0;
+                    HTRANS_reg  <= 0;
+                    send_inputs(seq_item.HRESETn, seq_item.HWRITE, 0, seq_item.HSIZE, seq_item.HBURST, seq_item.HPROT, seq_item.HADDR, seq_item.HWDATA, seq_item.RESET_op, seq_item.WRITE_op, seq_item.TRANS_op, seq_item.BURST_op, seq_item.SIZE_op);
+                end
+
                 if(seq_item.HRESETn) begin
                     counter <= counter + 1;
                     DATA_PHASE_FLAG = 1;

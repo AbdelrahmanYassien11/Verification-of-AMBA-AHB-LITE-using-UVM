@@ -15,6 +15,7 @@ module ahb_lite #(parameter P_BITS = $clog2(NO_OF_PERIPHERALS), ADDR_WIDTH = 32,
       input   wire  [3:0]            HPROT,
       input   wire  [DATA_WIDTH-1:0] HWDATA,
 
+      output    [3:0]                error_idle_control,
       output    [DATA_WIDTH-1:0]  HRDATA,
       output    [1:0]             HRESP,
       output                      HREADY
@@ -26,7 +27,7 @@ module ahb_lite #(parameter P_BITS = $clog2(NO_OF_PERIPHERALS), ADDR_WIDTH = 32,
    wire [DATA_WIDTH-1:0] HRDATA_bus [3:0]; 
    wire [1:0]            HRESP_bus  [3:0]; 
    wire                  HREADY_bus [3:0]; 
-
+   
    wire                  HREADYin;
    assign HREADYin = HREADY;
    /*********************************************************/
@@ -83,9 +84,11 @@ module ahb_lite #(parameter P_BITS = $clog2(NO_OF_PERIPHERALS), ADDR_WIDTH = 32,
                     .HSIZE               (HSIZE),
                     .HBURST             (HBURST),
                     .HWDATA             (HWDATA),
+                    .HREADYin           (HREADY),
+
+                    .error_idle_control (error_idle_control[3]),                    
                     .HRDATA      (HRDATA_bus[3]),
                     .HRESP        (HRESP_bus[3]),
-                    .HREADYin           (HREADY),
                     .HREADYout   (HREADY_bus[3])
                     );
    /*********************************************************/
@@ -102,6 +105,7 @@ module ahb_lite #(parameter P_BITS = $clog2(NO_OF_PERIPHERALS), ADDR_WIDTH = 32,
             .HWDATA                 (HWDATA),
             .HREADYin                (HREADY),
 
+            .error_idle_control (error_idle_control[0]),
             .HRDATA           (HRDATA_bus[0]),
             .HRESP             (HRESP_bus[0]),
             .HREADYout        (HREADY_bus[0])
@@ -120,6 +124,7 @@ module ahb_lite #(parameter P_BITS = $clog2(NO_OF_PERIPHERALS), ADDR_WIDTH = 32,
             .HWDATA                 (HWDATA),
             .HREADYin               (HREADY),
 
+            .error_idle_control (error_idle_control[1]),
             .HRDATA          (HRDATA_bus[1]),
             .HRESP            (HRESP_bus[1]),
             .HREADYout       (HREADY_bus[1])
@@ -128,8 +133,8 @@ module ahb_lite #(parameter P_BITS = $clog2(NO_OF_PERIPHERALS), ADDR_WIDTH = 32,
    /*********************************************************/
    ahb_slave #(.ADDR_WIDTH(ADDR_WIDTH), .DATA_WIDTH(DATA_WIDTH), .ADDR_DEPTH(ADDR_DEPTH)) slave2 
             (
-            .HRESETn(HRESETn),
-            .HCLK                    (HCLK),
+            .HRESETn               (HRESETn),
+            .HCLK                     (HCLK),
             .HSEL              (HSEL_bus[2]),
             .HADDR                   (HADDR),
             .HTRANS                 (HTRANS),
@@ -139,6 +144,7 @@ module ahb_lite #(parameter P_BITS = $clog2(NO_OF_PERIPHERALS), ADDR_WIDTH = 32,
             .HWDATA                 (HWDATA),
             .HREADYin               (HREADY),
 
+            .error_idle_control (error_idle_control[2]),
             .HRDATA          (HRDATA_bus[2]),
             .HRESP            (HRESP_bus[2]),
             .HREADYout       (HREADY_bus[2])

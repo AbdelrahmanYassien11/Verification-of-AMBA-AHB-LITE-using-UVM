@@ -155,15 +155,15 @@ class predictor extends uvm_subscriber #(sequence_item);
   endfunction : send_results
 
     task data_phase();
-        if(HRESETn === 1'b0)
-            reset_AHB();
-        else if(HWRITE === 1'b1) begin
-            write_AHB();
-        end
-        else if(HWRITE === 1'b0) begin
-            read_AHB();
-        end
-        send_results(/*iHRESETn, iHWRITE, iHTRANS, iHSIZE, iHBURST, iHPROT, iHADDR, iHWDATA*/);
+      if(HRESETn === 1'b0)
+          reset_AHB();
+      else if(HWRITE === 1'b1) begin
+          write_AHB();
+      end
+      else if(HWRITE === 1'b0) begin
+          read_AHB();
+      end
+      send_results(/*iHRESETn, iHWRITE, iHTRANS, iHSIZE, iHBURST, iHPROT, iHADDR, iHWDATA*/);
     endtask : data_phase
 
 
@@ -193,7 +193,6 @@ class predictor extends uvm_subscriber #(sequence_item);
             if(HADDR_VALID + burst_counter < ADDR_DEPTH)
               burst_counter = burst_counter +1;
           end
-
           WRAP4, WRAP8, WRAP16: begin
             if(wrap_counter == 10) begin
               case(HBURST)
@@ -239,6 +238,7 @@ class predictor extends uvm_subscriber #(sequence_item);
               end
               default: begin
                 HRESP_expected = ERROR;
+                HREADY_expected = NOT_READY;
               end
             endcase
           end
@@ -260,6 +260,7 @@ class predictor extends uvm_subscriber #(sequence_item);
               end
               default: begin
                 HRESP_expected = ERROR;
+                HREADY_expected = NOT_READY;
               end
             endcase
           end
@@ -281,6 +282,7 @@ class predictor extends uvm_subscriber #(sequence_item);
               end
               default: begin
                 HRESP_expected = ERROR;
+                HREADY_expected = NOT_READY;
               end
             endcase 
           end
@@ -289,6 +291,7 @@ class predictor extends uvm_subscriber #(sequence_item);
       end
       else begin
         HRESP_expected = ERROR;
+        HREADY_expected = NOT_READY;
       end
     endtask : write_process
 
@@ -354,7 +357,8 @@ class predictor extends uvm_subscriber #(sequence_item);
               end
               default: begin
                 HRDATA_expected[BYTE_WIDTH-1:0] = 0;
-                HRESP_expected = ERROR;
+                HRESP_expected  = ERROR;
+                HREADY_expected = NOT_READY;
               end
             endcase
           end
@@ -376,6 +380,7 @@ class predictor extends uvm_subscriber #(sequence_item);
               default: begin
                 HRDATA_expected[HALFWORD_WIDTH-1:0] = 0;
                 HRESP_expected = ERROR;
+                HREADY_expected = NOT_READY;
               end
             endcase
           end
@@ -398,6 +403,7 @@ class predictor extends uvm_subscriber #(sequence_item);
               default: begin
                 HRDATA_expected[WORD_WIDTH-1:0] = 0;
                 HRESP_expected = ERROR;
+                HREADY_expected = NOT_READY;
               end
             endcase
           end
@@ -406,6 +412,7 @@ class predictor extends uvm_subscriber #(sequence_item);
       end
       else begin
         HRESP_expected = ERROR;
+        HREADY_expected = NOT_READY;
       end
     endtask : read_process
 
