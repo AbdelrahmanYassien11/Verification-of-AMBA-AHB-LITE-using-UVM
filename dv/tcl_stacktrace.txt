@@ -1,0 +1,325 @@
+Tue Oct 22 15:03:48 +0300 2024
+Trace back: can't read "itk_component(1)": no such element in array
+    while executing
+"$itk_component($n) isaccessobj"
+    (object "::.main_pane.watch.interior.cs.body.m" method "::vsimwidgets::Monitor::updateNodes" body line 7)
+    invoked from within
+"updateNodes"
+    (object "::.main_pane.watch.interior.cs.body.m" method "::vsimwidgets::Monitor::timeUpdate" body line 4)
+    invoked from within
+"timeUpdate"
+    (object "::.main_pane.watch.interior.cs.body.m" method "::vsimwidgets::Monitor::TimebarModeChanged" body line 3)
+    invoked from within
+"::.main_pane.watch.interior.cs.body.m TimebarModeChanged"
+    (in namespace inscope "::vsimwidgets::Monitor" script line 1)
+    invoked from within
+"namespace inscope ::vsimwidgets::Monitor {::.main_pane.watch.interior.cs.body.m TimebarModeChanged}"
+    ("eval" body line 1)
+    invoked from within
+"eval $itk_option(-timemodecb)"
+    (while configuring option "-timemode" for widget "::.main_pane.watch.interior.cs.body.m.timebar")
+    (object "::.main_pane.watch.interior.cs.body.m.timebar" method "::itk::Archetype::configure" )
+    invoked from within
+"configure -timemode $new_mode"
+    (object "::.main_pane.watch.interior.cs.body.m.timebar" method "::vsimwidgets::TimeBar::TimeModeUpdate" body line 21)
+    invoked from within
+"$timebar TimeModeUpdate --trace"
+    (procedure "::vsimwidgets::TimeBar::TimeModeChangeHandler" body line 8)
+    invoked from within
+"::vsimwidgets::TimeBar::TimeModeChangeHandler gm {} write"
+    (write trace on "gm")
+    invoked from within
+"set gm $m "
+    (procedure "SetMode" line 6)
+    invoked from within
+"SetMode $MODES(now)"
+    (procedure "::TimeBarCmd::SetModeToNow" line 3)
+    invoked from within
+"::TimeBarCmd::SetModeToNow "
+    (procedure "::vsimwidgets::TimeBar::SetModeToNow" body line 1)
+    invoked from within
+"SetModeToNow"
+    (procedure "::vsimwidgets::TimeBar::TimeChangeHandler" body line 5)
+    invoked from within
+"::vsimwidgets::TimeBar::TimeChangeHandler ::vsimPriv acttime write"
+    (write trace on "::vsimPriv(acttime)")
+    invoked from within
+"set ::vsimPriv(acttime) $t"
+    (procedure "::TimeBarCmd::SetActiveTime" line 10)
+    invoked from within
+"::TimeBarCmd::SetActiveTime $t "--store""
+    (procedure "::vsimwidgets::TimeBar::SetActiveTime" body line 18)
+    invoked from within
+"vsimwidgets::TimeBar::SetActiveTime $t $reason"
+    (procedure "TimeBarCmd::SetActiveTime" line 13)
+    invoked from within
+"TimeBarCmd::SetActiveTime $t $reason"
+    (procedure "::SetActiveTime" line 2)
+    invoked from within
+"::SetActiveTime $::now --sync"
+    (procedure "::Vsim::_syncToNowForRestart" line 2)
+    invoked from within
+"::Vsim::_syncToNowForRestart"
+    ("after" script)
+  <2:F:/questasim/questasim64_2021.1/win64/tk8.6/bgerror.tcl:106: ::tkerror {can't set "::vsimPriv(acttime)": can't set "gm": can't read "itk_component(1)": no such element in array}
+  <1:eval:1: ::tk::dialog::error::bgerror {can't set "::vsimPriv(acttime)": can't set "gm": can't read "itk_component(1)": no such element in array}
+Tue Oct 22 16:58:10 +0300 2024
+Trace back: can't read "itk_component(1)": no such element in array
+    while executing
+"$itk_component($n) isaccessobj"
+    (object "::.main_pane.watch.interior.cs.body.m" method "::vsimwidgets::Monitor::updateNodes" body line 7)
+    invoked from within
+"updateNodes"
+    (object "::.main_pane.watch.interior.cs.body.m" method "::vsimwidgets::Monitor::timeUpdate" body line 4)
+    invoked from within
+"timeUpdate"
+    (object "::.main_pane.watch.interior.cs.body.m" method "::vsimwidgets::Monitor::TimebarModeChanged" body line 3)
+    invoked from within
+"::.main_pane.watch.interior.cs.body.m TimebarModeChanged"
+    (in namespace inscope "::vsimwidgets::Monitor" script line 1)
+    invoked from within
+"namespace inscope ::vsimwidgets::Monitor {::.main_pane.watch.interior.cs.body.m TimebarModeChanged}"
+    ("eval" body line 1)
+    invoked from within
+"eval $itk_option(-timemodecb)"
+    (while configuring option "-timemode" for widget "::.main_pane.watch.interior.cs.body.m.timebar")
+    (object "::.main_pane.watch.interior.cs.body.m.timebar" method "::itk::Archetype::configure" )
+    invoked from within
+"configure -timemode $new_mode"
+    (object "::.main_pane.watch.interior.cs.body.m.timebar" method "::vsimwidgets::TimeBar::TimeModeUpdate" body line 21)
+    invoked from within
+"$timebar TimeModeUpdate --trace"
+    (procedure "::vsimwidgets::TimeBar::TimeModeChangeHandler" body line 8)
+    invoked from within
+"::vsimwidgets::TimeBar::TimeModeChangeHandler gm {} write"
+    (write trace on "gm")
+    invoked from within
+"set gm $m "
+    (procedure "SetMode" line 6)
+    invoked from within
+"SetMode $MODES(now)"
+    (procedure "::TimeBarCmd::SetModeToNow" line 3)
+    invoked from within
+"::TimeBarCmd::SetModeToNow "
+    (procedure "::vsimwidgets::TimeBar::SetModeToNow" body line 1)
+    invoked from within
+"SetModeToNow"
+    (procedure "::vsimwidgets::TimeBar::TimeChangeHandler" body line 5)
+    invoked from within
+"::vsimwidgets::TimeBar::TimeChangeHandler ::vsimPriv acttime write"
+    (write trace on "::vsimPriv(acttime)")
+    invoked from within
+"set ::vsimPriv(acttime) $t"
+    (procedure "::TimeBarCmd::SetActiveTime" line 10)
+    invoked from within
+"::TimeBarCmd::SetActiveTime $t "--store""
+    (procedure "::vsimwidgets::TimeBar::SetActiveTime" body line 18)
+    invoked from within
+"vsimwidgets::TimeBar::SetActiveTime $t $reason"
+    (procedure "TimeBarCmd::SetActiveTime" line 13)
+    invoked from within
+"TimeBarCmd::SetActiveTime $t $reason"
+    (procedure "::SetActiveTime" line 2)
+    invoked from within
+"::SetActiveTime $::now --sync"
+    (procedure "::Vsim::_syncToNowForRestart" line 2)
+    invoked from within
+"::Vsim::_syncToNowForRestart"
+    ("after" script)
+  <2:F:/questasim/questasim64_2021.1/win64/tk8.6/bgerror.tcl:106: ::tkerror {can't set "::vsimPriv(acttime)": can't set "gm": can't read "itk_component(1)": no such element in array}
+  <1:F:/mtitcl/vsim/vsiminit.tc_:523: ::tk::dialog::error::bgerror {can't set "::vsimPriv(acttime)": can't set "gm": can't read "itk_component(1)": no such element in array}
+Tue Oct 22 17:04:29 +0300 2024
+Trace back: can't read "itk_component(1)": no such element in array
+    while executing
+"$itk_component($n) isaccessobj"
+    (object "::.main_pane.watch.interior.cs.body.m" method "::vsimwidgets::Monitor::updateNodes" body line 7)
+    invoked from within
+"updateNodes"
+    (object "::.main_pane.watch.interior.cs.body.m" method "::vsimwidgets::Monitor::timeUpdate" body line 4)
+    invoked from within
+"timeUpdate"
+    (object "::.main_pane.watch.interior.cs.body.m" method "::vsimwidgets::Monitor::TimebarModeChanged" body line 3)
+    invoked from within
+"::.main_pane.watch.interior.cs.body.m TimebarModeChanged"
+    (in namespace inscope "::vsimwidgets::Monitor" script line 1)
+    invoked from within
+"namespace inscope ::vsimwidgets::Monitor {::.main_pane.watch.interior.cs.body.m TimebarModeChanged}"
+    ("eval" body line 1)
+    invoked from within
+"eval $itk_option(-timemodecb)"
+    (while configuring option "-timemode" for widget "::.main_pane.watch.interior.cs.body.m.timebar")
+    (object "::.main_pane.watch.interior.cs.body.m.timebar" method "::itk::Archetype::configure" )
+    invoked from within
+"configure -timemode $new_mode"
+    (object "::.main_pane.watch.interior.cs.body.m.timebar" method "::vsimwidgets::TimeBar::TimeModeUpdate" body line 21)
+    invoked from within
+"$timebar TimeModeUpdate --trace"
+    (procedure "::vsimwidgets::TimeBar::TimeModeChangeHandler" body line 8)
+    invoked from within
+"::vsimwidgets::TimeBar::TimeModeChangeHandler gm {} write"
+    (write trace on "gm")
+    invoked from within
+"set gm $m "
+    (procedure "SetMode" line 6)
+    invoked from within
+"SetMode $MODES(now)"
+    (procedure "::TimeBarCmd::SetModeToNow" line 3)
+    invoked from within
+"::TimeBarCmd::SetModeToNow "
+    (procedure "::vsimwidgets::TimeBar::SetModeToNow" body line 1)
+    invoked from within
+"SetModeToNow"
+    (procedure "::vsimwidgets::TimeBar::TimeChangeHandler" body line 5)
+    invoked from within
+"::vsimwidgets::TimeBar::TimeChangeHandler ::vsimPriv acttime write"
+    (write trace on "::vsimPriv(acttime)")
+    invoked from within
+"set ::vsimPriv(acttime) $t"
+    (procedure "::TimeBarCmd::SetActiveTime" line 10)
+    invoked from within
+"::TimeBarCmd::SetActiveTime $t "--store""
+    (procedure "::vsimwidgets::TimeBar::SetActiveTime" body line 18)
+    invoked from within
+"vsimwidgets::TimeBar::SetActiveTime $t $reason"
+    (procedure "TimeBarCmd::SetActiveTime" line 13)
+    invoked from within
+"TimeBarCmd::SetActiveTime $t $reason"
+    (procedure "::SetActiveTime" line 2)
+    invoked from within
+"::SetActiveTime $::now --sync"
+    (procedure "::Vsim::_syncToNowForRestart" line 2)
+    invoked from within
+"::Vsim::_syncToNowForRestart"
+    ("after" script)
+  <2:F:/questasim/questasim64_2021.1/win64/tk8.6/bgerror.tcl:106: ::tkerror {can't set "::vsimPriv(acttime)": can't set "gm": can't read "itk_component(1)": no such element in array}
+  <1:F:/mtitcl/vsim/vsiminit.tc_:523: ::tk::dialog::error::bgerror {can't set "::vsimPriv(acttime)": can't set "gm": can't read "itk_component(1)": no such element in array}
+Tue Oct 22 17:22:24 +0300 2024
+Trace back: can't read "itk_component(1)": no such element in array
+    while executing
+"$itk_component($n) isaccessobj"
+    (object "::.main_pane.watch.interior.cs.body.m" method "::vsimwidgets::Monitor::updateNodes" body line 7)
+    invoked from within
+"updateNodes"
+    (object "::.main_pane.watch.interior.cs.body.m" method "::vsimwidgets::Monitor::timeUpdate" body line 4)
+    invoked from within
+"timeUpdate"
+    (object "::.main_pane.watch.interior.cs.body.m" method "::vsimwidgets::Monitor::TimebarModeChanged" body line 3)
+    invoked from within
+"::.main_pane.watch.interior.cs.body.m TimebarModeChanged"
+    (in namespace inscope "::vsimwidgets::Monitor" script line 1)
+    invoked from within
+"namespace inscope ::vsimwidgets::Monitor {::.main_pane.watch.interior.cs.body.m TimebarModeChanged}"
+    ("eval" body line 1)
+    invoked from within
+"eval $itk_option(-timemodecb)"
+    (while configuring option "-timemode" for widget "::.main_pane.watch.interior.cs.body.m.timebar")
+    (object "::.main_pane.watch.interior.cs.body.m.timebar" method "::itk::Archetype::configure" )
+    invoked from within
+"configure -timemode $new_mode"
+    (object "::.main_pane.watch.interior.cs.body.m.timebar" method "::vsimwidgets::TimeBar::TimeModeUpdate" body line 21)
+    invoked from within
+"$timebar TimeModeUpdate --trace"
+    (procedure "::vsimwidgets::TimeBar::TimeModeChangeHandler" body line 8)
+    invoked from within
+"::vsimwidgets::TimeBar::TimeModeChangeHandler gm {} write"
+    (write trace on "gm")
+    invoked from within
+"set gm $m "
+    (procedure "SetMode" line 6)
+    invoked from within
+"SetMode $MODES(now)"
+    (procedure "::TimeBarCmd::SetModeToNow" line 3)
+    invoked from within
+"::TimeBarCmd::SetModeToNow "
+    (procedure "::vsimwidgets::TimeBar::SetModeToNow" body line 1)
+    invoked from within
+"SetModeToNow"
+    (procedure "::vsimwidgets::TimeBar::TimeChangeHandler" body line 5)
+    invoked from within
+"::vsimwidgets::TimeBar::TimeChangeHandler ::vsimPriv acttime write"
+    (write trace on "::vsimPriv(acttime)")
+    invoked from within
+"set ::vsimPriv(acttime) $t"
+    (procedure "::TimeBarCmd::SetActiveTime" line 10)
+    invoked from within
+"::TimeBarCmd::SetActiveTime $t "--store""
+    (procedure "::vsimwidgets::TimeBar::SetActiveTime" body line 18)
+    invoked from within
+"vsimwidgets::TimeBar::SetActiveTime $t $reason"
+    (procedure "TimeBarCmd::SetActiveTime" line 13)
+    invoked from within
+"TimeBarCmd::SetActiveTime $t $reason"
+    (procedure "::SetActiveTime" line 2)
+    invoked from within
+"::SetActiveTime $::now --sync"
+    (procedure "::Vsim::_syncToNowForRestart" line 2)
+    invoked from within
+"::Vsim::_syncToNowForRestart"
+    ("after" script)
+  <2:F:/questasim/questasim64_2021.1/win64/tk8.6/bgerror.tcl:106: ::tkerror {can't set "::vsimPriv(acttime)": can't set "gm": can't read "itk_component(1)": no such element in array}
+  <1:F:/mtitcl/vsim/vsiminit.tc_:523: ::tk::dialog::error::bgerror {can't set "::vsimPriv(acttime)": can't set "gm": can't read "itk_component(1)": no such element in array}
+Tue Oct 22 17:49:48 +0300 2024
+Trace back: can't read "itk_component(1)": no such element in array
+    while executing
+"$itk_component($n) isaccessobj"
+    (object "::.main_pane.watch.interior.cs.body.m" method "::vsimwidgets::Monitor::updateNodes" body line 7)
+    invoked from within
+"updateNodes"
+    (object "::.main_pane.watch.interior.cs.body.m" method "::vsimwidgets::Monitor::timeUpdate" body line 4)
+    invoked from within
+"timeUpdate"
+    (object "::.main_pane.watch.interior.cs.body.m" method "::vsimwidgets::Monitor::TimebarModeChanged" body line 3)
+    invoked from within
+"::.main_pane.watch.interior.cs.body.m TimebarModeChanged"
+    (in namespace inscope "::vsimwidgets::Monitor" script line 1)
+    invoked from within
+"namespace inscope ::vsimwidgets::Monitor {::.main_pane.watch.interior.cs.body.m TimebarModeChanged}"
+    ("eval" body line 1)
+    invoked from within
+"eval $itk_option(-timemodecb)"
+    (while configuring option "-timemode" for widget "::.main_pane.watch.interior.cs.body.m.timebar")
+    (object "::.main_pane.watch.interior.cs.body.m.timebar" method "::itk::Archetype::configure" )
+    invoked from within
+"configure -timemode $new_mode"
+    (object "::.main_pane.watch.interior.cs.body.m.timebar" method "::vsimwidgets::TimeBar::TimeModeUpdate" body line 21)
+    invoked from within
+"$timebar TimeModeUpdate --trace"
+    (procedure "::vsimwidgets::TimeBar::TimeModeChangeHandler" body line 8)
+    invoked from within
+"::vsimwidgets::TimeBar::TimeModeChangeHandler gm {} write"
+    (write trace on "gm")
+    invoked from within
+"set gm $m "
+    (procedure "SetMode" line 6)
+    invoked from within
+"SetMode $MODES(now)"
+    (procedure "::TimeBarCmd::SetModeToNow" line 3)
+    invoked from within
+"::TimeBarCmd::SetModeToNow "
+    (procedure "::vsimwidgets::TimeBar::SetModeToNow" body line 1)
+    invoked from within
+"SetModeToNow"
+    (procedure "::vsimwidgets::TimeBar::TimeChangeHandler" body line 5)
+    invoked from within
+"::vsimwidgets::TimeBar::TimeChangeHandler ::vsimPriv acttime write"
+    (write trace on "::vsimPriv(acttime)")
+    invoked from within
+"set ::vsimPriv(acttime) $t"
+    (procedure "::TimeBarCmd::SetActiveTime" line 10)
+    invoked from within
+"::TimeBarCmd::SetActiveTime $t "--store""
+    (procedure "::vsimwidgets::TimeBar::SetActiveTime" body line 18)
+    invoked from within
+"vsimwidgets::TimeBar::SetActiveTime $t $reason"
+    (procedure "TimeBarCmd::SetActiveTime" line 13)
+    invoked from within
+"TimeBarCmd::SetActiveTime $t $reason"
+    (procedure "::SetActiveTime" line 2)
+    invoked from within
+"::SetActiveTime $::now --sync"
+    (procedure "::Vsim::_syncToNowForRestart" line 2)
+    invoked from within
+"::Vsim::_syncToNowForRestart"
+    ("after" script)
+  <2:F:/questasim/questasim64_2021.1/win64/tk8.6/bgerror.tcl:106: ::tkerror {can't set "::vsimPriv(acttime)": can't set "gm": can't read "itk_component(1)": no such element in array}
+  <1:F:/mtitcl/vsim/vsiminit.tc_:523: ::tk::dialog::error::bgerror {can't set "::vsimPriv(acttime)": can't set "gm": can't read "itk_component(1)": no such element in array}

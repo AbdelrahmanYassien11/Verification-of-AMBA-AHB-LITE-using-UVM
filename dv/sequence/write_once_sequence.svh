@@ -1,0 +1,74 @@
+/******************************************************************
+ * File: write_once_sequence.sv
+ * Author: Abdelrahman Mohamad Yassien
+ * Email: Abdelrahman.Yassien11@gmail.com
+ * Date: 25/08/2024
+ * Description: This class defines a sequence that performs a write 
+ *              operation to the FIFO once. It inherits from 
+ *              `base_sequence` and includes functionality to start 
+ *              the reset sequence if needed and perform a write 
+ *              operation with randomized sequence item values.
+ * 
+ * Copyright (c) 2024 Abdelrahman Mohamad Yassien. All Rights Reserved.
+ ******************************************************************/
+
+class write_once_sequence extends base_sequence;
+  `uvm_object_utils(write_once_sequence);
+
+  // Static flag to determine if reset is needed
+  static bit reset_flag;
+  static bit last_test;
+  // Handle to the reset sequence
+  reset_sequence reset_sequence_h;
+
+  // Constructor
+  function new(string name = "write_once_sequence");
+    super.new(name);
+  endfunction
+
+  // Pre-body phase task for setup operations
+  task pre_body();
+    $display("start of pre_body task");
+    super.pre_body(); // Call the base class pre_body
+    // Create an instance of the reset sequence
+    reset_sequence_h = reset_sequence::type_id::create("reset_sequence_h");
+  endtask : pre_body
+
+  // Main task body for executing the write operation
+  virtual task body();
+
+    // If reset_flag is not set, start the reset sequence
+    if (!reset_flag)
+      reset_sequence_h.start(sequencer_h);
+
+    // Configure the sequence item for the write operation
+    seq_item.RESET_op.rand_mode(0);
+    seq_item.WRITE_op.rand_mode(0);
+    seq_item.TRANS_op.rand_mode(0);
+    seq_item.BURST_op.rand_mode(0);
+    seq_item.SIZE_op.rand_mode(0);
+    //seq_item.HWRITE_rand_c.constraint_mode(0);
+
+    start_item(seq_item); // Start the sequence item
+    
+    // Set the operation type to WRITE
+    seq_item.RESET_op = WORKING;
+    seq_item.WRITE_op = WRITE;
+    seq_item.TRANS_op = NONSEQ;
+    seq_item.BURST_op = SINGLE;
+    seq_item.SIZE_op  = BYTE;
+
+    assert(seq_item.randomize()); // Randomize the sequence item
+    // Set the control signals for writing
+
+    if(last_test)
+      seq_item.last_item = 1'b1;
+
+    // Finish the sequence item
+    finish_item(seq_item);
+
+    // Log the operation for debugging
+    `uvm_info("write_once_SEQUENCE", $sformatf("write_once only: %s", seq_item.convert2string()), UVM_HIGH)
+  endtask : body
+
+endclass
