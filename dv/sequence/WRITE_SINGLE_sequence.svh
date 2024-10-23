@@ -1,60 +1,66 @@
 /******************************************************************
- * File: read_once_sequence.sv
+ * File: write_once_sequence.sv
  * Author: Abdelrahman Mohamad Yassien
  * Email: Abdelrahman.Yassien11@gmail.com
  * Date: 25/08/2024
- * Description: This class defines a sequence for performing a
- *              single read operation on the FIFO. It handles the
- *              necessary reset sequences and sets the appropriate
- *              control signals for a read operation.
+ * Description: This class defines a sequence that performs a write 
+ *              operation to the FIFO once. It inherits from 
+ *              `base_sequence` and includes functionality to start 
+ *              the reset sequence if needed and perform a write 
+ *              operation with randomized sequence item values.
  * 
  * Copyright (c) 2024 Abdelrahman Mohamad Yassien. All Rights Reserved.
  ******************************************************************/
 
-class read_once_sequence extends base_sequence;
-  `uvm_object_utils(read_once_sequence);
+class write_once_sequence extends base_sequence;
+  `uvm_object_utils(write_once_sequence);
 
-  // Static flag to determine if a reset is required
+  // Static flag to determine if reset is needed
   static bit reset_flag;
   static bit last_test;
 
-  // Handle for the reset sequence
+  // Handle to the reset sequence
   reset_sequence reset_sequence_h;
 
   // Constructor
-  function new(string name = "read_once_sequence");
+  function new(string name = "write_once_sequence");
     super.new(name);
   endfunction
 
-  // Preparation task before the main sequence body is executed
+  // Pre-body phase task for setup operations
   task pre_body();
-    // Display a message indicating the start of the pre_body task
     $display("start of pre_body task");
-    super.pre_body();
-    
-    // Create a new reset_sequence object for handling resets
+    super.pre_body(); // Call the base class pre_body
+    // Create an instance of the reset sequence
     reset_sequence_h = reset_sequence::type_id::create("reset_sequence_h");
   endtask : pre_body
 
-  // Main task body to perform the read operation
-  task body();
+  // Main task body for executing the write operation
+  virtual task body();
+
+    reset_sequence::last_test = 1'b1;
+
+
     // If reset_flag is not set, start the reset sequence
     if (!reset_flag)
       reset_sequence_h.start(sequencer_h);
 
+    if(~last_test)
+      seq_item.last_item = 1'b1;
+
+    // Start the sequence item
+    start_item(seq_item);
+    
     // Configure the sequence item for the write operation
     seq_item.RESET_op.rand_mode(0);
     seq_item.WRITE_op.rand_mode(0);
     seq_item.TRANS_op.rand_mode(0);
     seq_item.BURST_op.rand_mode(0);
     seq_item.SIZE_op.rand_mode(0);
-    //seq_item.HWRITE_rand_c.constraint_mode(0);
 
-    start_item(seq_item); // Start the sequence item
-    
     // Set the operation type to WRITE
     seq_item.RESET_op = WORKING;
-    seq_item.WRITE_op = READ;
+    seq_item.WRITE_op = WRITE;
     seq_item.TRANS_op = NONSEQ;
     seq_item.BURST_op = SINGLE;
     seq_item.SIZE_op  = BYTE;
@@ -62,14 +68,11 @@ class read_once_sequence extends base_sequence;
     assert(seq_item.randomize()); // Randomize the sequence item
     // Set the control signals for writing
 
-    if(last_test)
-      seq_item.last_item = 1'b1;
-
     // Finish the sequence item
     finish_item(seq_item);
 
-    // Log information about the read operation
-    `uvm_info("read_once_SEQUENCE", $sformatf("read_once only: %s", seq_item.convert2string()), UVM_HIGH);
+    // Log the operation for debugging
+    `uvm_info("write_once_SEQUENCE", $sformatf("write_once only: %s", seq_item.convert2string()), UVM_HIGH)
   endtask : body
 
 endclass

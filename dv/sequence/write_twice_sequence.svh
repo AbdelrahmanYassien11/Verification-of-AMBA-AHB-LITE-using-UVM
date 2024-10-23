@@ -17,11 +17,12 @@ class write_twice_sequence extends base_sequence;
 
   // Static flag to determine if reset is needed
   static bit reset_flag;
+  static bit last_test;
 
   // Handle to the reset sequence
   reset_sequence reset_sequence_h;
-  write_once_sequence write_once_sequence_h;
-  read_once_sequence read_once_sequence_h;
+  WRITE_SINGLE_sequence WRITE_SINGLE_sequence_h;
+  READ_SINGLE_sequence READ_SINGLE_sequence_h;
 
   // Constructor
   function new(string name = "write_twice_sequence");
@@ -34,8 +35,8 @@ class write_twice_sequence extends base_sequence;
     super.pre_body(); // Call the base class pre_body
     // Create an instance of the reset sequence
     reset_sequence_h = reset_sequence::type_id::create("reset_sequence_h");
-    write_once_sequence_h = write_once_sequence::type_id::create("write_once_sequence_h");
-    read_once_sequence_h = read_once_sequence::type_id::create("read_once_sequence_h");
+    WRITE_SINGLE_sequence_h = WRITE_SINGLE_sequence::type_id::create("WRITE_SINGLE_sequence_h");
+    READ_SINGLE_sequence_h = READ_SINGLE_sequence::type_id::create("READ_SINGLE_sequence_h");
   endtask : pre_body
 
   // Main task body for executing the write operation
@@ -43,6 +44,10 @@ class write_twice_sequence extends base_sequence;
 
     write_once_sequence::reset_flag = 1'b1;
     read_once_sequence::reset_flag = 1'b1;
+
+    reset_sequence::last_test = 1'b1;
+    READ_SINGLE_sequence::last_test = 1'b1;
+    WRITE_SINGLE_sequence::last_test = 1'b1;
 
 
     reset_sequence_h.start(sequencer_h);
@@ -264,7 +269,9 @@ class write_twice_sequence extends base_sequence;
 
     finish_item(seq_item);
 
-                sequence_item::last_item = 1'b1;
+    if(~last_test)
+    seq_item.last_item = 1'b1;
+
     read_once_sequence_h.start(sequencer_h);
 
     // Log the operation for debugging

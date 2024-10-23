@@ -14,6 +14,8 @@
 class reset_sequence extends base_sequence;
   `uvm_object_utils(reset_sequence);
 
+  static bit last_test;
+
   // Constructor
   function new(string name = "reset_sequence");
     super.new(name);
@@ -21,7 +23,12 @@ class reset_sequence extends base_sequence;
 
   // Main task body to perform the reset sequence
   task body();
-    // Display a message indicating the start of the body task
+
+    // Log information about the reset operation
+    `uvm_info("RESET_SEQUENCE: ", "STARTING", UVM_HIGH);
+
+    if(~last_test)
+      seq_item.last_item = 1'b1;
 
     // Start the sequence item for the reset operation
     start_item(seq_item);
@@ -32,8 +39,6 @@ class reset_sequence extends base_sequence;
     // Finish the sequence item after setting the reset signals
     finish_item(seq_item);
 
-    // Log information about the reset operation
-    `uvm_info("RESET_SEQUENCE", $sformatf("reset only: %s", seq_item.convert2string()), UVM_HIGH);
 
     // Display a message indicating the finish of the item
   endtask : body

@@ -65,7 +65,7 @@ bit DATA_PHASE_FLAG;
 bit OUTPUTS_PHASE_FLAG_1;
 bit OUTPUTS_PHASE_FLAG_2;
 
-bit last_test;
+// bit last_test;
 
 mailbox mbx = new(1);
 // Monitor handles
@@ -154,7 +154,7 @@ sequence_item previous_seq_item, seq_item;
     endtask : generic_reciever
 
 
-    always@(negedge clk or negedge HRESETn_global ) begin //CONTROL_PHASE
+    always@(posedge clk or negedge HRESETn_global ) begin //CONTROL_PHASE
         if(HRESETn_global)begin
             if(counter >= 1 && RECEIVING_PHASE_FLAG) begin
                 // if(counter > 1) begin
@@ -226,7 +226,7 @@ sequence_item previous_seq_item, seq_item;
         OUTPUTS_PHASE_FLAG_2 = 0;
     end
 
-    always@(negedge clk) begin //DATA_PHASE //DATA_PHASE_FLAG might be obselete
+    always@(posedge clk) begin //DATA_PHASE //DATA_PHASE_FLAG might be obselete
         if((counter >= 2) && HRESETn /*&& DATA_PHASE_FLAG*/ ) begin // HRESETn to make it work after the reset cycle is done
             //$display("DATA_PHASE: TIME:%0t ASSIGNING SIGNALS", $time());
             //wait(HREADY == 1'b1);                               // The counter & data_phase_flag to make it work after a transaction is sent after reset cycle is done
@@ -244,7 +244,7 @@ sequence_item previous_seq_item, seq_item;
         end
     end
 
-    always@(negedge clk) begin
+    always@(posedge clk) begin
         if(HRESETn && counter >= 3 && OUTPUTS_PHASE_FLAG_1) begin
             $display("OUTPUT_1_PHASE_SIGNALS: TIME:%0t SENDING OUTPUTS", $time());
             counter = counter + 1;
