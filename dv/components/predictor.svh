@@ -63,8 +63,8 @@ class predictor extends uvm_subscriber #(sequence_item);
   HBURST_e     BURST_op;
   HSIZE_e      SIZE_op;
 
-  int burst_counter;
-  int wrap_counter;  
+  integer burst_counter;
+  integer wrap_counter;  
 
   HRESP_e      RESP_op;
   string data_str;
@@ -100,32 +100,33 @@ class predictor extends uvm_subscriber #(sequence_item);
       seq_item_expected = sequence_item::type_id::create("seq_item_expected");
       @(inputs_written);
       // `uvm_info("PREDICTOR", {"WRITTEN_DATA: ", data_str}, UVM_HIGH)
-      sequence_item::PREDICTOR_transaction_counter = sequence_item::PREDICTOR_transaction_counter + 1;
       generic_predictor();
       wait(expected_outputs_written.triggered);
-      analysis_port_expected_outputs.write(seq_item_expected);
-      `uvm_info("PREDICTOR", {"EXPECTED_DATA: ", seq_item_expected.input2string()}, UVM_HIGH)
+      //if(HREADY_expected == 1) begin
+        sequence_item::PREDICTOR_transaction_counter = sequence_item::PREDICTOR_transaction_counter + 1;
+        analysis_port_expected_outputs.write(seq_item_expected);
+        `uvm_info("PREDICTOR", {"EXPECTED_DATA: ", seq_item_expected.input2string()}, UVM_HIGH)
+      //end
     end
   endtask
 
   // Write method for processing sequence items
   function void write(sequence_item t);
-    HRESETn = t.HRESETn;
-    HWRITE  = t.HWRITE;
-    HTRANS  = t.HTRANS;
-    HSIZE   = t.HSIZE;
-    HBURST  = t.HBURST;
-    HPROT   = t.HPROT;
-    HADDR   = t.HADDR;
-    HWDATA  = t.HWDATA;
-    HADDR_VALID = HADDR[ADDR_WIDTH-BITS_FOR_PERIPHERALS-1:0];
+      HRESETn = t.HRESETn;
+      HWRITE  = t.HWRITE;
+      HTRANS  = t.HTRANS;
+      HSIZE   = t.HSIZE;
+      HBURST  = t.HBURST;
+      HPROT   = t.HPROT;
+      HADDR   = t.HADDR;
+      HWDATA  = t.HWDATA;
+      HADDR_VALID = HADDR[ADDR_WIDTH-BITS_FOR_PERIPHERALS-1:0];
 
-    RESET_op   = t.RESET_op;
-    WRITE_op   = t.WRITE_op;
-    TRANS_op   = t.TRANS_op;
-    BURST_op   = t.BURST_op;          
-    SIZE_op    = t.SIZE_op;
-
+      RESET_op   = t.RESET_op;
+      WRITE_op   = t.WRITE_op;
+      TRANS_op   = t.TRANS_op;
+      BURST_op   = t.BURST_op;          
+      SIZE_op    = t.SIZE_op;
     //HREADY  <= t.HREADY;
      data_str   = $sformatf("HRESETn:%0d, HWRITE:%0d, HTRANS:%0d, HSIZE:%0d, HBURST:%0d, HPROT:%0d, HADDR:%0d, HWDATA:%0d",
                              HRESETn, HWRITE, HTRANS, HSIZE, HBURST, HPROT, HADDR, HWDATA);
@@ -173,7 +174,7 @@ class predictor extends uvm_subscriber #(sequence_item);
       HREADY_expected = READY;
       HRDATA_expected = 0;
       HTRANS = IDLE;
-      wrap_counter = 0;
+      wrap_counter = -10;
       burst_counter = 0;
     endtask : reset_AHB
 
@@ -183,8 +184,15 @@ class predictor extends uvm_subscriber #(sequence_item);
     HREADY_expected = READY;
     case(HTRANS)
       IDLE, BUSY: begin
-        wrap_counter = 10;
-        burst_counter = 0;
+        if(((HADDR_VALID + burst_counter) < ADDR_DEPTH) & ((HADDR_VALID + wrap_counter) < ADDR_DEPTH)) begin
+          wrap_counter = -10;
+          burst_counter = 0;
+        end
+        else begin
+          HRESP_expected = ERROR;
+          wrap_counter = -10;
+          burst_counter = 0;
+        end
       end
       NONSEQ, SEQ:  begin
         case(HBURST)
@@ -302,8 +310,15 @@ class predictor extends uvm_subscriber #(sequence_item);
     case(HTRANS)
 
       IDLE, BUSY: begin
-        wrap_counter = 10;
-        burst_counter = 0;
+        if(((HADDR_VALID + burst_counter) < ADDR_DEPTH) & ((HADDR_VALID + wrap_counter) < ADDR_DEPTH)) begin
+          wrap_counter = -10;
+          burst_counter = 0;
+        end
+        else begin
+          HRESP_expected = ERROR;
+          wrap_counter = -10;
+          burst_counter = 0;
+        end
       end
 
       NONSEQ, SEQ: begin

@@ -126,9 +126,27 @@ package AHB_pkg;
 	`include "base_sequence.svh"
 	`include "reset_sequence.svh"
 
-	`include "write_once_sequence.svh"
-	`include "read_once_sequence.svh"
+	`include "IDLE_sequence.svh"
+
+	`include "WRITE_SINGLE_sequence.svh"
+	`include "READ_SINGLE_sequence.svh"
 	`include "write_twice_sequence.svh"
+
+	`include "WRITE_WRAP4_sequence.svh"
+	`include "WRITE_WRAP8_sequence.svh"
+	`include "WRITE_WRAP16_sequence.svh"
+
+	`include "WRITE_INCR4_sequence.svh"
+	`include "WRITE_INCR8_sequence.svh"
+	`include "WRITE_INCR16_sequence.svh"
+
+	`include "READ_WRAP4_sequence.svh"
+	`include "READ_WRAP8_sequence.svh"
+	`include "READ_WRAP16_sequence.svh"
+
+	`include "READ_INCR4_sequence.svh"
+	`include "READ_INCR8_sequence.svh"
+	`include "READ_INCR16_sequence.svh"
 	
 	
 	// `include "write_all_sequence.svh"
@@ -156,7 +174,7 @@ package AHB_pkg;
 
 	`include "base_test.svh"
 	`include "reset_test.svh"
-	`include "write_once_test.svh"
+	`include "WRITE_SINGLE_test.svh"
 	`include "write_twice_test.svh"
 	// `include "read_once_test.svh"
 

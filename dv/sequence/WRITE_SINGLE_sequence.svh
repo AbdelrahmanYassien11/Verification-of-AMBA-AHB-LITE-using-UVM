@@ -1,5 +1,5 @@
 /******************************************************************
- * File: write_once_sequence.sv
+ * File: WRITE_SINGLE_sequence.sv
  * Author: Abdelrahman Mohamad Yassien
  * Email: Abdelrahman.Yassien11@gmail.com
  * Date: 25/08/2024
@@ -12,8 +12,8 @@
  * Copyright (c) 2024 Abdelrahman Mohamad Yassien. All Rights Reserved.
  ******************************************************************/
 
-class write_once_sequence extends base_sequence;
-  `uvm_object_utils(write_once_sequence);
+class WRITE_SINGLE_sequence extends base_sequence;
+  `uvm_object_utils(WRITE_SINGLE_sequence);
 
   // Static flag to determine if reset is needed
   static bit reset_flag;
@@ -23,7 +23,7 @@ class write_once_sequence extends base_sequence;
   reset_sequence reset_sequence_h;
 
   // Constructor
-  function new(string name = "write_once_sequence");
+  function new(string name = "WRITE_SINGLE_sequence");
     super.new(name);
   endfunction
 
@@ -40,6 +40,11 @@ class write_once_sequence extends base_sequence;
 
     reset_sequence::last_test = 1'b1;
 
+    IDLE_sequence::reset_flag = 1'b1;
+    IDLE_sequence::last_test = 1'b1;
+
+    // Log the operation for debugging
+    `uvm_info("WRITE_SINGLE_SEQUENCE: ", "STARTING", UVM_HIGH)
 
     // If reset_flag is not set, start the reset sequence
     if (!reset_flag)
@@ -47,7 +52,7 @@ class write_once_sequence extends base_sequence;
 
     if(~last_test)
       seq_item.last_item = 1'b1;
-
+    
     // Start the sequence item
     start_item(seq_item);
     
@@ -70,9 +75,8 @@ class write_once_sequence extends base_sequence;
 
     // Finish the sequence item
     finish_item(seq_item);
+    
 
-    // Log the operation for debugging
-    `uvm_info("write_once_SEQUENCE", $sformatf("write_once only: %s", seq_item.convert2string()), UVM_HIGH)
   endtask : body
 
 endclass

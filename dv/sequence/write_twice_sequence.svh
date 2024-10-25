@@ -1,5 +1,5 @@
 /******************************************************************
- * File: write_once_sequence.sv
+ * File: WRITE_SINGLE_sequence.sv
  * Author: Abdelrahman Mohamad Yassien
  * Email: Abdelrahman.Yassien11@gmail.com
  * Date: 25/08/2024
@@ -42,8 +42,8 @@ class write_twice_sequence extends base_sequence;
   // Main task body for executing the write operation
   virtual task body();
 
-    write_once_sequence::reset_flag = 1'b1;
-    read_once_sequence::reset_flag = 1'b1;
+    WRITE_SINGLE_sequence::reset_flag = 1'b1;
+    READ_SINGLE_sequence::reset_flag = 1'b1;
 
     reset_sequence::last_test = 1'b1;
     READ_SINGLE_sequence::last_test = 1'b1;
@@ -51,16 +51,16 @@ class write_twice_sequence extends base_sequence;
 
 
     reset_sequence_h.start(sequencer_h);
-    write_once_sequence_h.start(sequencer_h);
-    write_once_sequence_h.start(sequencer_h);
-    write_once_sequence_h.start(sequencer_h);
-    write_once_sequence_h.start(sequencer_h);
-    write_once_sequence_h.start(sequencer_h);
-    write_once_sequence_h.start(sequencer_h);
-    write_once_sequence_h.start(sequencer_h);
-    write_once_sequence_h.start(sequencer_h);
-    write_once_sequence_h.start(sequencer_h);
-    write_once_sequence_h.start(sequencer_h);
+    WRITE_SINGLE_sequence_h.start(sequencer_h);
+    WRITE_SINGLE_sequence_h.start(sequencer_h);
+    WRITE_SINGLE_sequence_h.start(sequencer_h);
+    WRITE_SINGLE_sequence_h.start(sequencer_h);
+    WRITE_SINGLE_sequence_h.start(sequencer_h);
+    WRITE_SINGLE_sequence_h.start(sequencer_h);
+    WRITE_SINGLE_sequence_h.start(sequencer_h);
+    WRITE_SINGLE_sequence_h.start(sequencer_h);
+    WRITE_SINGLE_sequence_h.start(sequencer_h);
+    WRITE_SINGLE_sequence_h.start(sequencer_h);
 
     seq_item.RESET_op.rand_mode(0);
     seq_item.WRITE_op.rand_mode(0);
@@ -129,12 +129,12 @@ class write_twice_sequence extends base_sequence;
 
     finish_item(seq_item);
 
-    write_once_sequence_h.start(sequencer_h);
-    write_once_sequence_h.start(sequencer_h);
-    write_once_sequence_h.start(sequencer_h);
+    WRITE_SINGLE_sequence_h.start(sequencer_h);
+    WRITE_SINGLE_sequence_h.start(sequencer_h);
+    WRITE_SINGLE_sequence_h.start(sequencer_h);
 
     for(int i = 0; i<10; i++) begin
-      read_once_sequence_h.start(sequencer_h);
+      READ_SINGLE_sequence_h.start(sequencer_h);
     end
 
     seq_item.RESET_op.rand_mode(0);
@@ -272,7 +272,7 @@ class write_twice_sequence extends base_sequence;
     if(~last_test)
     seq_item.last_item = 1'b1;
 
-    read_once_sequence_h.start(sequencer_h);
+    READ_SINGLE_sequence_h.start(sequencer_h);
 
     // Log the operation for debugging
     `uvm_info("write_twice_SEQUENCE", $sformatf("write_twice only: %s", seq_item.convert2string()), UVM_HIGH)

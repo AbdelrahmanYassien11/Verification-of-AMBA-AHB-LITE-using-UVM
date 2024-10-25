@@ -116,6 +116,7 @@ module ahb_slave #(parameter ADDR_WIDTH = 32, DATA_WIDTH = 32, ADDR_DEPTH = 16, 
     always @ (posedge HCLK or negedge HRESETn) begin
       if (HRESETn==0) begin
         state         <= IDLE;
+
         burst_counter_reg <= 0;
         wrap_counter_reg <= 0;
 
@@ -142,7 +143,7 @@ module ahb_slave #(parameter ADDR_WIDTH = 32, DATA_WIDTH = 32, ADDR_DEPTH = 16, 
         HTRANS_reg_d     <= HTRANS_reg_c;
         HSEL_reg_d       <= HSEL_reg_c;
         HADDR_reg_d      <= HADDR_reg_c;
-        HREADYin_reg_d   <= HREADYin_reg_c;
+        //HREADYin_reg_d   <= HREADYin_reg_c;
         HSIZE_reg_d      <= HSIZE_reg_c;
 
         HWDATA_reg_d     <= HWDATA;
@@ -153,7 +154,7 @@ module ahb_slave #(parameter ADDR_WIDTH = 32, DATA_WIDTH = 32, ADDR_DEPTH = 16, 
 
 
   always@(*) begin //next_state logic
-    if (HSEL_reg_c && HREADYin_reg_c) begin
+    if (HSEL_reg_c && HREADYin) begin
 
       case (HTRANS_reg_c) 
         2'b00: begin 
@@ -165,7 +166,7 @@ module ahb_slave #(parameter ADDR_WIDTH = 32, DATA_WIDTH = 32, ADDR_DEPTH = 16, 
         end 
         2'b10, 2'b11: begin 
           //HREADYout <= 1'b0; 
-          if((HADDR_reg_c + burst_counter < ADDR_DEPTH) & (HADDR_reg_c + wrap_counter < ADDR_DEPTH)) begin 
+          if((HADDR_reg_c + burst_counter < ADDR_DEPTH) & (/*HADDR_reg_c + wrap_counter*/ -6 < ADDR_DEPTH)) begin 
             if (HWRITE_reg_c) begin 
               next_state <= WRITE; 
             end 
@@ -188,10 +189,16 @@ module ahb_slave #(parameter ADDR_WIDTH = 32, DATA_WIDTH = 32, ADDR_DEPTH = 16, 
       endcase //HTRANS_reg_c
     end
 
-    else if(HSEL_reg_c && !HREADYin_reg_c)begin
-      next_state <= IDLE;
-                error_idle_control <= 0;
-    end 
+    else if(HSEL_reg_c && !HREADYin)begin
+      if(state == ERROR) begin
+        next_state <= IDLE;
+        error_idle_control <= 0;
+      end
+      else begin
+        next_state <= state;
+      end
+    end
+
     else begin
       next_state <= IDLE;
     end
@@ -205,11 +212,11 @@ module ahb_slave #(parameter ADDR_WIDTH = 32, DATA_WIDTH = 32, ADDR_DEPTH = 16, 
           burst_counter_reg = 0;
          // wrap_counter_reg = 0;        
           HRDATA_reg_d = HRDATA_reg_d;
-          if(HSEL_reg_d && HREADYin_reg_d) begin
+          if(HSEL_reg_d && HREADYin_reg_c) begin
             HRESP_reg_d = 2'b00;
             HREADYout_reg_d = 1'b1;
           end
-          else if (HSEL_reg_d && !HREADYin_reg_d) begin
+          else if (HSEL_reg_d && !HREADYin_reg_c) begin
             HRESP_reg_d = 2'b01;
             HREADYout_reg_d = 1'b1;
           end
@@ -271,7 +278,7 @@ module ahb_slave #(parameter ADDR_WIDTH = 32, DATA_WIDTH = 32, ADDR_DEPTH = 16, 
           $display("%0t WHY AM I HERE NOW1?", $time());
           case(HTRANS_reg_d)
             2'b00, 2'b01: begin
-              HRESP_reg_d         = 2'b00; //`HRESP_OKAY;
+              HRESP_reg_d       = 2'b00; //`HRESP_OKAY;
               burst_counter_reg = 0 ;
             end
             2'b10, 2'b11: begin
@@ -328,13 +335,18 @@ module ahb_slave #(parameter ADDR_WIDTH = 32, DATA_WIDTH = 32, ADDR_DEPTH = 16, 
       endcase // state
   end
 
-  always @(HBURST) begin 
-    case(HBURST)
-      WRAP4:  wrap_counter_reg = 1;
-      WRAP8:  wrap_counter_reg = 3;
-      WRAP16: wrap_counter_reg = 7;
-      default: wrap_counter_reg = wrap_counter_reg;
-    endcase
+  always @(HBURST) begin
+    if(state != IDLE) begin 
+      case(HBURST)
+        WRAP4:  wrap_counter_reg = 1;
+        WRAP8:  wrap_counter_reg = 3;
+        WRAP16: wrap_counter_reg = 7;
+        default: wrap_counter_reg = wrap_counter_reg;
+      endcase
+    end
+    else begin
+      wrap_counter_reg = wrap_counter_reg;
+    end
   end
 
 
