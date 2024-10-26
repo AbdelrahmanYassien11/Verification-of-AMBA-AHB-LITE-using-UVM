@@ -31,9 +31,9 @@ module ahb_mux #(parameter ADDR_WIDTH = 32, NO_OF_PERIPHERALS = 4, P_BITS = $clo
   output  reg                   HREADY
 );
  /********************************************************/
-  localparam P_HSEL_bus0      = 4'b0001; //sel0 //
-  localparam P_HSEL_bus1      = 4'b0010; //sel1 //
-  localparam P_HSEL_bus2      = 4'b0100; //sel2
+  localparam P_HSEL_bus0      = 4'b0001; //sel0 //1
+  localparam P_HSEL_bus1      = 4'b0010; //sel1 //2
+  localparam P_HSEL_bus2      = 4'b0100; //sel2 //4
   localparam P_HSEL_busd      = 4'b1000;
   localparam P_HSEL_bus_reset = 4'b0000;
 
@@ -83,7 +83,7 @@ module ahb_mux #(parameter ADDR_WIDTH = 32, NO_OF_PERIPHERALS = 4, P_BITS = $clo
     end
   end
 
-  always @(HREADY0 or HREADY1 or HREADY2 or HREADYd) begin
+  always @(*) begin
     case(HSEL_bus_reg_s) 
       P_HSEL_bus0: HREADY <= HREADY0; 
       P_HSEL_bus1: HREADY <= HREADY1;
@@ -94,7 +94,7 @@ module ahb_mux #(parameter ADDR_WIDTH = 32, NO_OF_PERIPHERALS = 4, P_BITS = $clo
     endcase
   end
 
-  always @(HRDATA0 or HRDATA1 or HRDATA2 or HRDATAd) begin
+  always @(*) begin
     case(HSEL_bus_reg_s) 
       P_HSEL_bus0: HRDATA <= HRDATA0;
       P_HSEL_bus1: HRDATA <= HRDATA1;
@@ -105,7 +105,7 @@ module ahb_mux #(parameter ADDR_WIDTH = 32, NO_OF_PERIPHERALS = 4, P_BITS = $clo
     endcase
   end
 
-  always @(HRESP0 or HRESP1 or HRESP2 or HRESPd) begin
+  always @(*) begin
     case(HSEL_bus_reg_s) 
       P_HSEL_bus0: HRESP <= HRESP0;
       P_HSEL_bus1: HRESP <= HRESP1;

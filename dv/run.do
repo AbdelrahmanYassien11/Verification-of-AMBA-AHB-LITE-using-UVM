@@ -13,6 +13,9 @@ vsim top_optimized -cover -solvefaildebug=2 +UVM_TESTNAME=write_twice_test
 #add wave -position insertpoint  \
 #sim:/top_test_uvm/f_if/RECIEVING_PHASE_FLAG
 add wave -position insertpoint sim:/top_test_uvm/DUT/slave1/*
+add wave -position insertpoint sim:/top_test_uvm/DUT/slave0/*
+add wave -position insertpoint sim:/top_test_uvm/DUT/slave2/*
+add wave -position insertpoint sim:/top_test_uvm/DUT/mux1/*
 add wave -position insertpoint  \
 sim:/top_test_uvm/DUT/mux1/HRESP
 add wave -position insertpoint  \

@@ -25,7 +25,7 @@ module ahb_slave #(parameter ADDR_WIDTH = 32, DATA_WIDTH = 32, ADDR_DEPTH = 16, 
        input   wire  [ 2:0] HSIZE,
        input   wire  [ 2:0] HBURST,
        input   wire  [DATA_WIDTH-1:0] HWDATA,
-       output  wire  [DATA_WIDTH-1:0] HRDATA,
+       output  reg   [DATA_WIDTH-1:0] HRDATA,
        output  reg   [ 1:0] HRESP,
        output  reg       error_idle_control,
        input   wire         HREADYin,
@@ -34,7 +34,7 @@ module ahb_slave #(parameter ADDR_WIDTH = 32, DATA_WIDTH = 32, ADDR_DEPTH = 16, 
    /*********************************************************/
    /*********************************************************/ 
 
-  reg [DATA_WIDTH-1:0] HRDATA_reg_s;
+  //reg [DATA_WIDTH-1:0] HRDATA_reg_s;
   reg [DATA_WIDTH-1:0] HRDATA_reg_d;
   //reg [DATA_WIDTH-1:0] HRDATA_reg2;
   reg [ 1:0] HRESP_reg_d;
@@ -104,11 +104,12 @@ module ahb_slave #(parameter ADDR_WIDTH = 32, DATA_WIDTH = 32, ADDR_DEPTH = 16, 
       if (HRESETn==0) begin
         HRESP         <= 2'b00; 
         HREADYout     <= 1'b1;
-        HRDATA_reg_s    <= 'b0;
+        //HRDATA_reg_s    <= 'b0;
+        HRDATA        <= 0;
       end 
       else begin
         HREADYout                 <= HREADYout_reg_d;
-        HRDATA_reg_s              <= HRDATA_reg_d;
+        HRDATA                    <= HRDATA_reg_d;
         HRESP                     <= HRESP_reg_d;        
       end
     end
@@ -210,19 +211,17 @@ module ahb_slave #(parameter ADDR_WIDTH = 32, DATA_WIDTH = 32, ADDR_DEPTH = 16, 
 
         IDLE: begin
           burst_counter_reg = 0;
-         // wrap_counter_reg = 0;        
+         // wrap_counter_reg = 0;
+          HREADYout_reg_d = 1;        
           HRDATA_reg_d = HRDATA_reg_d;
           if(HSEL_reg_d && HREADYin_reg_c) begin
             HRESP_reg_d = 2'b00;
-            HREADYout_reg_d = 1'b1;
           end
           else if (HSEL_reg_d && !HREADYin_reg_c) begin
             HRESP_reg_d = 2'b01;
-            HREADYout_reg_d = 1'b1;
           end
           else begin
             HRESP_reg_d = 2'b00;
-            HREADYout_reg_d = 1'b1;
           end
         end
 
@@ -321,10 +320,14 @@ module ahb_slave #(parameter ADDR_WIDTH = 32, DATA_WIDTH = 32, ADDR_DEPTH = 16, 
         end
 
         ERROR: begin
-          // if(HREADYin) begin
-            HRESP_reg_d     = 2'b01;
+          HRESP_reg_d     = 2'b01;
+          HRDATA_reg_d    = HRDATA_reg_d;
+          if(next_state == ERROR) begin
             HREADYout_reg_d =  1'b0;
-            HRDATA_reg_d    = HRDATA_reg_d;
+          end
+          else begin
+            HREADYout_reg_d = 1;
+          end
           // end
           // else begin
           //   HRESP_reg_d     = 2'b01;
@@ -350,7 +353,7 @@ module ahb_slave #(parameter ADDR_WIDTH = 32, DATA_WIDTH = 32, ADDR_DEPTH = 16, 
   end
 
 
-  assign HRDATA = HRDATA_reg_s;
+  //assign HRDATA = HRDATA_reg_s;
 
   //assign error_idle_control = (next_state == ERROR)? 1:0;
 

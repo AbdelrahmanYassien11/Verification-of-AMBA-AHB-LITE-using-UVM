@@ -248,7 +248,7 @@ sequence_item previous_seq_item, seq_item;
             $display("OUTPUT_1_PHASE_SIGNALS: TIME:%0t ", $time());
             counter = counter + 1;
             OUTPUTS_PHASE_FLAG_1 = 0;
-            OUTPUTS_PHASE_FLAG_2 <= 1;
+            OUTPUTS_PHASE_FLAG_2 = 1;
         end
     end
 

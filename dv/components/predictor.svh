@@ -184,6 +184,7 @@ class predictor extends uvm_subscriber #(sequence_item);
     HREADY_expected = READY;
     case(HTRANS)
       IDLE, BUSY: begin
+        $display("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA %0h--%0d--%0d", HADDR_VALID, burst_counter, wrap_counter);
         if(((HADDR_VALID + burst_counter) < ADDR_DEPTH) & ((HADDR_VALID + wrap_counter) < ADDR_DEPTH)) begin
           wrap_counter = -10;
           burst_counter = 0;
@@ -192,6 +193,7 @@ class predictor extends uvm_subscriber #(sequence_item);
           HRESP_expected = ERROR;
           wrap_counter = -10;
           burst_counter = 0;
+          $display("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
         end
       end
       NONSEQ, SEQ:  begin
