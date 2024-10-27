@@ -113,13 +113,14 @@ class write_twice_sequence extends base_sequence;
     seq_item.TRANS_op.rand_mode(0);
     seq_item.BURST_op.rand_mode(0);
     seq_item.SIZE_op.rand_mode(0);
+    seq_item.HADDR.rand_mode(0);
     //seq_item.HWRITE_rand_c.constraint_mode(0);
 
     start_item(seq_item); // Start the sequence item
     
     // Set the operation type to WRITE
     seq_item.RESET_op = WORKING;
-    seq_item.WRITE_op = WRITE;
+    seq_item.WRITE_op = READ;
     seq_item.TRANS_op = IDLE;
     seq_item.BURST_op = SINGLE;
     seq_item.SIZE_op  = BYTE;
@@ -187,6 +188,7 @@ class write_twice_sequence extends base_sequence;
     seq_item.TRANS_op.rand_mode(0);
     seq_item.BURST_op.rand_mode(0);
     seq_item.SIZE_op.rand_mode(0);
+    seq_item.HADDR.rand_mode(0);
     //seq_item.HWRITE_rand_c.constraint_mode(0);
 
     start_item(seq_item); // Start the sequence item
@@ -253,6 +255,7 @@ class write_twice_sequence extends base_sequence;
     seq_item.TRANS_op.rand_mode(0);
     seq_item.BURST_op.rand_mode(0);
     seq_item.SIZE_op.rand_mode(0);
+    seq_item.HADDR.rand_mode(0);
     //seq_item.HWRITE_rand_c.constraint_mode(0);
 
     start_item(seq_item); // Start the sequence item

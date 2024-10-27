@@ -31,8 +31,8 @@ static int COMPARATOR_transaction_counter;
   rand  bit   [BURST_WIDTH:0] HBURST;
         bit   [PROT_WIDTH:0]  HPROT; 
 
-  rand  bit   [ADDR_WIDTH-1:0]  HADDR;     
-  rand  bit   [DATA_WIDTH-1:0]  HWDATA; 
+  randc  bit   [ADDR_WIDTH-1:0]  HADDR;     
+  randc  bit   [DATA_WIDTH-1:0]  HWDATA; 
 
         // AHB lite output Signals
         logic   [DATA_WIDTH-1:0]  HRDATA;
@@ -47,12 +47,13 @@ static int COMPARATOR_transaction_counter;
        // }
 
 
+
       constraint HWDATA_c { HSIZE == BYTE     -> HWDATA dist {'h00000000:/1, 'h000000FF:/1, ['h01 : 'h000000FE]:/40};
                             HSIZE == HALFWORD -> HWDATA dist {'h00000000:/1, 'h0000FFFF:/1, ['h01 : 'h0000FFFE]:/40};
                             HSIZE == HALFWORD -> HWDATA dist {'h00000000:/1, 'hFFFFFFFF:/1, ['h01 : 'hFFFFFFFE]:/40};
       }
 
-      constraint HWADDR_SEL_c { HADDR[ADDR_WIDTH-1:(ADDR_WIDTH-BITS_FOR_PERIPHERALS)] dist {0:/30, NO_OF_PERIPHERALS-NO_OF_PERIPHERALS+1:/30, NO_OF_PERIPHERALS-NO_OF_PERIPHERALS+2:/30, NO_OF_PERIPHERALS-NO_OF_PERIPHERALS+3:/10};
+      constraint HADDR_SEL_c { HADDR[ADDR_WIDTH-1:(ADDR_WIDTH-BITS_FOR_PERIPHERALS)] dist {0:/30, NO_OF_PERIPHERALS-NO_OF_PERIPHERALS+1:/30, NO_OF_PERIPHERALS-NO_OF_PERIPHERALS+2:/30, NO_OF_PERIPHERALS-NO_OF_PERIPHERALS+3:/10};
       }
 
       constraint HADDR_c { HADDR[(ADDR_WIDTH-BITS_FOR_PERIPHERALS)-1:0] dist {'h00000000:/1, 'h0000000F:/1, ['h00000001 : 'h0000000E]:/40};
@@ -111,8 +112,9 @@ static int COMPARATOR_transaction_counter;
       else begin
         same = super.do_compare(rhs, comparer) && 
                (tested.HRDATA === HRDATA) &&
+               (tested.HREADY == HREADY) &&
                (tested.HRESP  === HRESP);
-               //(tested.HREADY == HREADY) &&
+
       end
       return same;
     endfunction : do_compare

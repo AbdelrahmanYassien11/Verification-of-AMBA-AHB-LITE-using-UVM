@@ -23,7 +23,7 @@ module ahb_default_slave #(parameter ADDR_WIDTH = 32, DATA_WIDTH = 32)
     localparam IDLE   = 2'h0, ERROR = 2'h1;
    /*********************************************************/
     reg [1:0] HRESP_reg;
-    reg       HREADYout_reg;
+    //reg       HREADYout_reg;
     reg  HSEL_reg;
 
   always @(posedge HCLK or negedge HRESETn) begin
@@ -32,7 +32,6 @@ module ahb_default_slave #(parameter ADDR_WIDTH = 32, DATA_WIDTH = 32)
     end 
     else begin
       HRESP     <= HRESP_reg;
-      HREADYout <= HREADYout_reg;
     end
   end
 
@@ -64,11 +63,9 @@ module ahb_default_slave #(parameter ADDR_WIDTH = 32, DATA_WIDTH = 32)
 
       IDLE: begin
         HRESP_reg = 2'b00;
-        HREADYout_reg = 1;
       end
       ERROR: begin 
         HRESP_reg = 2'b01;
-        HREADYout_reg = 0;
       end
 
     endcase // state

@@ -155,54 +155,63 @@ module ahb_slave #(parameter ADDR_WIDTH = 32, DATA_WIDTH = 32, ADDR_DEPTH = 16, 
 
 
   always@(*) begin //next_state logic
-    if (HSEL_reg_c && HREADYin) begin
+    case(state)
+      WRITE, READ, IDLE, BUSY: begin
+        if (HSEL_reg_c && HREADYin) begin
 
-      case (HTRANS_reg_c) 
-        2'b00: begin 
-          next_state    <= IDLE;
-          error_idle_control <= 0;  
-        end 
-        2'b01: begin 
-          next_state    <= BUSY; 
-        end 
-        2'b10, 2'b11: begin 
-          //HREADYout <= 1'b0; 
-          if((HADDR_reg_c + burst_counter < ADDR_DEPTH) & (/*HADDR_reg_c + wrap_counter*/ -6 < ADDR_DEPTH)) begin 
-            if (HWRITE_reg_c) begin 
-              next_state <= WRITE; 
+          case (HTRANS_reg_c) 
+            2'b00: begin 
+              next_state    <= IDLE;
+              error_idle_control <= 0;  
             end 
-            else if(~HWRITE_reg_c) begin 
-              next_state <= READ; 
+            2'b01: begin 
+              next_state    <= BUSY; 
+            end 
+            2'b10, 2'b11: begin 
+              //HREADYout <= 1'b0; 
+              if((HADDR_reg_c + burst_counter < ADDR_DEPTH) & ((HADDR_reg_c + wrap_counter) < ADDR_DEPTH)) begin 
+                if (HWRITE_reg_c) begin 
+                  next_state <= WRITE; 
+                end 
+                else if(~HWRITE_reg_c) begin 
+                  next_state <= READ; 
+                end
+                else begin 
+                  next_state <= ERROR;
+                  error_idle_control <= 1; 
+                end 
+              end 
+              else begin 
+                next_state <= ERROR;
+                error_idle_control <= 1;  
+              end
             end
-            else begin 
-              next_state <= ERROR;
-              error_idle_control <= 1; 
+            default: begin
+              next_state <= IDLE;
             end 
-          end 
-          else begin 
-            next_state <= ERROR;
-            error_idle_control <= 1;  
+          endcase //HTRANS_reg_c
+        end
+
+        else if(HSEL_reg_c && !HREADYin)begin
+          if(state == ERROR) begin
+            next_state <= IDLE;
+            error_idle_control <= 0;
+          end
+          else begin
+            next_state <= state;
           end
         end
-        default: begin
-          next_state <= IDLE;
-        end 
-      endcase //HTRANS_reg_c
-    end
 
-    else if(HSEL_reg_c && !HREADYin)begin
-      if(state == ERROR) begin
+        else begin
+          next_state <= IDLE;
+        end
+      end
+
+      ERROR: begin
         next_state <= IDLE;
         error_idle_control <= 0;
       end
-      else begin
-        next_state <= state;
-      end
-    end
-
-    else begin
-      next_state <= IDLE;
-    end
+    endcase
   end
 
 
@@ -233,7 +242,7 @@ module ahb_slave #(parameter ADDR_WIDTH = 32, DATA_WIDTH = 32, ADDR_DEPTH = 16, 
               burst_counter_reg = 0 ;
             end
             2'b10, 2'b11: begin
-              if((HADDR_reg_d + burst_counter < ADDR_DEPTH) & (HADDR_reg_d + wrap_counter < ADDR_DEPTH)) begin
+              if((HADDR_reg_d + burst_counter < ADDR_DEPTH) & ((HADDR_reg_d + wrap_counter) < ADDR_DEPTH)) begin
                 HRESP_reg_d = 2'b00;
                 case(HBURST_reg_d)
                   INCR, INCR4, INCR8, INCR16: begin
@@ -281,7 +290,7 @@ module ahb_slave #(parameter ADDR_WIDTH = 32, DATA_WIDTH = 32, ADDR_DEPTH = 16, 
               burst_counter_reg = 0 ;
             end
             2'b10, 2'b11: begin
-              if((HADDR_reg_d + burst_counter < ADDR_DEPTH) & (HADDR_reg_d + wrap_counter < ADDR_DEPTH)) begin
+              if((HADDR_reg_d + burst_counter < ADDR_DEPTH) & ((HADDR_reg_d + wrap_counter) < ADDR_DEPTH)) begin
                 case(HBURST_reg_d)
                   INCR, INCR4, INCR8, INCR16: begin
                     case(HSIZE_reg_d) 

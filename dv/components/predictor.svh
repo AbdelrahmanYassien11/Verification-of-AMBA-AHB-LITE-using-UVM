@@ -44,7 +44,8 @@ class predictor extends uvm_subscriber #(sequence_item);
   bit   [PROT_WIDTH:0]  HPROT; 
 
   bit   [ADDR_WIDTH-1:0]  HADDR; 
-  bit   [ADDR_WIDTH-BITS_FOR_PERIPHERALS-1:0] HADDR_VALID;  
+  bit   [ADDR_WIDTH-BITS_FOR_PERIPHERALS-1:0] HADDR_VALID;
+  bit   [ADDR_WIDTH-1:ADDR_WIDTH-BITS_FOR_PERIPHERALS] HSEL;  
   bit   [DATA_WIDTH-1:0]  HWDATA; 
 
   // AHB lite output Signals
@@ -112,6 +113,25 @@ class predictor extends uvm_subscriber #(sequence_item);
 
   // Write method for processing sequence items
   function void write(sequence_item t);
+    if(HRESP_expected == ERROR && HTRANS != IDLE) begin
+      HRESETn = t.HRESETn;
+      HWRITE  = t.HWRITE;
+      HTRANS  = 0;
+      HSIZE   = t.HSIZE;
+      HBURST  = t.HBURST;
+      HPROT   = t.HPROT;
+      HADDR   = t.HADDR;
+      HWDATA  = t.HWDATA;
+      HADDR_VALID = HADDR[ADDR_WIDTH-BITS_FOR_PERIPHERALS-1:0];
+      HSEL        = HADDR[ADDR_WIDTH-1:ADDR_WIDTH-BITS_FOR_PERIPHERALS];
+
+      RESET_op   = t.RESET_op;
+      WRITE_op   = t.WRITE_op;
+      TRANS_op   = t.TRANS_op;
+      BURST_op   = t.BURST_op;          
+      SIZE_op    = t.SIZE_op;
+    end
+    else begin
       HRESETn = t.HRESETn;
       HWRITE  = t.HWRITE;
       HTRANS  = t.HTRANS;
@@ -121,13 +141,14 @@ class predictor extends uvm_subscriber #(sequence_item);
       HADDR   = t.HADDR;
       HWDATA  = t.HWDATA;
       HADDR_VALID = HADDR[ADDR_WIDTH-BITS_FOR_PERIPHERALS-1:0];
+      HSEL        = HADDR[ADDR_WIDTH-1:ADDR_WIDTH-BITS_FOR_PERIPHERALS];
 
       RESET_op   = t.RESET_op;
       WRITE_op   = t.WRITE_op;
       TRANS_op   = t.TRANS_op;
       BURST_op   = t.BURST_op;          
       SIZE_op    = t.SIZE_op;
-    //HREADY  <= t.HREADY;
+    end
      data_str   = $sformatf("HRESETn:%0d, HWRITE:%0d, HTRANS:%0d, HSIZE:%0d, HBURST:%0d, HPROT:%0d, HADDR:%0d, HWDATA:%0d",
                              HRESETn, HWRITE, HTRANS, HSIZE, HBURST, HPROT, HADDR, HWDATA);
     -> inputs_written;
@@ -182,47 +203,61 @@ class predictor extends uvm_subscriber #(sequence_item);
   task write_AHB();
     HRESP_expected = OKAY;
     HREADY_expected = READY;
-    case(HTRANS)
-      IDLE, BUSY: begin
-        $display("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA %0h--%0d--%0d", HADDR_VALID, burst_counter, wrap_counter);
-        if(((HADDR_VALID + burst_counter) < ADDR_DEPTH) & ((HADDR_VALID + wrap_counter) < ADDR_DEPTH)) begin
-          wrap_counter = -10;
-          burst_counter = 0;
-        end
-        else begin
-          HRESP_expected = ERROR;
-          wrap_counter = -10;
-          burst_counter = 0;
-          $display("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
-        end
-      end
-      NONSEQ, SEQ:  begin
-        case(HBURST)
-          INCR, INCR4, INCR8, INCR16: begin
-            write_process(burst_counter);
-            if(HADDR_VALID + burst_counter < ADDR_DEPTH)
-              burst_counter = burst_counter +1;
-          end
-          WRAP4, WRAP8, WRAP16: begin
-            if(wrap_counter == 10) begin
-              case(HBURST)
-                WRAP4:  wrap_counter = 1;
-                WRAP8:  wrap_counter = 3;
-                WRAP16: wrap_counter = 7;
-              endcase // HBURST
+    if(HSEL != 3) begin
+      case(HTRANS)
+        IDLE, BUSY: begin
+          if(HBURST == SINGLE) begin
+            $display("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA %0h--%0d--%0d", HADDR_VALID, burst_counter, wrap_counter);
+            if((HADDR_VALID < ADDR_DEPTH) & (HADDR_VALID < ADDR_DEPTH)) begin
+              wrap_counter = -10;
+              burst_counter = 0;
             end
-            write_process(wrap_counter);
-            if(HADDR_VALID + wrap_counter < ADDR_DEPTH)
-              wrap_counter = wrap_counter -1;
+            else begin
+              HRESP_expected = ERROR;
+              wrap_counter = -10;
+              burst_counter = 0;
+            end
           end
-
-          default: begin
-            write_process(0);
+          else begin
+            $display("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA %0h--%0d--%0d", HADDR_VALID, burst_counter, wrap_counter);
+            if(~( ( (HADDR_VALID + burst_counter) < ADDR_DEPTH) & ((HADDR_VALID + wrap_counter) < ADDR_DEPTH) ) ) begin
+              HRESP_expected = ERROR;
+            end       
           end
+          HRDATA_expected = HRDATA_expected;
+        end
+        NONSEQ, SEQ:  begin
+          case(HBURST)
+            INCR, INCR4, INCR8, INCR16: begin
+              write_process(burst_counter);
+              if(HADDR_VALID + burst_counter < ADDR_DEPTH)
+                burst_counter = burst_counter +1;
+            end
+            WRAP4, WRAP8, WRAP16: begin
+              if(wrap_counter == 10) begin
+                case(HBURST)
+                  WRAP4:  wrap_counter = 1;
+                  WRAP8:  wrap_counter = 3;
+                  WRAP16: wrap_counter = 7;
+                endcase // HBURST
+              end
+              write_process(wrap_counter);
+              if(HADDR_VALID + wrap_counter < ADDR_DEPTH)
+                wrap_counter = wrap_counter -1;
+            end
 
-        endcase // HBURST
-      end
-    endcase // HTRANS
+            default: begin
+              write_process(0);
+            end
+
+          endcase // HBURST
+        end
+      endcase // HTRANS
+    end
+    else begin
+      HRESP_expected  = 1;
+      HRDATA_expected = 0;
+    end
   endtask : write_AHB
 
     task write_process(input int counter);
@@ -309,49 +344,65 @@ class predictor extends uvm_subscriber #(sequence_item);
   task read_AHB();
     HRESP_expected = OKAY;
     HREADY_expected = READY;
-    case(HTRANS)
+    if(HSEL != 3) begin
+      case(HTRANS)
 
-      IDLE, BUSY: begin
-        if(((HADDR_VALID + burst_counter) < ADDR_DEPTH) & ((HADDR_VALID + wrap_counter) < ADDR_DEPTH)) begin
-          wrap_counter = -10;
-          burst_counter = 0;
-        end
-        else begin
-          HRESP_expected = ERROR;
-          wrap_counter = -10;
-          burst_counter = 0;
-        end
-      end
-
-      NONSEQ, SEQ: begin
-        case(HBURST)
-
-          INCR, INCR4, INCR8, INCR16: begin
-            read_process(burst_counter);
-            if(HADDR_VALID + burst_counter < ADDR_DEPTH)
-              burst_counter = burst_counter +1;
-          end
-
-          WRAP4, WRAP8, WRAP16: begin
-            if(wrap_counter == 10) begin
-              case(HBURST)
-                WRAP4:  wrap_counter = 1;
-                WRAP8:  wrap_counter = 3;
-                WRAP16: wrap_counter = 7;
-              endcase // HBURST
+        IDLE, BUSY: begin
+          if(HBURST == SINGLE) begin
+            $display("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA %0h--%0d--%0d", HADDR_VALID, burst_counter, wrap_counter);
+            if((HADDR_VALID < ADDR_DEPTH) & (HADDR_VALID < ADDR_DEPTH)) begin
+              wrap_counter = -10;
+              burst_counter = 0;
             end
-            read_process(wrap_counter);
-            if(HADDR_VALID + wrap_counter < ADDR_DEPTH)
-              wrap_counter = wrap_counter -1;
+            else begin
+              HRESP_expected = ERROR;
+              wrap_counter = -10;
+              burst_counter = 0;
+            end
           end
-
-          default: begin
-            read_process(0);
+          else begin
+            $display("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA %0h--%0d--%0d", HADDR_VALID, burst_counter, wrap_counter);
+            if(~( ( (HADDR_VALID + burst_counter) < ADDR_DEPTH) & ((HADDR_VALID + wrap_counter) < ADDR_DEPTH) ) ) begin
+              HRESP_expected = ERROR;
+            end       
           end
+          HRDATA_expected = HRDATA_expected;
+        end
 
-        endcase // HBURST
-      end
-    endcase // HTRANS
+        NONSEQ, SEQ: begin
+          case(HBURST)
+
+            INCR, INCR4, INCR8, INCR16: begin
+              read_process(burst_counter);
+              if(HADDR_VALID + burst_counter < ADDR_DEPTH)
+                burst_counter = burst_counter +1;
+            end
+
+            WRAP4, WRAP8, WRAP16: begin
+              if(wrap_counter == 10) begin
+                case(HBURST)
+                  WRAP4:  wrap_counter = 1;
+                  WRAP8:  wrap_counter = 3;
+                  WRAP16: wrap_counter = 7;
+                endcase // HBURST
+              end
+              read_process(wrap_counter);
+              if(HADDR_VALID + wrap_counter < ADDR_DEPTH)
+                wrap_counter = wrap_counter -1;
+            end
+
+            default: begin
+              read_process(0);
+            end
+
+          endcase // HBURST
+        end
+      endcase // HTRANS
+    end
+    else begin
+      HRESP_expected  = 1;
+      HRDATA_expected = 0;
+    end
   endtask : read_AHB
 
 
