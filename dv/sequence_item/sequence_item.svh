@@ -46,7 +46,16 @@ static int COMPARATOR_transaction_counter;
        // constraint HWRITE_rand_c { WRITE_op dist { WRITE:=50, READ:=50 };
        // }
 
+      // constraint HADDR_VAL_BURST { BURST_op == WRAP4  -> ((HADDR[ADDR_WIDTH-BITS_FOR_PERIPHERALS-1:0] > 2) && (HADDR[ADDR_WIDTH-BITS_FOR_PERIPHERALS-1:0] < (ADDR_WIDTH-1)))
+      //                              BURST_op == WRAP8  -> ((HADDR[ADDR_WIDTH-BITS_FOR_PERIPHERALS-1:0] > 4) && (HADDR[ADDR_WIDTH-BITS_FOR_PERIPHERALS-1:0] < (ADDR_WIDTH-3)))
+      //                              BURST_op == WRAP16 -> ((HADDR[ADDR_WIDTH-BITS_FOR_PERIPHERALS-1:0] > 8) && (HADDR[ADDR_WIDTH-BITS_FOR_PERIPHERALS-1:0] < (ADDR_WIDTH-7)))
 
+      //                              BURST_op == INCR4   -> (HADDR[ADDR_WIDTH-BITS_FOR_PERIPHERALS-1:0] < ADDR_WIDTH-3  )
+      //                              BURST_op == INCR8   -> (HADDR[ADDR_WIDTH-BITS_FOR_PERIPHERALS-1:0] < ADDR_WIDTH-7  )
+      //                              BURST_op == INCR16  -> (HADDR[ADDR_WIDTH-BITS_FOR_PERIPHERALS-1:0] < ADDR_WIDTH-15 )
+
+      //                              //BURST_op == INCR    -> (HADDR[ADDR_WIDTH-BITS_FOR_PERIPHERALS-1:0] < ADDR_WIDTH-1  )
+      // }
 
       constraint HWDATA_c { HSIZE == BYTE     -> HWDATA dist {'h00000000:/1, 'h000000FF:/1, ['h01 : 'h000000FE]:/40};
                             HSIZE == HALFWORD -> HWDATA dist {'h00000000:/1, 'h0000FFFF:/1, ['h01 : 'h0000FFFE]:/40};
@@ -98,7 +107,7 @@ static int COMPARATOR_transaction_counter;
 
 
 
-    function bit do_compare(uvm_object rhs, uvm_comparer comparer);
+    function bit do_compare(uvm_object rhs, uvm_comparer comparer); 
       sequence_item tested;
       bit               same;
       
@@ -110,11 +119,12 @@ static int COMPARATOR_transaction_counter;
         $display("couldnt compare");
       end
       else begin
-        same = super.do_compare(rhs, comparer) && 
-               (tested.HRDATA === HRDATA) &&
-               (tested.HREADY == HREADY) &&
-               (tested.HRESP  === HRESP);
-
+        if(tested.HTRANS == IDLE) begin
+          same = super.do_compare(rhs, comparer) && /*(tested.HRDATA === HRDATA) &&*/ (tested.HREADY == HREADY) && (tested.HRESP  === HRESP);
+        end
+        else begin
+          same = super.do_compare(rhs, comparer) && (tested.HRDATA === HRDATA) && (tested.HREADY == HREADY) && (tested.HRESP  === HRESP);
+        end
       end
       return same;
     endfunction : do_compare

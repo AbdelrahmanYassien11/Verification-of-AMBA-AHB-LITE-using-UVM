@@ -156,6 +156,7 @@ module ahb_slave #(parameter ADDR_WIDTH = 32, DATA_WIDTH = 32, ADDR_DEPTH = 16, 
 
   always@(*) begin //next_state logic
     case(state)
+
       WRITE, READ, IDLE, BUSY: begin
         if (HSEL_reg_c && HREADYin) begin
 
@@ -167,9 +168,22 @@ module ahb_slave #(parameter ADDR_WIDTH = 32, DATA_WIDTH = 32, ADDR_DEPTH = 16, 
             2'b01: begin 
               next_state    <= BUSY; 
             end 
-            2'b10, 2'b11: begin 
+            // 2'b10: begin 
+            //   //HREADYout <= 1'b0; 
+            //   if (HWRITE_reg_c) begin 
+            //     next_state <= WRITE; 
+            //   end 
+            //   else if(~HWRITE_reg_c) begin 
+            //     next_state <= READ; 
+            //   end
+            //   else begin 
+            //     next_state <= ERROR;
+            //     error_idle_control <= 1; 
+            //   end 
+            // end
+            2'b11, 2'b10: begin 
               //HREADYout <= 1'b0; 
-              if((HADDR_reg_c + burst_counter < ADDR_DEPTH) & ((HADDR_reg_c + wrap_counter) < ADDR_DEPTH)) begin 
+              if((HADDR_reg_c + burst_counter < ADDR_DEPTH) & ((HADDR_reg_c + wrap_counter) < ADDR_DEPTH) /*& ((HADDR_reg_c + wrap_counter) > 0)*/) begin 
                 if (HWRITE_reg_c) begin 
                   next_state <= WRITE; 
                 end 
@@ -208,8 +222,13 @@ module ahb_slave #(parameter ADDR_WIDTH = 32, DATA_WIDTH = 32, ADDR_DEPTH = 16, 
       end
 
       ERROR: begin
-        next_state <= IDLE;
-        error_idle_control <= 0;
+        if(HBURST == SINGLE) begin
+          next_state <= IDLE;
+          error_idle_control <= 0;
+        end
+        else begin
+          next_state <= state;
+        end
       end
     endcase
   end
@@ -220,11 +239,16 @@ module ahb_slave #(parameter ADDR_WIDTH = 32, DATA_WIDTH = 32, ADDR_DEPTH = 16, 
 
         IDLE: begin
           burst_counter_reg = 0;
-         // wrap_counter_reg = 0;
-          HREADYout_reg_d = 1;        
+          HREADYout_reg_d = 1;
+          //wrap_counter_reg = -10;        
           HRDATA_reg_d = HRDATA_reg_d;
           if(HSEL_reg_d && HREADYin_reg_c) begin
-            HRESP_reg_d = 2'b00;
+            if(HRESP_reg_d == 2'b01) begin
+              HRESP_reg_d = 2'b01;
+            end
+            else begin
+              HRESP_reg_d = 2'b00;
+            end
           end
           else if (HSEL_reg_d && !HREADYin_reg_c) begin
             HRESP_reg_d = 2'b01;
@@ -241,22 +265,45 @@ module ahb_slave #(parameter ADDR_WIDTH = 32, DATA_WIDTH = 32, ADDR_DEPTH = 16, 
               HRESP_reg_d = 2'b00;
               burst_counter_reg = 0 ;
             end
+
+            // 2'b10: begin
+            //   HRESP_reg_d = 2'b00;
+            //   case(HBURST_reg_d)
+            //     INCR, INCR4, INCR8, INCR16: begin
+            //       case(HSIZE_reg_d) 
+            //         BYTE_P:     mem[HADDR_reg_d + burst_counter] = HWDATA_reg_d[7:0];
+            //         HALFWORD_P: mem[HADDR_reg_d + burst_counter] = HWDATA_reg_d[15:0];
+            //         default:    mem[HADDR_reg_d + burst_counter] = HWDATA_reg_d[DATA_WIDTH-1:0];
+            //       endcase // HSIZE_reg_d
+            //       burst_counter_reg = burst_counter_reg + 1;
+            //     end
+            //     WRAP4, WRAP8, WRAP16: begin
+            //       case(HSIZE_reg_d) 
+            //         BYTE_P:     mem[HADDR_reg_d + wrap_counter] = HWDATA_reg_d[7:0];
+            //         HALFWORD_P: mem[HADDR_reg_d + wrap_counter] = HWDATA_reg_d[15:0];
+            //         default:    mem[HADDR_reg_d + wrap_counter] = HWDATA_reg_d[DATA_WIDTH-1:0];
+            //       endcase //HSIZE_reg_d
+            //       wrap_counter_reg = wrap_counter_reg - 1;
+            //     end
+            //   endcase // HBURST_reg_d
+            // end
+
             2'b10, 2'b11: begin
               if((HADDR_reg_d + burst_counter < ADDR_DEPTH) & ((HADDR_reg_d + wrap_counter) < ADDR_DEPTH)) begin
                 HRESP_reg_d = 2'b00;
                 case(HBURST_reg_d)
                   INCR, INCR4, INCR8, INCR16: begin
                     case(HSIZE_reg_d) 
-                      BYTE_P:     mem[HADDR_reg_d + burst_counter] = HWDATA_reg_d[7:0];
-                      HALFWORD_P: mem[HADDR_reg_d + burst_counter] = HWDATA_reg_d[15:0];
+                      BYTE_P:     mem[HADDR_reg_d + burst_counter]  = HWDATA_reg_d[7:0];
+                      HALFWORD_P: mem[HADDR_reg_d + burst_counter]  = HWDATA_reg_d[15:0];
                       default:     mem[HADDR_reg_d + burst_counter] = HWDATA_reg_d[DATA_WIDTH-1:0];
                     endcase // HSIZE_reg_d
                     burst_counter_reg = burst_counter_reg + 1;
                   end
                   WRAP4, WRAP8, WRAP16: begin
                     case(HSIZE_reg_d) 
-                      BYTE_P:     mem[HADDR_reg_d + wrap_counter] = HWDATA_reg_d[7:0];
-                      HALFWORD_P: mem[HADDR_reg_d + wrap_counter] = HWDATA_reg_d[15:0];
+                      BYTE_P:     mem[HADDR_reg_d + wrap_counter]  = HWDATA_reg_d[7:0];
+                      HALFWORD_P: mem[HADDR_reg_d + wrap_counter]  = HWDATA_reg_d[15:0];
                       default:     mem[HADDR_reg_d + wrap_counter] = HWDATA_reg_d[DATA_WIDTH-1:0];
                     endcase //HSIZE_reg_d
                     wrap_counter_reg = wrap_counter_reg - 1;
@@ -265,7 +312,7 @@ module ahb_slave #(parameter ADDR_WIDTH = 32, DATA_WIDTH = 32, ADDR_DEPTH = 16, 
                     case(HSIZE_reg_d) 
                       BYTE_P:     mem[HADDR_reg_d + burst_counter] = HWDATA_reg_d[7:0];
                       HALFWORD_P: mem[HADDR_reg_d + burst_counter] = HWDATA_reg_d[15:0];
-                      default:     mem[HADDR_reg_d + burst_counter] = HWDATA_reg_d[DATA_WIDTH-1:0];
+                      default:    mem[HADDR_reg_d + burst_counter] = HWDATA_reg_d[DATA_WIDTH-1:0];
                     endcase //HSIZE_reg_d
                     burst_counter_reg = 0 ;
                   end
@@ -281,22 +328,53 @@ module ahb_slave #(parameter ADDR_WIDTH = 32, DATA_WIDTH = 32, ADDR_DEPTH = 16, 
         end
 
         READ: begin
-          HREADYout_reg_d              = 1'b1;
-          //HRDATA_reg_d                 = mem[HADDR_reg_d  +burst_counter_reg];
+          HREADYout_reg_d = 1'b1;
+          //HRDATA_reg_d  = mem[HADDR_reg_d + burst_counter_reg];
           $display("%0t WHY AM I HERE NOW1?", $time());
           case(HTRANS_reg_d)
             2'b00, 2'b01: begin
               HRESP_reg_d       = 2'b00; //`HRESP_OKAY;
               burst_counter_reg = 0 ;
             end
+
+            // 2'b10: begin
+            //   case(HBURST_reg_d)
+            //     INCR, INCR4, INCR8, INCR16: begin
+            //       case(HSIZE_reg_d) 
+            //         BYTE_P:     HRDATA_reg_d[7:0]  = mem[HADDR_reg_d  + burst_counter];
+            //         HALFWORD_P: HRDATA_reg_d[15:0] = mem[HADDR_reg_d  + burst_counter];
+            //         default:    HRDATA_reg_d[DATA_WIDTH-1:0] = mem[HADDR_reg_d  + burst_counter];
+            //       endcase //HSIZE_reg_d                
+            //       burst_counter_reg = burst_counter_reg + 1;
+            //       $display("%0t WHY AM I HERE NOW2?", $time());
+            //     end
+            //     WRAP4, WRAP8, WRAP16: begin
+            //       case(HSIZE_reg_d) 
+            //         BYTE_P:     HRDATA_reg_d[7:0]  = mem[HADDR_reg_d  + wrap_counter];
+            //         HALFWORD_P: HRDATA_reg_d[15:0] = mem[HADDR_reg_d  + wrap_counter];
+            //         default:    HRDATA_reg_d[DATA_WIDTH-1:0] = mem[HADDR_reg_d  + wrap_counter];
+            //       endcase //HSIZE_reg_d     
+            //       wrap_counter_reg  = wrap_counter_reg - 1;
+            //     end
+            //     default: begin
+            //       case(HSIZE_reg_d) 
+            //         BYTE_P:     HRDATA_reg_d[7:0]  = mem[HADDR_reg_d  + burst_counter];
+            //         HALFWORD_P: HRDATA_reg_d[15:0] = mem[HADDR_reg_d  + burst_counter];
+            //         default:    HRDATA_reg_d[DATA_WIDTH-1:0] = mem[HADDR_reg_d  + burst_counter];
+            //       endcase //HSIZE_reg_d     
+            //       burst_counter_reg = 0 ;
+            //     end
+            //   endcase // HBURST_reg_d
+            // end
+
             2'b10, 2'b11: begin
               if((HADDR_reg_d + burst_counter < ADDR_DEPTH) & ((HADDR_reg_d + wrap_counter) < ADDR_DEPTH)) begin
                 case(HBURST_reg_d)
                   INCR, INCR4, INCR8, INCR16: begin
                     case(HSIZE_reg_d) 
                       BYTE_P:     HRDATA_reg_d[7:0] = mem[HADDR_reg_d  + burst_counter];
-                      HALFWORD_P: HRDATA_reg_d[15:0] = mem[HADDR_reg_d  + burst_counter];
-                      default:     HRDATA_reg_d[DATA_WIDTH-1:0] = mem[HADDR_reg_d  + burst_counter];
+                      HALFWORD_P: HRDATA_reg_d[15:0] = mem[HADDR_reg_d + burst_counter];
+                      default:    HRDATA_reg_d[DATA_WIDTH-1:0] = mem[HADDR_reg_d  + burst_counter];
                     endcase //HSIZE_reg_d                
                     burst_counter_reg = burst_counter_reg + 1;
                     $display("%0t WHY AM I HERE NOW2?", $time());
@@ -304,16 +382,16 @@ module ahb_slave #(parameter ADDR_WIDTH = 32, DATA_WIDTH = 32, ADDR_DEPTH = 16, 
                   WRAP4, WRAP8, WRAP16: begin
                     case(HSIZE_reg_d) 
                       BYTE_P:     HRDATA_reg_d[7:0] = mem[HADDR_reg_d  + wrap_counter];
-                      HALFWORD_P: HRDATA_reg_d[15:0] = mem[HADDR_reg_d  + wrap_counter];
-                      default:     HRDATA_reg_d[DATA_WIDTH-1:0] = mem[HADDR_reg_d  + wrap_counter];
+                      HALFWORD_P: HRDATA_reg_d[15:0] = mem[HADDR_reg_d + wrap_counter];
+                      default:    HRDATA_reg_d[DATA_WIDTH-1:0] = mem[HADDR_reg_d  + wrap_counter];
                     endcase //HSIZE_reg_d     
                     wrap_counter_reg  = wrap_counter_reg - 1;
                   end
                   default: begin
                     case(HSIZE_reg_d) 
                       BYTE_P:     HRDATA_reg_d[7:0] = mem[HADDR_reg_d  + burst_counter];
-                      HALFWORD_P: HRDATA_reg_d[15:0] = mem[HADDR_reg_d  + burst_counter];
-                      default:     HRDATA_reg_d[DATA_WIDTH-1:0] = mem[HADDR_reg_d  + burst_counter];
+                      HALFWORD_P: HRDATA_reg_d[15:0] = mem[HADDR_reg_d + burst_counter];
+                      default:    HRDATA_reg_d[DATA_WIDTH-1:0] = mem[HADDR_reg_d  + burst_counter];
                     endcase //HSIZE_reg_d     
                     burst_counter_reg = 0 ;
                   end
@@ -337,12 +415,6 @@ module ahb_slave #(parameter ADDR_WIDTH = 32, DATA_WIDTH = 32, ADDR_DEPTH = 16, 
           else begin
             HREADYout_reg_d = 1;
           end
-          // end
-          // else begin
-          //   HRESP_reg_d     = 2'b01;
-          //   HREADYout_reg_d =  1'b1;
-          //   HRDATA_reg_d    = HRDATA;
-          // end
         end
       endcase // state
   end
@@ -368,8 +440,4 @@ module ahb_slave #(parameter ADDR_WIDTH = 32, DATA_WIDTH = 32, ADDR_DEPTH = 16, 
 
 endmodule
 // `endif
-
-
-
-
 

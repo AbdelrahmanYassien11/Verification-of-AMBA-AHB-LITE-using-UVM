@@ -177,9 +177,10 @@ class write_twice_sequence extends base_sequence;
       seq_item.BURST_op = INCR4;
       seq_item.SIZE_op  = BYTE;
 
+
       assert(seq_item.randomize()); // Randomize the sequence item
       // Set the control signals for writing
-
+            `uvm_info("WRITE_TWICE_SEQUENCE:", $sformatf("seq_item.HADDR INCR4 = %0d", seq_item.HADDR), UVM_LOW)
       finish_item(seq_item);
     end
 
@@ -191,6 +192,8 @@ class write_twice_sequence extends base_sequence;
     seq_item.HADDR.rand_mode(0);
     //seq_item.HWRITE_rand_c.constraint_mode(0);
 
+    `uvm_info("WRITE_TWICE_SEQUENCE:", $sformatf("seq_item.HADDR = %0d", seq_item.HADDR), UVM_LOW)
+
     start_item(seq_item); // Start the sequence item
     
     // Set the operation type to WRITE
@@ -200,12 +203,14 @@ class write_twice_sequence extends base_sequence;
     seq_item.BURST_op = SINGLE;
     seq_item.SIZE_op  = BYTE;
 
+    `uvm_info("WRITE_TWICE_SEQUENCE:", $sformatf("seq_item.HADDR = %0d", seq_item.HADDR), UVM_LOW)
+
     assert(seq_item.randomize()); // Randomize the sequence item
     // Set the control signals for writing
 
     finish_item(seq_item);
 
-        seq_item.RESET_op.rand_mode(0);
+    seq_item.RESET_op.rand_mode(0);
     seq_item.WRITE_op.rand_mode(0);
     seq_item.TRANS_op.rand_mode(0);
     seq_item.BURST_op.rand_mode(0);
@@ -221,9 +226,10 @@ class write_twice_sequence extends base_sequence;
     seq_item.BURST_op = WRAP4;
     seq_item.SIZE_op  = BYTE;
 
+          `uvm_info("WRITE_TWICE_SEQUENCE:", $sformatf("seq_item.HADDR WRAP4 = %0d", seq_item.HADDR), UVM_LOW)
     assert(seq_item.randomize()); // Randomize the sequence item
-    // Set the control signals for writing
 
+    // Set the control signals for writing
     finish_item(seq_item);
 
     for (int i = 0; i < 3; i++) begin
