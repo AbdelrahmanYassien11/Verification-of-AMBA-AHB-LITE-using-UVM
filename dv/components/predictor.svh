@@ -131,8 +131,8 @@ class predictor extends uvm_subscriber #(sequence_item);
       HBURST  = t.HBURST;
       HPROT   = t.HPROT;
       HWDATA  = t.HWDATA;
-      HADDR_VALID = HADDR[ADDR_WIDTH-BITS_FOR_PERIPHERALS-1:0];
-      HSEL        = HADDR[ADDR_WIDTH-1:ADDR_WIDTH-BITS_FOR_PERIPHERALS];
+      HADDR_VALID = HADDR[ADDR_WIDTH-BITS_FOR_PERIPHERALS-1:0];//29:0
+      HSEL        = HADDR[ADDR_WIDTH-1:ADDR_WIDTH-BITS_FOR_PERIPHERALS];//31:30
       RESET_op   = t.RESET_op;
       WRITE_op   = t.WRITE_op;
       TRANS_op   = t.TRANS_op;
@@ -200,17 +200,13 @@ class predictor extends uvm_subscriber #(sequence_item);
       case(HTRANS)
         IDLE, BUSY: begin
           if(HBURST == SINGLE) begin
-            $display("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA %0h--%0d--%0d", HADDR_VALID, burst_counter, wrap_counter);
-            if(~(/*((HADDR_VALID + wrap_counter) > 0) &*/ ((HADDR_VALID + burst_counter) < ADDR_DEPTH) & ((HADDR_VALID + wrap_counter) < ADDR_DEPTH))) begin
+            if(~(((HADDR_VALID + burst_counter) < ADDR_DEPTH) & (signed'(HADDR_VALID + wrap_counter) < ADDR_DEPTH))) begin
               HRESP_expected = ERROR;
-              $display("ERROR INITIATED SINGLE");
             end
           end
           else begin
-            $display("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA %0h--%0d--%0d", HADDR_VALID, burst_counter, wrap_counter);
-            if(~(/*((HADDR_VALID + wrap_counter) > 0) &*/ ((HADDR_VALID + burst_counter) < ADDR_DEPTH) & ((HADDR_VALID + wrap_counter) < ADDR_DEPTH))) begin
+            if(~(/*(signed'(HADDR_VALID + wrap_counter) > 0) &*/ ((HADDR_VALID + burst_counter) < ADDR_DEPTH) & (signed'(HADDR_VALID + wrap_counter) < ADDR_DEPTH))) begin
               HRESP_expected = ERROR;
-              $display("ERROR INITIATED BURST");
             end       
           end
           wrap_counter  = -10;
@@ -234,7 +230,7 @@ class predictor extends uvm_subscriber #(sequence_item);
                 endcase // HBURST
               end
               write_process(wrap_counter);
-              if(/*((HADDR_VALID + wrap_counter) > 0) &*/ ((HADDR_VALID + wrap_counter) < ADDR_DEPTH)) 
+              if(/*(signed'(HADDR_VALID + wrap_counter) > 0) &*/ (signed'(HADDR_VALID + wrap_counter) < ADDR_DEPTH)) 
                 wrap_counter = wrap_counter -1;
             end
 
@@ -343,15 +339,13 @@ class predictor extends uvm_subscriber #(sequence_item);
         IDLE, BUSY: begin
           wrap_counter = -10;
           burst_counter = 0;  
-          if(HBURST == SINGLE) begin          
-            $display("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA %0h--%0d--%0d", HADDR_VALID, burst_counter, wrap_counter);
-            if(~(/*((HADDR_VALID + wrap_counter) > 0) &*/ ((HADDR_VALID + burst_counter) < ADDR_DEPTH) & ((HADDR_VALID + wrap_counter) < ADDR_DEPTH))) begin
+          if(HBURST == SINGLE) begin  
+            if(~(/*(signed'(HADDR_VALID + wrap_counter) > 0) &*/ ((HADDR_VALID + burst_counter) < ADDR_DEPTH) & (signed'(HADDR_VALID + wrap_counter) < ADDR_DEPTH))) begin
               HRESP_expected = ERROR;
             end
           end
           else begin
-            $display("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA %0h--%0d--%0d", HADDR_VALID, burst_counter, wrap_counter);
-            if(~(/*((HADDR_VALID + wrap_counter) > 0) &*/ ((HADDR_VALID + burst_counter) < ADDR_DEPTH) & ((HADDR_VALID + wrap_counter) < ADDR_DEPTH))) begin
+            if(~(/*(signed'(HADDR_VALID + wrap_counter) > 0) &*/ ((HADDR_VALID + burst_counter) < ADDR_DEPTH) & (signed'(HADDR_VALID + wrap_counter) < ADDR_DEPTH))) begin
               HRESP_expected = ERROR;
             end       
           end
@@ -376,7 +370,7 @@ class predictor extends uvm_subscriber #(sequence_item);
                 endcase // HBURST
               end
               read_process(wrap_counter);
-              if(/*((HADDR_VALID + wrap_counter) > 0) &*/ ((HADDR_VALID + wrap_counter) < ADDR_DEPTH)) 
+              if(/*(signed'(HADDR_VALID + wrap_counter) > 0) &*/ (signed'(HADDR_VALID + wrap_counter) < ADDR_DEPTH)) 
                 wrap_counter = wrap_counter -1;
             end
 

@@ -43,26 +43,26 @@ static int COMPARATOR_transaction_counter;
       //rand bit [FIFO_WIDTH-1:0] data_to_write;
       // active low synchronous reset
 
-       // constraint HWRITE_rand_c { WRITE_op dist { WRITE:=50, READ:=50 };
-       // }
+       constraint HWRITE_rand_c { WRITE_op dist { WRITE:=50, READ:=50 };
+       }
 
-      // constraint HADDR_VAL_BURST { BURST_op == WRAP4  -> ((HADDR[ADDR_WIDTH-BITS_FOR_PERIPHERALS-1:0] > 2) && (HADDR[ADDR_WIDTH-BITS_FOR_PERIPHERALS-1:0] < (ADDR_WIDTH-1)))
-      //                              BURST_op == WRAP8  -> ((HADDR[ADDR_WIDTH-BITS_FOR_PERIPHERALS-1:0] > 4) && (HADDR[ADDR_WIDTH-BITS_FOR_PERIPHERALS-1:0] < (ADDR_WIDTH-3)))
-      //                              BURST_op == WRAP16 -> ((HADDR[ADDR_WIDTH-BITS_FOR_PERIPHERALS-1:0] > 8) && (HADDR[ADDR_WIDTH-BITS_FOR_PERIPHERALS-1:0] < (ADDR_WIDTH-7)))
+      constraint HADDR_VAL_BURST { BURST_op == WRAP4  -> ((HADDR[ADDR_WIDTH-BITS_FOR_PERIPHERALS-1:0] > 2) && (HADDR[ADDR_WIDTH-BITS_FOR_PERIPHERALS-1:0] < (ADDR_DEPTH-1)));
+                                   BURST_op == WRAP8  -> ((HADDR[ADDR_WIDTH-BITS_FOR_PERIPHERALS-1:0] > 4) && (HADDR[ADDR_WIDTH-BITS_FOR_PERIPHERALS-1:0] < (ADDR_DEPTH-3)));
+                                   BURST_op == WRAP16 -> ((HADDR[ADDR_WIDTH-BITS_FOR_PERIPHERALS-1:0] > 8) && (HADDR[ADDR_WIDTH-BITS_FOR_PERIPHERALS-1:0] < (ADDR_DEPTH-7)));
 
-      //                              BURST_op == INCR4   -> (HADDR[ADDR_WIDTH-BITS_FOR_PERIPHERALS-1:0] < ADDR_WIDTH-3  )
-      //                              BURST_op == INCR8   -> (HADDR[ADDR_WIDTH-BITS_FOR_PERIPHERALS-1:0] < ADDR_WIDTH-7  )
-      //                              BURST_op == INCR16  -> (HADDR[ADDR_WIDTH-BITS_FOR_PERIPHERALS-1:0] < ADDR_WIDTH-15 )
+                                   BURST_op == INCR4   -> (HADDR[ADDR_WIDTH-BITS_FOR_PERIPHERALS-1:0] < ADDR_DEPTH-3  );
+                                   BURST_op == INCR8   -> (HADDR[ADDR_WIDTH-BITS_FOR_PERIPHERALS-1:0] < ADDR_DEPTH-7  );
+                                   BURST_op == INCR16  -> (HADDR[ADDR_WIDTH-BITS_FOR_PERIPHERALS-1:0] < ADDR_DEPTH-15 );
 
-      //                              //BURST_op == INCR    -> (HADDR[ADDR_WIDTH-BITS_FOR_PERIPHERALS-1:0] < ADDR_WIDTH-1  )
-      // }
+                                   //BURST_op == INCR    -> (HADDR[ADDR_WIDTH-BITS_FOR_PERIPHERALS-1:0] < ADDR_WIDTH-1  )
+      }
 
       constraint HWDATA_c { HSIZE == BYTE     -> HWDATA dist {'h00000000:/1, 'h000000FF:/1, ['h01 : 'h000000FE]:/40};
                             HSIZE == HALFWORD -> HWDATA dist {'h00000000:/1, 'h0000FFFF:/1, ['h01 : 'h0000FFFE]:/40};
                             HSIZE == HALFWORD -> HWDATA dist {'h00000000:/1, 'hFFFFFFFF:/1, ['h01 : 'hFFFFFFFE]:/40};
       }
 
-      constraint HADDR_SEL_c { HADDR[ADDR_WIDTH-1:(ADDR_WIDTH-BITS_FOR_PERIPHERALS)] dist {0:/30, NO_OF_PERIPHERALS-NO_OF_PERIPHERALS+1:/30, NO_OF_PERIPHERALS-NO_OF_PERIPHERALS+2:/30, NO_OF_PERIPHERALS-NO_OF_PERIPHERALS+3:/10};
+      constraint HADDR_SEL_c { HADDR[ADDR_WIDTH-1:ADDR_WIDTH-BITS_FOR_PERIPHERALS] dist {0:/30, NO_OF_PERIPHERALS-NO_OF_PERIPHERALS+1:/30, NO_OF_PERIPHERALS-NO_OF_PERIPHERALS+2:/30, NO_OF_PERIPHERALS-NO_OF_PERIPHERALS+3:/10};
       }
 
       constraint HADDR_c { HADDR[(ADDR_WIDTH-BITS_FOR_PERIPHERALS)-1:0] dist {'h00000000:/1, 'h0000000F:/1, ['h00000001 : 'h0000000E]:/40};
