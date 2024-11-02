@@ -21,6 +21,7 @@ class WRITE_WRAP8_sequence extends base_sequence;
 
   // Handle to the reset sequence
   reset_sequence reset_sequence_h;
+  IDLE_sequence IDLE_sequence_h;
 
   // Constructor
   function new(string name = "WRITE_WRAP8_sequence");
@@ -33,6 +34,7 @@ class WRITE_WRAP8_sequence extends base_sequence;
     super.pre_body(); // Call the base class pre_body
     // Create an instance of the reset sequence
     reset_sequence_h = reset_sequence::type_id::create("reset_sequence_h");
+    IDLE_sequence_h = IDLE_sequence::type_id::create("IDLE_sequence_h");
   endtask : pre_body
 
   // Main task body for executing the write operation
@@ -40,6 +42,8 @@ class WRITE_WRAP8_sequence extends base_sequence;
 
     reset_sequence::last_test = 1'b1;
 
+    IDLE_sequence::reset_flag = 1'b1;
+    IDLE_sequence::last_test = 1'b1;
 
     `uvm_info("WRITE_WRAP8_sequence: ", "STARTING" , UVM_HIGH)
 
@@ -54,14 +58,14 @@ class WRITE_WRAP8_sequence extends base_sequence;
       seq_item.WRITE_op.rand_mode(0);
       seq_item.TRANS_op.rand_mode(0);
       seq_item.BURST_op.rand_mode(0);
-      seq_item.SIZE_op.rand_mode(0);
+      //seq_item.SIZE_op.rand_mode(0);
 
       // Set the operation type to WRITE
       seq_item.RESET_op = WORKING;
       seq_item.WRITE_op = WRITE;
       seq_item.TRANS_op = NONSEQ;
       seq_item.BURST_op = WRAP8;
-      seq_item.SIZE_op  = BYTE;
+      //seq_item.SIZE_op  = BYTE;
 
       assert(seq_item.randomize()); // Randomize the sequence item
 
@@ -84,7 +88,7 @@ class WRITE_WRAP8_sequence extends base_sequence;
         seq_item.WRITE_op = WRITE;
         seq_item.TRANS_op = SEQ;
         seq_item.BURST_op = WRAP8;
-        seq_item.SIZE_op  = BYTE;
+        //seq_item.SIZE_op  = BYTE;
 
         assert(seq_item.randomize()); // Randomize the sequence item
 
@@ -94,26 +98,7 @@ class WRITE_WRAP8_sequence extends base_sequence;
     if(~last_test)
       seq_item.last_item = 1'b1;
 
-    start_item(seq_item); // Start the sequence item
-    
-      seq_item.RESET_op.rand_mode(0);
-      seq_item.WRITE_op.rand_mode(0);
-      seq_item.TRANS_op.rand_mode(0);
-      seq_item.BURST_op.rand_mode(0);
-      seq_item.SIZE_op.rand_mode(0);
-
-      // Set the operation type to WRITE
-      seq_item.RESET_op = WORKING;
-      seq_item.WRITE_op = WRITE;
-      seq_item.TRANS_op = IDLE;
-      seq_item.BURST_op = SINGLE;
-      seq_item.SIZE_op  = BYTE;
-
-      // Randomize the sequence item
-      assert(seq_item.randomize()); 
-
-    finish_item(seq_item);
-
+    IDLE_sequence_h.start(sequencer_h);
 
   endtask : body
 

@@ -22,7 +22,6 @@ module top_test_uvm();
 				.HPROT(f_if.HPROT),
 				.HWDATA(f_if.HWDATA),
 				.HRDATA(f_if.HRDATA),				
-				.error_idle_control(f_if.error_to_idle),
 				.HRESP(f_if.HRESP),
 				.HREADY(f_if.HREADY)
 		);

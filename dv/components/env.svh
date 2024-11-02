@@ -78,7 +78,7 @@ class env extends uvm_env;
     super.connect_phase(phase);
 
     // Connect analysis ports and exports
-    passive_agent_h.tlm_analysis_port_outputs.connect(coverage_h.analysis_export);
+    active_agent_h.tlm_analysis_port_inputs.connect(coverage_h.analysis_export);
     active_agent_h.tlm_analysis_port_inputs.connect(scoreboard_h.analysis_export_inputs);
     passive_agent_h.tlm_analysis_port_outputs.connect(scoreboard_h.analysis_export_outputs);
 

@@ -35,7 +35,7 @@ class predictor extends uvm_subscriber #(sequence_item);
   // logic [DATA_WIDTH-1:0] slave2 [P_SLAVE2_START:P_SLAVE2_END];
 
   // AHB lite Control Signals
-  bit                   HRESETn;    // reset (active low)
+  bit     HRESETn;    // reset (active low)
   logic   HWRITE;
 
   bit   [TRANS_WIDTH:0]  HTRANS; 
@@ -44,8 +44,8 @@ class predictor extends uvm_subscriber #(sequence_item);
   bit   [PROT_WIDTH:0]  HPROT; 
 
   bit   [ADDR_WIDTH-1:0]  HADDR; 
-  bit   [ADDR_WIDTH-BITS_FOR_PERIPHERALS-1:0] HADDR_VALID;
-  bit   [ADDR_WIDTH-1:ADDR_WIDTH-BITS_FOR_PERIPHERALS] HSEL;  
+  bit   [ADDR_WIDTH-BITS_FOR_SUBORDINATES-1:0] HADDR_VALID;
+  bit   [ADDR_WIDTH-1:ADDR_WIDTH-BITS_FOR_SUBORDINATES] HSEL;  
   bit   [DATA_WIDTH-1:0]  HWDATA; 
 
   // AHB lite output Signals
@@ -118,27 +118,27 @@ class predictor extends uvm_subscriber #(sequence_item);
   // Write method for processing sequence items
   function void write(sequence_item t);
     if(HSEL != 3 && HRESP_expected == ERROR && HTRANS != IDLE && t.HBURST == SINGLE) begin
-      HTRANS  = 0;
+      HTRANS      = 0;
       $display("OVERRIDING TO IDLE");
     end
     else begin
-      HTRANS  = t.HTRANS;
+      HTRANS      = t.HTRANS;
     end
-      HRESETn = t.HRESETn;
-      HWRITE  = t.HWRITE;
-      HADDR   = t.HADDR;
-      HSIZE   = t.HSIZE;
-      HBURST  = t.HBURST;
-      HPROT   = t.HPROT;
-      HWDATA  = t.HWDATA;
-      HADDR_VALID = HADDR[ADDR_WIDTH-BITS_FOR_PERIPHERALS-1:0];//29:0
-      HSEL        = HADDR[ADDR_WIDTH-1:ADDR_WIDTH-BITS_FOR_PERIPHERALS];//31:30
-      RESET_op   = t.RESET_op;
-      WRITE_op   = t.WRITE_op;
-      TRANS_op   = t.TRANS_op;
-      BURST_op   = t.BURST_op;          
-      SIZE_op    = t.SIZE_op;
-     data_str   = $sformatf("HRESETn:%0d, HWRITE:%0d, HTRANS:%0d, HSIZE:%0d, HBURST:%0d, HPROT:%0d, HADDR:%0d, HWDATA:%0d",
+      HRESETn     = t.HRESETn;
+      HWRITE      = t.HWRITE;
+      HADDR       = t.HADDR;
+      HSIZE       = t.HSIZE;
+      HBURST      = t.HBURST;
+      HPROT       = t.HPROT;
+      HWDATA      = t.HWDATA;
+      HADDR_VALID = HADDR[ADDR_WIDTH-BITS_FOR_SUBORDINATES-1:0];//29:0
+      HSEL        = HADDR[ADDR_WIDTH-1:ADDR_WIDTH-BITS_FOR_SUBORDINATES];//31:30
+      RESET_op    = t.RESET_op;
+      WRITE_op    = t.WRITE_op;
+      TRANS_op    = t.TRANS_op;
+      BURST_op    = t.BURST_op;          
+      SIZE_op     = t.SIZE_op;
+      data_str    = $sformatf("HRESETn:%0d, HWRITE:%0d, HTRANS:%0d, HSIZE:%0d, HBURST:%0d, HPROT:%0d, HADDR:%0d, HWDATA:%0d",
                              HRESETn, HWRITE, HTRANS, HSIZE, HBURST, HPROT, HADDR, HWDATA);
     -> inputs_written;
   endfunction
@@ -174,7 +174,7 @@ class predictor extends uvm_subscriber #(sequence_item);
       else if(HWRITE === 1'b0) begin
           read_AHB();
       end
-      send_results(/*iHRESETn, iHWRITE, iHTRANS, iHSIZE, iHBURST, iHPROT, iHADDR, iHWDATA*/);
+      send_results();
     endtask : data_phase
 
 
@@ -256,7 +256,7 @@ class predictor extends uvm_subscriber #(sequence_item);
         case (HSIZE)
 
           BYTE_P: begin
-            case(HADDR[ADDR_WIDTH-1:ADDR_WIDTH-BITS_FOR_PERIPHERALS])
+            case(HADDR[ADDR_WIDTH-1:ADDR_WIDTH-BITS_FOR_SUBORDINATES])
               2'b00: begin
                 slave0[HADDR_VALID + counter] = HWDATA[BYTE_WIDTH-1:0];
                 `uvm_info("PREDICTOR", {"WRITE_SLAVE0:", $sformatf("%0h, %0h, %0h", slave0[HADDR_VALID+counter], HWDATA[BYTE_WIDTH-1:0], (HADDR + counter))}, UVM_LOW)
@@ -271,14 +271,14 @@ class predictor extends uvm_subscriber #(sequence_item);
                 `uvm_info("PREDICTOR", {"WRITE_SLAVE2:", $sformatf("%0h, %0h, %0h", slave2[HADDR_VALID+counter], HWDATA[BYTE_WIDTH-1:0], (HADDR + counter))}, UVM_LOW)
               end
               default: begin
-                HRESP_expected = ERROR;
+                HRESP_expected  = ERROR;
                 HREADY_expected = NOT_READY;
               end
             endcase
           end
 
           HALFWORD_P: begin
-            case(HADDR[ADDR_WIDTH-1:ADDR_WIDTH-BITS_FOR_PERIPHERALS])
+            case(HADDR[ADDR_WIDTH-1:ADDR_WIDTH-BITS_FOR_SUBORDINATES])
               2'b00: begin
                 slave0[HADDR_VALID + counter] = HWDATA[HALFWORD_WIDTH-1:0];
                 `uvm_info("PREDICTOR", {"WRITE_SLAVE0:", $sformatf("%0h, %0h", slave0[HADDR_VALID+counter], HWDATA[HALFWORD_WIDTH-1:0])}, UVM_LOW)
@@ -293,14 +293,14 @@ class predictor extends uvm_subscriber #(sequence_item);
                 `uvm_info("PREDICTOR", {"WRITE_SLAVE2:", $sformatf("%0h, %0h", slave2[HADDR_VALID+counter], HWDATA[HALFWORD_WIDTH-1:0])}, UVM_LOW)
               end
               default: begin
-                HRESP_expected = ERROR;
+                HRESP_expected  = ERROR;
                 HREADY_expected = NOT_READY;
               end
             endcase
           end
 
           default : begin
-            case(HADDR[ADDR_WIDTH-1:ADDR_WIDTH-BITS_FOR_PERIPHERALS])
+            case(HADDR[ADDR_WIDTH-1:ADDR_WIDTH-BITS_FOR_SUBORDINATES])
               2'b00: begin
                 slave0[HADDR_VALID + counter] = HWDATA[WORD_WIDTH-1:0];
                 `uvm_info("PREDICTOR", {"WRITE_SLAVE0:", $sformatf("%0h, %0h", slave0[HADDR_VALID+counter], HWDATA[WORD_WIDTH-1:0])}, UVM_LOW)
@@ -315,7 +315,7 @@ class predictor extends uvm_subscriber #(sequence_item);
                 `uvm_info("PREDICTOR", {"WRITE_SLAVE2:", $sformatf("%0h, %0h", slave2[HADDR_VALID+counter], HWDATA[WORD_WIDTH-1:0])}, UVM_LOW)
               end
               default: begin
-                HRESP_expected = ERROR;
+                HRESP_expected  = ERROR;
                 HREADY_expected = NOT_READY;
               end
             endcase 
@@ -324,12 +324,12 @@ class predictor extends uvm_subscriber #(sequence_item);
         endcase
       end
       else begin
-        HRESP_expected = ERROR;
+        HRESP_expected  = ERROR;
         HREADY_expected = NOT_READY;
       end
     endtask : write_process
 
-    // Task: Read data from the AHB and handle pointer updates
+  // Task: Read data from the AHB peripheral
   task read_AHB();
     HRESP_expected = OKAY;
     HREADY_expected = READY;
@@ -393,7 +393,7 @@ class predictor extends uvm_subscriber #(sequence_item);
       if(((HADDR_VALID + counter) < ADDR_DEPTH) /*& ((HADDR_VALID + counter) > 0)*/) begin
         case (HSIZE)
           BYTE_P: begin
-            case(HADDR[ADDR_WIDTH-1:ADDR_WIDTH-BITS_FOR_PERIPHERALS])
+            case(HADDR[ADDR_WIDTH-1:ADDR_WIDTH-BITS_FOR_SUBORDINATES])
               2'b00: begin
                 HRDATA_expected[BYTE_WIDTH-1:0] = slave0[HADDR_VALID+counter];
                 `uvm_info("PREDICTOR", {"READ_SLAVE0:", $sformatf("%0h  %0h", slave0[HADDR_VALID+counter], (HADDR_VALID+counter))}, UVM_LOW)
@@ -415,7 +415,7 @@ class predictor extends uvm_subscriber #(sequence_item);
           end
 
           HALFWORD_P: begin
-            case(HADDR[ADDR_WIDTH-1:ADDR_WIDTH-BITS_FOR_PERIPHERALS])
+            case(HADDR[ADDR_WIDTH-1:ADDR_WIDTH-BITS_FOR_SUBORDINATES])
               2'b00: begin
                 HRDATA_expected[HALFWORD_WIDTH-1:0] = slave0[HADDR_VALID+counter];
                 `uvm_info("PREDICTOR", {"READ_SLAVE0:", $sformatf("%0h", slave0[HADDR_VALID+counter])}, UVM_LOW)
@@ -430,7 +430,7 @@ class predictor extends uvm_subscriber #(sequence_item);
               end
               default: begin
                 HRDATA_expected[HALFWORD_WIDTH-1:0] = 0;
-                HRESP_expected = ERROR;
+                HRESP_expected  = ERROR;
                 HREADY_expected = NOT_READY;
               end
             endcase
@@ -438,7 +438,7 @@ class predictor extends uvm_subscriber #(sequence_item);
 
 
           default : begin
-            case(HADDR[ADDR_WIDTH-1:ADDR_WIDTH-BITS_FOR_PERIPHERALS])
+            case(HADDR[ADDR_WIDTH-1:ADDR_WIDTH-BITS_FOR_SUBORDINATES])
               2'b00: begin
                 HRDATA_expected[WORD_WIDTH-1:0] = slave0[HADDR_VALID+counter];
                 `uvm_info("PREDICTOR", {"READ_SLAVE0:", $sformatf("%0h", slave0[HADDR_VALID+counter])}, UVM_LOW)
@@ -453,7 +453,7 @@ class predictor extends uvm_subscriber #(sequence_item);
               end
               default: begin
                 HRDATA_expected[WORD_WIDTH-1:0] = 0;
-                HRESP_expected = ERROR;
+                HRESP_expected  = ERROR;
                 HREADY_expected = NOT_READY;
               end
             endcase
@@ -462,7 +462,7 @@ class predictor extends uvm_subscriber #(sequence_item);
         endcase
       end
       else begin
-        HRESP_expected = ERROR;
+        HRESP_expected  = ERROR;
         HREADY_expected = NOT_READY;
       end
     endtask : read_process

@@ -1,5 +1,5 @@
 /******************************************************************
- * File: READ_SINGLE_sequence.sv
+ * File: READ_INCR_sequence.sv
  * Author: Abdelrahman Mohamad Yassien
  * Email: Abdelrahman.Yassien11@gmail.com
  * Date: 25/08/2024
@@ -12,8 +12,8 @@
  * Copyright (c) 2024 Abdelrahman Mohamad Yassien. All Rights Reserved.
  ******************************************************************/
 
-class READ_WRAP8_sequence extends base_sequence;
-  `uvm_object_utils(READ_WRAP8_sequence);
+class READ_INCR_sequence extends base_sequence;
+  `uvm_object_utils(READ_INCR_sequence);
 
   // Static flag to determine if reset is needed
   static bit reset_flag;
@@ -21,11 +21,11 @@ class READ_WRAP8_sequence extends base_sequence;
 
   // Handle to the reset sequence
   reset_sequence reset_sequence_h;
+
   IDLE_sequence IDLE_sequence_h;
 
-
   // Constructor
-  function new(string name = "READ_WRAP8_sequence");
+  function new(string name = "READ_INCR_sequence");
     super.new(name);
   endfunction
 
@@ -36,7 +36,6 @@ class READ_WRAP8_sequence extends base_sequence;
     // Create an instance of the reset sequence
     reset_sequence_h = reset_sequence::type_id::create("reset_sequence_h");
     IDLE_sequence_h = IDLE_sequence::type_id::create("IDLE_sequence_h");
-
   endtask : pre_body
 
   // Main task body for executing the READ operation
@@ -47,10 +46,12 @@ class READ_WRAP8_sequence extends base_sequence;
     IDLE_sequence::reset_flag = 1'b1;
     IDLE_sequence::last_test = 1'b1;
 
-    `uvm_info("READ_WRAP8_sequence: ", "STARTING" , UVM_HIGH)
+
+    `uvm_info("READ_INCR_sequence: ", "STARTING" , UVM_HIGH)
 
     if(~reset_flag)
       reset_sequence_h.start(sequencer_h);
+
 
     //seq_item.HREAD_rand_c.constraint_mode(0);
 
@@ -60,20 +61,20 @@ class READ_WRAP8_sequence extends base_sequence;
       seq_item.WRITE_op.rand_mode(0);
       seq_item.TRANS_op.rand_mode(0);
       seq_item.BURST_op.rand_mode(0);
-      // seq_item.SIZE_op.rand_mode(0);
+      //seq_item.SIZE_op.rand_mode(0);
 
       // Set the operation type to READ
       seq_item.RESET_op = WORKING;
       seq_item.WRITE_op = READ;
       seq_item.TRANS_op = NONSEQ;
-      seq_item.BURST_op = WRAP8;
-      // seq_item.SIZE_op  = BYTE;
+      seq_item.BURST_op = INCR;
+      //seq_item.SIZE_op  = BYTE;
 
       assert(seq_item.randomize()); // Randomize the sequence item
 
     finish_item(seq_item);
 
-    for (int i = 0; i < 7; i++) begin
+    for (int i = 0; i < $urandom_range(1,20); i++) begin
       //seq_item.HREAD_rand_c.constraint_mode(0);
 
       start_item(seq_item); // Start the sequence item
@@ -89,8 +90,8 @@ class READ_WRAP8_sequence extends base_sequence;
         seq_item.RESET_op = WORKING;
         seq_item.WRITE_op = READ;
         seq_item.TRANS_op = SEQ;
-        seq_item.BURST_op = WRAP8;
-        // seq_item.SIZE_op  = BYTE;
+        seq_item.BURST_op = INCR;
+        //seq_item.SIZE_op  = BYTE;
 
         assert(seq_item.randomize()); // Randomize the sequence item
 
@@ -101,7 +102,6 @@ class READ_WRAP8_sequence extends base_sequence;
       seq_item.last_item = 1'b1;
 
     IDLE_sequence_h.start(sequencer_h);
-
 
   endtask : body
 

@@ -5,24 +5,45 @@
  * Date: 25/08/2024
  * Description: This class defines a UVM coverage component used
  *              to collect coverage data on various signals and
- *              operations related to FIFO.
+ *              operations related to the generated stimulus.
  * 
  * Copyright (c) 2024 Abdelrahman Mohamad Yassien. All Rights Reserved.
  ******************************************************************/
- // covergroup HWDATA_df_cg(input bit [DATA_WIDTH-1:0] position, input ref [DATA_WIDTH-1:0] vector);
- //    df: coverpoint (vector & position) != 0;
- //    option.per_instance = 1;
- // endgroup : HWDATA_df_cg
+ covergroup HWDATA_df_cg(input bit [DATA_WIDTH-1:0] position, ref bit [DATA_WIDTH-1:0] vector);
+    df: coverpoint (vector & position) != 0;
+    option.per_instance = 1;
+ endgroup : HWDATA_df_cg
 
- // covergroup HWDATA_dt_cf(input bit [DATA_WIDTH-1:0] position, input ref [DATA_WIDTH-1:0] vector);
- //    dt: coverpoint (0 => 1, 1 => 0);
- //    option.per_instance = 1;
- // endgroup : HWDATA_dt_cg
+ covergroup HWDATA_dt_cg(input bit [DATA_WIDTH-1:0] position, ref bit [DATA_WIDTH-1:0] vector);
+    dt: coverpoint (vector & position) != 0 {
+          bins tr[] = (0 => 1, 1 => 0);
+      }
+    option.per_instance = 1;
+ endgroup : HWDATA_dt_cg
 
- // covergroup HADDR_dt_cf(input bit [DATA_WIDTH-1:0] position, input ref [DATA_WIDTH-1:0] vector);
- //    df: coverpoint (vector & postion) != 0;
- //    option.per_instance = 1;
- // endgroup : HADDR
+ covergroup HADDR_df_cg(input bit [ADDR_WIDTH-BITS_FOR_PERIPHERALS-1:0] position, ref bit [ADDR_WIDTH-BITS_FOR_PERIPHERALS-1:0] vector);
+    df: coverpoint (vector & position) != 0;
+    option.per_instance = 1;
+ endgroup : HADDR_df_cg
+
+ covergroup HADDR_dt_cg(input bit [ADDR_WIDTH-BITS_FOR_PERIPHERALS-1:0] position, ref bit [ADDR_WIDTH-BITS_FOR_PERIPHERALS-1:0] vector);
+    dt: coverpoint (vector & position) != 0 {
+          bins tr[] = (0 => 1, 1 => 0);
+      }
+    option.per_instance = 1;
+ endgroup : HADDR_dt_cg
+
+ covergroup HSEL_df_cg(input bit [BITS_FOR_PERIPHERALS-1:0] position, ref bit [BITS_FOR_PERIPHERALS-1:0] vector);
+    df: coverpoint (vector & position) != 0;
+    option.per_instance = 1;
+ endgroup : HSEL_df_cg
+
+  covergroup HSEL_dt_cg(input bit [BITS_FOR_PERIPHERALS-1:0] position, ref bit [BITS_FOR_PERIPHERALS-1:0] vector);
+    dt: coverpoint (vector & position) != 0 {
+          bins tr[] = (0 => 1, 1 => 0);
+      }
+    option.per_instance = 1;
+ endgroup : HSEL_dt_cg
 
 class coverage extends uvm_subscriber #(sequence_item);
   `uvm_component_utils(coverage);
@@ -44,7 +65,10 @@ class coverage extends uvm_subscriber #(sequence_item);
         bit   [PROT_WIDTH:0]  HPROT_cov; 
 
         bit   [ADDR_WIDTH-1:0]  HADDR_cov;     
-        bit   [DATA_WIDTH-1:0]  HWDATA_cov; 
+        bit   [DATA_WIDTH-1:0]  HWDATA_cov;
+
+        bit   [ADDR_WIDTH-BITS_FOR_PERIPHERALS-1:0] HADDR_VALID_cov;
+        bit   [BITS_FOR_PERIPHERALS-1:0] HSEL_cov; 
 
         // AHB lite output Signals
         logic   [DATA_WIDTH-1:0]  HRDATA_cov;
@@ -58,6 +82,14 @@ class coverage extends uvm_subscriber #(sequence_item);
   HBURST_e     BURST_op_cov;
   HSIZE_e      SIZE_op_cov;
 
+  HWDATA_df_cg HWDATA_df_cg_bits  [DATA_WIDTH-1:0];
+  HWDATA_dt_cg HWDATA_dt_cg_bits  [DATA_WIDTH-1:0];
+
+  HADDR_df_cg  HADDR_df_cg_bits   [ADDR_WIDTH-1-BITS_FOR_PERIPHERALS:0];
+  HADDR_dt_cg  HADDR_dt_cg_bits   [ADDR_WIDTH-1-BITS_FOR_PERIPHERALS:0];
+
+  HSEL_df_cg  HSEL_df_cg_bits   [BITS_FOR_PERIPHERALS-1:0];
+  HSEL_dt_cg  HSEL_dt_cg_bits   [BITS_FOR_PERIPHERALS-1:0];
 
   // Covergroup for RESET-related coverage
   covergroup RESET_covgrp;
@@ -231,15 +263,15 @@ class coverage extends uvm_subscriber #(sequence_item);
 
     /* --------------------------------------------------------------------------------------Data Frame coverage of the current operation (either write or read)---------------------------------------------------------------------------------------------- */
     df_operation: coverpoint HSIZE_cov iff (HRESETn_cov) {
-      bins BYTE_Operation     =  {BYTE};
-      bins HALFWORD_Operation       =  {HALFWORD};
-      bins WORD_Operation      =  {WORD};
+      bins BYTE_Operation       =  {BYTE};
+      bins HALFWORD_Operation   =  {HALFWORD};
+      bins WORD_Operation       =  {WORD};
 
-      // bins INCR4_Operation      =  {2WORD};
-      // bins WRAP8_Operation      =  {4WORD};
-      // bins INCR8_Operation      =  {8WORD};
-      // bins WRAP16_Operation     =  {16WORD};
-      // bins INCR16_Operation     =  {32WORD};
+      bins INCR4_Operation      =  {WORD2};
+      bins WRAP8_Operation      =  {WORD4};
+      bins INCR8_Operation      =  {WORD8};
+      bins WRAP16_Operation     =  {WORD16};
+      bins INCR16_Operation     =  {WORD32};
     }
 
     /* -------------------------------------------------------------------------------Data Transition coverage of the current operation (from write to read and vice versa)---------------------------------------------------------------------------------------------- */
@@ -337,6 +369,9 @@ class coverage extends uvm_subscriber #(sequence_item);
     HADDR_cov      = t.HADDR; 
     HWDATA_cov     = t.HWDATA;
 
+    HADDR_VALID_cov = t.HADDR[ADDR_WIDTH-1-BITS_FOR_PERIPHERALS:0];
+    HSEL_cov        = t.HADDR[ADDR_WIDTH-1:ADDR_WIDTH-BITS_FOR_PERIPHERALS];
+
     HRDATA_cov     = t.HRDATA;
     HRESP_cov      = t.HRESP;
     HREADY_cov     = t.HREADY;
@@ -356,12 +391,23 @@ class coverage extends uvm_subscriber #(sequence_item);
     ADDR_covgrp.sample();
     WDATA_covgrp.sample();
 
+    foreach(HWDATA_df_cg_bits[i]) HWDATA_df_cg_bits[i].sample();
+    foreach(HWDATA_dt_cg_bits[i]) HWDATA_dt_cg_bits[i].sample();
+
+    foreach(HADDR_df_cg_bits[i]) HADDR_df_cg_bits[i].sample();
+    foreach(HADDR_dt_cg_bits[i]) HADDR_dt_cg_bits[i].sample();
+
+    foreach(HSEL_df_cg_bits[i]) HSEL_df_cg_bits[i].sample();
+    foreach(HSEL_dt_cg_bits[i]) HSEL_dt_cg_bits[i].sample();
+
     `uvm_info("COVERAGE", {"SAMPLE: ", t.convert2string}, UVM_HIGH)
   endfunction
 
   // Constructor for the coverage component
   function new(string name, uvm_component parent);
+
     super.new(name, parent);
+
     RESET_covgrp        = new;
     WRITE_covgrp        = new;
     TRANS_covgrp        = new;
@@ -370,6 +416,16 @@ class coverage extends uvm_subscriber #(sequence_item);
     SLAVE_SELECT_covgrp = new;
     ADDR_covgrp         = new;
     WDATA_covgrp        = new;
+
+    foreach(HWDATA_df_cg_bits[i]) HWDATA_df_cg_bits[i] = new(1'b1<<i,HWDATA_cov);
+    foreach(HWDATA_dt_cg_bits[i]) HWDATA_dt_cg_bits[i] = new(1'b1<<i,HWDATA_cov);
+
+    foreach(HADDR_df_cg_bits[i]) HADDR_df_cg_bits[i] = new(1'b1<<i,HADDR_VALID_cov);
+    foreach(HADDR_dt_cg_bits[i]) HADDR_dt_cg_bits[i] = new(1'b1<<i,HADDR_VALID_cov);
+
+    foreach(HSEL_df_cg_bits[i]) HSEL_df_cg_bits[i] = new(1'b1<<i,HSEL_cov);
+    foreach(HSEL_dt_cg_bits[i]) HSEL_dt_cg_bits[i] = new(1'b1<<i,HSEL_cov);
+
   endfunction
 
   // Build phase for component setup

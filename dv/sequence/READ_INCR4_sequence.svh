@@ -43,11 +43,15 @@ class READ_INCR4_sequence extends base_sequence;
 
     reset_sequence::last_test = 1'b1;
 
+    IDLE_sequence::reset_flag = 1'b1;
+    IDLE_sequence::last_test = 1'b1;
+
 
     `uvm_info("READ_INCR4_sequence: ", "STARTING" , UVM_HIGH)
 
     if(~reset_flag)
       reset_sequence_h.start(sequencer_h);
+
 
     //seq_item.HREAD_rand_c.constraint_mode(0);
 
@@ -57,14 +61,14 @@ class READ_INCR4_sequence extends base_sequence;
       seq_item.WRITE_op.rand_mode(0);
       seq_item.TRANS_op.rand_mode(0);
       seq_item.BURST_op.rand_mode(0);
-      seq_item.SIZE_op.rand_mode(0);
+      //seq_item.SIZE_op.rand_mode(0);
 
       // Set the operation type to READ
       seq_item.RESET_op = WORKING;
       seq_item.WRITE_op = READ;
       seq_item.TRANS_op = NONSEQ;
       seq_item.BURST_op = INCR4;
-      seq_item.SIZE_op  = BYTE;
+      //seq_item.SIZE_op  = BYTE;
 
       assert(seq_item.randomize()); // Randomize the sequence item
 
@@ -87,7 +91,7 @@ class READ_INCR4_sequence extends base_sequence;
         seq_item.WRITE_op = READ;
         seq_item.TRANS_op = SEQ;
         seq_item.BURST_op = INCR4;
-        seq_item.SIZE_op  = BYTE;
+        //seq_item.SIZE_op  = BYTE;
 
         assert(seq_item.randomize()); // Randomize the sequence item
 
@@ -98,27 +102,6 @@ class READ_INCR4_sequence extends base_sequence;
       seq_item.last_item = 1'b1;
 
     IDLE_sequence_h.start(sequencer_h);
-
-    // start_item(seq_item); // Start the sequence item
-    
-    //   seq_item.RESET_op.rand_mode(0);
-    //   seq_item.WRITE_op.rand_mode(0);
-    //   seq_item.TRANS_op.rand_mode(0);
-    //   seq_item.BURST_op.rand_mode(0);
-    //   seq_item.SIZE_op.rand_mode(0);
-
-    //   // Set the operation type to READ
-    //   seq_item.RESET_op = WORKING;
-    //   seq_item.WRITE_op = READ;
-    //   seq_item.TRANS_op = IDLE;
-    //   seq_item.BURST_op = SINGLE;
-    //   seq_item.SIZE_op  = BYTE;
-
-    //   // Randomize the sequence item
-    //   assert(seq_item.randomize()); 
-
-    // finish_item(seq_item);
-
 
   endtask : body
 

@@ -19,6 +19,8 @@ static bit last_item;
 static int PREDICTOR_transaction_counter;
 static int COMPARATOR_transaction_counter;
 
+rand int randomized_sequences;
+
 
 
   // AHB lite Control Signals
@@ -43,6 +45,10 @@ static int COMPARATOR_transaction_counter;
       //rand bit [FIFO_WIDTH-1:0] data_to_write;
       // active low synchronous reset
 
+
+      constraint randomized_seq { randomized_sequences inside {[0:17]};
+      };
+
        constraint HWRITE_rand_c { WRITE_op dist { WRITE:=50, READ:=50 };
        }
 
@@ -59,13 +65,13 @@ static int COMPARATOR_transaction_counter;
 
       constraint HWDATA_c { HSIZE == BYTE     -> HWDATA dist {'h00000000:/1, 'h000000FF:/1, ['h01 : 'h000000FE]:/40};
                             HSIZE == HALFWORD -> HWDATA dist {'h00000000:/1, 'h0000FFFF:/1, ['h01 : 'h0000FFFE]:/40};
-                            HSIZE == HALFWORD -> HWDATA dist {'h00000000:/1, 'hFFFFFFFF:/1, ['h01 : 'hFFFFFFFE]:/40};
+                            HSIZE == WORD     -> HWDATA dist {'h00000000:/1, 'hFFFFFFFF:/1, ['h01 : 'hFFFFFFFE]:/40};
       }
 
       constraint HADDR_SEL_c { HADDR[ADDR_WIDTH-1:ADDR_WIDTH-BITS_FOR_PERIPHERALS] dist {0:/30, NO_OF_PERIPHERALS-NO_OF_PERIPHERALS+1:/30, NO_OF_PERIPHERALS-NO_OF_PERIPHERALS+2:/30, NO_OF_PERIPHERALS-NO_OF_PERIPHERALS+3:/10};
       }
 
-      constraint HADDR_c { HADDR[(ADDR_WIDTH-BITS_FOR_PERIPHERALS)-1:0] dist {'h00000000:/1, 'h0000000F:/1, ['h00000001 : 'h0000000E]:/40};
+      constraint HADDR_c { HADDR[(ADDR_WIDTH-BITS_FOR_PERIPHERALS)-1:0] dist {'h00000000:/1, (ADDR_DEPTH-1):/1, ['h00000001 : (ADDR_DEPTH-2)]:/40};
       }
 
       constraint RESET_c {RESET_op == RESETING -> HRESETn == 1'b0;
@@ -92,14 +98,18 @@ static int COMPARATOR_transaction_counter;
                           BURST_op == INCR16    -> HBURST == 3'b111;
       }
 
-      constraint SIZE_c  {SIZE_op == BYTE       -> HSIZE == 3'b000 && HWDATA[DATA_WIDTH-1:8]  == 'h0;
-                          SIZE_op == HALFWORD   -> HSIZE == 3'b001 && HWDATA[DATA_WIDTH-1:16] == 'h0;
+      constraint SIZE_c1 { SIZE_op inside {[0:2]};
+      }
+
+
+      constraint SIZE_c  {SIZE_op == BYTE       -> HSIZE == 3'b000;
+                          SIZE_op == HALFWORD   -> HSIZE == 3'b001;
                           SIZE_op == WORD       -> HSIZE == 3'b010; 
-                          SIZE_op == WORD2      -> HSIZE == 3'b011;
-                          SIZE_op == WORD4      -> HSIZE == 3'b100;
-                          SIZE_op == WORD8      -> HSIZE == 3'b101;
-                          SIZE_op == WORD16     -> HSIZE == 3'b110;
-                          SIZE_op == WORD32     -> HSIZE == 3'b111;
+                          // SIZE_op == WORD2      -> HSIZE == 3'b011 && HWDATA[DATA_WIDTH-1:16] == 'h0;
+                          // SIZE_op == WORD4      -> HSIZE == 3'b100 && HWDATA[DATA_WIDTH-1:16] == 'h0;
+                          // SIZE_op == WORD8      -> HSIZE == 3'b101 && HWDATA[DATA_WIDTH-1:16] == 'h0;
+                          // SIZE_op == WORD16     -> HSIZE == 3'b110 && HWDATA[DATA_WIDTH-1:16] == 'h0;
+                          // SIZE_op == WORD32     -> HSIZE == 3'b111 && HWDATA[DATA_WIDTH-1:16] == 'h0;
       }
 
       constraint randomized_test_number_c { randomized_number_of_tests inside {[100 :150]};    

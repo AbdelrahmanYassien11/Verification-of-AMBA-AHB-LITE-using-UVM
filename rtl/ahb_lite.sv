@@ -1,9 +1,10 @@
 // `include "ahb_decoder_s3.v"
 // `include "ahb_s2m_s3.v"
 // `include "ahb_default_slave.v"
+import AHB_lite_uvm_pkg::**;
 `timescale 1ns/1ns
 
-module ahb_lite #(parameter P_BITS = $clog2(NO_OF_PERIPHERALS), ADDR_WIDTH = 32, DATA_WIDTH = 32, ADDR_DEPTH = 16, NO_OF_PERIPHERALS = 4)
+module ahb_lite #(parameter P_BITS = $clog2(NO_OF_PERIPHERALS), ADDR_WIDTH = 32, DATA_WIDTH = 32, ADDR_DEPTH = 256, NO_OF_PERIPHERALS = 4)
 (
       input   wire                   HRESETn,
       input   wire                   HCLK,
@@ -15,7 +16,6 @@ module ahb_lite #(parameter P_BITS = $clog2(NO_OF_PERIPHERALS), ADDR_WIDTH = 32,
       input   wire  [3:0]            HPROT,
       input   wire  [DATA_WIDTH-1:0] HWDATA,
 
-      output    [3:0]                error_idle_control,
       output    [DATA_WIDTH-1:0]  HRDATA,
       output    [1:0]             HRESP,
       output                      HREADY
@@ -29,6 +29,7 @@ module ahb_lite #(parameter P_BITS = $clog2(NO_OF_PERIPHERALS), ADDR_WIDTH = 32,
    wire                  HREADY_bus [3:0]; 
    
    wire                  HREADYin;
+
    assign HREADYin = HREADY;
    /*********************************************************/
    ahb_decoder #(.NO_OF_PERIPHERALS(NO_OF_PERIPHERALS), .P_BITS(P_BITS), .ADDR_WIDTH(ADDR_WIDTH)) decoder1 
@@ -85,14 +86,13 @@ module ahb_lite #(parameter P_BITS = $clog2(NO_OF_PERIPHERALS), ADDR_WIDTH = 32,
                     .HBURST             (HBURST),
                     .HWDATA             (HWDATA),
                     .HREADYin           (HREADY),
-
-                    .error_idle_control (error_idle_control[3]),                    
+                   
                     .HRDATA      (HRDATA_bus[3]),
                     .HRESP        (HRESP_bus[3]),
                     .HREADYout   (HREADY_bus[3])
                     );
    /*********************************************************/
-   ahb_slave #(.ADDR_WIDTH(ADDR_WIDTH), .DATA_WIDTH(DATA_WIDTH), .ADDR_DEPTH(ADDR_DEPTH)) slave0 
+   ahb_slave #(.ADDR_WIDTH(ADDR_WIDTH), .DATA_WIDTH(DATA_WIDTH), .ADDR_DEPTH(ADDR_DEPTH), .NO_OF_PERIPHERALS(NO_OF_PERIPHERALS)) slave0 
             (
             .HRESETn               (HRESETn),
             .HCLK                     (HCLK),
@@ -105,13 +105,12 @@ module ahb_lite #(parameter P_BITS = $clog2(NO_OF_PERIPHERALS), ADDR_WIDTH = 32,
             .HWDATA                 (HWDATA),
             .HREADYin                (HREADY),
 
-            .error_idle_control (error_idle_control[0]),
             .HRDATA           (HRDATA_bus[0]),
             .HRESP             (HRESP_bus[0]),
             .HREADYout        (HREADY_bus[0])
             );
    /*********************************************************/
-   ahb_slave #(.ADDR_WIDTH(ADDR_WIDTH), .DATA_WIDTH(DATA_WIDTH), .ADDR_DEPTH(ADDR_DEPTH)) slave1 
+   ahb_slave #(.ADDR_WIDTH(ADDR_WIDTH), .DATA_WIDTH(DATA_WIDTH), .ADDR_DEPTH(ADDR_DEPTH), .NO_OF_PERIPHERALS(NO_OF_PERIPHERALS)) slave1 
             (
             .HRESETn               (HRESETn),
             .HCLK                     (HCLK),
@@ -124,14 +123,13 @@ module ahb_lite #(parameter P_BITS = $clog2(NO_OF_PERIPHERALS), ADDR_WIDTH = 32,
             .HWDATA                 (HWDATA),
             .HREADYin               (HREADY),
 
-            .error_idle_control (error_idle_control[1]),
             .HRDATA          (HRDATA_bus[1]),
             .HRESP            (HRESP_bus[1]),
             .HREADYout       (HREADY_bus[1])
 
             );
    /*********************************************************/
-   ahb_slave #(.ADDR_WIDTH(ADDR_WIDTH), .DATA_WIDTH(DATA_WIDTH), .ADDR_DEPTH(ADDR_DEPTH)) slave2 
+   ahb_slave #(.ADDR_WIDTH(ADDR_WIDTH), .DATA_WIDTH(DATA_WIDTH), .ADDR_DEPTH(ADDR_DEPTH), .NO_OF_PERIPHERALS(NO_OF_PERIPHERALS)) slave2 
             (
             .HRESETn               (HRESETn),
             .HCLK                     (HCLK),
@@ -144,7 +142,6 @@ module ahb_lite #(parameter P_BITS = $clog2(NO_OF_PERIPHERALS), ADDR_WIDTH = 32,
             .HWDATA                 (HWDATA),
             .HREADYin               (HREADY),
 
-            .error_idle_control (error_idle_control[2]),
             .HRDATA          (HRDATA_bus[2]),
             .HRESP            (HRESP_bus[2]),
             .HREADYout       (HREADY_bus[2])

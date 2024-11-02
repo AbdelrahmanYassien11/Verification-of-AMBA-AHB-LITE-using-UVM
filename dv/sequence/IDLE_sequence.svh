@@ -1,13 +1,13 @@
 /******************************************************************
- * File: READ_SINGLE_sequence.sv
+ * File: IDLE_sequence.svh
  * Author: Abdelrahman Mohamad Yassien
  * Email: Abdelrahman.Yassien11@gmail.com
  * Date: 25/08/2024
- * Description: This class defines a sequence that performs a READ 
- *              operation to the FIFO once. It inherits from 
- *              `base_sequence` and includes functionality to start 
- *              the reset sequence if needed and perform a READ 
- *              operation with randomized sequence item values.
+ * Description: This class defines a sequence that performs an IDLE
+ *              operation. It inherits from `base_sequence` and includes 
+ *              functionality to start the reset sequence if needed 
+ *              and perform an IDLE operation with randomized 
+ *              sequence item values.
  * 
  * Copyright (c) 2024 Abdelrahman Mohamad Yassien. All Rights Reserved.
  ******************************************************************/

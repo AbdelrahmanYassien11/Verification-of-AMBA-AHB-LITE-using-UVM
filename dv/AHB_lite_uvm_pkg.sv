@@ -2,15 +2,10 @@ package AHB_pkg;
 
 	import uvm_pkg::*;
 	`include "uvm_macros.svh"
+	`include "AHB_SUBORDINATE_config.svh"
 
 	parameter CLOCK_PERIOD = 5;
-	parameter NO_OF_PERIPHERALS = 4;
 
-	parameter ADDR_DEPTH = 16;
-	// parameter DATA_WIDTH = 32;
-	// parameter ADDR_WIDTH = 32;
-
-	parameter BITS_FOR_PERIPHERALS = $clog2(NO_OF_PERIPHERALS);
 
 	typedef enum {RESETING, WORKING} HRESET_e;
 
@@ -26,31 +21,6 @@ package AHB_pkg;
 
 	typedef enum {NOT_READY, READY} HREADY_e;
 
-
-	// //HREADY PARAMETERS
-	// parameter READY = 1;
-	// parameter NOT_READY = 0;
-
-	// //HTRANS PARAMETERS
-	// parameter IDLE 			= 2'b00;
-	// parameter BUSY 			= 2'b01;
-	// parameter NONSEQ 		= 2'b10;
-	// parameter SEQ 			= 2'b11;
-
-	// //HRESP PARAMETERS
-	// parameter OKAY 			= 2'b00;
-	// parameter ERROR 		= 2'b01;
-	// parameter RETRY 		= 2'b10;
-
-	// //HBURST PARAMETERS
-	// parameter SINGLE 		= 3'b00;
-	// parameter INCR 			= 3'b001;
-	// parameter WRAP4 		= 3'b010;
-	// parameter INCR4 		= 3'b011;
-	// parameter WRAP8 		= 3'b100;
-	// parameter INCR8 		= 3'b101;
-	// parameter WRAP16 		= 3'b110;
-	// parameter INCR16 		= 3'b111;
 
 	//HSIZE PARAMETERS
 	parameter BYTE_P		= 3'b000;
@@ -86,28 +56,27 @@ package AHB_pkg;
    	parameter PROT_WIDTH = 3;
 
    	//data phase signal parameters
-   	parameter DATA_WIDTH = 32;
    	parameter RESP_WIDTH = 1;
    	parameter READY_WIDTH = 0;
 
 
-   	parameter P_SLAVE0_START = 16'h0000;
-  	parameter P_SLAVE0_ADDR_SIZE = 'h0010;
-  	//parameter P_SLAVE0_END = P_ADDR_START0 + P_ADDR_SIZE0 - 1;
-  	parameter P_SLAVE0_END = P_SLAVE0_START + P_SLAVE0_ADDR_SIZE - 1;
+ //   	parameter P_SLAVE0_START = 16'h0000;
+ //  	parameter P_SLAVE0_ADDR_SIZE = 'h0010;
+ //  	//parameter P_SLAVE0_END = P_ADDR_START0 + P_ADDR_SIZE0 - 1;
+ //  	parameter P_SLAVE0_END = P_SLAVE0_START + P_SLAVE0_ADDR_SIZE - 1;
 
 
-	parameter P_SLAVE1_START = 16'h0100;
-   	//parameter P_SLAVE1_START = P_SLAVE0_END + 1;
-  	parameter P_SLAVE1_ADDR_SIZE = 'h0010;
-  	//parameter P_SLAVE1_END = P_ADDR_START1 + P_ADDR_SIZE1 - 1;
-	parameter P_SLAVE1_END = P_SLAVE1_START + P_SLAVE1_ADDR_SIZE - 1;
+	// parameter P_SLAVE1_START = 16'h0100;
+ //   	//parameter P_SLAVE1_START = P_SLAVE0_END + 1;
+ //  	parameter P_SLAVE1_ADDR_SIZE = 'h0010;
+ //  	//parameter P_SLAVE1_END = P_ADDR_START1 + P_ADDR_SIZE1 - 1;
+	// parameter P_SLAVE1_END = P_SLAVE1_START + P_SLAVE1_ADDR_SIZE - 1;
 
-	parameter P_SLAVE2_START = 16'h0200;
-   	//parameter P_SLAVE2_START = P_SLAVE1_END + 1;
-  	parameter P_SLAVE2_ADDR_SIZE = 'h0010;
-	//parameter P_SLAVE2_END = P_ADDR_START1 + P_ADDR_SIZE1 - 1;
-	parameter P_SLAVE2_END = P_SLAVE2_START + P_SLAVE2_ADDR_SIZE - 1;
+	// parameter P_SLAVE2_START = 16'h0200;
+ //   	//parameter P_SLAVE2_START = P_SLAVE1_END + 1;
+ //  	parameter P_SLAVE2_ADDR_SIZE = 'h0010;
+	// //parameter P_SLAVE2_END = P_ADDR_START1 + P_ADDR_SIZE1 - 1;
+	// parameter P_SLAVE2_END = P_SLAVE2_START + P_SLAVE2_ADDR_SIZE - 1;
 
   	int incorrect_counter;
    	int correct_counter;

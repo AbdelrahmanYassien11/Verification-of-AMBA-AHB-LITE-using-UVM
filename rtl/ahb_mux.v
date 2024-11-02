@@ -115,42 +115,6 @@ module ahb_mux #(parameter ADDR_WIDTH = 32, NO_OF_PERIPHERALS = 4, P_BITS = $clo
       default: HRESP <= 2'b01; 
     endcase
   end
-
-
-
-
-  // always @ (HSEL_bus_reg_c or HREADY0 or HREADY1 or HREADY2 or HREADYd) begin
-  //   case(HSEL_bus_reg_c) 
-  //     P_HSEL_bus0: HREADY = HREADY0; 
-  //     P_HSEL_bus1: HREADY = HREADY1;
-  //     P_HSEL_bus2: HREADY = HREADY2;
-  //     P_HSEL_busd: HREADY = HREADYd;
-  //     P_HSEL_bus_reset: HREADY = 1'b1;
-  //     default: HREADY = 1'b1;
-  //   endcase
-  // end
-
-  // always @ (HSEL_bus_reg_c or HRDATA0 or HRDATA1 or HRDATA2 or HRDATAd) begin
-  //   case(HSEL_bus_reg_c) 
-  //     P_HSEL_bus0: HRDATA = HRDATA0;
-  //     P_HSEL_bus1: HRDATA = HRDATA1;
-  //     P_HSEL_bus2: HRDATA = HRDATA2;
-  //     P_HSEL_busd: HRDATA = HRDATAd;
-  //     P_HSEL_bus_reset: HRDATA = 0;
-  //     default: HRDATA = HRDATA;
-  //   endcase
-  // end
-
-  // always @ (HSEL_bus_reg_c or HRESP0 or HRESP1 or HRESP2 or HRESPd) begin
-  //   case(HSEL_bus_reg_c) 
-  //     P_HSEL_bus0: HRESP = HRESP0;
-  //     P_HSEL_bus1: HRESP = HRESP1;
-  //     P_HSEL_bus2: HRESP = HRESP2;
-  //     P_HSEL_busd: HRESP = HRESPd;
-  //     P_HSEL_bus_reset: HRESP = 2'b00;
-  //     default: HRESP = 2'b01; 
-  //   endcase
-  // end
-
+  
 endmodule
 

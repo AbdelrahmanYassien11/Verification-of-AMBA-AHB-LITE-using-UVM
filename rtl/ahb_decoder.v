@@ -8,7 +8,7 @@ module ahb_decoder #(parameter ADDR_WIDTH = 32, NO_OF_PERIPHERALS = 4, P_BITS = 
     output  reg         HSEL2
 );
 
-
+	// combinational always block to asser tthe correct HSELx accoridng to the bits allocated for management from HADDR PERIPHERAL
 	always@(*) begin
 		if(HREADY) begin
 			case(HADDR[ADDR_WIDTH-1:ADDR_WIDTH-P_BITS])

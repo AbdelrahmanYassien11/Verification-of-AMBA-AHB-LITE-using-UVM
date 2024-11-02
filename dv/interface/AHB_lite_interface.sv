@@ -37,7 +37,6 @@ logic   [DATA_WIDTH-1:0]  HRDATA;
 logic   [RESP_WIDTH:0]  HRESP; 
 logic   [READY_WIDTH:0]  HREADY;  
 
-bit     [NO_OF_PERIPHERALS-1:0]  error_to_idle;
 logic   HRESETn_reg;    // reset (active low)
 
 bit   HWRITE_reg;
@@ -158,8 +157,6 @@ sequence_item previous_seq_item, seq_item;
         if(HRESETn_global)begin
             if(counter >= 1 && RECEIVING_PHASE_FLAG) begin
                 $display("CONTROL PHASE: TIME:%0t ASSIGINING SIGNALS", $time());
-                //if(~error_to_idle) begin
-                    $display("CONTROL PHASE: TIME:%0t ~error_to_idle", $time());
              		HRESETn <= seq_item.HRESETn;
                     HWRITE  <= seq_item.HWRITE;
                     HTRANS  <= seq_item.HTRANS;
@@ -180,13 +177,6 @@ sequence_item previous_seq_item, seq_item;
                     $display("seq_item.HADDR: %0h ", seq_item.HADDR);
 
                     send_inputs(seq_item.HRESETn, seq_item.HWRITE, seq_item.HTRANS, seq_item.HSIZE, seq_item.HBURST, seq_item.HPROT, seq_item.HADDR, seq_item.HWDATA, seq_item.RESET_op, seq_item.WRITE_op, seq_item.TRANS_op, seq_item.BURST_op, seq_item.SIZE_op);
-                //end
-                // else begin
-                //     $display("CONTROL PHASE: TIME:%0t ERROR_TO_IDLE", $time());
-                //     HTRANS  <= 0;
-                //     HTRANS_reg  <= 0;
-                //     send_inputs(seq_item.HRESETn, seq_item.HWRITE, 0, seq_item.HSIZE, seq_item.HBURST, seq_item.HPROT, seq_item.HADDR, seq_item.HWDATA, seq_item.RESET_op, seq_item.WRITE_op, seq_item.TRANS_op, seq_item.BURST_op, seq_item.SIZE_op);
-                // end
 
                 if(seq_item.HRESETn) begin
                     counter <= counter + 1;
