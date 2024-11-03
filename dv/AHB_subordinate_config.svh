@@ -1,29 +1,34 @@
+//`ifndef AHB_SUBORDINATE_CONFIG
+
 class AHB_SUBORDINATE_config;
 
+
+
+
   `ifdef HWDATA_WIDTH32
-    parameter DATA_WIDTH = 32,
+    parameter DATA_WIDTH = 32;
   `elsif HWDATA_WIDTH64
-    parameter DATA_WIDTH = 64,
+    parameter DATA_WIDTH = 64;
   `elsif HWDATA_WIDTH128
-    parameter DATA_WIDTH = 128,
+    parameter DATA_WIDTH = 128;
   `elsif HWDATA_WIDTH256
-    parameter DATA_WIDTH = 256,
+    parameter DATA_WIDTH = 256;
   `elsif HWDATA_WIDTH512
-    parameter DATA_WIDTH = 512,
+    parameter DATA_WIDTH = 512;
   `elsif HWDATA_WIDTH1024
-    parameter DATA_WIDTH = 1024,
+    parameter DATA_WIDTH = 1024;
   `else 
-    parameter DATA_WIDTH = 32
+    parameter DATA_WIDTH = 32;
   `endif
 
   `ifdef ADDR_WIDTH10
-    parameter ADDR_WIDTH = 10,
+    parameter ADDR_WIDTH = 10;
   `elsif ADDR_WIDTH32
-    parameter ADDR_WIDTH = 32,
+    parameter ADDR_WIDTH = 32;
   `elsif ADDR_WIDTH64
-    parameter ADDR_WIDTH = 64,
+    parameter ADDR_WIDTH = 64;
   `else 
-    parameter ADDR_WIDTH = 32
+    parameter ADDR_WIDTH = 32;
   `endif
 
   parameter ADDR_DEPTH = 256;

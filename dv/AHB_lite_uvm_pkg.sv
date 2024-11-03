@@ -2,7 +2,16 @@ package AHB_pkg;
 
 	import uvm_pkg::*;
 	`include "uvm_macros.svh"
-	`include "AHB_SUBORDINATE_config.svh"
+	`include "AHB_subordinate_defines.vh"
+	`include "AHB_subordinate_config.svh"
+
+	AHB_SUBORDINATE_config subordinate_cfg = new();
+
+	parameter ADDR_WIDTH 			= subordinate_cfg.ADDR_WIDTH;
+	parameter DATA_WIDTH 			= subordinate_cfg.DATA_WIDTH;
+	parameter ADDR_DEPTH 			= subordinate_cfg.ADDR_DEPTH;
+	parameter BITS_FOR_SUBORDINATES = subordinate_cfg.BITS_FOR_SUBORDINATES;
+	parameter NO_OF_SUBORDINATES    = subordinate_cfg.NO_OF_SUBORDINATES;
 
 	parameter CLOCK_PERIOD = 5;
 
@@ -49,7 +58,6 @@ package AHB_pkg;
 
 
 	//control phase signal parameters
-	parameter ADDR_WIDTH = 32;
    	parameter TRANS_WIDTH = 1;
    	parameter SIZE_WIDTH = 2;
    	parameter BURST_WIDTH = 2;

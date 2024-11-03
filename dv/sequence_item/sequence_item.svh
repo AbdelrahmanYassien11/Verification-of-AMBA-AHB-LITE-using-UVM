@@ -52,26 +52,22 @@ rand int randomized_sequences;
        constraint HWRITE_rand_c { WRITE_op dist { WRITE:=50, READ:=50 };
        }
 
-      constraint HADDR_VAL_BURST { BURST_op == WRAP4  -> ((HADDR[ADDR_WIDTH-BITS_FOR_PERIPHERALS-1:0] > 2) && (HADDR[ADDR_WIDTH-BITS_FOR_PERIPHERALS-1:0] < (ADDR_DEPTH-1)));
-                                   BURST_op == WRAP8  -> ((HADDR[ADDR_WIDTH-BITS_FOR_PERIPHERALS-1:0] > 4) && (HADDR[ADDR_WIDTH-BITS_FOR_PERIPHERALS-1:0] < (ADDR_DEPTH-3)));
-                                   BURST_op == WRAP16 -> ((HADDR[ADDR_WIDTH-BITS_FOR_PERIPHERALS-1:0] > 8) && (HADDR[ADDR_WIDTH-BITS_FOR_PERIPHERALS-1:0] < (ADDR_DEPTH-7)));
+      constraint HADDR_VAL_BURST { BURST_op == WRAP4  -> ((HADDR[ADDR_WIDTH-BITS_FOR_SUBORDINATES-1:0] > 2) && (HADDR[ADDR_WIDTH-BITS_FOR_SUBORDINATES-1:0] < (ADDR_DEPTH-1)));
+                                   BURST_op == WRAP8  -> ((HADDR[ADDR_WIDTH-BITS_FOR_SUBORDINATES-1:0] > 4) && (HADDR[ADDR_WIDTH-BITS_FOR_SUBORDINATES-1:0] < (ADDR_DEPTH-3)));
+                                   BURST_op == WRAP16 -> ((HADDR[ADDR_WIDTH-BITS_FOR_SUBORDINATES-1:0] > 8) && (HADDR[ADDR_WIDTH-BITS_FOR_SUBORDINATES-1:0] < (ADDR_DEPTH-7)));
 
-                                   BURST_op == INCR4   -> (HADDR[ADDR_WIDTH-BITS_FOR_PERIPHERALS-1:0] < ADDR_DEPTH-3  );
-                                   BURST_op == INCR8   -> (HADDR[ADDR_WIDTH-BITS_FOR_PERIPHERALS-1:0] < ADDR_DEPTH-7  );
-                                   BURST_op == INCR16  -> (HADDR[ADDR_WIDTH-BITS_FOR_PERIPHERALS-1:0] < ADDR_DEPTH-15 );
+                                   BURST_op == INCR4   -> (HADDR[ADDR_WIDTH-BITS_FOR_SUBORDINATES-1:0] < ADDR_DEPTH-3  );
+                                   BURST_op == INCR8   -> (HADDR[ADDR_WIDTH-BITS_FOR_SUBORDINATES-1:0] < ADDR_DEPTH-7  );
+                                   BURST_op == INCR16  -> (HADDR[ADDR_WIDTH-BITS_FOR_SUBORDINATES-1:0] < ADDR_DEPTH-15 );
 
-                                   //BURST_op == INCR    -> (HADDR[ADDR_WIDTH-BITS_FOR_PERIPHERALS-1:0] < ADDR_WIDTH-1  )
+                                   BURST_op == INCR    -> (HADDR[ADDR_WIDTH-BITS_FOR_SUBORDINATES-1:0] < ADDR_WIDTH-1  );
       }
 
-      constraint HWDATA_c { HSIZE == BYTE     -> HWDATA dist {'h00000000:/1, 'h000000FF:/1, ['h01 : 'h000000FE]:/40};
-                            HSIZE == HALFWORD -> HWDATA dist {'h00000000:/1, 'h0000FFFF:/1, ['h01 : 'h0000FFFE]:/40};
-                            HSIZE == WORD     -> HWDATA dist {'h00000000:/1, 'hFFFFFFFF:/1, ['h01 : 'hFFFFFFFE]:/40};
+
+      constraint HADDR_SEL_c { HADDR[ADDR_WIDTH-1:ADDR_WIDTH-BITS_FOR_SUBORDINATES] dist {0:/30, NO_OF_SUBORDINATES-NO_OF_SUBORDINATES+1:/30, NO_OF_SUBORDINATES-NO_OF_SUBORDINATES+2:/30, NO_OF_SUBORDINATES-NO_OF_SUBORDINATES+3:/10};
       }
 
-      constraint HADDR_SEL_c { HADDR[ADDR_WIDTH-1:ADDR_WIDTH-BITS_FOR_PERIPHERALS] dist {0:/30, NO_OF_PERIPHERALS-NO_OF_PERIPHERALS+1:/30, NO_OF_PERIPHERALS-NO_OF_PERIPHERALS+2:/30, NO_OF_PERIPHERALS-NO_OF_PERIPHERALS+3:/10};
-      }
-
-      constraint HADDR_c { HADDR[(ADDR_WIDTH-BITS_FOR_PERIPHERALS)-1:0] dist {'h00000000:/1, (ADDR_DEPTH-1):/1, ['h00000001 : (ADDR_DEPTH-2)]:/40};
+      constraint HADDR_c { HADDR[(ADDR_WIDTH-BITS_FOR_SUBORDINATES)-1:0] dist {'h00000000:/1, (ADDR_DEPTH-1):/1, ['h00000001 : (ADDR_DEPTH-2)]:/40};
       }
 
       constraint RESET_c {RESET_op == RESETING -> HRESETn == 1'b0;
@@ -98,18 +94,35 @@ rand int randomized_sequences;
                           BURST_op == INCR16    -> HBURST == 3'b111;
       }
 
-      constraint SIZE_c1 { SIZE_op inside {[0:2]};
-      }
 
+      constraint SIZE_c1 { DATA_WIDTH == BYTE_WIDTH      -> SIZE_op == 0;
+                           DATA_WIDTH == HALFWORD_WIDTH  -> SIZE_op inside {[0:1]};
+                           DATA_WIDTH == WORD_WIDTH      -> SIZE_op inside {[0:2]};
+                           DATA_WIDTH == WORD2_WIDTH     -> SIZE_op inside {[0:3]};
+                           DATA_WIDTH == WORD4_WIDTH     -> SIZE_op inside {[0:4]};
+                           DATA_WIDTH == WORD8_WIDTH     -> SIZE_op inside {[0:5]};
+                           DATA_WIDTH == WORD16_WIDTH    -> SIZE_op inside {[0:6]};
+                           DATA_WIDTH == WORD32_WIDTH    -> SIZE_op inside {[0:7]};
+      }
 
       constraint SIZE_c  {SIZE_op == BYTE       -> HSIZE == 3'b000;
                           SIZE_op == HALFWORD   -> HSIZE == 3'b001;
                           SIZE_op == WORD       -> HSIZE == 3'b010; 
-                          // SIZE_op == WORD2      -> HSIZE == 3'b011 && HWDATA[DATA_WIDTH-1:16] == 'h0;
-                          // SIZE_op == WORD4      -> HSIZE == 3'b100 && HWDATA[DATA_WIDTH-1:16] == 'h0;
-                          // SIZE_op == WORD8      -> HSIZE == 3'b101 && HWDATA[DATA_WIDTH-1:16] == 'h0;
-                          // SIZE_op == WORD16     -> HSIZE == 3'b110 && HWDATA[DATA_WIDTH-1:16] == 'h0;
-                          // SIZE_op == WORD32     -> HSIZE == 3'b111 && HWDATA[DATA_WIDTH-1:16] == 'h0;
+                          SIZE_op == WORD2      -> HSIZE == 3'b011;
+                          SIZE_op == WORD4      -> HSIZE == 3'b100;
+                          SIZE_op == WORD8      -> HSIZE == 3'b101;
+                          SIZE_op == WORD16     -> HSIZE == 3'b110;
+                          SIZE_op == WORD32     -> HSIZE == 3'b111;
+      }
+
+      constraint HWDATA_c { HSIZE == BYTE     -> HWDATA dist {'h0:/1, 'h000000FF:/1, ['h01 : 'h000000FE]:/40};
+                            HSIZE == HALFWORD -> HWDATA dist {'h0:/1, 'h0000FFFF:/1, ['h01 : 'h0000FFFE]:/40};
+                            HSIZE == WORD     -> HWDATA dist {'h0:/1, 'h0FFFFFFFF:/1, ['h01 : 'h0FFFFFFFE]:/40};
+                            HSIZE == WORD2    -> HWDATA dist {'h0:/1, 'h0FFFFFFFFFFFFFFFF:/1, ['h01: 'h0FFFFFFFFFFFFFFFE]:/40};
+                            HSIZE == WORD4    -> HWDATA dist {'h0:/1, 'h0FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF:/1, ['h01: 'h0FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFE]:/40};
+                            HSIZE == WORD8    -> HWDATA dist {'h0:/1, 'h0FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF:/1, ['h01: 'h0FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFE]:/40};
+                            HSIZE == WORD16   -> HWDATA dist {'h0:/1, 'h0FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF:/1, ['h01: 'h0FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFE]:/40};
+                            HSIZE == WORD32   -> HWDATA dist {'h0:/1, 'h0FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF:/1, ['h01: 'h0FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFE]:/40};
       }
 
       constraint randomized_test_number_c { randomized_number_of_tests inside {[100 :150]};    
@@ -181,7 +194,7 @@ rand int randomized_sequences;
 
       s = $sformatf("-----------------------------------------------------------------------------------------------------------------------------------------
                      time: %0t  HRESETn = %0d, HSEL= %0d, HWRITE = %0d, HTRANS =  %0d, HSIZE = %0d, HBURST = %0d, HPROT = %0d, HADDR = %0h, HWDATA = %0h, HRDATA = %0h, HRESP = %0d, HREADY = %0d, PREDICTOR_transaction_counter = %0d, COMPARATOR_transaction_counter= %0d",
-                     $time, HRESETn, HADDR[ADDR_WIDTH-1:ADDR_WIDTH-BITS_FOR_PERIPHERALS], HWRITE, HTRANS, HSIZE, HBURST, HPROT, HADDR, HWDATA, HRDATA, HRESP, HREADY, PREDICTOR_transaction_counter, COMPARATOR_transaction_counter);
+                     $time, HRESETn, HADDR[ADDR_WIDTH-1:ADDR_WIDTH-BITS_FOR_SUBORDINATES], HWRITE, HTRANS, HSIZE, HBURST, HPROT, HADDR, HWDATA, HRDATA, HRESP, HREADY, PREDICTOR_transaction_counter, COMPARATOR_transaction_counter);
       return s;
     endfunction : convert2string
 
@@ -190,7 +203,7 @@ rand int randomized_sequences;
       string s;
       s = $sformatf("-----------------------------------------------------------------------------------------------------------------------------------------
                     time: %0t HRESETn = %0d, HSEL= %0d, HWRITE = %0d, HTRANS =  %0d, HSIZE = %0d, HBURST = %0d, HPROT = %0d, HADDR = %0h, HWDATA = %0h, PREDICTOR_transaction_counter = %0d, COMPARATOR_transaction_counter= %0d",
-                    $time, HRESETn, HADDR[ADDR_WIDTH-1:ADDR_WIDTH-BITS_FOR_PERIPHERALS], HWRITE, HTRANS, HSIZE, HBURST, HPROT, HADDR, HWDATA, PREDICTOR_transaction_counter, COMPARATOR_transaction_counter);
+                    $time, HRESETn, HADDR[ADDR_WIDTH-1:ADDR_WIDTH-BITS_FOR_SUBORDINATES], HWRITE, HTRANS, HSIZE, HBURST, HPROT, HADDR, HWDATA, PREDICTOR_transaction_counter, COMPARATOR_transaction_counter);
       return s;
     endfunction
 
@@ -198,7 +211,7 @@ rand int randomized_sequences;
       string s;
       s = $sformatf("-----------------------------------------------------------------------------------------------------------------------------------------
                     time: %0t HSEL: %0d  HRDATA: %0h  HRESP: %0d   HREADY: %0d, PREDICTOR_transaction_counter = %0d, COMPARATOR_transaction_counter= %0d",
-                    $time, HADDR[ADDR_WIDTH-1:ADDR_WIDTH-BITS_FOR_PERIPHERALS], HRDATA, HRESP, HREADY, PREDICTOR_transaction_counter, COMPARATOR_transaction_counter);
+                    $time, HADDR[ADDR_WIDTH-1:ADDR_WIDTH-BITS_FOR_SUBORDINATES], HRDATA, HRESP, HREADY, PREDICTOR_transaction_counter, COMPARATOR_transaction_counter);
       return s;
     endfunction
 
@@ -210,7 +223,7 @@ rand int randomized_sequences;
     //   s = $sformatf("  \n 
     //                 time: %0t  HRESETn = %0d, HSEL= %0d, HWRITE = %0d, HTRANS =  %0d, HSIZE = %0d, HBURST = %0d, HPROT = %0d, HADDR = %0h, HWDATA = %0h, HRDATA = %0h, HRESP = %0d, HREADY = %0d, PREDICTOR_transaction_counter = %0d, COMPARATOR_transaction_counter= %0d  \n
     //                 ******************************************************************************************************************************************************************************************************************",
-    //                 $time, HRESETn, HADDR[ADDR_WIDTH-1:ADDR_WIDTH-BITS_FOR_PERIPHERALS], HWRITE, HTRANS, HSIZE, HBURST, HPROT, HADDR, HWDATA, HRDATA, HRESP, HREADY, PREDICTOR_transaction_counter, COMPARATOR_transaction_counter);
+    //                 $time, HRESETn, HADDR[ADDR_WIDTH-1:ADDR_WIDTH-BITS_FOR_SUBORDINATES], HWRITE, HTRANS, HSIZE, HBURST, HPROT, HADDR, HWDATA, HRDATA, HRESP, HREADY, PREDICTOR_transaction_counter, COMPARATOR_transaction_counter);
     //   return s;
     // endfunction : convert2string
 
@@ -220,7 +233,7 @@ rand int randomized_sequences;
     //   s= $sformatf(" \n
     //                 time: %0t HRESETn = %0d, HSEL= %0d, HWRITE = %0d, HTRANS =  %0d, HSIZE = %0d, HBURST = %0d, HPROT = %0d, HADDR = %0h, HWDATA = %0h, PREDICTOR_transaction_counter = %0d, COMPARATOR_transaction_counter= %0d \n
     //                 --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------",
-    //                 $time, HRESETn, HADDR[ADDR_WIDTH-1:ADDR_WIDTH-BITS_FOR_PERIPHERALS], HWRITE, HTRANS, HSIZE, HBURST, HPROT, HADDR, HWDATA, PREDICTOR_transaction_counter, COMPARATOR_transaction_counter);
+    //                 $time, HRESETn, HADDR[ADDR_WIDTH-1:ADDR_WIDTH-BITS_FOR_SUBORDINATES], HWRITE, HTRANS, HSIZE, HBURST, HPROT, HADDR, HWDATA, PREDICTOR_transaction_counter, COMPARATOR_transaction_counter);
     //   return s;
     // endfunction
 
@@ -229,7 +242,7 @@ rand int randomized_sequences;
     //   s= $sformatf("  \m
     //                 time: %0t HSEL: %0d  HRDATA: %0h  HRESP: %0d   HREADY: %0d, PREDICTOR_transaction_counter = %0d, COMPARATOR_transaction_counter= %0d \n
     //                 ====================================================================================================================================================================================================================",
-    //                 $time, HADDR[ADDR_WIDTH-1:ADDR_WIDTH-BITS_FOR_PERIPHERALS], HRDATA, HRESP, HREADY, PREDICTOR_transaction_counter, COMPARATOR_transaction_counter);
+    //                 $time, HADDR[ADDR_WIDTH-1:ADDR_WIDTH-BITS_FOR_SUBORDINATES], HRDATA, HRESP, HREADY, PREDICTOR_transaction_counter, COMPARATOR_transaction_counter);
     //   return s;
     // endfunction
 

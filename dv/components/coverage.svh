@@ -21,24 +21,24 @@
     option.per_instance = 1;
  endgroup : HWDATA_dt_cg
 
- covergroup HADDR_df_cg(input bit [ADDR_WIDTH-BITS_FOR_PERIPHERALS-1:0] position, ref bit [ADDR_WIDTH-BITS_FOR_PERIPHERALS-1:0] vector);
+ covergroup HADDR_df_cg(input bit [ADDR_WIDTH-BITS_FOR_SUBORDINATES-1:0] position, ref bit [ADDR_WIDTH-BITS_FOR_SUBORDINATES-1:0] vector);
     df: coverpoint (vector & position) != 0;
     option.per_instance = 1;
  endgroup : HADDR_df_cg
 
- covergroup HADDR_dt_cg(input bit [ADDR_WIDTH-BITS_FOR_PERIPHERALS-1:0] position, ref bit [ADDR_WIDTH-BITS_FOR_PERIPHERALS-1:0] vector);
+ covergroup HADDR_dt_cg(input bit [ADDR_WIDTH-BITS_FOR_SUBORDINATES-1:0] position, ref bit [ADDR_WIDTH-BITS_FOR_SUBORDINATES-1:0] vector);
     dt: coverpoint (vector & position) != 0 {
           bins tr[] = (0 => 1, 1 => 0);
       }
     option.per_instance = 1;
  endgroup : HADDR_dt_cg
 
- covergroup HSEL_df_cg(input bit [BITS_FOR_PERIPHERALS-1:0] position, ref bit [BITS_FOR_PERIPHERALS-1:0] vector);
+ covergroup HSEL_df_cg(input bit [BITS_FOR_SUBORDINATES-1:0] position, ref bit [BITS_FOR_SUBORDINATES-1:0] vector);
     df: coverpoint (vector & position) != 0;
     option.per_instance = 1;
  endgroup : HSEL_df_cg
 
-  covergroup HSEL_dt_cg(input bit [BITS_FOR_PERIPHERALS-1:0] position, ref bit [BITS_FOR_PERIPHERALS-1:0] vector);
+  covergroup HSEL_dt_cg(input bit [BITS_FOR_SUBORDINATES-1:0] position, ref bit [BITS_FOR_SUBORDINATES-1:0] vector);
     dt: coverpoint (vector & position) != 0 {
           bins tr[] = (0 => 1, 1 => 0);
       }
@@ -67,8 +67,8 @@ class coverage extends uvm_subscriber #(sequence_item);
         bit   [ADDR_WIDTH-1:0]  HADDR_cov;     
         bit   [DATA_WIDTH-1:0]  HWDATA_cov;
 
-        bit   [ADDR_WIDTH-BITS_FOR_PERIPHERALS-1:0] HADDR_VALID_cov;
-        bit   [BITS_FOR_PERIPHERALS-1:0] HSEL_cov; 
+        bit   [ADDR_WIDTH-BITS_FOR_SUBORDINATES-1:0] HADDR_VALID_cov;
+        bit   [BITS_FOR_SUBORDINATES-1:0] HSEL_cov; 
 
         // AHB lite output Signals
         logic   [DATA_WIDTH-1:0]  HRDATA_cov;
@@ -85,11 +85,11 @@ class coverage extends uvm_subscriber #(sequence_item);
   HWDATA_df_cg HWDATA_df_cg_bits  [DATA_WIDTH-1:0];
   HWDATA_dt_cg HWDATA_dt_cg_bits  [DATA_WIDTH-1:0];
 
-  HADDR_df_cg  HADDR_df_cg_bits   [ADDR_WIDTH-1-BITS_FOR_PERIPHERALS:0];
-  HADDR_dt_cg  HADDR_dt_cg_bits   [ADDR_WIDTH-1-BITS_FOR_PERIPHERALS:0];
+  HADDR_df_cg  HADDR_df_cg_bits   [ADDR_WIDTH-1-BITS_FOR_SUBORDINATES:0];
+  HADDR_dt_cg  HADDR_dt_cg_bits   [ADDR_WIDTH-1-BITS_FOR_SUBORDINATES:0];
 
-  HSEL_df_cg  HSEL_df_cg_bits   [BITS_FOR_PERIPHERALS-1:0];
-  HSEL_dt_cg  HSEL_dt_cg_bits   [BITS_FOR_PERIPHERALS-1:0];
+  HSEL_df_cg  HSEL_df_cg_bits   [BITS_FOR_SUBORDINATES-1:0];
+  HSEL_dt_cg  HSEL_dt_cg_bits   [BITS_FOR_SUBORDINATES-1:0];
 
   // Covergroup for RESET-related coverage
   covergroup RESET_covgrp;
@@ -295,7 +295,7 @@ class coverage extends uvm_subscriber #(sequence_item);
   covergroup SLAVE_SELECT_covgrp;
 
     /* --------------------------------------------------------------------------------------Data Frame coverage of the current operation (either write or read)---------------------------------------------------------------------------------------------- */
-    df_operation: coverpoint HADDR_cov[ADDR_WIDTH-1:(ADDR_WIDTH-(BITS_FOR_PERIPHERALS))] iff (HRESETn_cov) {
+    df_operation: coverpoint HADDR_cov[ADDR_WIDTH-1:(ADDR_WIDTH-(BITS_FOR_SUBORDINATES))] iff (HRESETn_cov) {
       bins SLAVE0_Operation             =  {'b00};
       bins SLAVE1_Operation             =  {'b01};
       bins SLAVE2_Operation             =  {'b10};
@@ -303,7 +303,7 @@ class coverage extends uvm_subscriber #(sequence_item);
     }
 
     /* -------------------------------------------------------------------------------Data Transition coverage of the current operation (from write to read and vice versa)---------------------------------------------------------------------------------------------- */
-    dt_operation: coverpoint HADDR_cov[ADDR_WIDTH-1:(ADDR_WIDTH-(BITS_FOR_PERIPHERALS))] iff(HRESETn_cov)  {
+    dt_operation: coverpoint HADDR_cov[ADDR_WIDTH-1:(ADDR_WIDTH-(BITS_FOR_SUBORDINATES))] iff(HRESETn_cov)  {
       bins SLAVE0_SLAVE0_Transition          = (2'b00 => 2'b00);
       bins SLAVE0_SLAVE1_Transition          = (2'b00 => 2'b01);
       bins SLAVE0_SLAVE2_Transition          = (2'b00 => 2'b10);
@@ -328,7 +328,7 @@ class coverage extends uvm_subscriber #(sequence_item);
 
   covergroup ADDR_covgrp;
     /* --------------------------------------------------------------------------------------Data Frame coverage of the current operation (either write or read)---------------------------------------------------------------------------------------------- */
-    df_operation: coverpoint HADDR_cov[(ADDR_WIDTH-(BITS_FOR_PERIPHERALS))-1: 0] iff ( HRESETn_cov ) {
+    df_operation: coverpoint HADDR_cov[(ADDR_WIDTH-(BITS_FOR_SUBORDINATES))-1: 0] iff ( HRESETn_cov ) {
       bins ADDR_values_others          =  {['hE:'h1]};
       bins ADDR_values_zeros           =  {'h0};
       bins ADDR_values_ones            =  {'hF};
@@ -369,8 +369,8 @@ class coverage extends uvm_subscriber #(sequence_item);
     HADDR_cov      = t.HADDR; 
     HWDATA_cov     = t.HWDATA;
 
-    HADDR_VALID_cov = t.HADDR[ADDR_WIDTH-1-BITS_FOR_PERIPHERALS:0];
-    HSEL_cov        = t.HADDR[ADDR_WIDTH-1:ADDR_WIDTH-BITS_FOR_PERIPHERALS];
+    HADDR_VALID_cov = t.HADDR[ADDR_WIDTH-1-BITS_FOR_SUBORDINATES:0];
+    HSEL_cov        = t.HADDR[ADDR_WIDTH-1:ADDR_WIDTH-BITS_FOR_SUBORDINATES];
 
     HRDATA_cov     = t.HRDATA;
     HRESP_cov      = t.HRESP;

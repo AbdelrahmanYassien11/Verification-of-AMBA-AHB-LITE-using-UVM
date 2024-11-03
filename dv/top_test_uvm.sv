@@ -11,7 +11,7 @@ module top_test_uvm();
 
 	inf f_if(clk);
 
-	ahb_lite	 DUT(
+	ahb_lite	 #(.NO_OF_SUBORDINATES(NO_OF_SUBORDINATES), .DATA_WIDTH(DATA_WIDTH), .ADDR_WIDTH(ADDR_WIDTH), .ADDR_DEPTH(ADDR_DEPTH), .BITS_FOR_SUBORDINATES(BITS_FOR_SUBORDINATES))  DUT(
 				.HCLK(clk),
 				.HRESETn(f_if.HRESETn),
 				.HADDR(f_if.HADDR),
