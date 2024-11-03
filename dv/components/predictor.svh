@@ -268,8 +268,14 @@ class predictor extends uvm_subscriber #(sequence_item);
       endcase // HTRANS
     end
     else begin
-      HRESP_expected  = 1;
-      HRDATA_expected = 0;
+      if(HTRANS != IDLE) begin
+        HRESP_expected  = 1;
+        HRDATA_expected = 0;
+      end
+      else begin
+        HRESP_expected  = 0;
+        HRDATA_expected = 0;
+      end
     end
 
   endtask : write_AHB
@@ -534,8 +540,14 @@ class predictor extends uvm_subscriber #(sequence_item);
       endcase // HTRANS
     end
     else begin
-      HRESP_expected  = 1;
-      HRDATA_expected = 0;
+      if(HTRANS != IDLE) begin
+        HRESP_expected  = 1;
+        HRDATA_expected = 0;
+      end
+      else begin
+        HRESP_expected  = 0;
+        HRDATA_expected = 0;
+      end
     end
   endtask : read_AHB
 

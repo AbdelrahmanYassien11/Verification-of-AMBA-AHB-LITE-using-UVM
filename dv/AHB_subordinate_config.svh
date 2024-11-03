@@ -1,4 +1,4 @@
-//`ifndef AHB_SUBORDINATE_CONFIG
+
 
 class AHB_SUBORDINATE_config;
 

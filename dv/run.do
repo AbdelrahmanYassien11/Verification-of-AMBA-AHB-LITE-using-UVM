@@ -6,7 +6,7 @@ vopt top_test_uvm -o top_optimized +acc +cover=bcefsx+ahb_lite(rtl)
 
 
 
-vsim top_optimized -cover -solvefaildebug=2 +UVM_TESTNAME=WRITE_SINGLE_test
+vsim top_optimized -cover -solvefaildebug=2 +UVM_TESTNAME=READ_INCR4_test
 #add wave -position insertpoint sim:/top_test_uvm/DUT/*
 #add wave -position insertpoint  \
 #sim:/top_test_uvm/f_if/counter

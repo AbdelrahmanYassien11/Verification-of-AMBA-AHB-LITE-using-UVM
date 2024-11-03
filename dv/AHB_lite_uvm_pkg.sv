@@ -109,21 +109,27 @@ package AHB_pkg;
 	`include "READ_SINGLE_sequence.svh"
 	`include "write_twice_sequence.svh"
 
+
 	`include "WRITE_WRAP4_sequence.svh"
 	`include "WRITE_WRAP8_sequence.svh"
 	`include "WRITE_WRAP16_sequence.svh"
 
+	`include "WRITE_INCR_sequence.svh"
 	`include "WRITE_INCR4_sequence.svh"
 	`include "WRITE_INCR8_sequence.svh"
 	`include "WRITE_INCR16_sequence.svh"
+
 
 	`include "READ_WRAP4_sequence.svh"
 	`include "READ_WRAP8_sequence.svh"
 	`include "READ_WRAP16_sequence.svh"
 
+	`include "READ_INCR_sequence.svh"
 	`include "READ_INCR4_sequence.svh"
 	`include "READ_INCR8_sequence.svh"
 	`include "READ_INCR16_sequence.svh"
+
+	`include "runall_sequence.svh"
 	
 	
 	// `include "write_all_sequence.svh"
@@ -151,19 +157,31 @@ package AHB_pkg;
 
 	`include "base_test.svh"
 	`include "reset_test.svh"
-	`include "WRITE_SINGLE_test.svh"
 	`include "write_twice_test.svh"
-	// `include "read_once_test.svh"
 
-	// `include "write_all_test.svh"
-	// //`include "read_all_test.svh" //obselete
-	// `include "reset_write_read_all_test.svh"
+	`include "IDLE_test.svh"
 
-	// `include "write_once_rand_test.svh"
-	// `include "read_once_rand_test.svh"
-	// `include "write_read_rand_test.svh"
+	`include "WRITE_SINGLE_test.svh"
+	`include "READ_SINGLE_test.svh"
 
-	// `include "concurrent_write_read_once_test.svh"
-	// `include "concurrent_write_read_rand_test.svh"
+	`include "WRITE_WRAP4_test.svh"
+	`include "WRITE_WRAP8_test.svh"
+	`include "WRITE_WRAP16_test.svh"
+
+	`include "WRITE_INCR_test.svh"
+	`include "WRITE_INCR4_test.svh"
+	`include "WRITE_INCR8_test.svh"
+	`include "WRITE_INCR16_test.svh"
+
+	`include "READ_WRAP4_test.svh"
+	`include "READ_WRAP8_test.svh"
+	`include "READ_WRAP16_test.svh"
+
+	`include "READ_INCR_test.svh"
+	`include "READ_INCR4_test.svh"
+	`include "READ_INCR8_test.svh"
+	`include "READ_INCR16_test.svh"
+
+	`include "runall_test.svh"
 
 endpackage : AHB_pkg
