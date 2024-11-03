@@ -9,6 +9,7 @@
 //                  described per AMBA SPECIFICATION by ARM.
 //--------------------------------------------------------
 //--------------------------------------------------------
+`include "../dv/AHB_subordinate_defines.vh"
 `timescale 1ns/1ns
 module ahb_default_slave #(parameter ADDR_WIDTH = 32, DATA_WIDTH = 32)
 (

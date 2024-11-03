@@ -11,27 +11,10 @@
 //----------------------------------------------------------------
 `timescale 1ns/1ns
 
-`define HWDATA_WIDTH32
+`include "../dv/AHB_subordinate_defines.vh"
 
 module ahb_slave 
-  #(  
-      `ifdef HWDATA_WIDTH32
-        parameter DATA_WIDTH = 32,
-      `elsif HWDATA_WIDTH64
-        parameter DATA_WIDTH = 64,
-      `elsif HWDATA_WIDTH128
-        parameter DATA_WIDTH = 128,
-      `elsif HWDATA_WIDTH256
-        parameter DATA_WIDTH = 256,
-      `elsif HWDATA_WIDTH512
-        parameter DATA_WIDTH = 512,
-      `elsif HWDATA_WIDTH1024
-        parameter DATA_WIDTH = 1024,
-      `else 
-        parameter DATA_WIDTH = 32
-      `endif
-      ADDR_WIDTH = 32, ADDR_DEPTH = 16, NO_OF_PERIPHERALS = 4, BITS_FOR_PERIPHERALS = $clog2(NO_OF_PERIPHERALS) 
-    )
+  #(parameter DATA_WIDTH = 32, ADDR_WIDTH = 32, ADDR_DEPTH = 16, NO_OF_SUBORDINATES = 4, BITS_FOR_SUBORDINATES = $clog2(NO_OF_SUBORDINATES))
   (
        input   wire                   HRESETn,
        input   wire                   HCLK,
@@ -125,45 +108,49 @@ module ahb_slave
 
    /*********************************************************/
 
+  `ifdef HWDATA_WIDTH64
+    `define HWDATA_WIDTH32
+  `elsif HWDATA_WIDTH128
+    `define HWDATA_WIDTH32
+    `define HWDATA_WIDTH64
+  `elsif HWDATA_WIDTH256
+    `define HWDATA_WIDTH32
+    `define HWDATA_WIDTH64
+    `define HWDATA_WIDTH128
+  `elsif HWDATA_WIDTH512
+    `define HWDATA_WIDTH32
+    `define HWDATA_WIDTH64
+    `define HWDATA_WIDTH128
+    `define HWDATA_WIDTH256
+  `elsif HWDATA_WIDTH1024
+    `define HWDATA_WIDTH32
+    `define HWDATA_WIDTH64
+    `define HWDATA_WIDTH128
+    `define HWDATA_WIDTH256
+    `define HWDATA_WIDTH512
+  `else 
+    `define HWDATA_WIDTH32
+  `endif
+
    `define HSIZE_conditional_WRITE_def(counter) \
       `ifdef HWDATA_WIDTH32 \
                           HSIZE_BYTE      : mem[HADDR_reg_d + counter]  = HWDATA_reg_d[7:0]; \
                           HSIZE_HALFWORD  : mem[HADDR_reg_d + counter]  = HWDATA_reg_d[15:0]; \
                           HSIZE_WORD      : mem[HADDR_reg_d + counter]  = HWDATA_reg_d[31:0]; \
-      `elsif HWDATA_WIDTH64 \
-                          HSIZE_BYTE      : mem[HADDR_reg_d + counter]  = HWDATA_reg_d[7:0]; \
-                          HSIZE_HALFWORD  : mem[HADDR_reg_d + counter]  = HWDATA_reg_d[15:0]; \
-                          HSIZE_WORD      : mem[HADDR_reg_d + counter]  = HWDATA_reg_d[31:0]; \
+      `endif
+      `ifdef HWDATA_WIDTH64 \
                           HSIZE_WORD2     : mem[HADDR_reg_d + counter]  = HWDATA_reg_d[63:0]; \
-      `elsif HWDATA_WIDTH128 \
-                          HSIZE_BYTE      : mem[HADDR_reg_d + counter]  = HWDATA_reg_d[7:0]; \
-                          HSIZE_HALFWORD  : mem[HADDR_reg_d + counter]  = HWDATA_reg_d[15:0]; \
-                          HSIZE_WORD      : mem[HADDR_reg_d + counter]  = HWDATA_reg_d[31:0]; \
-                          HSIZE_WORD2     : mem[HADDR_reg_d + counter]  = HWDATA_reg_d[63:0]; \
+      `endif
+      `ifdef HWDATA_WIDTH128 \
                           HSIZE_WORD4     : mem[HADDR_reg_d + counter]  = HWDATA_reg_d[127:0]; \
-      `elsif HWDATA_WIDTH256 \
-                          HSIZE_BYTE      : mem[HADDR_reg_d + counter]  = HWDATA_reg_d[7:0]; \
-                          HSIZE_HALFWORD  : mem[HADDR_reg_d + counter]  = HWDATA_reg_d[15:0]; \
-                          HSIZE_WORD      : mem[HADDR_reg_d + counter]  = HWDATA_reg_d[31:0]; \
-                          HSIZE_WORD2     : mem[HADDR_reg_d + counter]  = HWDATA_reg_d[63:0]; \
-                          HSIZE_WORD4     : mem[HADDR_reg_d + counter]  = HWDATA_reg_d[127:0]; \
+      `endif
+      `ifdef HWDATA_WIDTH256 \
                           HSIZE_WORD8     : mem[HADDR_reg_d + counter]  = HWDATA_reg_d[255:0]; \
-      `elsif HWDATA_WIDTH512 \
-                          HSIZE_BYTE      : mem[HADDR_reg_d + counter]  = HWDATA_reg_d[7:0]; \
-                          HSIZE_HALFWORD  : mem[HADDR_reg_d + counter]  = HWDATA_reg_d[15:0]; \
-                          HSIZE_WORD      : mem[HADDR_reg_d + counter]  = HWDATA_reg_d[31:0]; \
-                          HSIZE_WORD2     : mem[HADDR_reg_d + counter]  = HWDATA_reg_d[63:0]; \
-                          HSIZE_WORD4     : mem[HADDR_reg_d + counter]  = HWDATA_reg_d[127:0]; \
-                          HSIZE_WORD8     : mem[HADDR_reg_d + counter]  = HWDATA_reg_d[255:0]; \
+      `endif
+      `ifdef HWDATA_WIDTH512 \
                           HSIZE_WORD16    : mem[HADDR_reg_d + counter]  = HWDATA_reg_d[511:0]; \
-      `elsif HWDATA_WIDTH1024 \
-                          HSIZE_BYTE      : mem[HADDR_reg_d + counter]  = HWDATA_reg_d[7:0]; \
-                          HSIZE_HALFWORD  : mem[HADDR_reg_d + counter]  = HWDATA_reg_d[15:0]; \
-                          HSIZE_WORD      : mem[HADDR_reg_d + counter]  = HWDATA_reg_d[31:0]; \
-                          HSIZE_WORD2     : mem[HADDR_reg_d + counter]  = HWDATA_reg_d[63:0]; \
-                          HSIZE_WORD4     : mem[HADDR_reg_d + counter]  = HWDATA_reg_d[127:0]; \
-                          HSIZE_WORD8     : mem[HADDR_reg_d + counter]  = HWDATA_reg_d[255:0]; \
-                          HSIZE_WORD16    : mem[HADDR_reg_d + counter]  = HWDATA_reg_d[511:0]; \
+      `endif
+      `ifdef HWDATA_WIDTH1024 \
                           HSIZE_WORD32    : mem[HADDR_reg_d + counter]  = HWDATA_reg_d[1023:0]; \
       `endif
 
@@ -172,40 +159,20 @@ module ahb_slave
                         HSIZE_BYTE      : HRDATA_reg_d[7:0]     = mem[HADDR_reg_d + counter]; \
                         HSIZE_HALFWORD  : HRDATA_reg_d[15:0]    = mem[HADDR_reg_d + counter]; \
                         HSIZE_WORD      : HRDATA_reg_d[31:0]    = mem[HADDR_reg_d + counter]; \
-    `elsif HWDATA_WIDTH64 \
-                        HSIZE_BYTE      : HRDATA_reg_d[7:0]     = mem[HADDR_reg_d + counter]; \
-                        HSIZE_HALFWORD  : HRDATA_reg_d[15:0]    = mem[HADDR_reg_d + counter]; \
-                        HSIZE_WORD      : HRDATA_reg_d[31:0]    = mem[HADDR_reg_d + counter]; \
+    `endif
+    `ifdef HWDATA_WIDTH64 \
                         HSIZE_WORD2     : HRDATA_reg_d[63:0]    = mem[HADDR_reg_d + counter]; \
-    `elsif HWDATA_WIDTH128 \
-                        HSIZE_BYTE      : HRDATA_reg_d[7:0]     = mem[HADDR_reg_d + counter]; \
-                        HSIZE_HALFWORD  : HRDATA_reg_d[15:0]    = mem[HADDR_reg_d + counter]; \
-                        HSIZE_WORD      : HRDATA_reg_d[31:0]    = mem[HADDR_reg_d + counter]; \
-                        HSIZE_WORD2     : HRDATA_reg_d[63:0]    = mem[HADDR_reg_d + counter]; \
+    `endif
+    `ifdef HWDATA_WIDTH128 \
                         HSIZE_WORD4     : HRDATA_reg_d[127:0]   = mem[HADDR_reg_d + counter]; \
-    `elsif HWDATA_WIDTH256 \
-                        HSIZE_BYTE      : HRDATA_reg_d[7:0]     = mem[HADDR_reg_d + counter]; \
-                        HSIZE_HALFWORD  : HRDATA_reg_d[15:0]    = mem[HADDR_reg_d + counter]; \
-                        HSIZE_WORD      : HRDATA_reg_d[31:0]    = mem[HADDR_reg_d + counter]; \
-                        HSIZE_WORD2     : HRDATA_reg_d[63:0]    = mem[HADDR_reg_d + counter]; \
-                        HSIZE_WORD4     : HRDATA_reg_d[127:0]   = mem[HADDR_reg_d + counter]; \
+    `endif
+    `ifdef HWDATA_WIDTH256 \
                         HSIZE_WORD8     : HRDATA_reg_d[255:0]   = mem[HADDR_reg_d + counter]; \
-    `elsif HWDATA_WIDTH512 \
-                        HSIZE_BYTE      : HRDATA_reg_d[7:0]     = mem[HADDR_reg_d + counter]; \
-                        HSIZE_HALFWORD  : HRDATA_reg_d[15:0]    = mem[HADDR_reg_d + counter]; \
-                        HSIZE_WORD      : HRDATA_reg_d[31:0]    = mem[HADDR_reg_d + counter]; \
-                        HSIZE_WORD2     : HRDATA_reg_d[63:0]    = mem[HADDR_reg_d + counter]; \
-                        HSIZE_WORD4     : HRDATA_reg_d[127:0]   = mem[HADDR_reg_d + counter]; \
-                        HSIZE_WORD8     : HRDATA_reg_d[255:0]   = mem[HADDR_reg_d + counter]; \
+    `endif
+    `ifdef HWDATA_WIDTH512 \
                         HSIZE_WORD16    : HRDATA_reg_d[511:0]   = mem[HADDR_reg_d + counter]; \
-    `elsif HWDATA_WIDTH1024 \
-                        HSIZE_BYTE      : HRDATA_reg_d[7:0]     = mem[HADDR_reg_d + counter]; \
-                        HSIZE_HALFWORD  : HRDATA_reg_d[15:0]    = mem[HADDR_reg_d + counter]; \
-                        HSIZE_WORD      : HRDATA_reg_d[31:0]    = mem[HADDR_reg_d + counter]; \
-                        HSIZE_WORD2     : HRDATA_reg_d[63:0]    = mem[HADDR_reg_d + counter]; \
-                        HSIZE_WORD4     : HRDATA_reg_d[127:0]   = mem[HADDR_reg_d + counter]; \
-                        HSIZE_WORD8     : HRDATA_reg_d[255:0]   = mem[HADDR_reg_d + counter]; \
-                        HSIZE_WORD16    : HRDATA_reg_d[511:0]   = mem[HADDR_reg_d + counter]; \
+    `endif
+    `ifdef HWDATA_WIDTH1024 \
                         HSIZE_WORD32    : HRDATA_reg_d[1023:0]  = mem[HADDR_reg_d + counter]; \
     `endif
 
@@ -236,7 +203,7 @@ module ahb_slave
         HBURST_reg_c      <= HBURST;
         HTRANS_reg_c      <= HTRANS;
         HSEL_reg_c        <= HSEL;
-        HADDR_reg_c       <= HADDR[ADDR_WIDTH-$clog2(NO_OF_PERIPHERALS)-1:0];
+        HADDR_reg_c       <= HADDR[ADDR_WIDTH-$clog2(NO_OF_SUBORDINATES)-1:0];
         HREADYin_reg_c    <= HREADYin;
         HSIZE_reg_c       <= HSIZE;
         HWRITE_reg_c      <= HWRITE;

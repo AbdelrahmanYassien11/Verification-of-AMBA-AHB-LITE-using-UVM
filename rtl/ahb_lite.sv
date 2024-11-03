@@ -1,10 +1,9 @@
 // `include "ahb_decoder_s3.v"
 // `include "ahb_s2m_s3.v"
 // `include "ahb_default_slave.v"
-import AHB_lite_uvm_pkg::**;
 `timescale 1ns/1ns
 
-module ahb_lite #(parameter P_BITS = $clog2(NO_OF_PERIPHERALS), ADDR_WIDTH = 32, DATA_WIDTH = 32, ADDR_DEPTH = 256, NO_OF_PERIPHERALS = 4)
+module ahb_lite #(parameter BITS_FOR_SUBORDINATES = $clog2(NO_OF_SUBORDINATES), ADDR_WIDTH = 32, DATA_WIDTH = 32, ADDR_DEPTH = 256, NO_OF_SUBORDINATES = 4)
 (
       input   wire                   HRESETn,
       input   wire                   HCLK,
@@ -32,7 +31,7 @@ module ahb_lite #(parameter P_BITS = $clog2(NO_OF_PERIPHERALS), ADDR_WIDTH = 32,
 
    assign HREADYin = HREADY;
    /*********************************************************/
-   ahb_decoder #(.NO_OF_PERIPHERALS(NO_OF_PERIPHERALS), .P_BITS(P_BITS), .ADDR_WIDTH(ADDR_WIDTH)) decoder1 
+   ahb_decoder #(.NO_OF_SUBORDINATES(NO_OF_SUBORDINATES), .BITS_FOR_SUBORDINATES(BITS_FOR_SUBORDINATES), .ADDR_WIDTH(ADDR_WIDTH)) decoder1 
               ( 
               .HADDR(HADDR),
               .HREADY(HREADY),
@@ -42,7 +41,7 @@ module ahb_lite #(parameter P_BITS = $clog2(NO_OF_PERIPHERALS), ADDR_WIDTH = 32,
               .HSELd(HSEL_bus[3])
               );
    /*********************************************************/ //MUX
-   ahb_mux #(.NO_OF_PERIPHERALS(NO_OF_PERIPHERALS), .P_BITS(P_BITS), .ADDR_WIDTH(ADDR_WIDTH), .DATA_WIDTH(DATA_WIDTH)) mux1 
+   ahb_mux #(.NO_OF_SUBORDINATES(NO_OF_SUBORDINATES), .BITS_FOR_SUBORDINATES(BITS_FOR_SUBORDINATES), .ADDR_WIDTH(ADDR_WIDTH), .DATA_WIDTH(DATA_WIDTH)) mux1 
           (
           .HRESETn(HRESETn),
           .HCLK   (HCLK),
@@ -92,7 +91,7 @@ module ahb_lite #(parameter P_BITS = $clog2(NO_OF_PERIPHERALS), ADDR_WIDTH = 32,
                     .HREADYout   (HREADY_bus[3])
                     );
    /*********************************************************/
-   ahb_slave #(.ADDR_WIDTH(ADDR_WIDTH), .DATA_WIDTH(DATA_WIDTH), .ADDR_DEPTH(ADDR_DEPTH), .NO_OF_PERIPHERALS(NO_OF_PERIPHERALS)) slave0 
+   ahb_slave #(.ADDR_WIDTH(ADDR_WIDTH), .DATA_WIDTH(DATA_WIDTH), .ADDR_DEPTH(ADDR_DEPTH), .NO_OF_SUBORDINATES(NO_OF_SUBORDINATES)) slave0 
             (
             .HRESETn               (HRESETn),
             .HCLK                     (HCLK),
@@ -110,7 +109,7 @@ module ahb_lite #(parameter P_BITS = $clog2(NO_OF_PERIPHERALS), ADDR_WIDTH = 32,
             .HREADYout        (HREADY_bus[0])
             );
    /*********************************************************/
-   ahb_slave #(.ADDR_WIDTH(ADDR_WIDTH), .DATA_WIDTH(DATA_WIDTH), .ADDR_DEPTH(ADDR_DEPTH), .NO_OF_PERIPHERALS(NO_OF_PERIPHERALS)) slave1 
+   ahb_slave #(.ADDR_WIDTH(ADDR_WIDTH), .DATA_WIDTH(DATA_WIDTH), .ADDR_DEPTH(ADDR_DEPTH), .NO_OF_SUBORDINATES(NO_OF_SUBORDINATES)) slave1 
             (
             .HRESETn               (HRESETn),
             .HCLK                     (HCLK),
@@ -129,7 +128,7 @@ module ahb_lite #(parameter P_BITS = $clog2(NO_OF_PERIPHERALS), ADDR_WIDTH = 32,
 
             );
    /*********************************************************/
-   ahb_slave #(.ADDR_WIDTH(ADDR_WIDTH), .DATA_WIDTH(DATA_WIDTH), .ADDR_DEPTH(ADDR_DEPTH), .NO_OF_PERIPHERALS(NO_OF_PERIPHERALS)) slave2 
+   ahb_slave #(.ADDR_WIDTH(ADDR_WIDTH), .DATA_WIDTH(DATA_WIDTH), .ADDR_DEPTH(ADDR_DEPTH), .NO_OF_SUBORDINATES(NO_OF_SUBORDINATES)) slave2 
             (
             .HRESETn               (HRESETn),
             .HCLK                     (HCLK),
