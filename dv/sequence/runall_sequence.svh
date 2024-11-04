@@ -168,35 +168,85 @@ class runall_sequence extends base_sequence;
         if(seq_item.TRANS_op !== IDLE)begin
           if(seq_item.WRITE_op == WRITE) begin
             case (seq_item.BURST_op)
-              SINGLE: WRITE_SINGLE_sequence_h.start(sequencer_h);
-              INCR:   WRITE_INCR_sequence_h.start(sequencer_h);
-              INCR4:  WRITE_INCR4_sequence_h.start(sequencer_h);
-              INCR8:  WRITE_INCR8_sequence_h.start(sequencer_h);
-              INCR16: WRITE_INCR16_sequence_h.start(sequencer_h);
-              WRAP4:  WRITE_WRAP4_sequence_h.start(sequencer_h);
-              WRAP8:  WRITE_WRAP8_sequence_h.start(sequencer_h);
-              WRAP16: WRITE_WRAP16_sequence_h.start(sequencer_h);                                                                                                          
+              SINGLE: begin 
+                WRITE_SINGLE_sequence_h.start(sequencer_h);
+                `uvm_info("runall_sequence","WRITE_SINGLE", UVM_LOW);
+              end
+              INCR: begin
+                WRITE_INCR_sequence_h.start(sequencer_h);
+                `uvm_info("runall_sequence","WRITE_INCR", UVM_LOW);
+              end
+              INCR4: begin 
+                WRITE_INCR4_sequence_h.start(sequencer_h);
+                `uvm_info("runall_sequence","WRITE_INCR4", UVM_LOW);
+              end
+              INCR8: begin 
+                WRITE_INCR8_sequence_h.start(sequencer_h);
+                `uvm_info("runall_sequence","WRITE_INCR8", UVM_LOW);
+              end
+              INCR16: begin 
+                WRITE_INCR16_sequence_h.start(sequencer_h);
+                `uvm_info("runall_sequence","WRITE_INCR16", UVM_LOW);
+              end
+              WRAP4: begin 
+                WRITE_WRAP4_sequence_h.start(sequencer_h);
+                `uvm_info("runall_sequence","WRITE_WRAP4", UVM_LOW);
+              end
+              WRAP8: begin 
+                WRITE_WRAP8_sequence_h.start(sequencer_h);
+                `uvm_info("runall_sequence","WRITE_WRAP8", UVM_LOW);
+              end
+              WRAP16: begin 
+                WRITE_WRAP16_sequence_h.start(sequencer_h);
+                `uvm_info("runall_sequence","WRITE_WRAP16", UVM_LOW);
+              end                                                                                                           
             endcase // seq_item.HBURST
           end
           else if(seq_item.WRITE_op == READ) begin
             case(seq_item.BURST_op)
-              SINGLE: READ_SINGLE_sequence_h.start(sequencer_h);
-              INCR:   READ_INCR_sequence_h.start(sequencer_h);
-              INCR4:  READ_INCR4_sequence_h.start(sequencer_h);
-              INCR8:  READ_INCR8_sequence_h.start(sequencer_h);
-              INCR16: READ_INCR16_sequence_h.start(sequencer_h);
-              WRAP4:  READ_WRAP4_sequence_h.start(sequencer_h);
-              WRAP8:  READ_WRAP8_sequence_h.start(sequencer_h);
-              WRAP16: READ_WRAP16_sequence_h.start(sequencer_h);
+              SINGLE: begin 
+                READ_SINGLE_sequence_h.start(sequencer_h);
+                `uvm_info("runall_sequence","READ_SINGLE", UVM_LOW);
+              end
+              INCR: begin
+                READ_INCR_sequence_h.start(sequencer_h);
+                `uvm_info("runall_sequence","READ_INCR", UVM_LOW);
+              end
+              INCR4: begin 
+                READ_INCR4_sequence_h.start(sequencer_h);
+                `uvm_info("runall_sequence","READ_INCR4", UVM_LOW);
+              end
+              INCR8: begin 
+                READ_INCR8_sequence_h.start(sequencer_h);
+                `uvm_info("runall_sequence","READ_INCR8", UVM_LOW);
+              end
+              INCR16: begin 
+                READ_INCR16_sequence_h.start(sequencer_h);
+                `uvm_info("runall_sequence","READ_INCR16", UVM_LOW);
+              end
+              WRAP4: begin 
+                READ_WRAP4_sequence_h.start(sequencer_h);
+                `uvm_info("runall_sequence","READ_WRAP4", UVM_LOW);
+              end
+              WRAP8: begin 
+                READ_WRAP8_sequence_h.start(sequencer_h);
+                `uvm_info("runall_sequence","READ_WRAP8", UVM_LOW);
+              end
+              WRAP16: begin 
+                READ_WRAP16_sequence_h.start(sequencer_h);
+                `uvm_info("runall_sequence","READ_WRAP16", UVM_LOW);
+              end  
             endcase // seq_item.HBURST
           end
         end
         else begin
           IDLE_sequence_h.start(sequencer_h);
+          `uvm_info("runall_sequence","IDLE", UVM_LOW);
         end
       end
       else begin
         reset_sequence_h.start(sequencer_h);
+        `uvm_info("runall_sequence","RESET", UVM_LOW);
       end
 
 
@@ -218,7 +268,7 @@ class runall_sequence extends base_sequence;
 
       // base_sequence_r[seq_item.randomized_sequences].start(sequencer_h);
 
-      // $display("LOVELOVELOVELOVELOVELOVELOVLEOLVOELOVELOVELOVE");
+     $display("LOVELOVELOVELOVELOVELOVELOVLEOLVOELOVELOVELOVE");
 
     end
 

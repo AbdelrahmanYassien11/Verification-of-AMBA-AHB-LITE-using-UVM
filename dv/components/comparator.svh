@@ -19,6 +19,8 @@ class comparator extends uvm_component;
   sequence_item seq_item_actual;
   sequence_item seq_item_expected;
   sequence_item seq_item_expected_unchanged;
+  sequence_item seq_item_expected_reset;
+
   // Handle for the comparer component
   uvm_comparer comparer_h;
 
@@ -76,14 +78,18 @@ class comparator extends uvm_component;
       fifo_expected_outputs.get(seq_item_expected);
       `uvm_info("COMPARATOR", {"EXPECTED_SEQ_ITEM RECEIVED: ", 
                       seq_item_expected.convert2string()}, UVM_HIGH)
-      seq_item_expected_unchanged = seq_item_expected.clone_me();
+      //seq_item_expected_unchanged = seq_item_expected.clone_me();
 
-      fifo_actual_outputs.get(seq_item_actual);
+      while(fifo_actual_outputs.get(seq_item_actual) == null) begin
+        seq_item_expected_reset = fifo_expected_outputs.peek();
+        if(~seq_item_expected_reset.HRESETn) begin
+          fifo_expected_outputs.flush();
+        end
+      end
       `uvm_info("COMPARATOR", {"ACTUAL_SEQ_ITEM RECEIVED: ", 
-                      seq_item_actual.output2string()}, UVM_HIGH)
-
+                seq_item_actual.output2string()}, UVM_HIGH)
       // Compare the actual and expected sequence items
-      if (seq_item_actual.do_compare(seq_item_expected_unchanged, comparer_h)) begin
+      if (seq_item_actual.do_compare(seq_item_expected, comparer_h)) begin
         `uvm_info("SCOREBOARD", "PASS", UVM_HIGH)
       end
       else begin

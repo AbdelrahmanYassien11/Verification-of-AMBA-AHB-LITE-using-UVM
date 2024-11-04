@@ -21,6 +21,7 @@ class predictor extends uvm_subscriber #(sequence_item);
 
   // Analysis port for sending expected outputs
   uvm_analysis_port #(sequence_item) analysis_port_expected_outputs;
+  //uvm_analysis_port #(sequence_item) analysis_port_expected_outputs_clearing;
 
   // Sequence item for expected output values
   sequence_item seq_item_expected;
@@ -113,6 +114,8 @@ class predictor extends uvm_subscriber #(sequence_item);
       `uvm_fatal(get_full_name(),"Error");
     end
 
+    seq_item_expected = sequence_item::type_id::create("seq_item_expected");
+
     $display("my_predictor build phase");
   endfunction : build_phase
 
@@ -127,8 +130,17 @@ class predictor extends uvm_subscriber #(sequence_item);
     super.run_phase(phase);
     forever begin      
       $display("my_predictor run phase");
-      seq_item_expected = sequence_item::type_id::create("seq_item_expected");
       @(inputs_written);
+      // if(~HRESETn) begin
+      //   while(analysis_port_expected_outputs.size()>0) begin
+      //               $display("EEEEEEEEEEEEEEEEEEEH BRUH EEEEEEEEEEEEH %0d", analysis_port_expected_outputs.size());
+      //     analysis_port_expected_outputs.get(seq_item_expected);
+      //     #1ns;
+      //   end
+      // end
+      //if(HRESETn)begin
+        seq_item_expected = sequence_item::type_id::create("seq_item_expected");
+      //end
       // `uvm_info("PREDICTOR", {"WRITTEN_DATA: ", data_str}, UVM_HIGH)
       generic_predictor();
       wait(expected_outputs_written.triggered);
@@ -268,14 +280,14 @@ class predictor extends uvm_subscriber #(sequence_item);
       endcase // HTRANS
     end
     else begin
-      if(HTRANS != IDLE) begin
+      // if(HTRANS != IDLE) begin
         HRESP_expected  = 1;
         HRDATA_expected = 0;
-      end
-      else begin
-        HRESP_expected  = 0;
-        HRDATA_expected = 0;
-      end
+      // end
+      // else begin
+      //   HRESP_expected  = 0;
+      //   HRDATA_expected = 0;
+      // end
     end
 
   endtask : write_AHB
@@ -540,14 +552,14 @@ class predictor extends uvm_subscriber #(sequence_item);
       endcase // HTRANS
     end
     else begin
-      if(HTRANS != IDLE) begin
+      // if(HTRANS != IDLE) begin
         HRESP_expected  = 1;
         HRDATA_expected = 0;
-      end
-      else begin
-        HRESP_expected  = 0;
-        HRDATA_expected = 0;
-      end
+      // end
+      // else begin
+      //   HRESP_expected  = 0;
+      //   HRDATA_expected = 0;
+      // end
     end
   endtask : read_AHB
 

@@ -54,6 +54,7 @@ class scoreboard extends uvm_scoreboard;
     analysis_export_inputs.connect(predictor_h.analysis_export);
     analysis_export_outputs.connect(comparator_h.analysis_actual_outputs);
     predictor_h.analysis_port_expected_outputs.connect(comparator_h.analysis_expected_outputs);
+    //predictor_h.analysis_port_expected_outputs.connect(predictor_h.analysis_port_expected_outputs_clearing);
 
     `uvm_info("SCOREBOARD", "Connect phase completed", UVM_MEDIUM)
   endfunction

@@ -231,10 +231,23 @@ sequence_item previous_seq_item, seq_item;
             DATA_PHASE_FLAG = 0;
             OUTPUTS_PHASE_FLAG_1 = 1;
         end
+        else if(counter == 2) begin
+            if(HWRITE_reg == 1'b1) begin
+                //$display("DATA_PHASE_WRITE: TIME:%0t ASSIGNING SIGNALS", $time());
+                write_AHB(HWDATA_reg);
+            end
+            else if(HWRITE_reg == 1'b0) begin
+                //$display("DATA_PHASE_READ: TIME:%0t ASSIGNING SIGNALS", $time());
+                read_AHB();
+            end
+            counter <= counter + 1;
+            DATA_PHASE_FLAG = 0;
+            OUTPUTS_PHASE_FLAG_1 = 1;
+        end
     end
 
     always@(posedge clk) begin
-        if(HRESETn && counter >= 3 && OUTPUTS_PHASE_FLAG_1) begin
+        if(/*HRESETn &&*/ counter >= 3 && OUTPUTS_PHASE_FLAG_1) begin
             $display("OUTPUT_1_PHASE_SIGNALS: TIME:%0t ", $time());
             counter = counter + 1;
             OUTPUTS_PHASE_FLAG_1 = 0;
@@ -243,7 +256,7 @@ sequence_item previous_seq_item, seq_item;
     end
 
     always@(posedge clk) begin
-        if(HRESETn && counter >= 4 && OUTPUTS_PHASE_FLAG_2) begin
+        if(/*HRESETn && */counter >= 4 && OUTPUTS_PHASE_FLAG_2) begin
             $display("OUTPUT_2_PHASE_SIGNALS: TIME:%0t", $time());
             counter = counter + 1;
             OUTPUTS_PHASE_FLAG_2 = 0;
@@ -252,7 +265,7 @@ sequence_item previous_seq_item, seq_item;
     end
 
     always@(posedge clk) begin
-        if(HRESETn && counter >= 5 && OUTPUTS_PHASE_FLAG_3) begin
+        if(/*HRESETn && */counter >= 5 && OUTPUTS_PHASE_FLAG_3) begin
             $display("OUTPUT_3_PHASE_SIGNALS: TIME:%0t SENDING OUTPUTS", $time());
             send_outputs();
             OUTPUTS_PHASE_FLAG_3 = 0;
