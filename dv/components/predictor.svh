@@ -54,11 +54,6 @@ class predictor extends uvm_subscriber #(sequence_item);
   logic   [RESP_WIDTH-1:0]  HRESP_expected; 
   logic   [DATA_WIDTH-1:0]  HREADY_expected;
 
-  logic   [DATA_WIDTH-1:0]  HRDATA_expected0;
-  logic   [DATA_WIDTH-1:0]  HRDATA_expected1;
-  logic   [DATA_WIDTH-1:0]  HRDATA_expected2;
-  logic   [DATA_WIDTH-1:0]  HRDATA_expected3;
-
   logic [DATA_WIDTH-1:0] slave0 [ADDR_DEPTH-1:0];
   logic [DATA_WIDTH-1:0] slave1 [ADDR_DEPTH-1:0];
   logic [DATA_WIDTH-1:0] slave2 [ADDR_DEPTH-1:0];
@@ -220,10 +215,6 @@ class predictor extends uvm_subscriber #(sequence_item);
       HRESP_expected   = OKAY;
       HREADY_expected  = READY;
       HRDATA_expected  = 0;
-      HRDATA_expected0 = 0;
-      HRDATA_expected1 = 0;
-      HRDATA_expected2 = 0;
-      HRDATA_expected3 = 0;
       HTRANS           = IDLE;
       wrap_counter     = -10;
       burst_counter    = 0;

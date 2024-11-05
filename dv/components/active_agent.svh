@@ -20,6 +20,8 @@ class active_agent extends uvm_agent;
 
   // Handles for sequencer, driver, and inputs_monitor components
   sequencer sequencer_h;
+  sequencer burst_sequencer_h;
+  sequencer runall_sequencer_h;
   driver driver_h;
   inputs_monitor inputs_monitor_h;
 
@@ -52,6 +54,9 @@ class active_agent extends uvm_agent;
     // Create sequencer and driver if the agent is active
     if (get_is_active() == UVM_ACTIVE) begin
       sequencer_h = sequencer::type_id::create("sequencer_h", this);
+      burst_sequencer_h = sequencer::type_id::create("burst_sequencer_h", this);
+      runall_sequencer_h = sequencer::type_id::create("runall_sequencer_h", this);
+
       driver_h = driver::type_id::create("driver_h", this);  
     end    
 

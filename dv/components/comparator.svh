@@ -27,10 +27,13 @@ class comparator extends uvm_component;
   // Analysis exports to connect to TLM analysis channels
   uvm_analysis_export #(sequence_item) analysis_actual_outputs;
   uvm_analysis_export #(sequence_item) analysis_expected_outputs;
+  uvm_analysis_export #(sequence_item) analysis_expected_outputs_cleared;
 
   // TLM analysis FIFOs for storing sequence items
   uvm_tlm_analysis_fifo #(sequence_item) fifo_actual_outputs;
   uvm_tlm_analysis_fifo #(sequence_item) fifo_expected_outputs;
+  uvm_tlm_analysis_fifo #(sequence_item) fifo_expected_outputs_cleared;
+
 
   // Constructor for the comparator component
   function new (string name = "comparator", uvm_component parent);
@@ -44,14 +47,20 @@ class comparator extends uvm_component;
     // seq_item_actual = sequence_item::type_id::create("seq_item_actual");
     // seq_item_expected = sequence_item::type_id::create("seq_item_expected");
     seq_item_expected_unchanged = sequence_item::type_id::create("seq_item_expected_unchanged");
+    //seq_item_expected_unchanged = sequence_item::type_id::create("seq_item_expected_unchanged");
+
 
     // Create FIFOs for actual and expected sequence items
     fifo_expected_outputs = new("fifo_expected_outputs", this);
     fifo_actual_outputs  = new("fifo_actual_outputs", this);
 
+    fifo_expected_outputs_cleared = new("fifo_expected_outputs_cleared", this);
+
     // Create analysis exports for expected and actual outputs
     analysis_expected_outputs = new("analysis_expected_outputs", this);
     analysis_actual_outputs = new("analysis_actual_outputs", this);
+
+    analysis_expected_outputs_cleared = new("analysis_expected_outputs_cleared", this);
 
     // Display a message indicating the build phase is complete
     $display("my_comparator build phase");
@@ -64,6 +73,7 @@ class comparator extends uvm_component;
     // Connect the analysis exports to the respective FIFOs
     analysis_actual_outputs.connect(fifo_actual_outputs.analysis_export);
     analysis_expected_outputs.connect(fifo_expected_outputs.analysis_export);
+    analysis_expected_outputs_cleared.connect(fifo_expected_outputs_cleared.analysis_export);
 
     // Display a message indicating the connect phase is complete
     $display("my_comparator connect phase");
@@ -80,12 +90,35 @@ class comparator extends uvm_component;
                       seq_item_expected.convert2string()}, UVM_HIGH)
       //seq_item_expected_unchanged = seq_item_expected.clone_me();
 
-      while(fifo_actual_outputs.get(seq_item_actual) == null) begin
-        seq_item_expected_reset = fifo_expected_outputs.peek();
-        if(~seq_item_expected_reset.HRESETn) begin
-          fifo_expected_outputs.flush();
+      do begin
+        //$display("COMPARATOR : %0t",$time());
+        #1;
+        if(fifo_expected_outputs_cleared.used() > 0) begin
+          for(int i = 0; i < fifo_expected_outputs.used(); i++)begin
+            int to_be_decremented = fifo_expected_outputs.used();
+            if(fifo_expected_outputs_cleared.try_get(seq_item_expected_reset)) begin
+              if(~seq_item_expected_reset.HRESETn) begin
+                $display("TIME : %0t fifo_expected_outputs.used(): %0d & to_be_decremented %0d", $time(), fifo_expected_outputs.used(), to_be_decremented);
+                fifo_expected_outputs.flush();
+                sequence_item::PREDICTOR_transaction_counter = sequence_item::PREDICTOR_transaction_counter - to_be_decremented;
+                seq_item_expected.HRDATA  = 0;
+                seq_item_expected.HRESP   = 0;
+                seq_item_expected.HREADY  = 1;
+                $display("TIME : %0t fifo_expected_outputs.used(): %0d & to_be_decremented %0d", $time(), fifo_expected_outputs.used(), to_be_decremented);
+                $display("TIME : %0t FIXING EXPECTED_SEQ_ITEM", $time());
+              end
+            end
+          end
         end
-      end
+      end while((fifo_actual_outputs.used() == 0) && (sequence_item::COMPARATOR_transaction_counter != sequence_item::PREDICTOR_transaction_counter));
+
+      fifo_actual_outputs.get(seq_item_actual);
+      // while(fifo_actual_outputs.get(seq_item_actual) == null) begin
+      //   seq_item_expected_reset = fifo_expected_outputs.peek();
+      //   if(~seq_item_expected_reset.HRESETn) begin
+      //     fifo_expected_outputs.flush();
+      //   end
+      // end
       `uvm_info("COMPARATOR", {"ACTUAL_SEQ_ITEM RECEIVED: ", 
                 seq_item_actual.output2string()}, UVM_HIGH)
       // Compare the actual and expected sequence items

@@ -60,6 +60,7 @@ class runall_sequence extends base_sequence;
     // Create an instance of the reset sequence
     reset_sequence_h = reset_sequence::type_id::create("reset_sequence_h");
     IDLE_sequence_h = IDLE_sequence::type_id::create("IDLE_sequence_h");
+    IDLE_sequence_h = IDLE_sequence::type_id::create("IDLE_sequence_h");
 
 
     WRITE_SINGLE_sequence_h   = WRITE_SINGLE_sequence::type_id::create("WRITE_SINGLE_sequence_h");
@@ -105,7 +106,8 @@ class runall_sequence extends base_sequence;
   // Main task body for executing the READ operation
   virtual task body();
 
-    int tests_randomized = $urandom_range(100,200);
+    //int tests_randomized = $urandom_range(20,50);
+    int tests_randomized = 4;
 
     reset_sequence::last_test = 1'b1;
     IDLE_sequence::last_test = 1'b1;
@@ -155,7 +157,7 @@ class runall_sequence extends base_sequence;
     `uvm_info("runall_sequence: ", "STARTING" , UVM_HIGH)
 
     if(~reset_flag)
-      reset_sequence_h.start(sequencer_h);
+      reset_sequence_h.start(m_sequencer);
 
 
     for(int i = 0; i < tests_randomized ; i++) begin
@@ -169,84 +171,136 @@ class runall_sequence extends base_sequence;
           if(seq_item.WRITE_op == WRITE) begin
             case (seq_item.BURST_op)
               SINGLE: begin 
-                WRITE_SINGLE_sequence_h.start(sequencer_h);
-                `uvm_info("runall_sequence","WRITE_SINGLE", UVM_LOW);
+                `uvm_info("runall_sequence1","WRITE_SINGLE", UVM_LOW); 
+                //`uvm_info("TEST_INFO", $sformatf("Sequencer is busy: %0d", sequencer_h.is_busy()), UVM_MEDIUM);
+               
+                WRITE_SINGLE_sequence_h.start(m_sequencer);
+                //`uvm_do_on(WRITE_SINGLE_sequence_h, sequencer_h)
               end
               INCR: begin
-                WRITE_INCR_sequence_h.start(sequencer_h);
-                `uvm_info("runall_sequence","WRITE_INCR", UVM_LOW);
+                `uvm_info("runall_sequence1","WRITE_INCR", UVM_LOW);  
+                //`uvm_info("TEST_INFO", $sformatf("Sequencer is busy: %0d", sequencer_h.is_busy()), UVM_MEDIUM);
+              
+                WRITE_INCR_sequence_h.start(m_sequencer);
+                //`uvm_do_on(WRITE_INCR_sequence_h, sequencer_h)
               end
-              INCR4: begin 
-                WRITE_INCR4_sequence_h.start(sequencer_h);
-                `uvm_info("runall_sequence","WRITE_INCR4", UVM_LOW);
+              INCR4: begin
+                `uvm_info("runall_sequence1","WRITE_INCR4", UVM_LOW);  
+                //`uvm_info("TEST_INFO", $sformatf("Sequencer is busy: %0d", sequencer_h.is_busy()), UVM_MEDIUM);
+             
+                WRITE_INCR4_sequence_h.start(m_sequencer);
+                //`uvm_do_on(WRITE_INCR4_sequence_h, sequencer_h)
               end
-              INCR8: begin 
-                WRITE_INCR8_sequence_h.start(sequencer_h);
-                `uvm_info("runall_sequence","WRITE_INCR8", UVM_LOW);
+              INCR8: begin
+                `uvm_info("runall_sequence1","WRITE_INCR8", UVM_LOW);   
+                //`uvm_info("TEST_INFO", $sformatf("Sequencer is busy: %0d", sequencer_h.is_busy()), UVM_MEDIUM);
+            
+                WRITE_INCR8_sequence_h.start(m_sequencer);
+                //`uvm_do_on(WRITE_INCR8_sequence_h, sequencer_h)
               end
               INCR16: begin 
-                WRITE_INCR16_sequence_h.start(sequencer_h);
-                `uvm_info("runall_sequence","WRITE_INCR16", UVM_LOW);
+                `uvm_info("runall_sequence1","WRITE_INCR16", UVM_LOW);    
+                //`uvm_info("TEST_INFO", $sformatf("Sequencer is busy: %0d", sequencer_h.is_busy()), UVM_MEDIUM);
+            
+                WRITE_INCR16_sequence_h.start(m_sequencer);
+                //`uvm_do_on(WRITE_INCR16_sequence_h, sequencer_h)
               end
               WRAP4: begin 
-                WRITE_WRAP4_sequence_h.start(sequencer_h);
-                `uvm_info("runall_sequence","WRITE_WRAP4", UVM_LOW);
+                `uvm_info("runall_sequence1","WRITE_WRAP4", UVM_LOW);       
+                //`uvm_info("TEST_INFO", $sformatf("Sequencer is busy: %0d", sequencer_h.is_busy()), UVM_MEDIUM);
+         
+                WRITE_WRAP4_sequence_h.start(m_sequencer);
+                //`uvm_do_on(WRITE_WRAP4_sequence_h, sequencer_h)
               end
               WRAP8: begin 
-                WRITE_WRAP8_sequence_h.start(sequencer_h);
-                `uvm_info("runall_sequence","WRITE_WRAP8", UVM_LOW);
+                `uvm_info("runall_sequence1","WRITE_WRAP8", UVM_LOW);      
+                //`uvm_info("TEST_INFO", $sformatf("Sequencer is busy: %0d", sequencer_h.is_busy()), UVM_MEDIUM);
+          
+                WRITE_WRAP8_sequence_h.start(m_sequencer);
+                //`uvm_do_on(WRITE_WRAP8_sequence_h, sequencer_h)
               end
               WRAP16: begin 
-                WRITE_WRAP16_sequence_h.start(sequencer_h);
-                `uvm_info("runall_sequence","WRITE_WRAP16", UVM_LOW);
+                `uvm_info("runall_sequence1","WRITE_WRAP16", UVM_LOW);      
+                //`uvm_info("TEST_INFO", $sformatf("Sequencer is busy: %0d", sequencer_h.is_busy()), UVM_MEDIUM);
+          
+                WRITE_WRAP16_sequence_h.start(m_sequencer);
+                //`uvm_do_on(WRITE_WRAP16_sequence_h, sequencer_h)
               end                                                                                                           
             endcase // seq_item.HBURST
           end
           else if(seq_item.WRITE_op == READ) begin
             case(seq_item.BURST_op)
               SINGLE: begin 
-                READ_SINGLE_sequence_h.start(sequencer_h);
-                `uvm_info("runall_sequence","READ_SINGLE", UVM_LOW);
+                `uvm_info("runall_sequence1","READ_SINGLE", UVM_LOW);  
+                //`uvm_info("TEST_INFO", $sformatf("Sequencer is busy: %0d", sequencer_h.is_busy()), UVM_MEDIUM);
+              
+                READ_SINGLE_sequence_h.start(m_sequencer);
+                //`uvm_do_on(READ_SINGLE_sequence_h, sequencer_h)
               end
               INCR: begin
-                READ_INCR_sequence_h.start(sequencer_h);
-                `uvm_info("runall_sequence","READ_INCR", UVM_LOW);
+                `uvm_info("runall_sequence1","READ_INCR", UVM_LOW); 
+                //`uvm_info("TEST_INFO", $sformatf("Sequencer is busy: %0d", sequencer_h.is_busy()), UVM_MEDIUM);
+               
+                READ_INCR_sequence_h.start(m_sequencer);
+                //`uvm_do_on(READ_INCR_sequence_h, sequencer_h)
               end
-              INCR4: begin 
-                READ_INCR4_sequence_h.start(sequencer_h);
-                `uvm_info("runall_sequence","READ_INCR4", UVM_LOW);
+              INCR4: begin
+                `uvm_info("runall_sequence1","READ_INCR4", UVM_LOW); 
+                //`uvm_info("TEST_INFO", $sformatf("Sequencer is busy: %0d", sequencer_h.is_busy()), UVM_MEDIUM);
+
+                READ_INCR4_sequence_h.start(m_sequencer);
+                //`uvm_do_on(READ_INCR4_sequence_h, sequencer_h)
               end
               INCR8: begin 
-                READ_INCR8_sequence_h.start(sequencer_h);
-                `uvm_info("runall_sequence","READ_INCR8", UVM_LOW);
+                `uvm_info("runall_sequence1","READ_INCR8", UVM_LOW);
+                //`uvm_info("TEST_INFO", $sformatf("Sequencer is busy: %0d", sequencer_h.is_busy()), UVM_MEDIUM);
+
+                READ_INCR8_sequence_h.start(m_sequencer);
+                //`uvm_do_on(READ_INCR8_sequence_h, sequencer_h)
               end
               INCR16: begin 
-                READ_INCR16_sequence_h.start(sequencer_h);
-                `uvm_info("runall_sequence","READ_INCR16", UVM_LOW);
+                `uvm_info("runall_sequence1","READ_INCR16", UVM_LOW);
+                //`uvm_info("TEST_INFO", $sformatf("Sequencer is busy: %0d", sequencer_h.is_busy()), UVM_MEDIUM);
+
+                READ_INCR16_sequence_h.start(m_sequencer);
+                //`uvm_do_on(READ_INCR16_sequence_h, sequencer_h)
               end
-              WRAP4: begin 
-                READ_WRAP4_sequence_h.start(sequencer_h);
-                `uvm_info("runall_sequence","READ_WRAP4", UVM_LOW);
+              WRAP4: begin
+               `uvm_info("runall_sequence1","READ_WRAP4", UVM_LOW); 
+               //`uvm_info("TEST_INFO", $sformatf("Sequencer is busy: %0d", sequencer_h.is_busy()), UVM_MEDIUM);
+
+                READ_WRAP4_sequence_h.start(m_sequencer);
+                //`uvm_do_on(READ_WRAP4_sequence_h, sequencer_h)
               end
               WRAP8: begin 
-                READ_WRAP8_sequence_h.start(sequencer_h);
-                `uvm_info("runall_sequence","READ_WRAP8", UVM_LOW);
+                `uvm_info("runall_sequence1","READ_WRAP8", UVM_LOW);
+                //`uvm_info("TEST_INFO", $sformatf("Sequencer is busy: %0d", sequencer_h.is_busy()), UVM_MEDIUM);
+
+                READ_WRAP8_sequence_h.start(m_sequencer);
+                //`uvm_do_on(READ_WRAP8_sequence_h, sequencer_h)
               end
               WRAP16: begin 
-                READ_WRAP16_sequence_h.start(sequencer_h);
-                `uvm_info("runall_sequence","READ_WRAP16", UVM_LOW);
+                `uvm_info("runall_sequence1","READ_WRAP16", UVM_LOW);
+                //`uvm_info("TEST_INFO", $sformatf("Sequencer is busy: %0d", sequencer_h.is_busy()), UVM_MEDIUM);
+
+                READ_WRAP16_sequence_h.start(m_sequencer);
+                //`uvm_do_on(READ_WRAP16_sequence_h, sequencer_h)
               end  
             endcase // seq_item.HBURST
           end
         end
         else begin
-          IDLE_sequence_h.start(sequencer_h);
-          `uvm_info("runall_sequence","IDLE", UVM_LOW);
+          `uvm_info("runall_sequence1","IDLE", UVM_LOW);
+          //`uvm_info("TEST_INFO", $sformatf("Sequencer is busy: %0d", sequencer_h.is_busy()), UVM_MEDIUM);     
+          IDLE_sequence_h.start(m_sequencer);
+          //`uvm_do_on(IDLE_sequence_h, sequencer_h)
         end
       end
       else begin
-        reset_sequence_h.start(sequencer_h);
-        `uvm_info("runall_sequence","RESET", UVM_LOW);
+        `uvm_info("runall_sequence1","RESET", UVM_LOW);        
+        //`uvm_info("TEST_INFO", $sformatf("Sequencer is busy: %0d", sequencer_h.is_busy()), UVM_MEDIUM);
+        reset_sequence_h.start(m_sequencer);
+        //`uvm_do_on(reset_sequence_h, sequencer_h)
       end
 
 

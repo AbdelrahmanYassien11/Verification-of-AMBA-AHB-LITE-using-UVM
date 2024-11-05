@@ -247,8 +247,8 @@ sequence_item previous_seq_item, seq_item;
     end
 
     always@(posedge clk) begin
-        if(/*HRESETn &&*/ counter >= 3 && OUTPUTS_PHASE_FLAG_1) begin
-            $display("OUTPUT_1_PHASE_SIGNALS: TIME:%0t ", $time());
+        if(HRESETn && counter >= 3 && OUTPUTS_PHASE_FLAG_1) begin
+            //$display("OUTPUT_1_PHASE_SIGNALS: TIME:%0t ", $time());
             counter = counter + 1;
             OUTPUTS_PHASE_FLAG_1 = 0;
             OUTPUTS_PHASE_FLAG_2 = 1;
@@ -256,8 +256,8 @@ sequence_item previous_seq_item, seq_item;
     end
 
     always@(posedge clk) begin
-        if(/*HRESETn && */counter >= 4 && OUTPUTS_PHASE_FLAG_2) begin
-            $display("OUTPUT_2_PHASE_SIGNALS: TIME:%0t", $time());
+        if(HRESETn && counter >= 4 && OUTPUTS_PHASE_FLAG_2) begin
+            //$display("OUTPUT_2_PHASE_SIGNALS: TIME:%0t", $time());
             counter = counter + 1;
             OUTPUTS_PHASE_FLAG_2 = 0;
             OUTPUTS_PHASE_FLAG_3 = 1;
@@ -265,8 +265,8 @@ sequence_item previous_seq_item, seq_item;
     end
 
     always@(posedge clk) begin
-        if(/*HRESETn && */counter >= 5 && OUTPUTS_PHASE_FLAG_3) begin
-            $display("OUTPUT_3_PHASE_SIGNALS: TIME:%0t SENDING OUTPUTS", $time());
+        if(HRESETn && counter >= 5 && OUTPUTS_PHASE_FLAG_3) begin
+            //$display("OUTPUT_3_PHASE_SIGNALS: TIME:%0t SENDING OUTPUTS", $time());
             send_outputs();
             OUTPUTS_PHASE_FLAG_3 = 0;
         end

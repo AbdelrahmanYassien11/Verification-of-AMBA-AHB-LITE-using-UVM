@@ -102,14 +102,14 @@ class WRITE_INCR16_sequence extends base_sequence;
     start_item(seq_item); // Start the sequence item
     
       seq_item.RESET_op.rand_mode(0);
-      seq_item.WRITE_op.rand_mode(0);
+      seq_item.WRITE_op.rand_mode(0);      
       seq_item.TRANS_op.rand_mode(0);
       seq_item.BURST_op.rand_mode(0);
-      seq_item.SIZE_op.rand_mode(0);
+      seq_item.SIZE_op.rand_mode(0); 
 
-      // Set the operation type to WRITE
+      // Set the operation type to READ
       seq_item.RESET_op = WORKING;
-      seq_item.WRITE_op = WRITE;
+      seq_item.WRITE_op = READ;
       seq_item.TRANS_op = IDLE;
       seq_item.BURST_op = SINGLE;
       seq_item.SIZE_op  = BYTE;

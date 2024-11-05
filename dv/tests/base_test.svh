@@ -18,6 +18,8 @@ class base_test extends uvm_test;
 
    // Sequencer instance
    sequencer sequencer_h;
+   sequencer burst_sequencer_h;
+   sequencer runall_sequencer_h;
 
    // Base sequence instance
    base_sequence base_sequence_h;
@@ -61,8 +63,13 @@ class base_test extends uvm_test;
       // Obtain the sequencer from the active agent in the environment
       sequencer_h = env_h.active_agent_h.sequencer_h;
 
+      runall_sequencer_h = env_h.active_agent_h.runall_sequencer_h;
+      burst_sequencer_h = env_h.active_agent_h.burst_sequencer_h;
+
       // Set the sequencer in the base sequence
       base_sequence_h.sequencer_h = sequencer_h;
+      base_sequence_h.burst_sequencer_h = burst_sequencer_h;
+      base_sequence_h.runall_sequencer_h = runall_sequencer_h;
    endfunction : end_of_elaboration_phase
 
    // Run phase for executing the test

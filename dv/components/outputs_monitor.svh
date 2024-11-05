@@ -15,7 +15,7 @@ class outputs_monitor extends uvm_monitor;
 
   // Virtual interface for DUT interaction
   virtual inf my_vif;
-
+  int i;
   // Analysis port to provide data to other components
   uvm_analysis_port #(sequence_item) tlm_analysis_port;
 
@@ -72,8 +72,10 @@ class outputs_monitor extends uvm_monitor;
     seq_item.HREADY = iHREADY;
     // Write the sequence item to the analysis port
     tlm_analysis_port.write(seq_item);
-    `uvm_info(get_full_name(),"OUTPUTS SENT TO THE COMPARATOR",UVM_LOW)
-
+    while(i < 5) begin
+      `uvm_info(get_full_name(),"OUTPUTS SENT TO THE COMPARATOR",UVM_LOW)
+      i++;
+    end
   endfunction : write_to_monitor
 
 endclass

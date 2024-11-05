@@ -17,6 +17,8 @@ class base_sequence extends uvm_sequence #(sequence_item);
   // Handle for the sequence item used in this sequence
   sequence_item seq_item;
   sequencer sequencer_h;
+  sequencer burst_sequencer_h;
+  sequencer runall_sequencer_h;
 
   // Constructor
   function new(string name = "base_sequence");

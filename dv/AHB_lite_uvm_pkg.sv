@@ -130,6 +130,7 @@ package AHB_pkg;
 	`include "READ_INCR16_sequence.svh"
 
 	`include "runall_sequence.svh"
+	`include "test_sequence.svh"
 	
 	
 	// `include "write_all_sequence.svh"
@@ -183,5 +184,6 @@ package AHB_pkg;
 	`include "READ_INCR16_test.svh"
 
 	`include "runall_test.svh"
+	`include "test_test.svh"
 
 endpackage : AHB_pkg
