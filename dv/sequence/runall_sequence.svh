@@ -106,8 +106,8 @@ class runall_sequence extends base_sequence;
   // Main task body for executing the READ operation
   virtual task body();
 
-    //int tests_randomized = $urandom_range(20,50);
-    int tests_randomized = 4;
+    int tests_randomized = $urandom_range(150,200);
+    //int tests_randomized = 4;
 
     reset_sequence::last_test = 1'b1;
     IDLE_sequence::last_test = 1'b1;

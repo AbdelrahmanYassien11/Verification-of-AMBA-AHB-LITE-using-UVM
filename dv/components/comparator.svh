@@ -100,6 +100,7 @@ class comparator extends uvm_component;
               if(~seq_item_expected_reset.HRESETn) begin
                 $display("TIME : %0t fifo_expected_outputs.used(): %0d & to_be_decremented %0d", $time(), fifo_expected_outputs.used(), to_be_decremented);
                 fifo_expected_outputs.flush();
+                fifo_expected_outputs_cleared.flush();
                 sequence_item::PREDICTOR_transaction_counter = sequence_item::PREDICTOR_transaction_counter - to_be_decremented;
                 seq_item_expected.HRDATA  = 0;
                 seq_item_expected.HRESP   = 0;

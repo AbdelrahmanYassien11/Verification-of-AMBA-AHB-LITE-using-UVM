@@ -196,6 +196,14 @@ module ahb_slave
         state             <= IDLE;
         burst_counter_reg <= 0;
         wrap_counter_reg  <= 0;
+
+        HADDR_reg_c       <= 0;
+        HBURST_reg_c      <= 0;
+        HTRANS_reg_c      <= 0;
+        HSEL_reg_c        <= 0;
+        HREADYin_reg_c    <= 1;
+        HSIZE_reg_c       <= 0;
+        HWRITE_reg_c      <= 0;     
       end 
       else begin 
         state             <= next_state;
@@ -219,6 +227,14 @@ module ahb_slave
         HRDATA_reg_d      <= 0;
         HRESP_reg_d       <= 0;
         HREADYout_reg_d   <= 1;
+
+        HADDR_reg_d       <= 0;
+        HTRANS_reg_d      <= 0;
+        HBURST_reg_d      <= 0;
+        HSEL_reg_d        <= 0;
+        HSIZE_reg_d       <= 0;
+        
+        HWDATA_reg_d      <= 0;
       end 
       else begin 
         HBURST_reg_d     <= HBURST_reg_c;
