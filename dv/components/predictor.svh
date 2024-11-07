@@ -32,6 +32,11 @@ class predictor extends uvm_subscriber #(sequence_item);
 
   realtime async_reset_time;
 
+  sequence_item seq_item_old;
+  sequence_item seq_item_older;
+  sequence_item seq_item_oldest;
+  bit undo_on;
+
 
   // logic [DATA_WIDTH-1:0] slave0 [P_SLAVE0_START:P_SLAVE0_END];
   // logic [DATA_WIDTH-1:0] slave1 [P_SLAVE1_START:P_SLAVE1_END];
@@ -50,8 +55,6 @@ class predictor extends uvm_subscriber #(sequence_item);
   bit   [ADDR_WIDTH-BITS_FOR_SUBORDINATES-1:0] HADDR_VALID;
   bit   [ADDR_WIDTH-1:ADDR_WIDTH-BITS_FOR_SUBORDINATES] HSEL;  
   bit   [DATA_WIDTH-1:0]  HWDATA; 
-
-  bit   [DATA_WIDTH-1:0]  HWDATA_last_op; 
 
   // AHB lite output Signals
   logic   [DATA_WIDTH-1:0]  HRDATA_expected;
@@ -119,6 +122,10 @@ class predictor extends uvm_subscriber #(sequence_item);
     end
 
     seq_item_expected = sequence_item::type_id::create("seq_item_expected");
+    seq_item_old = sequence_item::type_id::create("seq_item_old");
+    seq_item_older = sequence_item::type_id::create("seq_item_older");
+    seq_item_oldest = sequence_item::type_id::create("seq_item_oldest");
+
 
     $display("my_predictor build phase");
   endfunction : build_phase
@@ -157,12 +164,17 @@ class predictor extends uvm_subscriber #(sequence_item);
   endtask
 
   // Write method for processing sequence items
-  function void write(sequence_item t);
+ function void write(sequence_item t);
     $display("async_reset_time: %0t and actual time: %0t",async_reset_time, $time());
-    if(async_reset_time === $time()) begin
+    if(async_reset_time === ($time()-5)) begin
       undo_last_operation();
     end
     async_reset_time = $time();
+    seq_item_old     <= t.clone_me();
+    seq_item_older   <= seq_item_old;
+    seq_item_oldest  <= seq_item_older;
+
+
     if(HSEL != 3 && HRESP_expected == ERROR && HTRANS != IDLE && t.HBURST == SINGLE) begin
       HTRANS      = 0;
       $display("OVERRIDING TO IDLE");
@@ -242,6 +254,11 @@ class predictor extends uvm_subscriber #(sequence_item);
       HTRANS           = IDLE;
       wrap_counter     = -10;
       burst_counter    = 0;
+      $display("AAAASLAVE0 MEM AFTER RESET: %p", slave0);
+      $display("AAAASLAVE1 MEM AFTER RESET: %p", slave1);
+      $display("AAAASLAVE2 MEM AFTER RESET: %p", slave2);
+      $display("TAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAKH");
+
     endtask : reset_AHB
 
     // Task: Write data into the AHB and handle pointer updates
@@ -313,18 +330,18 @@ class predictor extends uvm_subscriber #(sequence_item);
           BYTE_P: begin
             case(HADDR[ADDR_WIDTH-1:ADDR_WIDTH-BITS_FOR_SUBORDINATES])
               2'b00: begin
-                HWDATA_last_op[BYTE_WIDTH-1:0] = slave0[HADDR_VALID + counter];
+                if(~undo_on) seq_item_old.HWDATA[BYTE_WIDTH-1:0] = slave0[HADDR_VALID + counter];
                 slave0[HADDR_VALID + counter] = HWDATA[BYTE_WIDTH-1:0];
                 `uvm_info("PREDICTOR", {"WRITE_SLAVE0:", $sformatf("%0h, %0h, %0h", slave0[HADDR_VALID+counter], HWDATA[BYTE_WIDTH-1:0], (HADDR + counter))}, UVM_LOW)
               end
               2'b01: begin
-                HWDATA_last_op[BYTE_WIDTH-1:0] = slave1[HADDR_VALID + counter];
+                if(~undo_on) seq_item_old.HWDATA[BYTE_WIDTH-1:0] = slave1[HADDR_VALID + counter];
                 slave1[HADDR_VALID + counter] = HWDATA[BYTE_WIDTH-1:0];
                 `uvm_info("PREDICTOR", {"WRITE_SLAVE1:", $sformatf("%0h, %0h, %0h", slave1[HADDR_VALID+counter], HWDATA[BYTE_WIDTH-1:0], (HADDR + counter))}, UVM_LOW)
 
               end
               2'b10: begin
-                HWDATA_last_op[BYTE_WIDTH-1:0] = slave2[HADDR_VALID + counter];
+                if(~undo_on) seq_item_old.HWDATA[BYTE_WIDTH-1:0] = slave2[HADDR_VALID + counter];
                 slave2[HADDR_VALID + counter] = HWDATA[BYTE_WIDTH-1:0];
                 `uvm_info("PREDICTOR", {"WRITE_SLAVE2:", $sformatf("%0h, %0h, %0h", slave2[HADDR_VALID+counter], HWDATA[BYTE_WIDTH-1:0], (HADDR + counter))}, UVM_LOW)
               end
@@ -338,18 +355,18 @@ class predictor extends uvm_subscriber #(sequence_item);
           HALFWORD_P: begin
             case(HADDR[ADDR_WIDTH-1:ADDR_WIDTH-BITS_FOR_SUBORDINATES])
               2'b00: begin
-                HWDATA_last_op[HALFWORD_WIDTH-1:0] = slave0[HADDR_VALID + counter];
+                if(~undo_on) seq_item_old.HWDATA[HALFWORD_WIDTH-1:0] = slave0[HADDR_VALID + counter];
                 slave0[HADDR_VALID + counter] = HWDATA[HALFWORD_WIDTH-1:0];
                 `uvm_info("PREDICTOR", {"WRITE_SLAVE0:", $sformatf("%0h, %0h", slave0[HADDR_VALID+counter], HWDATA[HALFWORD_WIDTH-1:0])}, UVM_LOW)
               end
               2'b01: begin
-                HWDATA_last_op[HALFWORD_WIDTH-1:0] = slave1[HADDR_VALID + counter];
+                if(~undo_on) seq_item_old.HWDATA[HALFWORD_WIDTH-1:0] = slave1[HADDR_VALID + counter];
                 slave1[HADDR_VALID + counter] = HWDATA[HALFWORD_WIDTH-1:0];
                 `uvm_info("PREDICTOR", {"WRITE_SLAVE1:", $sformatf("%0h, %0h", slave1[HADDR_VALID+counter], HWDATA[HALFWORD_WIDTH-1:0])}, UVM_LOW)
 
               end
               2'b10: begin
-                HWDATA_last_op[HALFWORD_WIDTH-1:0] = slave2[HADDR_VALID + counter];
+                if(~undo_on) seq_item_old.HWDATA[HALFWORD_WIDTH-1:0] = slave2[HADDR_VALID + counter];
                 slave2[HADDR_VALID + counter] = HWDATA[HALFWORD_WIDTH-1:0];
                 `uvm_info("PREDICTOR", {"WRITE_SLAVE2:", $sformatf("%0h, %0h", slave2[HADDR_VALID+counter], HWDATA[HALFWORD_WIDTH-1:0])}, UVM_LOW)
               end
@@ -363,18 +380,18 @@ class predictor extends uvm_subscriber #(sequence_item);
           WORD_P: begin
             case(HADDR[ADDR_WIDTH-1:ADDR_WIDTH-BITS_FOR_SUBORDINATES])
               2'b00: begin
-                HWDATA_last_op[WORD_WIDTH-1:0] = slave0[HADDR_VALID + counter];
+                if(~undo_on) seq_item_old.HWDATA[WORD_WIDTH-1:0] = slave0[HADDR_VALID + counter];
                 slave0[HADDR_VALID + counter] = HWDATA[WORD_WIDTH-1:0];
                 `uvm_info("PREDICTOR", {"WRITE_SLAVE0:", $sformatf("%0h, %0h", slave0[HADDR_VALID+counter], HWDATA[WORD_WIDTH-1:0])}, UVM_LOW)
               end
               2'b01: begin
-                HWDATA_last_op[WORD_WIDTH-1:0] = slave1[HADDR_VALID + counter];
+                if(~undo_on) seq_item_old.HWDATA[WORD_WIDTH-1:0] = slave1[HADDR_VALID + counter];
                 slave1[HADDR_VALID + counter] = HWDATA[WORD_WIDTH-1:0];
                 `uvm_info("PREDICTOR", {"WRITE_SLAVE1:", $sformatf("%0h, %0h", slave1[HADDR_VALID+counter], HWDATA[WORD_WIDTH-1:0])}, UVM_LOW)
 
               end
               2'b10: begin
-                HWDATA_last_op[WORD_WIDTH-1:0] = slave2[HADDR_VALID + counter];
+                if(~undo_on) seq_item_old.HWDATA[WORD_WIDTH-1:0] = slave2[HADDR_VALID + counter];
                 slave2[HADDR_VALID + counter] = HWDATA[WORD_WIDTH-1:0];
                 `uvm_info("PREDICTOR", {"WRITE_SLAVE2:", $sformatf("%0h, %0h", slave2[HADDR_VALID+counter], HWDATA[WORD_WIDTH-1:0])}, UVM_LOW)
               end
@@ -391,18 +408,18 @@ class predictor extends uvm_subscriber #(sequence_item);
           WORD2_P: begin
             case(HADDR[ADDR_WIDTH-1:ADDR_WIDTH-BITS_FOR_SUBORDINATES])
               2'b00: begin
-                HWDATA_last_op[WORD2_WIDTH-1:0] = slave0[HADDR_VALID + counter];
+                if(~undo_on) seq_item_old.HWDATA[WORD2_WIDTH-1:0] = slave0[HADDR_VALID + counter];
                 slave0[HADDR_VALID + counter] = HWDATA[WORD2_WIDTH-1:0];
                 `uvm_info("PREDICTOR", {"WRITE_SLAVE0:", $sformatf("%0h, %0h", slave0[HADDR_VALID+counter], HWDATA[WORD2_WIDTH-1:0])}, UVM_LOW)
               end
               2'b01: begin
-                HWDATA_last_op[WORD2_WIDTH-1:0] = slave1[HADDR_VALID + counter];
+                if(~undo_on) seq_item_old.HWDATA[WORD2_WIDTH-1:0] = slave1[HADDR_VALID + counter];
                 slave1[HADDR_VALID + counter] = HWDATA[WORD2_WIDTH-1:0];
                 `uvm_info("PREDICTOR", {"WRITE_SLAVE1:", $sformatf("%0h, %0h", slave1[HADDR_VALID+counter], HWDATA[WORD2_WIDTH-1:0])}, UVM_LOW)
 
               end
               2'b10: begin
-                HWDATA_last_op[WORD2_WIDTH-1:0] = slave2[HADDR_VALID + counter];
+                if(~undo_on) seq_item_old.HWDATA[WORD2_WIDTH-1:0] = slave2[HADDR_VALID + counter];
                 slave2[HADDR_VALID + counter] = HWDATA[WORD2_WIDTH-1:0];
                 `uvm_info("PREDICTOR", {"WRITE_SLAVE2:", $sformatf("%0h, %0h", slave2[HADDR_VALID+counter], HWDATA[WORD2_WIDTH-1:0])}, UVM_LOW)
               end
@@ -418,18 +435,18 @@ class predictor extends uvm_subscriber #(sequence_item);
           WORD4_P: begin
             case(HADDR[ADDR_WIDTH-1:ADDR_WIDTH-BITS_FOR_SUBORDINATES])
               2'b00: begin
-                HWDATA_last_op[WORD4_WIDTH-1:0] = slave0[HADDR_VALID + counter];
+                if(~undo_on) seq_item_old.HWDATA[WORD4_WIDTH-1:0] = slave0[HADDR_VALID + counter];
                 slave0[HADDR_VALID + counter] = HWDATA[WORD4_WIDTH-1:0];
                 `uvm_info("PREDICTOR", {"WRITE_SLAVE0:", $sformatf("%0h, %0h", slave0[HADDR_VALID+counter], HWDATA[WORD4_WIDTH-1:0])}, UVM_LOW)
               end
               2'b01: begin
-                HWDATA_last_op[WORD4_WIDTH-1:0] = slave1[HADDR_VALID + counter];
+                if(~undo_on) seq_item_old.HWDATA[WORD4_WIDTH-1:0] = slave1[HADDR_VALID + counter];
                 slave1[HADDR_VALID + counter] = HWDATA[WORD4_WIDTH-1:0];
                 `uvm_info("PREDICTOR", {"WRITE_SLAVE1:", $sformatf("%0h, %0h", slave1[HADDR_VALID+counter], HWDATA[WORD4_WIDTH-1:0])}, UVM_LOW)
 
               end
               2'b10: begin
-                HWDATA_last_op[WORD4_WIDTH-1:0] = slave2[HADDR_VALID + counter];
+                if(~undo_on) seq_item_old.HWDATA[WORD4_WIDTH-1:0] = slave2[HADDR_VALID + counter];
                 slave2[HADDR_VALID + counter] = HWDATA[WORD4_WIDTH-1:0];
                 `uvm_info("PREDICTOR", {"WRITE_SLAVE2:", $sformatf("%0h, %0h", slave2[HADDR_VALID+counter], HWDATA[WORD4_WIDTH-1:0])}, UVM_LOW)
               end
@@ -445,18 +462,18 @@ class predictor extends uvm_subscriber #(sequence_item);
           WORD8_P: begin
             case(HADDR[ADDR_WIDTH-1:ADDR_WIDTH-BITS_FOR_SUBORDINATES])
               2'b00: begin
-                HWDATA_last_op[WORD8_WIDTH-1:0] = slave0[HADDR_VALID + counter];
+                if(~undo_on) seq_item_old.HWDATA[WORD8_WIDTH-1:0] = slave0[HADDR_VALID + counter];
                 slave0[HADDR_VALID + counter] = HWDATA[WORD8_WIDTH-1:0];
                 `uvm_info("PREDICTOR", {"WRITE_SLAVE0:", $sformatf("%0h, %0h", slave0[HADDR_VALID+counter], HWDATA[WORD8_WIDTH-1:0])}, UVM_LOW)
               end
               2'b01: begin
-                HWDATA_last_op[WORD8_WIDTH-1:0] = slave1[HADDR_VALID + counter];
+                if(~undo_on) seq_item_old.HWDATA[WORD8_WIDTH-1:0] = slave1[HADDR_VALID + counter];
                 slave1[HADDR_VALID + counter] = HWDATA[WORD8_WIDTH-1:0];
                 `uvm_info("PREDICTOR", {"WRITE_SLAVE1:", $sformatf("%0h, %0h", slave1[HADDR_VALID+counter], HWDATA[WORD8_WIDTH-1:0])}, UVM_LOW)
 
               end
               2'b10: begin
-                HWDATA_last_op[WORD8_WIDTH-1:0] = slave2[HADDR_VALID + counter];
+                if(~undo_on) seq_item_old.HWDATA[WORD8_WIDTH-1:0] = slave2[HADDR_VALID + counter];
                 slave2[HADDR_VALID + counter] = HWDATA[WORD8_WIDTH-1:0];
                 `uvm_info("PREDICTOR", {"WRITE_SLAVE2:", $sformatf("%0h, %0h", slave2[HADDR_VALID+counter], HWDATA[WORD8_WIDTH-1:0])}, UVM_LOW)
               end
@@ -472,18 +489,18 @@ class predictor extends uvm_subscriber #(sequence_item);
           WORD16_P: begin
             case(HADDR[ADDR_WIDTH-1:ADDR_WIDTH-BITS_FOR_SUBORDINATES])
               2'b00: begin
-                HWDATA_last_op[WORD16_WIDTH-1:0] = slave0[HADDR_VALID + counter];
+                if(~undo_on) seq_item_old.HWDATA[WORD16_WIDTH-1:0] = slave0[HADDR_VALID + counter];
                 slave0[HADDR_VALID + counter] = HWDATA[WORD16_WIDTH-1:0];
                 `uvm_info("PREDICTOR", {"WRITE_SLAVE0:", $sformatf("%0h, %0h", slave0[HADDR_VALID+counter], HWDATA[WORD16_WIDTH-1:0])}, UVM_LOW)
               end
               2'b01: begin
-                HWDATA_last_op[WORD16_WIDTH-1:0] = slave1[HADDR_VALID + counter];
+                if(~undo_on) seq_item_old.HWDATA[WORD16_WIDTH-1:0] = slave1[HADDR_VALID + counter];
                 slave1[HADDR_VALID + counter] = HWDATA[WORD16_WIDTH-1:0];
                 `uvm_info("PREDICTOR", {"WRITE_SLAVE1:", $sformatf("%0h, %0h", slave1[HADDR_VALID+counter], HWDATA[WORD16_WIDTH-1:0])}, UVM_LOW)
 
               end
               2'b10: begin
-                HWDATA_last_op[WORD16_WIDTH-1:0] = slave2[HADDR_VALID + counter];
+                if(~undo_on) seq_item_old.HWDATA[WORD16_WIDTH-1:0] = slave2[HADDR_VALID + counter];
                 slave2[HADDR_VALID + counter] = HWDATA[WORD16_WIDTH-1:0];
                 `uvm_info("PREDICTOR", {"WRITE_SLAVE2:", $sformatf("%0h, %0h", slave2[HADDR_VALID+counter], HWDATA[WORD16_WIDTH-1:0])}, UVM_LOW)
               end
@@ -499,18 +516,18 @@ class predictor extends uvm_subscriber #(sequence_item);
           WORD32_P: begin
             case(HADDR[ADDR_WIDTH-1:ADDR_WIDTH-BITS_FOR_SUBORDINATES])
               2'b00: begin
-                HWDATA_last_op[WORD32_WIDTH-1:0] = slave0[HADDR_VALID + counter];
+                if(~undo_on) seq_item_old.HWDATA[WORD32_WIDTH-1:0] = slave0[HADDR_VALID + counter];
                 slave0[HADDR_VALID + counter] = HWDATA[WORD32_WIDTH-1:0];
                 `uvm_info("PREDICTOR", {"WRITE_SLAVE0:", $sformatf("%0h, %0h", slave0[HADDR_VALID+counter], HWDATA[WORD32_WIDTH-1:0])}, UVM_LOW)
               end
               2'b01: begin
-                HWDATA_last_op[WORD32_WIDTH-1:0] = slave1[HADDR_VALID + counter];
+                if(~undo_on) seq_item_old.HWDATA[WORD32_WIDTH-1:0] = slave1[HADDR_VALID + counter];
                 slave1[HADDR_VALID + counter] = HWDATA[WORD32_WIDTH-1:0];
                 `uvm_info("PREDICTOR", {"WRITE_SLAVE1:", $sformatf("%0h, %0h", slave1[HADDR_VALID+counter], HWDATA[WORD32_WIDTH-1:0])}, UVM_LOW)
 
               end
               2'b10: begin
-                HWDATA_last_op[WORD32_WIDTH-1:0] = slave2[HADDR_VALID + counter];
+                if(~undo_on) seq_item_old.HWDATA[WORD32_WIDTH-1:0] = slave2[HADDR_VALID + counter];
                 slave2[HADDR_VALID + counter] = HWDATA[WORD32_WIDTH-1:0];
                 `uvm_info("PREDICTOR", {"WRITE_SLAVE2:", $sformatf("%0h, %0h", slave2[HADDR_VALID+counter], HWDATA[WORD32_WIDTH-1:0])}, UVM_LOW)
               end
@@ -813,10 +830,41 @@ class predictor extends uvm_subscriber #(sequence_item);
 
     function void undo_last_operation();
       $display("TIME : %0t correcting the predictor mem", $time());
-      if(HWRITE == 1) begin
-        HWDATA = HWDATA_last_op;
+      $display("SLAVE0 MEM AFTER RESET: %p", slave0);
+      $display("SLAVE1 MEM AFTER RESET: %p", slave1);
+      $display("SLAVE2 MEM AFTER RESET: %p", slave2);
+      if(seq_item_older.HWRITE == 1) begin
+        undo_on = 1;
+        HRESETn     = seq_item_older.HRESETn;
+        HWRITE      = seq_item_older.HWRITE;
+        HADDR       = seq_item_older.HADDR;
+        HSIZE       = seq_item_older.HSIZE;
+        HBURST      = seq_item_older.HBURST;
+        HPROT       = seq_item_older.HPROT;
+        HWDATA      = seq_item_older.HWDATA;
+        HADDR_VALID = HADDR[ADDR_WIDTH-BITS_FOR_SUBORDINATES-1:0];//29:0
+        HSEL        = HADDR[ADDR_WIDTH-1:ADDR_WIDTH-BITS_FOR_SUBORDINATES];//31:30
         write_AHB();
+        undo_on = 0;
       end
+      if(seq_item_oldest.HWRITE == 1) begin
+        undo_on = 1;
+        HRESETn     = seq_item_oldest.HRESETn;
+        HWRITE      = seq_item_oldest.HWRITE;
+        HADDR       = seq_item_oldest.HADDR;
+        HSIZE       = seq_item_oldest.HSIZE;
+        HBURST      = seq_item_oldest.HBURST;
+        HPROT       = seq_item_oldest.HPROT;
+        HWDATA      = seq_item_oldest.HWDATA;
+        HADDR_VALID = HADDR[ADDR_WIDTH-BITS_FOR_SUBORDINATES-1:0];//29:0
+        HSEL        = HADDR[ADDR_WIDTH-1:ADDR_WIDTH-BITS_FOR_SUBORDINATES];//31:30
+        write_AHB();
+        undo_on = 0;
+      end
+      $display("TIME : %0t AFTER correcting the predictor mem", $time());
+      $display("SLAVE0 MEM AFTER RESET: %p", slave0);
+      $display("SLAVE1 MEM AFTER RESET: %p", slave1);
+      $display("SLAVE2 MEM AFTER RESET: %p", slave2);
     endfunction : undo_last_operation
 
 

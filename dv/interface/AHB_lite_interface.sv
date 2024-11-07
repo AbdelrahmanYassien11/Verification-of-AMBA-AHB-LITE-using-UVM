@@ -183,6 +183,7 @@ sequence_item previous_seq_item, seq_item;
 
                     send_inputs(seq_item.HRESETn, seq_item.HWRITE, seq_item.HTRANS, seq_item.HSIZE, seq_item.HBURST, seq_item.HPROT, seq_item.HADDR, seq_item.HWDATA, seq_item.RESET_op, seq_item.WRITE_op, seq_item.TRANS_op, seq_item.BURST_op, seq_item.SIZE_op);
 
+
                 if(seq_item.HRESETn) begin
                     counter <= counter + 1;
                     DATA_PHASE_FLAG = 1;
@@ -224,6 +225,7 @@ sequence_item previous_seq_item, seq_item;
         if((counter >= 2) && HRESETn /*&& DATA_PHASE_FLAG*/ ) begin // HRESETn to make it work after the reset cycle is done
             //$display("DATA_PHASE: TIME:%0t ASSIGNING SIGNALS", $time());
             // The counter & data_phase_flag to make it work after a transaction is sent after reset cycle is done
+            //send_inputs(HRESETn_reg, HWRITE_reg, HTRANS_reg, HSIZE_reg, HBURST_reg, HPROT_reg, HADDR_reg, HWDATA_reg, seq_item.RESET_op, seq_item.WRITE_op, seq_item.TRANS_op, seq_item.BURST_op, seq_item.SIZE_op);
             if(HWRITE_reg == 1'b1) begin
                 //$display("DATA_PHASE_WRITE: TIME:%0t ASSIGNING SIGNALS", $time());
                 write_AHB(HWDATA_reg);

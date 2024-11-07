@@ -31,7 +31,7 @@ class AHB_SUBORDINATE_config;
     parameter ADDR_WIDTH = 32;
   `endif
 
-  parameter ADDR_DEPTH = 256;
+  parameter ADDR_DEPTH = 32;
   parameter NO_OF_SUBORDINATES = 4;
   parameter BITS_FOR_SUBORDINATES = $clog2(NO_OF_SUBORDINATES);
 

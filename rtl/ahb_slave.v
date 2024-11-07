@@ -438,18 +438,18 @@ module ahb_slave
   end
 
   // An always block to manage WRAP_COUNTER values
-  always @(HBURST) begin
-    if(state != IDLE) begin 
-      case(HBURST)
+  always @(HBURST_reg_c) begin
+    //if(state != IDLE) begin 
+      case(HBURST_reg_c)
         WRAP4:  wrap_counter_reg = 1;
         WRAP8:  wrap_counter_reg = 3;
         WRAP16: wrap_counter_reg = 7;
-        default: wrap_counter_reg = wrap_counter_reg;
+        default: wrap_counter_reg = 0;
       endcase
-    end
-    else begin
-      wrap_counter_reg = wrap_counter_reg;
-    end
+    // end
+    // else begin
+    //   wrap_counter_reg = wrap_counter_reg;
+    // end
   end
 
 

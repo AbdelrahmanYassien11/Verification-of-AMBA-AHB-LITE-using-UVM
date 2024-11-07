@@ -129,6 +129,9 @@ package AHB_pkg;
 	`include "READ_INCR8_sequence.svh"
 	`include "READ_INCR16_sequence.svh"
 
+	`include "WRITE_READ_INCR4_sequence.svh"
+	`include "WRITE_READ_WRAP4_sequence.svh"
+
 	`include "runall_sequence.svh"
 	`include "test_sequence.svh"
 	
@@ -182,6 +185,10 @@ package AHB_pkg;
 	`include "READ_INCR4_test.svh"
 	`include "READ_INCR8_test.svh"
 	`include "READ_INCR16_test.svh"
+
+	`include "WRITE_READ_INCR4_test.svh"
+	`include "WRITE_READ_WRAP4_test.svh"
+
 
 	`include "runall_test.svh"
 	`include "test_test.svh"
