@@ -21,6 +21,8 @@ static int COMPARATOR_transaction_counter;
 
 rand int randomized_sequences;
 
+integer undo_counter;
+
 
 
   // AHB lite Control Signals

@@ -235,6 +235,10 @@ module ahb_slave
         HSIZE_reg_d       <= 0;
         
         HWDATA_reg_d      <= 0;
+
+        HRDATA_reg_d      <= 0;
+        HRESP_reg_d       <= 0;
+        HREADYout_reg_d   <= 1;
       end 
       else begin 
         HBURST_reg_d     <= HBURST_reg_c;

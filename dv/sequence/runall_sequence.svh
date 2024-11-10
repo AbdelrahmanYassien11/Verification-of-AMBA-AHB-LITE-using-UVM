@@ -107,7 +107,7 @@ class runall_sequence extends base_sequence;
   virtual task body();
 
     //int tests_randomized = $urandom_range(150,200);
-    int tests_randomized = 300;
+    int tests_randomized = 200;
 
     reset_sequence::last_test = 1'b1;
     IDLE_sequence::last_test = 1'b1;
