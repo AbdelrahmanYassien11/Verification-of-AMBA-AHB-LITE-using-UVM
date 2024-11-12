@@ -255,7 +255,50 @@ module ahb_slave
   always@(*) begin
     case(state)
 
-      WRITE, READ, IDLE, BUSY: begin
+      IDLE, BUSY: begin
+        if (HSEL_reg_c && HREADYin) begin
+
+          case (HTRANS_reg_c) 
+            2'b00: begin 
+              next_state    <= IDLE; 
+            end 
+            2'b01: begin 
+              next_state    <= BUSY; 
+            end
+
+            2'b11, 2'b10: begin 
+              if (HWRITE_reg_c) begin 
+                next_state <= WRITE; 
+              end 
+              else if(~HWRITE_reg_c) begin 
+                next_state <= READ; 
+              end
+              else begin 
+                next_state <= ERROR;
+              end 
+            end 
+
+            default: begin
+              next_state <= IDLE;
+            end 
+          endcase //HTRANS_reg_c
+
+        end
+        else if(HSEL_reg_c && !HREADYin)begin
+          if(state == ERROR) begin
+            next_state <= IDLE;
+          end
+          else begin
+            next_state <= state;
+          end
+        end
+
+        else begin
+          next_state <= IDLE;
+        end
+      end
+
+      WRITE, READ : begin
         if (HSEL_reg_c && HREADYin) begin
 
           case (HTRANS_reg_c) 
@@ -282,6 +325,7 @@ module ahb_slave
                 next_state <= ERROR; 
               end
             end
+
             default: begin
               next_state <= IDLE;
             end 
@@ -338,106 +382,131 @@ module ahb_slave
           end
         end
 
-        WRITE: begin     
-          HREADYout_reg_d = 1'b1;
-          case(HTRANS_reg_d)
-            2'b00, 2'b01: begin
-              HRESP_reg_d = 2'b00;
-              burst_counter_reg = 0 ;
-            end
-
-            2'b10, 2'b11: begin
-              if((HADDR_reg_d + burst_counter < ADDR_DEPTH) & ((HADDR_reg_d + wrap_counter) < ADDR_DEPTH)) begin
+        WRITE: begin
+          if(HSEL_reg_d && HREADYin_reg_c) begin     
+            HREADYout_reg_d = 1'b1;
+            case(HTRANS_reg_d)
+              2'b00, 2'b01: begin
                 HRESP_reg_d = 2'b00;
-                case(HBURST_reg_d)
-                  INCR, INCR4, INCR8, INCR16: begin
-                    case(HSIZE_reg_d) 
-                      `HSIZE_conditional_WRITE_def(burst_counter)
-                      default         : HRESP_reg_d = 2'b01;
-                    endcase // HSIZE_reg_d
-                    burst_counter_reg = burst_counter_reg + 1;
-                  end
-                  WRAP4, WRAP8, WRAP16: begin
-                    case(HSIZE_reg_d) 
-                      `HSIZE_conditional_WRITE_def(wrap_counter)
-                      default         : HRESP_reg_d = 2'b01;
-                    endcase //HSIZE_reg_d
-                    wrap_counter_reg = wrap_counter_reg - 1;
-                  end
-                  default: begin
-                    case(HSIZE_reg_d) 
-                      `HSIZE_conditional_WRITE_def(0)
-                      default         : HRESP_reg_d = 2'b01;
-                    endcase //HSIZE_reg_d
-                    burst_counter_reg = 0 ;
-                  end
-                endcase // HBURST_reg_d
+                burst_counter_reg = 0 ;
               end
-              else begin
-                HRESP_reg_d = 2'b01; //error
-                HRDATA_reg_d = HRDATA_reg_d;
-                HREADYout_reg_d = 0;
+
+              2'b10, 2'b11: begin
+                if((HADDR_reg_d + burst_counter < ADDR_DEPTH) & ((HADDR_reg_d + wrap_counter) < ADDR_DEPTH)) begin
+                  HRESP_reg_d = 2'b00;
+                  case(HBURST_reg_d)
+                    INCR, INCR4, INCR8, INCR16: begin
+                      case(HSIZE_reg_d) 
+                        `HSIZE_conditional_WRITE_def(burst_counter)
+                        default         : HRESP_reg_d = 2'b01;
+                      endcase // HSIZE_reg_d
+                      burst_counter_reg = burst_counter_reg + 1;
+                    end
+                    WRAP4, WRAP8, WRAP16: begin
+                      case(HSIZE_reg_d) 
+                        `HSIZE_conditional_WRITE_def(wrap_counter)
+                        default         : HRESP_reg_d = 2'b01;
+                      endcase //HSIZE_reg_d
+                      wrap_counter_reg = wrap_counter_reg - 1;
+                    end
+                    default: begin
+                      case(HSIZE_reg_d) 
+                        `HSIZE_conditional_WRITE_def(0)
+                        default         : HRESP_reg_d = 2'b01;
+                      endcase //HSIZE_reg_d
+                      burst_counter_reg = 0 ;
+                    end
+                  endcase // HBURST_reg_d
+                end
+                else begin
+                  HRESP_reg_d = 2'b01; //error
+                  HRDATA_reg_d = HRDATA_reg_d;
+                  HREADYout_reg_d = 0;
+                end
               end
-            end
-          endcase // HTRANS_reg_d                    
+            endcase // HTRANS_reg_d                    
+          end
+          else if (HSEL_reg_d && !HREADYin_reg_c) begin
+            HRESP_reg_d = 2'b01;
+          end
+          else begin
+            HRESP_reg_d = 2'b00;
+          end
         end
 
         READ: begin
-          HREADYout_reg_d = 1'b1;
-          //HRDATA_reg_d  = mem[HADDR_reg_d + burst_counter_reg];
-          $display("%0t WHY AM I HERE NOW1?", $time());
-          case(HTRANS_reg_d)
-            2'b00, 2'b01: begin
-              HRESP_reg_d       = 2'b00; //`HRESP_OKAY;
-              burst_counter_reg = 0 ;
-            end
-
-            2'b10, 2'b11: begin
-              if((HADDR_reg_d + burst_counter < ADDR_DEPTH) & ((HADDR_reg_d + wrap_counter) < ADDR_DEPTH)) begin
-                case(HBURST_reg_d)
-                  INCR, INCR4, INCR8, INCR16: begin
-                    case(HSIZE_reg_d) 
-                      `HSIZE_conditional_READ_def(burst_counter)
-                      default         : HRESP_reg_d = 2'b01;
-                    endcase //HSIZE_reg_d                
-                    burst_counter_reg = burst_counter_reg + 1;
-                    $display("%0t WHY AM I HERE NOW2?", $time());
-                  end
-                  WRAP4, WRAP8, WRAP16: begin
-                    case(HSIZE_reg_d) 
-                      `HSIZE_conditional_READ_def(wrap_counter)
-                      default         : HRESP_reg_d = 2'b01;
-                    endcase //HSIZE_reg_d     
-                    wrap_counter_reg  = wrap_counter_reg - 1;
-                  end
-                  default: begin
-                    case(HSIZE_reg_d) 
-                      `HSIZE_conditional_READ_def(0)
-                      default         : HRESP_reg_d = 2'b01;
-                    endcase //HSIZE_reg_d     
-                    burst_counter_reg = 0 ;
-                  end
-                endcase // HBURST_reg_d
-              end 
-              else begin
-                HRESP_reg_d = 2'b01;
-                HRDATA_reg_d = HRDATA_reg_d;
-                HREADYout_reg_d = 0;
+          if(HSEL_reg_d && HREADYin_reg_c) begin 
+            HREADYout_reg_d = 1'b1;
+            //HRDATA_reg_d  = mem[HADDR_reg_d + burst_counter_reg];
+            $display("%0t WHY AM I HERE NOW1?", $time());
+            case(HTRANS_reg_d)
+              2'b00, 2'b01: begin
+                HRESP_reg_d       = 2'b00; //`HRESP_OKAY;
+                burst_counter_reg = 0 ;
               end
-            end
-          endcase // HTRANS_reg_d  
+
+              2'b10, 2'b11: begin
+                if((HADDR_reg_d + burst_counter < ADDR_DEPTH) & ((HADDR_reg_d + wrap_counter) < ADDR_DEPTH)) begin
+                  case(HBURST_reg_d)
+                    INCR, INCR4, INCR8, INCR16: begin
+                      case(HSIZE_reg_d) 
+                        `HSIZE_conditional_READ_def(burst_counter)
+                        default         : HRESP_reg_d = 2'b01;
+                      endcase //HSIZE_reg_d                
+                      burst_counter_reg = burst_counter_reg + 1;
+                      $display("%0t WHY AM I HERE NOW2?", $time());
+                    end
+                    WRAP4, WRAP8, WRAP16: begin
+                      case(HSIZE_reg_d) 
+                        `HSIZE_conditional_READ_def(wrap_counter)
+                        default         : HRESP_reg_d = 2'b01;
+                      endcase //HSIZE_reg_d     
+                      wrap_counter_reg  = wrap_counter_reg - 1;
+                    end
+                    default: begin
+                      case(HSIZE_reg_d) 
+                        `HSIZE_conditional_READ_def(0)
+                        default         : HRESP_reg_d = 2'b01;
+                      endcase //HSIZE_reg_d     
+                      burst_counter_reg = 0 ;
+                    end
+                  endcase // HBURST_reg_d
+                end 
+                else begin
+                  HRESP_reg_d = 2'b01;
+                  HRDATA_reg_d = HRDATA_reg_d;
+                  HREADYout_reg_d = 0;
+                end
+              end
+            endcase // HTRANS_reg_d  
+          end
+          else if (HSEL_reg_d && !HREADYin_reg_c) begin
+            HRESP_reg_d = 2'b01;
+          end
+          else begin
+            HRESP_reg_d = 2'b00;
+          end
         end
 
         ERROR: begin
-          HRESP_reg_d     = 2'b01;
-          HRDATA_reg_d    = HRDATA_reg_d;
-          if(next_state == ERROR) begin
-            HREADYout_reg_d =  1'b0;
+          if(HSEL_reg_d && HREADYin_reg_c) begin 
+            HRESP_reg_d     = 2'b01;
+            HRDATA_reg_d    = HRDATA_reg_d;
+            if(next_state == ERROR) begin
+              HREADYout_reg_d =  1'b0;
+            end
+            else begin
+              HREADYout_reg_d = 1;
+            end
+          end
+          else if (HSEL_reg_d && !HREADYin_reg_c) begin
+            HRESP_reg_d = 2'b01;
           end
           else begin
-            HREADYout_reg_d = 1;
-          end
+            HRESP_reg_d = 2'b00;
+          end            
         end
+
       endcase // state
   end
 

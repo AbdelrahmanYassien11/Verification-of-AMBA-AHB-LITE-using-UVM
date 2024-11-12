@@ -97,9 +97,9 @@ class comparator extends uvm_component;
                  // $display("DEAR2 : %0t",$time());
           for(int i = 0; i < fifo_expected_outputs.used(); i++)begin
             int to_be_decremented = fifo_expected_outputs.used();
-            $display("DEAR3 : %0t",$time());
+            //$display("DEAR3 : %0t",$time());
             if(fifo_expected_outputs_cleared.try_get(seq_item_expected_reset)) begin
-              $display("DEAR4 : %0t",$time());
+              //$display("DEAR4 : %0t",$time());
               if(~seq_item_expected_reset.HRESETn) begin
                 $display("TIME : %0t fifo_expected_outputs.used(): %0d & to_be_decremented %0d", $time(), fifo_expected_outputs.used(), to_be_decremented);
                 fifo_expected_outputs.flush();

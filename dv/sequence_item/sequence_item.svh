@@ -49,7 +49,11 @@ integer undo_counter;
 
 
       constraint randomized_seq { randomized_sequences inside {[0:17]};
-      };
+      }
+
+      constraint RESET_c {RESET_op == RESETING -> HRESETn == 1'b0 && TRANS_op == IDLE && WRITE_op == READ;
+                          RESET_op == WORKING  -> HRESETn == 1'b1; 
+      }
 
        constraint HWRITE_rand_c { WRITE_op dist { WRITE:=50, READ:=50 };
        }
@@ -72,9 +76,6 @@ integer undo_counter;
       constraint HADDR_c { HADDR[(ADDR_WIDTH-BITS_FOR_SUBORDINATES)-1:0] dist {'h00000000:/1, (ADDR_DEPTH-1):/1, ['h00000001 : (ADDR_DEPTH-2)]:/40};
       }
 
-      constraint RESET_c {RESET_op == RESETING -> HRESETn == 1'b0;
-                          RESET_op == WORKING  -> HRESETn == 1'b1; 
-      }
 
       constraint WRITE_c {WRITE_op == READ   -> HWRITE == 1'b0;
                           WRITE_op == WRITE  -> HWRITE  == 1'b1; 
