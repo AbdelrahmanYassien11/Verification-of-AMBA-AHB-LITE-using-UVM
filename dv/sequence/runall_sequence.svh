@@ -106,8 +106,6 @@ class runall_sequence extends base_sequence;
   // Main task body for executing the READ operation
   virtual task body();
 
-    //int tests_randomized = $urandom_range(150,200);
-    int tests_randomized = 200;
 
     reset_sequence::last_test = 1'b1;
     IDLE_sequence::last_test = 1'b1;
@@ -159,9 +157,10 @@ class runall_sequence extends base_sequence;
     if(~reset_flag)
       reset_sequence_h.start(m_sequencer);
 
+    assert(seq_item.randomize());
+    for(int i = 0; i < seq_item.randomized_number_of_tests ; i++) begin
 
-    for(int i = 0; i < tests_randomized ; i++) begin
-
+      seq_item.randomized_number_of_tests.rand_mode(0);
       assert(seq_item.randomize());
 
       `uvm_info("runall_sequence", {seq_item.convert2string()}, UVM_LOW)

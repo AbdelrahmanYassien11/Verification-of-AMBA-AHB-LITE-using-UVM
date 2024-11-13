@@ -148,7 +148,7 @@ sequence_item previous_seq_item, seq_item;
         RECEIVING_PHASE_FLAG = 1;
 
         if(last_item)begin
-            $display("RECIEVING PHASE: TIME: %0t WAITING FOR COUNTERS ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~",$time());
+            //$display("RECIEVING PHASE: TIME: %0t WAITING FOR COUNTERS ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~",$time());
             wait(HRESETn && !RECEIVING_PHASE_FLAG && (sequence_item::COMPARATOR_transaction_counter == sequence_item::PREDICTOR_transaction_counter) /*&& !OUTPUTS_PHASE_FLAG && !DATA_PHASE_FLAG*/); //so the driver doesnt keep driving when the sequence is already driven to the interface/dut
         end
         else begin
@@ -161,7 +161,7 @@ sequence_item previous_seq_item, seq_item;
     always@(posedge clk or negedge HRESETn_global ) begin //CONTROL_PHASE
         if(HRESETn_global)begin
             if(counter >= 1 && RECEIVING_PHASE_FLAG) begin
-                $display("CONTROL PHASE: TIME:%0t ASSIGINING SIGNALS", $time());
+                //$display("CONTROL PHASE: TIME:%0t ASSIGINING SIGNALS", $time());
              		HRESETn <= seq_item.HRESETn;
                     HWRITE  <= seq_item.HWRITE;
                     HTRANS  <= seq_item.HTRANS;
@@ -179,7 +179,7 @@ sequence_item previous_seq_item, seq_item;
                     HADDR_reg   <= seq_item.HADDR;
                     HWDATA_reg  <= seq_item.HWDATA;
 
-                    $display("seq_item.HADDR: %0h ", seq_item.HADDR);
+                    //$display("seq_item.HADDR: %0h ", seq_item.HADDR);
 
                     send_inputs(seq_item.HRESETn, seq_item.HWRITE, seq_item.HTRANS, seq_item.HSIZE, seq_item.HBURST, seq_item.HPROT, seq_item.HADDR, seq_item.HWDATA, seq_item.RESET_op, seq_item.WRITE_op, seq_item.TRANS_op, seq_item.BURST_op, seq_item.SIZE_op);
 
@@ -194,6 +194,7 @@ sequence_item previous_seq_item, seq_item;
         end
         else begin
             HRESETn <= seq_item.HRESETn; //forced design reset at the start of any sim
+            HADDR   <= seq_item.HADDR;
             CONTROL_PHASE_FLAG = 1;
         end
     end

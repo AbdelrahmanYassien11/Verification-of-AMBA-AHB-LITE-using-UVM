@@ -26,7 +26,7 @@ module top_test_uvm();
 				.HREADY(f_if.HREADY)
 		);
 
-	//bind fifo1 FIFO_sva sva(f_if); // bind / dut / module to be instentiated / instance name()
+	bind AHB_subordinate AHB_subordinate_sva sva(f_if); // bind / dut / module to be instentiated / instance name()
 
 	initial begin
 		uvm_config_db#(virtual inf)::set(null,"uvm_test_top", "my_vif", f_if);

@@ -15,13 +15,15 @@ rand HBURST_e     BURST_op;
 rand HSIZE_e      SIZE_op;
      HRESP_e      RESP_op;
 
+//operation_e operation_o;
+
 static bit last_item;
 static int PREDICTOR_transaction_counter;
 static int COMPARATOR_transaction_counter;
 
-rand int randomized_sequences;
+//rand int unsigned randomized_sequences;
 
-integer undo_counter;
+rand int unsigned INCR_CONTROL;
 
 
 
@@ -48,15 +50,24 @@ integer undo_counter;
       // active low synchronous reset
 
 
-      constraint randomized_seq { randomized_sequences inside {[0:17]};
+      // constraint randomized_seq { randomized_sequences inside {[0:17]};
+      // }
+
+      constraint RESET_cmd {RESET_op dist {0:/5, 1:/95}; 
       }
 
-      constraint RESET_c {RESET_op == RESETING -> HRESETn == 1'b0 && TRANS_op == IDLE && WRITE_op == READ;
-                          RESET_op == WORKING  -> HRESETn == 1'b1; 
+      constraint RESET_c {RESET_op == RESETING -> HRESETn == 0;
+                          RESET_op == WORKING  -> HRESETn == 1;
       }
 
-       constraint HWRITE_rand_c { WRITE_op dist { WRITE:=50, READ:=50 };
-       }
+      // constraint operation_c { operation_e == RESETING -> HRESETn == 1'b0 && TRANS_op == IDLE  && WRITE_op == READ  && HADDR[ADDR_WIDTH-1:ADDR_WIDTH-BITS_FOR_SUBORDINATES] == 0                              && HADDR[ADDR_WIDTH-BITS_FOR_SUBORDINATES-1:0] == 0;
+      //                          operation_e == WRITTING -> HRESETn == 1'b1 &&                      WRITE_op == WRITE && HADDR[ADDR_WIDTH-1:ADDR_WIDTH-BITS_FOR_SUBORDINATES] dist {1:/30, 2:/30, 3:/30, 4:/10} && HADDR[ADDR_WIDTH-BITS_FOR_SUBORDINATES-1:0] dist {0:/1, (ADDR_DEPTH-1):/1, ['h00000001 : (ADDR_DEPTH-2)]:=40};
+      //                          operation_e == READ     -> HRESETn == 1'b1 &&                      WRITE_op == READ  && HADDR[ADDR_WIDTH-1:ADDR_WIDTH-BITS_FOR_SUBORDINATES] dist {1:/30, 2:/30, 3:/30, 4:/10} && HADDR[ADDR_WIDTH-BITS_FOR_SUBORDINATES-1:0] dist {0:/1, (ADDR_DEPTH-1):/1, ['h00000001 : (ADDR_DEPTH-2)]:=40};
+      //                          operation_e == IDLE     -> HRESETn == 1'b1 && TRANS_op == IDLE  && WRITE_op == READ;  
+      // }
+
+      constraint HWRITE_rand_c { WRITE_op dist { WRITE:=50, READ:=50 };
+      }
 
       constraint HADDR_VAL_BURST { BURST_op == WRAP4  -> ((HADDR[ADDR_WIDTH-BITS_FOR_SUBORDINATES-1:0] > 2) && (HADDR[ADDR_WIDTH-BITS_FOR_SUBORDINATES-1:0] < (ADDR_DEPTH-1)));
                                    BURST_op == WRAP8  -> ((HADDR[ADDR_WIDTH-BITS_FOR_SUBORDINATES-1:0] > 4) && (HADDR[ADDR_WIDTH-BITS_FOR_SUBORDINATES-1:0] < (ADDR_DEPTH-3)));
@@ -66,14 +77,20 @@ integer undo_counter;
                                    BURST_op == INCR8   -> (HADDR[ADDR_WIDTH-BITS_FOR_SUBORDINATES-1:0] < ADDR_DEPTH-7  );
                                    BURST_op == INCR16  -> (HADDR[ADDR_WIDTH-BITS_FOR_SUBORDINATES-1:0] < ADDR_DEPTH-15 );
 
-                                   BURST_op == INCR    -> (HADDR[ADDR_WIDTH-BITS_FOR_SUBORDINATES-1:0] < ADDR_WIDTH-1  );
+                                   BURST_op == INCR    -> (HADDR[ADDR_WIDTH-BITS_FOR_SUBORDINATES-1:0] < ADDR_DEPTH-INCR_CONTROL );
+      }
+
+      constraint INCR_CONTROL_c {INCR_CONTROL inside {[1:ADDR_DEPTH-1]}; 
       }
 
 
-      constraint HADDR_SEL_c { HADDR[ADDR_WIDTH-1:ADDR_WIDTH-BITS_FOR_SUBORDINATES] dist {0:/30, NO_OF_SUBORDINATES-NO_OF_SUBORDINATES+1:/30, NO_OF_SUBORDINATES-NO_OF_SUBORDINATES+2:/30, NO_OF_SUBORDINATES-NO_OF_SUBORDINATES+3:/10};
+      constraint HADDR_SEL_c { /*HRESETn == 1  -> */HADDR[ADDR_WIDTH-1:ADDR_WIDTH-BITS_FOR_SUBORDINATES] dist {1:/30, 2:/30, 3:/30, 4:/10};
+                               //HRESETn == 0  -> HADDR[ADDR_WIDTH-1:ADDR_WIDTH-BITS_FOR_SUBORDINATES] == 0;
       }
 
-      constraint HADDR_c { HADDR[(ADDR_WIDTH-BITS_FOR_SUBORDINATES)-1:0] dist {'h00000000:/1, (ADDR_DEPTH-1):/1, ['h00000001 : (ADDR_DEPTH-2)]:/40};
+      constraint HADDR_c { /*RESET_op == WORKING  ->*/ HADDR[ADDR_WIDTH-BITS_FOR_SUBORDINATES-1:0] dist {0:/1, (ADDR_DEPTH-1):/1, ['h00000001 : (ADDR_DEPTH-2)]:=40};
+                           //RESET_op == RESETING -> HADDR[(ADDR_WIDTH-BITS_FOR_SUBORDINATES)-1:0] == 0;
+
       }
 
 
@@ -128,7 +145,7 @@ integer undo_counter;
                             HSIZE == WORD32   -> HWDATA dist {'h0:/1, 'h0FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF:/1, ['h01: 'h0FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFE]:/40};
       }
 
-      constraint randomized_test_number_c { randomized_number_of_tests inside {[100 :150]};    
+      constraint randomized_test_number_c { randomized_number_of_tests inside {[400:500]};    
       }
 
 

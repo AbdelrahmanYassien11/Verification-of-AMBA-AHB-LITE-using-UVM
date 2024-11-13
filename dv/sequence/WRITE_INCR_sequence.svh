@@ -19,6 +19,8 @@ class WRITE_INCR_sequence extends base_sequence;
   static bit reset_flag;
   static bit last_test;
 
+  sequence_item INCR_CONTROL_seq_item;
+
   // Handle to the reset sequence
   reset_sequence reset_sequence_h;
 
@@ -36,6 +38,7 @@ class WRITE_INCR_sequence extends base_sequence;
     // Create an instance of the reset sequence
     reset_sequence_h = reset_sequence::type_id::create("reset_sequence_h");
     IDLE_sequence_h = IDLE_sequence::type_id::create("IDLE_sequence_h");
+    INCR_CONTROL_seq_item = sequence_item::type_id::create("INCR_CONTROL_seq_item");
   endtask : pre_body
 
   // Main task body for executing the WRITE operation
@@ -74,7 +77,7 @@ class WRITE_INCR_sequence extends base_sequence;
 
     finish_item(seq_item);
 
-    for (int i = 0; i < $urandom_range(1,20); i++) begin
+    for (int i = 0; i < seq_item.INCR_CONTROL; i++) begin
       //seq_item.HWRITE_rand_c.constraint_mode(0);
 
       start_item(seq_item); // Start the sequence item
@@ -85,6 +88,7 @@ class WRITE_INCR_sequence extends base_sequence;
         seq_item.BURST_op.rand_mode(0);
         seq_item.SIZE_op.rand_mode(0);
         seq_item.HADDR.rand_mode(0);
+        seq_item.INCR_CONTROL.rand_mode(0);
         
         // Set the operation type to WRITE
         seq_item.RESET_op = WORKING;

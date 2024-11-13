@@ -74,7 +74,7 @@ class READ_INCR_sequence extends base_sequence;
 
     finish_item(seq_item);
 
-    for (int i = 0; i < $urandom_range(1,20); i++) begin
+    for (int i = 0; i < seq_item.INCR_CONTROL; i++) begin
       //seq_item.HREAD_rand_c.constraint_mode(0);
 
       start_item(seq_item); // Start the sequence item
@@ -85,6 +85,7 @@ class READ_INCR_sequence extends base_sequence;
         seq_item.BURST_op.rand_mode(0);
         seq_item.SIZE_op.rand_mode(0);
         seq_item.HADDR.rand_mode(0);
+        seq_item.INCR_CONTROL.rand_mode(0);
         
         // Set the operation type to READ
         seq_item.RESET_op = WORKING;

@@ -35,7 +35,7 @@ class reset_sequence extends base_sequence;
 
     // Set the reset signals
     seq_item.HRESETn = 1'b0;  // Assert the read reset signal
-
+    seq_item.HADDR = 0;
     // Finish the sequence item after setting the reset signals
     finish_item(seq_item);
 

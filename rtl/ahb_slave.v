@@ -14,7 +14,7 @@
 `include "../dv/AHB_subordinate_defines.vh"
 
 module ahb_slave 
-  #(parameter DATA_WIDTH = 32, ADDR_WIDTH = 32, ADDR_DEPTH = 16, NO_OF_SUBORDINATES = 4, BITS_FOR_SUBORDINATES = $clog2(NO_OF_SUBORDINATES))
+  #(parameter DATA_WIDTH, ADDR_WIDTH, ADDR_DEPTH, NO_OF_SUBORDINATES, BITS_FOR_SUBORDINATES)
   (
        input   wire                   HRESETn,
        input   wire                   HCLK,
@@ -211,7 +211,7 @@ module ahb_slave
         HBURST_reg_c      <= HBURST;
         HTRANS_reg_c      <= HTRANS;
         HSEL_reg_c        <= HSEL;
-        HADDR_reg_c       <= HADDR[ADDR_WIDTH-$clog2(NO_OF_SUBORDINATES)-1:0];
+        HADDR_reg_c       <= HADDR[ADDR_WIDTH-BITS_FOR_SUBORDINATES-1:0];
         HREADYin_reg_c    <= HREADYin;
         HSIZE_reg_c       <= HSIZE;
         HWRITE_reg_c      <= HWRITE;
@@ -438,7 +438,7 @@ module ahb_slave
           if(HSEL_reg_d && HREADYin_reg_c) begin 
             HREADYout_reg_d = 1'b1;
             //HRDATA_reg_d  = mem[HADDR_reg_d + burst_counter_reg];
-            $display("%0t WHY AM I HERE NOW1?", $time());
+            //$display("%0t WHY AM I HERE NOW1?", $time());
             case(HTRANS_reg_d)
               2'b00, 2'b01: begin
                 HRESP_reg_d       = 2'b00; //`HRESP_OKAY;
@@ -454,7 +454,7 @@ module ahb_slave
                         default         : HRESP_reg_d = 2'b01;
                       endcase //HSIZE_reg_d                
                       burst_counter_reg = burst_counter_reg + 1;
-                      $display("%0t WHY AM I HERE NOW2?", $time());
+                      //$display("%0t WHY AM I HERE NOW2?", $time());
                     end
                     WRAP4, WRAP8, WRAP16: begin
                       case(HSIZE_reg_d) 

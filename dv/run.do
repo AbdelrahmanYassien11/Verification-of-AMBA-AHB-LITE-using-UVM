@@ -12,9 +12,9 @@ vsim top_optimized -cover -solvefaildebug=2 +UVM_TESTNAME=runall_test
 #sim:/top_test_uvm/f_if/counter
 #add wave -position insertpoint  \
 #sim:/top_test_uvm/f_if/RECIEVING_PHASE_FLAG
-add wave -position insertpoint sim:/top_test_uvm/DUT/slave1/*
-add wave -position insertpoint sim:/top_test_uvm/DUT/slave0/*
-add wave -position insertpoint sim:/top_test_uvm/DUT/slave2/*
+add wave -position insertpoint sim:/top_test_uvm/DUT/subordinate2/*
+add wave -position insertpoint sim:/top_test_uvm/DUT/subordinate1/*
+add wave -position insertpoint sim:/top_test_uvm/DUT/subordinate3/*
 add wave -position insertpoint sim:/top_test_uvm/DUT/mux1/*
 add wave -position insertpoint  \
 sim:/top_test_uvm/DUT/mux1/HRESP
