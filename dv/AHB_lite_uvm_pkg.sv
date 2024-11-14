@@ -1,3 +1,14 @@
+/******************************************************************
+ * File: AHB_lite_uvm_pkg.sv
+ * Author: Abdelrahman Mohamad Yassien
+ * Email: Abdelrahman.Yassien11@gmail.com
+ * Date: 01/11/2024
+ * Description: This module defines a package for an AMBA AHB lite-interconnect 
+ *              in a UVM testbench. It is responsible for setting parameters,
+ *              typedefs, and including the uvm_environment components.
+ *
+ * Copyright (c) 2024 Abdelrahman Mohamad Yassien. All Rights Reserved.
+ ******************************************************************/
 package AHB_pkg;
 
 	import uvm_pkg::*;
@@ -70,28 +81,12 @@ package AHB_pkg;
    	parameter RESP_WIDTH = 1;
    	parameter READY_WIDTH = 0;
 
-
- //   	parameter P_SLAVE0_START = 16'h0000;
- //  	parameter P_SLAVE0_ADDR_SIZE = 'h0010;
- //  	//parameter P_SLAVE0_END = P_ADDR_START0 + P_ADDR_SIZE0 - 1;
- //  	parameter P_SLAVE0_END = P_SLAVE0_START + P_SLAVE0_ADDR_SIZE - 1;
-
-
-	// parameter P_SLAVE1_START = 16'h0100;
- //   	//parameter P_SLAVE1_START = P_SLAVE0_END + 1;
- //  	parameter P_SLAVE1_ADDR_SIZE = 'h0010;
- //  	//parameter P_SLAVE1_END = P_ADDR_START1 + P_ADDR_SIZE1 - 1;
-	// parameter P_SLAVE1_END = P_SLAVE1_START + P_SLAVE1_ADDR_SIZE - 1;
-
-	// parameter P_SLAVE2_START = 16'h0200;
- //   	//parameter P_SLAVE2_START = P_SLAVE1_END + 1;
- //  	parameter P_SLAVE2_ADDR_SIZE = 'h0010;
-	// //parameter P_SLAVE2_END = P_ADDR_START1 + P_ADDR_SIZE1 - 1;
-	// parameter P_SLAVE2_END = P_SLAVE2_START + P_SLAVE2_ADDR_SIZE - 1;
-
   	int incorrect_counter;
    	int correct_counter;
 
+   	//******************************************************************************************************************//
+   	//												UVM ENVIRONMENT COMPONENTS
+   	//*****************************************************************************************************************//
 
 	`include "sequence_item.svh"
 	`include "sequencer.svh"
@@ -100,12 +95,27 @@ package AHB_pkg;
 	`include "active_agent_config.svh"
 	`include "env_config.svh"
 
+	`include "driver.svh"
+	`include "inputs_monitor.svh"
+	`include "outputs_monitor.svh"
+
+	`include "active_agent.svh"
+	`include "passive_agent.svh"
+
+	`include "coverage.svh"
+
+	`include "scoreboard.svh"
 	`include "predictor.svh"
 	`include "comparator.svh"
+
+	`include "env.svh"
 
 	`include "base_sequence.svh"
 	`include "reset_sequence.svh"
 
+   	//******************************************************************************************************************//
+   	//												UVM AMBA AHB LITE SEQUENCES
+   	//*****************************************************************************************************************//
 	`include "IDLE_sequence.svh"
 
 	`include "WRITE_SINGLE_sequence.svh"
@@ -132,35 +142,18 @@ package AHB_pkg;
 	`include "READ_INCR8_sequence.svh"
 	`include "READ_INCR16_sequence.svh"
 
+	`include "WRITE_READ_INCR_sequence.svh"
 	`include "WRITE_READ_INCR4_sequence.svh"
 	`include "WRITE_READ_WRAP4_sequence.svh"
+	`include "WRITE_READ_WRAP8_sequence.svh"
+	`include "WRITE_READ_WRAP16_sequence.svh"
 
 	`include "runall_sequence.svh"
 	`include "test_sequence.svh"
-	
-	
-	// `include "write_all_sequence.svh"
-	// `include "read_all_sequence.svh"
-	// `include "reset_write_read_all_sequence.svh"
 
-	// `include "rand_once_sequence.svh"
-	// `include "write_once_rand_sequence.svh"
-	// `include "read_once_rand_sequence.svh"
-	// `include "write_read_rand_sequence.svh"
-
-	// `include "concurrent_write_read_once_sequence.svh"
-	// `include "concurrent_write_read_rand_sequence.svh"
-
-	`include "driver.svh"
-	`include "inputs_monitor.svh"
-	`include "outputs_monitor.svh"
-
-	`include "active_agent.svh"
-	`include "passive_agent.svh"
-	`include "scoreboard.svh"
-	`include "coverage.svh"
-
-	`include "env.svh"
+   	//******************************************************************************************************************//
+   	//												UVM AMBA AHB LITE TESTS
+   	//*****************************************************************************************************************//
 
 	`include "base_test.svh"
 	`include "reset_test.svh"
@@ -189,9 +182,13 @@ package AHB_pkg;
 	`include "READ_INCR8_test.svh"
 	`include "READ_INCR16_test.svh"
 
+	`include "WRITE_READ_INCR_test.svh"
 	`include "WRITE_READ_INCR4_test.svh"
 	`include "WRITE_READ_WRAP4_test.svh"
-
+	`include "WRITE_READ_INCR8_test.svh"
+	`include "WRITE_READ_WRAP8_test.svh"
+	`include "WRITE_READ_INCR16_test.svh"
+	`include "WRITE_READ_WRAP16_test.svh"
 
 	`include "runall_test.svh"
 	`include "test_test.svh"

@@ -1,10 +1,10 @@
 /******************************************************************
- * File: WRITE_READ_INCR4_sequence.sv
+ * File: WRITE_READ_INCR8_sequence.sv
  * Author: Abdelrahman Mohamad Yassien
  * Email: Abdelrahman.Yassien11@gmail.com
  * Date: 25/08/2024
- * Description: This class defines a sequence that performs a INCR4 WRITE 
- *              and INCR4 READ from the same addresses. It inherits from 
+ * Description: This class defines a sequence that performs a INCR8 WRITE 
+ *              and INCR8 READ from the same addresses. It inherits from 
  *              `base_sequence` and includes functionality to start 
  *              the reset sequence if needed and perform a the  
  *              operation with randomized sequence item values.
@@ -12,8 +12,8 @@
  * Copyright (c) 2024 Abdelrahman Mohamad Yassien. All Rights Reserved.
  ******************************************************************/
 
-class WRITE_READ_INCR4_sequence extends base_sequence;
-  `uvm_object_utils(WRITE_READ_INCR4_sequence);
+class WRITE_READ_INCR8_sequence extends base_sequence;
+  `uvm_object_utils(WRITE_READ_INCR8_sequence);
 
   // Static flag to determine if reset is needed
   static bit reset_flag;
@@ -24,7 +24,7 @@ class WRITE_READ_INCR4_sequence extends base_sequence;
 
 
   // Constructor
-  function new(string name = "WRITE_READ_INCR4_sequence");
+  function new(string name = "WRITE_READ_INCR8_sequence");
     super.new(name);
   endfunction
 
@@ -41,8 +41,8 @@ class WRITE_READ_INCR4_sequence extends base_sequence;
 
     reset_sequence::last_test = 1'b1;
 
-    //READ_INCR4_sequence::last_test = 1'b1;
-    `uvm_info("WRITE_READ_INCR4_sequence: ", "STARTING" , UVM_HIGH)
+    //READ_INCR8_sequence::last_test = 1'b1;
+    `uvm_info("WRITE_READ_INCR8_sequence: ", "STARTING" , UVM_HIGH)
 
     if(~reset_flag)
       reset_sequence_h.start(sequencer_h);
@@ -51,11 +51,11 @@ class WRITE_READ_INCR4_sequence extends base_sequence;
       seq_item.WRITE_op.rand_mode(0);
       seq_item.TRANS_op.rand_mode(0);
       seq_item.BURST_op.rand_mode(0);
-      //seq_item.SIZE_op.rand_mode(0);
+      //seq_item.SIZE_op.rand_mode(0);    
 
     /***************************************************************************************/
-    //                                 STARTING WRITE_INCR4
-    /**************************************************************************************/
+    //                                 STARTING WRITE_INCR8
+    /**************************************************************************************/      
 
     start_item(seq_item); // Start the sequence item
 
@@ -63,13 +63,13 @@ class WRITE_READ_INCR4_sequence extends base_sequence;
       seq_item.RESET_op = WORKING;
       seq_item.WRITE_op = WRITE;
       seq_item.TRANS_op = NONSEQ;
-      seq_item.BURST_op = INCR4;
+      seq_item.BURST_op = INCR8;
 
       assert(seq_item.randomize()); // Randomize the sequence item
 
     finish_item(seq_item);
 
-    for (int i = 0; i < 3; i++) begin
+    for (int i = 0; i < 7; i++) begin
       start_item(seq_item); // Start the sequence item
 
         seq_item.SIZE_op.rand_mode(0);
@@ -79,7 +79,7 @@ class WRITE_READ_INCR4_sequence extends base_sequence;
         seq_item.RESET_op = WORKING;
         seq_item.WRITE_op = WRITE;
         seq_item.TRANS_op = SEQ;
-        seq_item.BURST_op = INCR4;
+        seq_item.BURST_op = INCR8;
 
         assert(seq_item.randomize()); // Randomize the sequence item
 
@@ -99,23 +99,23 @@ class WRITE_READ_INCR4_sequence extends base_sequence;
 
     finish_item(seq_item);
 
-    /***************************************************************************************/
-    //                                 STARTING READ_INCR4
-    /**************************************************************************************/
 
+    /***************************************************************************************/
+    //                                 STARTING READ_INCR8
+    /**************************************************************************************/
     start_item(seq_item); // Start the sequence item
 
       // Set the operation type to READ
       seq_item.RESET_op = WORKING;
       seq_item.WRITE_op = READ;
       seq_item.TRANS_op = NONSEQ;
-      seq_item.BURST_op = INCR4;
+      seq_item.BURST_op = INCR8;
 
       assert(seq_item.randomize()); // Randomize the sequence item
 
     finish_item(seq_item);
 
-    for (int i = 0; i < 3; i++) begin
+    for (int i = 0; i < 7; i++) begin
       //seq_item.HREAD_rand_c.constraint_mode(0);
 
       start_item(seq_item); // Start the sequence item
@@ -124,7 +124,7 @@ class WRITE_READ_INCR4_sequence extends base_sequence;
         seq_item.RESET_op = WORKING;
         seq_item.WRITE_op = READ;
         seq_item.TRANS_op = SEQ;
-        seq_item.BURST_op = INCR4;
+        seq_item.BURST_op = INCR8;
         assert(seq_item.randomize()); // Randomize the sequence item
 
       finish_item(seq_item);
@@ -134,7 +134,7 @@ class WRITE_READ_INCR4_sequence extends base_sequence;
       seq_item.last_item = 1'b1;
 
     start_item(seq_item); // Start the sequence item
-
+    
       // Set the operation type to READ
       seq_item.RESET_op = WORKING;
       seq_item.WRITE_op = READ;

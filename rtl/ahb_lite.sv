@@ -1,6 +1,3 @@
-// `include "ahb_decoder_s3.v"
-// `include "ahb_s2m_s3.v"
-// `include "ahb_default_slave.v"
 `timescale 1ns/1ns
 
 module ahb_lite #(parameter BITS_FOR_SUBORDINATES, ADDR_WIDTH, DATA_WIDTH, ADDR_DEPTH, NO_OF_SUBORDINATES)
@@ -73,7 +70,7 @@ module ahb_lite #(parameter BITS_FOR_SUBORDINATES, ADDR_WIDTH, DATA_WIDTH, ADDR_
           );
 
    /*********************************************************/
-   ahb_default_slave #(.ADDR_WIDTH(ADDR_WIDTH), .DATA_WIDTH(DATA_WIDTH)) default_subordinate
+   ahb_default_subordinate #(.ADDR_WIDTH(ADDR_WIDTH), .DATA_WIDTH(DATA_WIDTH)) default_subordinate
                     (
                     .HRESETn          (HRESETn),
                     .HCLK                (HCLK),
@@ -91,7 +88,7 @@ module ahb_lite #(parameter BITS_FOR_SUBORDINATES, ADDR_WIDTH, DATA_WIDTH, ADDR_
                     .HREADYout   (HREADY_bus[3])
                     );
    /*********************************************************/
-   ahb_slave #(.ADDR_WIDTH(ADDR_WIDTH), .DATA_WIDTH(DATA_WIDTH), .ADDR_DEPTH(ADDR_DEPTH), .NO_OF_SUBORDINATES(NO_OF_SUBORDINATES), .BITS_FOR_SUBORDINATES(BITS_FOR_SUBORDINATES)) subordinate1 
+   ahb_subordinate #(.ADDR_WIDTH(ADDR_WIDTH), .DATA_WIDTH(DATA_WIDTH), .ADDR_DEPTH(ADDR_DEPTH), .NO_OF_SUBORDINATES(NO_OF_SUBORDINATES), .BITS_FOR_SUBORDINATES(BITS_FOR_SUBORDINATES)) subordinate1 
             (
             .HRESETn               (HRESETn),
             .HCLK                     (HCLK),
@@ -109,7 +106,7 @@ module ahb_lite #(parameter BITS_FOR_SUBORDINATES, ADDR_WIDTH, DATA_WIDTH, ADDR_
             .HREADYout        (HREADY_bus[0])
             );
    /*********************************************************/
-   ahb_slave #(.ADDR_WIDTH(ADDR_WIDTH), .DATA_WIDTH(DATA_WIDTH), .ADDR_DEPTH(ADDR_DEPTH), .NO_OF_SUBORDINATES(NO_OF_SUBORDINATES), .BITS_FOR_SUBORDINATES(BITS_FOR_SUBORDINATES)) subordinate2 
+   ahb_subordinate #(.ADDR_WIDTH(ADDR_WIDTH), .DATA_WIDTH(DATA_WIDTH), .ADDR_DEPTH(ADDR_DEPTH), .NO_OF_SUBORDINATES(NO_OF_SUBORDINATES), .BITS_FOR_SUBORDINATES(BITS_FOR_SUBORDINATES)) subordinate2 
             (
             .HRESETn               (HRESETn),
             .HCLK                     (HCLK),
@@ -128,7 +125,7 @@ module ahb_lite #(parameter BITS_FOR_SUBORDINATES, ADDR_WIDTH, DATA_WIDTH, ADDR_
 
             );
    /*********************************************************/
-   ahb_slave #(.ADDR_WIDTH(ADDR_WIDTH), .DATA_WIDTH(DATA_WIDTH), .ADDR_DEPTH(ADDR_DEPTH), .NO_OF_SUBORDINATES(NO_OF_SUBORDINATES), .BITS_FOR_SUBORDINATES(BITS_FOR_SUBORDINATES)) subordinate3 
+   ahb_subordinate #(.ADDR_WIDTH(ADDR_WIDTH), .DATA_WIDTH(DATA_WIDTH), .ADDR_DEPTH(ADDR_DEPTH), .NO_OF_SUBORDINATES(NO_OF_SUBORDINATES), .BITS_FOR_SUBORDINATES(BITS_FOR_SUBORDINATES)) subordinate3 
             (
             .HRESETn               (HRESETn),
             .HCLK                     (HCLK),

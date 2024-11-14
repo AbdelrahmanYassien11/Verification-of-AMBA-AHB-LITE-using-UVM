@@ -1,13 +1,13 @@
 /******************************************************************
- * File: READ_SINGLE_sequence.sv
+ * File: READ_WRAP16_sequence.sv
  * Author: Abdelrahman Mohamad Yassien
  * Email: Abdelrahman.Yassien11@gmail.com
  * Date: 25/08/2024
- * Description: This class defines a sequence that performs a READ 
- *              operation to the FIFO once. It inherits from 
+ * Description: This class defines a sequence that performs a WRAP16 READ 
+ *              operation to the AMBA AHB lite once. It inherits from 
  *              `base_sequence` and includes functionality to start 
- *              the reset sequence if needed and perform a READ 
- *              operation with randomized sequence item values.
+ *              the reset sequence if needed and perform operation 
+ *              with randomized sequence item values.
  * 
  * Copyright (c) 2024 Abdelrahman Mohamad Yassien. All Rights Reserved.
  ******************************************************************/
@@ -53,15 +53,13 @@ class READ_WRAP16_sequence extends base_sequence;
     if(~reset_flag)
       reset_sequence_h.start(sequencer_h);
 
-    //seq_item.HREAD_rand_c.constraint_mode(0);
-
-    start_item(seq_item); // Start the sequence item
-
       seq_item.RESET_op.rand_mode(0);
       seq_item.WRITE_op.rand_mode(0);
       seq_item.TRANS_op.rand_mode(0);
       seq_item.BURST_op.rand_mode(0);
       //seq_item.SIZE_op.rand_mode(0);
+
+    start_item(seq_item); // Start the sequence item
 
       // Set the operation type to READ
       seq_item.RESET_op = WORKING;
@@ -75,14 +73,9 @@ class READ_WRAP16_sequence extends base_sequence;
     finish_item(seq_item);
 
     for (int i = 0; i < 15; i++) begin
-      //seq_item.HREAD_rand_c.constraint_mode(0);
 
       start_item(seq_item); // Start the sequence item
 
-        seq_item.RESET_op.rand_mode(0);
-        seq_item.WRITE_op.rand_mode(0);
-        seq_item.TRANS_op.rand_mode(0);
-        seq_item.BURST_op.rand_mode(0);
         seq_item.SIZE_op.rand_mode(0);
         seq_item.HADDR.rand_mode(0);
         
@@ -103,12 +96,6 @@ class READ_WRAP16_sequence extends base_sequence;
 
     start_item(seq_item); // Start the sequence item
     
-      seq_item.RESET_op.rand_mode(0);
-      seq_item.WRITE_op.rand_mode(0);      
-      seq_item.TRANS_op.rand_mode(0);
-      seq_item.BURST_op.rand_mode(0);
-      seq_item.SIZE_op.rand_mode(0); 
-
       // Set the operation type to READ
       seq_item.RESET_op = WORKING;
       seq_item.WRITE_op = READ;

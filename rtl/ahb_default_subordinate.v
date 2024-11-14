@@ -1,17 +1,17 @@
 // `ifndef AHB_SUBORDINATE_CONFIG
 // `define AHB_SUBORDINATE_CONFIG
 //--------------------------------------------------------
-//  * File: ahb_slave.v
+//  * File: ahb_subordinate.v
 //  * Author: Abdelrahman Mohamad Yassien
 //  * Email: Abdelrahman.Yassien11@gmail.com
 //  * Date: 25/10/2024
-//  * Description: This module works as an AHB SUBORDINATE as per 
-//                  described per AMBA SPECIFICATION by ARM.
+//  * Description: This module works as an AHB DEFAULT SUBORDINATE as per 
+//                  described per AMBA SPECIFICATION by ARM corporation.
 //--------------------------------------------------------
 //--------------------------------------------------------
 `include "../dv/AHB_subordinate_defines.vh"
 `timescale 1ns/1ns
-module ahb_default_slave #(parameter ADDR_WIDTH, DATA_WIDTH)
+module ahb_default_subordinate #(parameter ADDR_WIDTH, DATA_WIDTH)
 (
        input   wire                   HRESETn,
        input   wire                   HCLK,

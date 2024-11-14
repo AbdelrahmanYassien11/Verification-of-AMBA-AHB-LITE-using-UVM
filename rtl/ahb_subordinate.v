@@ -1,7 +1,5 @@
-// `ifndef AHB_SUBORDINATE_CONFIG
-// `define AHB_SUBORDINATE_CONFIG
 //----------------------------------------------------------------
-//  * File: ahb_slave.v
+//  * File: ahb_subordinate.v
 //  * Author: Abdelrahman Mohamad Yassien
 //  * Email: Abdelrahman.Yassien11@gmail.com
 //  * Date: 25/10/2024
@@ -13,7 +11,7 @@
 
 `include "../dv/AHB_subordinate_defines.vh"
 
-module ahb_slave 
+module ahb_subordinate 
   #(parameter DATA_WIDTH, ADDR_WIDTH, ADDR_DEPTH, NO_OF_SUBORDINATES, BITS_FOR_SUBORDINATES)
   (
        input   wire                   HRESETn,

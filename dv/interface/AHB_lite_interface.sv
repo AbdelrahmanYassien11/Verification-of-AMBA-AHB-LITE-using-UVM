@@ -4,11 +4,11 @@
  * Email: Abdelrahman.Yassien11@gmail.com
  * Date: 25/08/2024
  * Description: This interface provides control and monitoring 
- *              for a AHB (First-In-First-Out) memory module. 
- *              It includes tasks for AHB operations such as reading, 
- *              writing, and resetting. The interface also contains 
- *              assertions to validate the AHB's status signals (full 
- *              and empty) and functions for sending input and output 
+ *              for an AMBA AHB LITE module. It includes tasks
+ *              for AHB operations such as reading, writing, 
+ *              and resetting. The interface also contains 
+ *              assertions to validate the AHB's status and
+ *              functions for sending input and output 
  *              data to monitors.
  * 
  * Copyright (c) 2024 Abdelrahman Mohamad Yassien. All Rights Reserved.
@@ -84,6 +84,9 @@ HSIZE_e      SIZE_op;
 int counter;
 
 sequence_item previous_seq_item, seq_item;
+
+
+  modport SVA (input HRESETn, HWRITE, HTRANS, HSIZE, HBURST, HPROT, HADDR, HWDATA, data_out ,  clk, rst_n, data_in, wr_en, rd_en);
 
 // Task: Handle generic receiving operations based on reset and enable signals
     task generic_reciever( input bit iHRESETn, input bit   iHWRITE, input bit  [TRANS_WIDTH:0] iHTRANS, 

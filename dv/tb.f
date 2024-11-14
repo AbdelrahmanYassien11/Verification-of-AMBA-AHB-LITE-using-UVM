@@ -5,4 +5,5 @@ AHB_subordinate_config.svh
 +incdir+components
 AHB_lite_uvm_pkg.sv
 interface/AHB_lite_interface.sv
+sva/AHB_subordinate_sva.sv
 top_test_uvm.sv
