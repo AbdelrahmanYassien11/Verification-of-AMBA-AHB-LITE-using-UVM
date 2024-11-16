@@ -72,7 +72,7 @@ class READ_WRAP8_sequence extends base_sequence;
 
     finish_item(seq_item);
 
-    for (int i = 0; i < 15; i++) begin
+    for (int i = 0; i < 7; i++) begin
 
       start_item(seq_item); // Start the sequence item
 

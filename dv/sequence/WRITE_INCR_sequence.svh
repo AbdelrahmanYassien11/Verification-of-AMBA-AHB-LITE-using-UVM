@@ -69,7 +69,7 @@ class WRITE_INCR_sequence extends base_sequence;
 
     finish_item(seq_item);
 
-    sq_item.INCR_CONTROL.rand_mode(0);
+    seq_item.INCR_CONTROL.rand_mode(0);
 
     for (int i = 0; i < seq_item.INCR_CONTROL; i++) begin
 

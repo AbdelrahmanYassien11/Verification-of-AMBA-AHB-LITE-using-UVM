@@ -1,6 +1,6 @@
 
 `timescale 1ns/1ns
-module ahb_mux #(parameter ADDR_WIDTH, NO_OF_SUBORDINATES, BITS_FOR_SUBORDINATES = $clog2(NO_OF_SUBORDINATES), DATA_WIDTH)
+module ahb_mux #(parameter ADDR_WIDTH, NO_OF_SUBORDINATES, BITS_FOR_SUBORDINATES, DATA_WIDTH)
 (
   input   wire        HRESETn,
   input   wire        HCLK,

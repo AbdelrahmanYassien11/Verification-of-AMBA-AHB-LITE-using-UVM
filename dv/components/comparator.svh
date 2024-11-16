@@ -15,6 +15,8 @@
 class comparator extends uvm_component;
   `uvm_component_utils(comparator);
 
+  predictor predictor_h;
+
   // Sequence items to be compared
   sequence_item seq_item_actual;
   sequence_item seq_item_expected;
@@ -90,40 +92,10 @@ class comparator extends uvm_component;
                       seq_item_expected.convert2string()}, UVM_HIGH)
       //seq_item_expected_unchanged = seq_item_expected.clone_me();
 
-      do begin
-        //$display("DEAR1 : %0t",$time());
-        #1;
-        if(fifo_expected_outputs_cleared.used() > 0) begin
-                 // $display("DEAR2 : %0t",$time());
-          for(int i = 0; i < fifo_expected_outputs.used(); i++)begin
-            int to_be_decremented = fifo_expected_outputs.used();
-            //$display("DEAR3 : %0t",$time());
-            if(fifo_expected_outputs_cleared.try_get(seq_item_expected_reset)) begin
-              //$display("DEAR4 : %0t",$time());
-              if(~seq_item_expected_reset.HRESETn) begin
-                $display("TIME : %0t fifo_expected_outputs.used(): %0d & to_be_decremented %0d", $time(), fifo_expected_outputs.used(), to_be_decremented);
-                fifo_expected_outputs.flush();
-                fifo_expected_outputs_cleared.flush();
-                sequence_item::PREDICTOR_transaction_counter = sequence_item::PREDICTOR_transaction_counter - to_be_decremented;
-                seq_item_expected.HRDATA  = 0;
-                seq_item_expected.HRESP   = 0;
-                seq_item_expected.HREADY  = 1;
-                $display("TIME : %0t fifo_expected_outputs.used(): %0d & to_be_decremented %0d", $time(), fifo_expected_outputs.used(), to_be_decremented);
-                $display("TIME : %0t FIXING EXPECTED_SEQ_ITEM", $time());
-              end
-            end
-          end
-        end
-      end while((fifo_actual_outputs.used() == 0) && (sequence_item::COMPARATOR_transaction_counter != sequence_item::PREDICTOR_transaction_counter));
+      clearing_fifo();
 
       fifo_actual_outputs.get(seq_item_actual);
       fifo_expected_outputs_cleared.try_get(seq_item_expected_reset);
-      // while(fifo_actual_outputs.get(seq_item_actual) == null) begin
-      //   seq_item_expected_reset = fifo_expected_outputs.peek();
-      //   if(~seq_item_expected_reset.HRESETn) begin
-      //     fifo_expected_outputs.flush();
-      //   end
-      // end
       `uvm_info("COMPARATOR", {"ACTUAL_SEQ_ITEM RECEIVED: ", 
                 seq_item_actual.output2string()}, UVM_HIGH)
       // Compare the actual and expected sequence items
@@ -132,14 +104,39 @@ class comparator extends uvm_component;
       end
       else begin
         `uvm_error("SCOREBOARD", "FAIL")
-              // `uvm_info("COMPARATOR_CHECK", {"EXPECTED_SEQ_ITEM RECEIVED: ", 
-              //         seq_item_expected.output2string()}, UVM_HIGH)
-              // `uvm_info("COMPARATOR_CHECK", {"ACTUAL_SEQ_ITEM RECEIVED: ", 
-              //         seq_item_actual.output2string()}, UVM_HIGH)
+        predictor_h.display_subordinates;
       end
 
       sequence_item::COMPARATOR_transaction_counter = sequence_item::COMPARATOR_transaction_counter + 1;
     end
   endtask
+
+  task clearing_fifo();
+    do begin
+      //$display("DEAR1 : %0t",$time());
+      #1;
+      if(fifo_expected_outputs_cleared.used() > 0) begin
+               // $display("DEAR2 : %0t",$time());
+        for(int i = 0; i < fifo_expected_outputs.used(); i++)begin
+          int to_be_decremented = fifo_expected_outputs.used();
+          //$display("DEAR3 : %0t",$time());
+          if(fifo_expected_outputs_cleared.try_get(seq_item_expected_reset)) begin
+            //$display("DEAR4 : %0t",$time());
+            if(~seq_item_expected_reset.HRESETn) begin
+              $display("TIME : %0t fifo_expected_outputs.used(): %0d & to_be_decremented %0d", $time(), fifo_expected_outputs.used(), to_be_decremented);
+              fifo_expected_outputs.flush();
+              fifo_expected_outputs_cleared.flush();
+              sequence_item::PREDICTOR_transaction_counter = sequence_item::PREDICTOR_transaction_counter - to_be_decremented;
+              seq_item_expected.HRDATA  = 0;
+              seq_item_expected.HRESP   = 0;
+              seq_item_expected.HREADY  = 1;
+              $display("TIME : %0t fifo_expected_outputs.used(): %0d & to_be_decremented %0d", $time(), fifo_expected_outputs.used(), to_be_decremented);
+              $display("TIME : %0t FIXING EXPECTED_SEQ_ITEM", $time());
+            end
+          end
+        end
+      end
+    end while((fifo_actual_outputs.used() == 0) && (sequence_item::COMPARATOR_transaction_counter != sequence_item::PREDICTOR_transaction_counter));
+  endtask : clearing_fifo
 
 endclass : comparator

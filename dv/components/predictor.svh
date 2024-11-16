@@ -6,7 +6,7 @@
  * Description: This class defines a predictor for a AMBA AHB lite-interconnect 
  *              in a UVM testbench. It is responsible for recieving the input 
  *              stimulus the AMBA AHB lite and providing expected outputs.  
- *              The class includes methods for writing and reading from the  
+ *              The class includes methods for writing to and reading from the  
  *              AMBA AHB lite.
  *
  * Copyright (c) 2024 Abdelrahman Mohamad Yassien. All Rights Reserved.
@@ -141,15 +141,7 @@ class predictor extends uvm_subscriber #(sequence_item);
     super.run_phase(phase);
     forever begin      
       $display("my_predictor run phase");
-      @(inputs_written);
-        seq_item_expected = sequence_item::type_id::create("seq_item_expected");
       generic_predictor();
-      wait(expected_outputs_written.triggered);
-      //if(HREADY_expected == 1) begin
-        sequence_item::PREDICTOR_transaction_counter = sequence_item::PREDICTOR_transaction_counter + 1;
-        analysis_port_expected_outputs.write(seq_item_expected);
-        `uvm_info("PREDICTOR", {"EXPECTED_DATA: ", seq_item_expected.input2string()}, UVM_HIGH)
-      //end
     end
   endtask
 
@@ -181,8 +173,8 @@ class predictor extends uvm_subscriber #(sequence_item);
       HBURST      = t.HBURST;
       HPROT       = t.HPROT;
       HWDATA      = t.HWDATA;
-      HADDR_VALID = HADDR[ADDR_WIDTH-BITS_FOR_SUBORDINATES-1:0];//29:0
-      HSEL        = HADDR[ADDR_WIDTH-1:ADDR_WIDTH-BITS_FOR_SUBORDINATES];//31:30
+      HADDR_VALID = HADDR[ADDR_WIDTH-BITS_FOR_SUBORDINATES-1:0];//28:0
+      HSEL        = HADDR[ADDR_WIDTH-1:ADDR_WIDTH-BITS_FOR_SUBORDINATES];//31:29
       RESET_op    = t.RESET_op;
       WRITE_op    = t.WRITE_op;
       TRANS_op    = t.TRANS_op;
@@ -195,7 +187,13 @@ class predictor extends uvm_subscriber #(sequence_item);
 
   // Task for processing AHB operations based on inputs
   task generic_predictor();
+    @(inputs_written);
+    seq_item_expected = sequence_item::type_id::create("seq_item_expected");
     data_phase();
+    wait(expected_outputs_written.triggered);
+    sequence_item::PREDICTOR_transaction_counter = sequence_item::PREDICTOR_transaction_counter + 1;
+    analysis_port_expected_outputs.write(seq_item_expected);
+    `uvm_info("PREDICTOR", {"EXPECTED_DATA: ", seq_item_expected.input2string()}, UVM_HIGH)
   endtask : generic_predictor
 
   // Send expected results to the analysis port
@@ -216,7 +214,10 @@ class predictor extends uvm_subscriber #(sequence_item);
       3'b010:  seq_item_expected.HRDATA = HRDATA_expected1;
       3'b011:  seq_item_expected.HRDATA = HRDATA_expected2;
       3'b100:  seq_item_expected.HRDATA = HRDATA_expected3;
-      default: seq_item_expected.HRDATA = 'hx;
+      default: begin 
+        seq_item_expected.HRDATA = 'hx;
+        //$display("I AM HERE NOW HSEL: %0d", HSEL);
+      end 
     endcase
     //seq_item_expected.HRDATA      = HRDATA_expected;
     -> expected_outputs_written;
@@ -652,8 +653,12 @@ class predictor extends uvm_subscriber #(sequence_item);
                 endcase // HBURST
               end
               read_process(wrap_counter);
-              if(/*(signed'(HADDR_VALID + wrap_counter) > 0) &*/ (signed'(HADDR_VALID + wrap_counter) < ADDR_DEPTH)) 
+              if(/*(signed'(HADDR_VALID + wrap_counter) > 0) &*/ (signed'(HADDR_VALID + wrap_counter) < ADDR_DEPTH)) begin
                 wrap_counter = wrap_counter -1;
+              end
+              else begin
+                $display("I AM HERE NOW x2 HADDR_VALID: %0d, wrap_counter: %0d, (HADDR_VALID + wrap_counter): %0d", HADDR_VALID, wrap_counter, (signed'(HADDR_VALID + wrap_counter)));
+              end
             end
 
             default: begin
@@ -955,6 +960,12 @@ class predictor extends uvm_subscriber #(sequence_item);
       $display("TIME : %0t AFTER correcting the predictor mem", $time());
       
     endfunction : undo_last_operation
+
+    function void display_subordinates();
+      $display("subordinate0 MEM AFTER fail: %p", subordinate0);
+      $display("subordinate1 MEM AFTER fail: %p", subordinate1);
+      $display("subordinate2 MEM AFTER fail: %p", subordinate2);
+    endfunction 
 
 
 endclass : predictor

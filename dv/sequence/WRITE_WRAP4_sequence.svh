@@ -1,5 +1,5 @@
 /******************************************************************
- * File: WRITE_sequence.sv
+ * File: WRITE_WRAP4_sequence.svh
  * Author: Abdelrahman Mohamad Yassien
  * Email: Abdelrahman.Yassien11@gmail.com
  * Date: 25/08/2024
@@ -12,8 +12,8 @@
  * Copyright (c) 2024 Abdelrahman Mohamad Yassien. All Rights Reserved.
  ******************************************************************/
 
-class WRITE_sequence extends base_sequence;
-  `uvm_object_utils(WRITE_sequence);
+class WRITE_WRAP4_sequence extends base_sequence;
+  `uvm_object_utils(WRITE_WRAP4_sequence);
 
   // Static flag to determine if reset is needed
   static bit reset_flag;
@@ -25,7 +25,7 @@ class WRITE_sequence extends base_sequence;
 
 
   // Constructor
-  function new(string name = "WRITE_sequence");
+  function new(string name = "WRITE_WRAP4_sequence");
     super.new(name);
   endfunction
 
@@ -48,7 +48,7 @@ class WRITE_sequence extends base_sequence;
     IDLE_sequence::last_test = 1'b1;
 
 
-    `uvm_info("WRITE_sequence: ", "STARTING" , UVM_HIGH)
+    `uvm_info("WRITE_WRAP4_sequence: ", "STARTING" , UVM_HIGH)
 
     if(~reset_flag)
       reset_sequence_h.start(sequencer_h);

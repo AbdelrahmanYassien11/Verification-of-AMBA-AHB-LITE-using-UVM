@@ -88,6 +88,7 @@ package AHB_pkg;
    	//												UVM ENVIRONMENT COMPONENTS
    	//*****************************************************************************************************************//
 
+
 	`include "sequence_item.svh"
 	`include "sequencer.svh"
 
@@ -95,27 +96,16 @@ package AHB_pkg;
 	`include "active_agent_config.svh"
 	`include "env_config.svh"
 
-	`include "driver.svh"
-	`include "inputs_monitor.svh"
-	`include "outputs_monitor.svh"
-
-	`include "active_agent.svh"
-	`include "passive_agent.svh"
-
-	`include "coverage.svh"
-
-	`include "scoreboard.svh"
 	`include "predictor.svh"
 	`include "comparator.svh"
 
-	`include "env.svh"
-
 	`include "base_sequence.svh"
-	`include "reset_sequence.svh"
 
    	//******************************************************************************************************************//
    	//												UVM AMBA AHB LITE SEQUENCES
    	//*****************************************************************************************************************//
+	`include "reset_sequence.svh"
+
 	`include "IDLE_sequence.svh"
 
 	`include "WRITE_SINGLE_sequence.svh"
@@ -150,6 +140,20 @@ package AHB_pkg;
 
 	`include "runall_sequence.svh"
 	`include "test_sequence.svh"
+
+
+
+	`include "driver.svh"
+	`include "inputs_monitor.svh"
+	`include "outputs_monitor.svh"
+
+	`include "active_agent.svh"
+	`include "passive_agent.svh"	
+
+	`include "scoreboard.svh"
+	`include "coverage.svh"
+
+	`include "env.svh"
 
    	//******************************************************************************************************************//
    	//												UVM AMBA AHB LITE TESTS

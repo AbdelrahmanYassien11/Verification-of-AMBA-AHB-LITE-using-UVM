@@ -16,10 +16,61 @@ add wave -position insertpoint sim:/top_test_uvm/DUT/subordinate2/*
 add wave -position insertpoint sim:/top_test_uvm/DUT/subordinate1/*
 add wave -position insertpoint sim:/top_test_uvm/DUT/subordinate3/*
 add wave -position insertpoint sim:/top_test_uvm/DUT/mux1/*
-add wave -position insertpoint  \
-sim:/top_test_uvm/DUT/mux1/HRESP
-add wave -position insertpoint  \
-sim:/top_test_uvm/DUT/mux1/HSEL_bus_reg_s
+add wave -position insertpoint sim:/top_test_uvm/DUT/mux1/HRESP
+add wave -position insertpoint sim:/top_test_uvm/DUT/mux1/HSEL_bus_reg_s
+
+
+add wave /top_test_uvm/DUT/subordinate1/sva/idle_inputs_assert
+add wave /top_test_uvm/DUT/subordinate1/sva/idle_ready_assert
+
+add wave /top_test_uvm/DUT/subordinate1/sva/reset_addr_assert
+add wave /top_test_uvm/DUT/subordinate1/sva/reset_duration_assert
+
+add wave /top_test_uvm/DUT/subordinate1/sva/burst_trans_nonseq_assert
+add wave /top_test_uvm/DUT/subordinate1/sva/burst_trans_seq_assert
+
+add wave /top_test_uvm/DUT/subordinate1/sva/incr4_idle_assert
+add wave /top_test_uvm/DUT/subordinate1/sva/incr8_idle_assert
+add wave /top_test_uvm/DUT/subordinate1/sva/incr16_idle_assert
+add wave /top_test_uvm/DUT/subordinate1/sva/wrap4_idle_assert
+add wave /top_test_uvm/DUT/subordinate1/sva/wrap8_idle_assert
+add wave /top_test_uvm/DUT/subordinate1/sva/wrap16_idle_assert
+
+
+add wave /top_test_uvm/DUT/subordinate2/sva/incr4_idle_assert
+add wave /top_test_uvm/DUT/subordinate2/sva/incr8_idle_assert
+add wave /top_test_uvm/DUT/subordinate2/sva/incr16_idle_assert
+add wave /top_test_uvm/DUT/subordinate2/sva/wrap4_idle_assert
+add wave /top_test_uvm/DUT/subordinate2/sva/wrap8_idle_assert
+add wave /top_test_uvm/DUT/subordinate2/sva/wrap16_idle_assert
+
+add wave /top_test_uvm/DUT/subordinate2/sva/idle_inputs_assert
+add wave /top_test_uvm/DUT/subordinate2/sva/idle_ready_assert
+
+add wave /top_test_uvm/DUT/subordinate2/sva/reset_addr_assert
+add wave /top_test_uvm/DUT/subordinate2/sva/reset_duration_assert
+
+add wave /top_test_uvm/DUT/subordinate2/sva/burst_trans_nonseq_assert
+add wave /top_test_uvm/DUT/subordinate2/sva/burst_trans_seq_assert
+
+
+
+add wave /top_test_uvm/DUT/subordinate3/sva/incr4_idle_assert
+add wave /top_test_uvm/DUT/subordinate3/sva/incr8_idle_assert
+add wave /top_test_uvm/DUT/subordinate3/sva/incr16_idle_assert
+add wave /top_test_uvm/DUT/subordinate3/sva/wrap4_idle_assert
+add wave /top_test_uvm/DUT/subordinate3/sva/wrap8_idle_assert
+add wave /top_test_uvm/DUT/subordinate3/sva/wrap16_idle_assert
+
+add wave /top_test_uvm/DUT/subordinate3/sva/idle_inputs_assert
+add wave /top_test_uvm/DUT/subordinate3/sva/idle_ready_assert
+
+add wave /top_test_uvm/DUT/subordinate3/sva/reset_addr_assert
+add wave /top_test_uvm/DUT/subordinate3/sva/reset_duration_assert
+
+add wave /top_test_uvm/DUT/subordinate3/sva/burst_trans_nonseq_assert
+add wave /top_test_uvm/DUT/subordinate3/sva/burst_trans_seq_assert
+
 run -all
 #set NoQuitOnFinish 1
 #onbreak {resume}

@@ -1,6 +1,6 @@
 module ahb_decoder #(parameter ADDR_WIDTH, NO_OF_SUBORDINATES, BITS_FOR_SUBORDINATES)
 (
-    input   wire [31:0] HADDR,
+    input   wire [ADDR_WIDTH-1:0] HADDR,
     input   wire        HREADY, 
     output  reg        	HSELd,
     output  reg         HSEL1,

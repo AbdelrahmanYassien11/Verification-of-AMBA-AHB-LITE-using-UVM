@@ -1,10 +1,10 @@
 /******************************************************************
- * File: READ_INCR_test.svh
+ * File: WRITE_READ_INCR_test.svh
  * Author: Abdelrahman Mohamad Yassien
  * Email: Abdelrahman.Yassien11@gmail.com
- * Date: 01/11/2024
+ * Date: 25/08/2024
  * Description: This class defines a UVM test component that sets up
- *              and executes the `READ_INCR_test`. It extends the 
+ *              and executes the `WRITE_READ_INCR_test`. It extends the 
  *              `base_test` class and overrides the `build_phase` 
  *              and `connect_phase` methods to configure the sequence 
  *              type and establish connections.
@@ -12,14 +12,14 @@
  * Copyright (c) 2024 Abdelrahman Mohamad Yassien. All Rights Reserved.
  ******************************************************************/
 
-class READ_INCR_test extends base_test;
-   `uvm_component_utils(READ_INCR_test);
+class WRITE_READ_INCR_test extends base_test;
+   `uvm_component_utils(WRITE_READ_INCR_test);
 
    // Virtual interface for the test
    virtual inf my_vif;
 
    // Constructor for the test class
-   function new(string name = "READ_INCR_test", uvm_component parent);
+   function new(string name = "WRITE_READ_INCR_test", uvm_component parent);
       super.new(name, parent);
    endfunction
 

@@ -1,4 +1,16 @@
-module AHB_subordinate_sva #(parameter TRANS_WIDTH, SIZE_WIDTH, BURST_WIDTH, PROT_WIDTH, ADDR_WIDTH, DATA_WIDTH, RESP_WIDTH, READY_WIDTH) (inf.SVA f_if);
+/******************************************************************
+ * File: AHB_subordinate_sva.sv
+ * Author: Abdelrahman Mohamad Yassien
+ * Email: Abdelrahman.Yassien11@gmail.com
+ * Date: 01/11/2024
+ * Description: This module defines a AHB_subordinate SV Assertions for a AMBA AHB 
+ *              lite-subordinate. It is responsible for monitoring the state of  
+ *              the inputs and outputs of the AMBA AHB subordinate and providing   
+ *              assertion based verification of the DUT.
+ *
+ * Copyright (c) 2024 Abdelrahman Mohamad Yassien. All Rights Reserved.
+ ******************************************************************/
+module AHB_subordinate_sva #(parameter TRANS_WIDTH = 1, SIZE_WIDTH = 2, BURST_WIDTH = 2, PROT_WIDTH = 1, ADDR_WIDTH, DATA_WIDTH, RESP_WIDTH = 1, READY_WIDTH = 0) (inf.SVA f_if);
 
 
 	// AHB lite Control Signals
@@ -24,7 +36,7 @@ module AHB_subordinate_sva #(parameter TRANS_WIDTH, SIZE_WIDTH, BURST_WIDTH, PRO
 	assign HRESETn		= f_if.HRESETn;
 	assign HWRITE		= f_if.HWRITE;
 	assign HTRANS 		= f_if.HTRANS;
-	assign HBRUST 	 	= f_if.HBRUST;
+	assign HBURST 	 	= f_if.HBURST;
 	assign HPROT		= f_if.HPROT;
 
 	assign HADDR 		= f_if.HADDR;
@@ -32,23 +44,29 @@ module AHB_subordinate_sva #(parameter TRANS_WIDTH, SIZE_WIDTH, BURST_WIDTH, PRO
 	assign HRESP 		= f_if.HRESP;
 	assign HREADY 		= f_if.HREADY;
 
-	property burst_trans_seq
+	property burst_trans_seq;
 
-		@(posedge) (HBURST != 0) & (HBURST != 1) & (HTRANS == 2'b10) |=> (HTRANS == 2'b11);
+		@(posedge clk) (HBURST != 0) && (HBURST != 1) && (HTRANS == 2'b10) |=> (HTRANS == 2'b11);
 
 	endproperty
 
 	property burst_trans_nonseq;
 
-		@(posedge clk) $rose(HBURST[0]) | $rose(HBURST[1]) | $rose(HBURST[2]) | $fell(HBURST[0]) | $fell(HBURST[1]) | $fell(HBURST[2]) |-> (HTRANS == 2'b10);
+		@(posedge clk) ( ( $rose(HBURST[0]) || $rose(HBURST[1]) || $rose(HBURST[2]) || $fell(HBURST[0]) || $fell(HBURST[1]) || $fell(HBURST[2]) ) && (HBURST != 0) ) |-> ##[0:1] (HTRANS == 2'b10);
+
+	endproperty
+
+	property burst_trans_nonseq;
+
+		@(posedge clk) ( ( $rose(HBURST[0]) || $rose(HBURST[1]) || $rose(HBURST[2]) || $fell(HBURST[0]) || $fell(HBURST[1]) || $fell(HBURST[2]) ) && (HBURST == 0) ) |-> ##[0:1] (HTRANS == 2'b00);
 
 	endproperty
 
 	property reset_duration;
 
-		@(posedge clk) $fell(HRESETn) => ##15 (HRESETn);
+		@(posedge clk) $fell(HRESETn) |=> ##15 (HRESETn);
 
-	endproperty;
+	endproperty
 
 	property reset_addr;
 
@@ -58,7 +76,7 @@ module AHB_subordinate_sva #(parameter TRANS_WIDTH, SIZE_WIDTH, BURST_WIDTH, PRO
 
 	property idle_ready;
 
-		@(posedge clk) HTRANS == 0 |=> ##3 (HREADY);
+		@(posedge clk) HTRANS  == 0 |=> ##3 (HREADY);
 
 	endproperty
 
@@ -68,23 +86,21 @@ module AHB_subordinate_sva #(parameter TRANS_WIDTH, SIZE_WIDTH, BURST_WIDTH, PRO
 
 	endproperty
 
-
-
 	property incr4_idle;
 
-		@(posedge clk) ( ($rose(HBURST[0]) | $rose(HBURST[1]) | $rose(HBURST[2]) | $fell(HBURST[0]) | $fell(HBURST[1]) | $fell(HBURST[2])) & (HBURST == 3) ) |=> ##4 (HTRANS==0);
+		@(posedge clk) ( ( $rose(HBURST[0]) || $rose(HBURST[1]) || $rose(HBURST[2]) || $fell(HBURST[0]) || $fell(HBURST[1]) || $fell(HBURST[2]) ) && (HBURST == 3) ) |-> ##4 (HTRANS==0);
 
 	endproperty
 
 	property incr8_idle;
 
-		@(posedge clk) ( ($rose(HBURST[0]) | $rose(HBURST[1]) | $rose(HBURST[2]) | $fell(HBURST[0]) | $fell(HBURST[1]) | $fell(HBURST[2])) & (HBURST == 5) ) |=> ##8 (HTRANS==0);
+		@(posedge clk) ( ( $rose(HBURST[0]) || $rose(HBURST[1]) || $rose(HBURST[2]) || $fell(HBURST[0]) || $fell(HBURST[1]) || $fell(HBURST[2]) ) && (HBURST == 5) ) |-> ##8 (HTRANS==0);
 
 	endproperty
 
 	property incr16_idle;
 
-		@(posedge clk) ( ($rose(HBURST[0]) | $rose(HBURST[1]) | $rose(HBURST[2]) | $fell(HBURST[0]) | $fell(HBURST[1]) | $fell(HBURST[2])) & (HBURST == 7) )|=> ##16 (HTRANS==0);
+		@(posedge clk) ( ( $rose(HBURST[0]) || $rose(HBURST[1]) || $rose(HBURST[2]) || $fell(HBURST[0]) || $fell(HBURST[1]) || $fell(HBURST[2]) ) && (HBURST == 7) )|-> ##16 (HTRANS==0);
 
 	endproperty
 
@@ -92,19 +108,19 @@ module AHB_subordinate_sva #(parameter TRANS_WIDTH, SIZE_WIDTH, BURST_WIDTH, PRO
 
 	property wrap4_idle;
 
-		@(posedge clk) ( ($rose(HBURST[0]) | $rose(HBURST[1]) | $rose(HBURST[2]) | $fell(HBURST[0]) | $fell(HBURST[1]) | $fell(HBURST[2])) & (HBURST == 2) ) |=> ##4 (HTRANS==0);
+		@(posedge clk) ( ( $rose(HBURST[0]) || $rose(HBURST[1]) || $rose(HBURST[2]) || $fell(HBURST[0]) || $fell(HBURST[1]) || $fell(HBURST[2]) ) && (HBURST == 2) ) |-> ##4 (HTRANS==0);
 
 	endproperty
 
 	property wrap8_idle;
 
-		@(posedge clk) ( ($rose(HBURST[0]) | $rose(HBURST[1]) | $rose(HBURST[2]) | $fell(HBURST[0]) | $fell(HBURST[1]) | $fell(HBURST[2])) & (HBURST == 4) ) |=> ##8 (HTRANS==0);
+		@(posedge clk) ( ( $rose(HBURST[0]) || $rose(HBURST[1]) || $rose(HBURST[2]) || $fell(HBURST[0]) || $fell(HBURST[1]) || $fell(HBURST[2]) ) && (HBURST == 4) ) |-> ##8 (HTRANS==0);
 
 	endproperty
 
 	property wrap16_idle;
 
-		@(posedge clk) ( ($rose(HBURST[0]) | $rose(HBURST[1]) | $rose(HBURST[2]) | $fell(HBURST[0]) | $fell(HBURST[1]) | $fell(HBURST[2])) & (HBURST == 6) ) |=> ##16 (HTRANS==0);
+		@(posedge clk) ( ( $rose(HBURST[0]) || $rose(HBURST[1]) || $rose(HBURST[2]) || $fell(HBURST[0]) || $fell(HBURST[1]) || $fell(HBURST[2]) ) && (HBURST == 6) ) |-> ##16 (HTRANS==0);
 
 	endproperty
 
@@ -120,7 +136,7 @@ module AHB_subordinate_sva #(parameter TRANS_WIDTH, SIZE_WIDTH, BURST_WIDTH, PRO
 	incr8_idle_assert: 			assert property (incr8_idle);
 	incr16_idle_assert: 		assert property (incr16_idle);
 
-	wrao4_idle_assert: 			assert property (wrap4_idle);
+	wrap4_idle_assert: 			assert property (wrap4_idle);
 	wrap8_idle_assert: 			assert property (wrap8_idle);
 	wrap16_idle_assert: 		assert property (wrap16_idle);
 

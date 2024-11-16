@@ -45,6 +45,7 @@ class scoreboard extends uvm_scoreboard;
 
     uvm_config_db#(virtual inf)::set(this, "predictor_h", "my_vif", my_vif);
 
+    comparator_h.predictor_h = predictor_h;
     `uvm_info("SCOREBOARD", "Build phase completed", UVM_MEDIUM)
   endfunction
 

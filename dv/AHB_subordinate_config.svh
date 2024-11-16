@@ -2,9 +2,6 @@
 
 class AHB_SUBORDINATE_config;
 
-
-
-
   `ifdef HWDATA_WIDTH32
     parameter DATA_WIDTH = 32;
   `elsif HWDATA_WIDTH64
