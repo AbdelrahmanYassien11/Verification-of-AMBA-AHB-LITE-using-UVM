@@ -9,6 +9,30 @@
  * 
  * Copyright (c) 2024 Abdelrahman Mohamad Yassien. All Rights Reserved.
  ******************************************************************/
+  `ifdef HWDATA_WIDTH64
+    `define HWDATA_WIDTH32
+  `elsif HWDATA_WIDTH128
+    `define HWDATA_WIDTH32
+    `define HWDATA_WIDTH64
+  `elsif HWDATA_WIDTH256
+    `define HWDATA_WIDTH32
+    `define HWDATA_WIDTH64
+    `define HWDATA_WIDTH128
+  `elsif HWDATA_WIDTH512
+    `define HWDATA_WIDTH32
+    `define HWDATA_WIDTH64
+    `define HWDATA_WIDTH128
+    `define HWDATA_WIDTH256
+  `elsif HWDATA_WIDTH1024
+    `define HWDATA_WIDTH32
+    `define HWDATA_WIDTH64
+    `define HWDATA_WIDTH128
+    `define HWDATA_WIDTH256
+    `define HWDATA_WIDTH512
+  `else 
+    `define HWDATA_WIDTH32
+  `endif
+
  covergroup HWDATA_df_cg(input bit [DATA_WIDTH-1:0] position, ref bit [DATA_WIDTH-1:0] vector);
     df: coverpoint (vector & position) != 0;
     option.per_instance = 1;
@@ -292,50 +316,51 @@ class coverage extends uvm_subscriber #(sequence_item);
   endgroup
 
 
-  covergroup SLAVE_SELECT_covgrp;
+  covergroup SUBORDINATE_SELECT_covgrp;
 
     /* --------------------------------------------------------------------------------------Data Frame coverage of the current operation (either write or read)---------------------------------------------------------------------------------------------- */
-    df_operation: coverpoint HADDR_cov[ADDR_WIDTH-1:(ADDR_WIDTH-(BITS_FOR_SUBORDINATES))] iff (HRESETn_cov) {
-      bins SLAVE0_Operation             =  {'b00};
-      bins SLAVE1_Operation             =  {'b01};
-      bins SLAVE2_Operation             =  {'b10};
-      bins SLAVE_DEFAULT_Operation      =  {'b11};
+    df_operation: coverpoint HADDR_cov[ADDR_WIDTH-1:ADDR_WIDTH-BITS_FOR_SUBORDINATES] iff (HRESETn_cov) {
+      bins SUBORDINATE1_Operation             =  {'b001};
+      bins SUBORDINATE2_Operation             =  {'b010};
+      bins SUBORDINATE3_Operation             =  {'b011};
+      bins SUBORDINATE_DEFAULT_Operation      =  {'b100};
     }
 
     /* -------------------------------------------------------------------------------Data Transition coverage of the current operation (from write to read and vice versa)---------------------------------------------------------------------------------------------- */
-    dt_operation: coverpoint HADDR_cov[ADDR_WIDTH-1:(ADDR_WIDTH-(BITS_FOR_SUBORDINATES))] iff(HRESETn_cov)  {
-      bins SLAVE0_SLAVE0_Transition          = (2'b00 => 2'b00);
-      bins SLAVE0_SLAVE1_Transition          = (2'b00 => 2'b01);
-      bins SLAVE0_SLAVE2_Transition          = (2'b00 => 2'b10);
-      bins SLAVE0_DEFAULT_Transition         = (2'b00 => 2'b11);
+    dt_operation: coverpoint HADDR_cov[ADDR_WIDTH-1:ADDR_WIDTH-BITS_FOR_SUBORDINATES] iff(HRESETn_cov)  {
+      bins SUBORDINATE1_SUBORDINATE1_Transition          = (3'b001 => 3'b001);
+      bins SUBORDINATE1_SUBORDINATE2_Transition          = (3'b001 => 3'b010);
+      bins SUBORDINATE1_SUBORDINATE3_Transition          = (3'b001 => 3'b011);
+      bins SUBORDINATE1_DEFAULT_Transition               = (3'b001 => 3'b100);
 
-      bins SLAVE1_SLAVE0_Transition          = (2'b01 => 2'b00);
-      bins SLAVE1_SLAVE1_Transition          = (2'b01 => 2'b01);
-      bins SLAVE1_SLAVE2_Transition          = (2'b01 => 2'b10);
-      bins SLAVE1_DEFAULT_Transition         = (2'b01 => 2'b11);
+      bins SUBORDINATE2_SUBORDINATE1_Transition          = (3'b010 => 3'b001);
+      bins SUBORDINATE2_SUBORDINATE2_Transition          = (3'b010 => 3'b010);
+      bins SUBORDINATE2_SUBORDINATE3_Transition          = (3'b010 => 3'b011);
+      bins SUBORDINATE2_DEFAULT_Transition               = (3'b010 => 3'b100);
 
-      bins SLAVE2_SLAVE0_Transition          = (2'b10 => 2'b00);
-      bins SLAVE2_SLAVE1_Transition          = (2'b10 => 2'b01);
-      bins SLAVE2_SLAVE2_Transition          = (2'b10 => 2'b10);
-      bins SLAVE2_DEFAULT_Transition         = (2'b10 => 2'b11);
+      bins SUBORDINATE3_SUBORDINATE1_Transition          = (3'b011 => 3'b001);
+      bins SUBORDINATE3_SUBORDINATE2_Transition          = (3'b011 => 3'b010);
+      bins SUBORDINATE3_SUBORDINATE3_Transition          = (3'b011 => 3'b011);
+      bins SUBORDINATE3_DEFAULT_Transition               = (3'b011 => 3'b100);
 
-      bins DEFAULT_SLAVE0_Transition          = (2'b11 => 2'b00);
-      bins DEFAULT_SLAVE1_Transition          = (2'b11 => 2'b01);
-      bins DEFAULT_SLAVE2_Transition          = (2'b11 => 2'b10);
-      bins DEFAULT_DEFAULT_Transition         = (2'b11 => 2'b11);
+      bins DEFAULT_SUBORDINATE1_Transition         = (3'b100 => 3'b001);
+      bins DEFAULT_SUBORDINATE2_Transition         = (3'b100 => 3'b010);
+      bins DEFAULT_SUBORDINATE3_Transition         = (3'b100 => 3'b011);
+      bins DEFAULT_DEFAULT_Transition              = (3'b100 => 3'b100);
     }
   endgroup 
 
   covergroup ADDR_covgrp;
     /* --------------------------------------------------------------------------------------Data Frame coverage of the current operation (either write or read)---------------------------------------------------------------------------------------------- */
-    df_operation: coverpoint HADDR_cov[(ADDR_WIDTH-(BITS_FOR_SUBORDINATES))-1: 0] iff ( HRESETn_cov ) {
+    df_operation: coverpoint HADDR_cov[ADDR_WIDTH-BITS_FOR_SUBORDINATES-1: 0] iff ( HRESETn_cov ) {
       bins ADDR_values_others          =  {['hE:'h1]};
       bins ADDR_values_zeros           =  {'h0};
       bins ADDR_values_ones            =  {'hF};
     }
   endgroup 
 
-  covergroup WDATA_covgrp;
+ `ifdef HWDATA_WIDTH32
+  covergroup HWDATA_covgrp;
     /* --------------------------------------------------------------------------------------Data Frame coverage of the current operation (either write or read)---------------------------------------------------------------------------------------------- */
     df_BYTE_operation: coverpoint HWDATA_cov iff (HRESETn_cov && (HSIZE_cov === BYTE)) {
       bins HWDATA_BYTE_values_others          =  {['h000000FE:'h00000001]};
@@ -354,6 +379,42 @@ class coverage extends uvm_subscriber #(sequence_item);
       bins HWDATA_WORD_values_zeros           =  {'h00000000};
       bins HWDATA_WORD_values_ones            =  {'hFFFFFFFF};
     }
+  `endif
+  `ifdef HWDATA_WIDTH64 
+    df_WORD2_operation: coverpoint HWDATA_cov iff (HRESETn_cov && (HSIZE_cov === WORD)) {
+      bins HWDATA_WORD2_values_others          =  {['hFFFFFFFFFFFFFFFE:'h1]};
+      bins HWDATA_WORD2_values_zeros           =  {'h0};
+      bins HWDATA_WORD2_values_ones            =  {'hFFFFFFFFFFFFFFFF};
+    }
+  `endif
+  `ifdef HWDATA_WIDTH128
+    df_WORD4_operation: coverpoint HWDATA_cov iff (HRESETn_cov && (HSIZE_cov === WORD)) {
+      bins HWDATA_WORD4_values_others          =  {['hFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFE:'h1]};
+      bins HWDATA_WORD4_values_zeros           =  {'h0};
+      bins HWDATA_WORD4_values_ones            =  {'hFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF};
+    }
+  `endif
+  `ifdef HWDATA_WIDTH256
+    df_WORD8_operation: coverpoint HWDATA_cov iff (HRESETn_cov && (HSIZE_cov === WORD)) {
+      bins HWDATA_WORD8_values_others          =  {['hFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFE:'h1]};
+      bins HWDATA_WORD8_values_zeros           =  {'h0};
+      bins HWDATA_WORD8_values_ones            =  {'hFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF};
+    }
+  `endif
+  `ifdef HWDATA_WIDTH512
+    df_WORD16_operation: coverpoint HWDATA_cov iff (HRESETn_cov && (HSIZE_cov === WORD)) {
+      bins HWDATA_WORD16_values_others          =  {['hFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFE:'h1]};
+      bins HWDATA_WORD16_values_zeros           =  {'h0};
+      bins HWDATA_WORD16_values_ones            =  {'hFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF};
+    }
+  `endif
+  `ifdef HWDATA_WIDTH1024
+    df_WORD16_operation: coverpoint HWDATA_cov iff (HRESETn_cov && (HSIZE_cov === WORD)) {
+      bins HWDATA_WORD32_values_others          =  {['hFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFE:'h1]};
+      bins HWDATA_WORD32_values_zeros           =  {'h0};
+      bins HWDATA_WORD32_values_ones            =  {'hFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF};
+    }
+  `endif
     /* -------------------------------------------------------------------------------Data Transition coverage of the current operation (from write to read and vice versa)---------------------------------------------------------------------------------------------- */
   endgroup 
 
@@ -387,9 +448,9 @@ class coverage extends uvm_subscriber #(sequence_item);
     TRANS_covgrp.sample();
     BURST_covgrp.sample();
     SIZE_covgrp.sample();
-    SLAVE_SELECT_covgrp.sample();
+    SUBORDINATE_SELECT_covgrp.sample();
     ADDR_covgrp.sample();
-    WDATA_covgrp.sample();
+    HWDATA_covgrp.sample();
 
     foreach(HWDATA_df_cg_bits[i]) HWDATA_df_cg_bits[i].sample();
     foreach(HWDATA_dt_cg_bits[i]) HWDATA_dt_cg_bits[i].sample();
@@ -413,9 +474,9 @@ class coverage extends uvm_subscriber #(sequence_item);
     TRANS_covgrp        = new;
     BURST_covgrp        = new;
     SIZE_covgrp         = new;
-    SLAVE_SELECT_covgrp = new;
+    SUBORDINATE_SELECT_covgrp = new;
     ADDR_covgrp         = new;
-    WDATA_covgrp        = new;
+    HWDATA_covgrp        = new;
 
     foreach(HWDATA_df_cg_bits[i]) HWDATA_df_cg_bits[i] = new(1'b1<<i,HWDATA_cov);
     foreach(HWDATA_dt_cg_bits[i]) HWDATA_dt_cg_bits[i] = new(1'b1<<i,HWDATA_cov);

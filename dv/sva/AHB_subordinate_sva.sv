@@ -56,7 +56,7 @@ module AHB_subordinate_sva #(parameter TRANS_WIDTH = 1, SIZE_WIDTH = 2, BURST_WI
 
 	endproperty
 
-	property burst_trans_nonseq;
+	property burst_trans_idle;
 
 		@(posedge clk) ( ( $rose(HBURST[0]) || $rose(HBURST[1]) || $rose(HBURST[2]) || $fell(HBURST[0]) || $fell(HBURST[1]) || $fell(HBURST[2]) ) && (HBURST == 0) ) |-> ##[0:1] (HTRANS == 2'b00);
 
