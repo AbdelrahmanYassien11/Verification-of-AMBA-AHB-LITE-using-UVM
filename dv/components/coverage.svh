@@ -67,7 +67,19 @@
           bins tr[] = (0 => 1, 1 => 0);
       }
     option.per_instance = 1;
- endgroup : HSEL_dt_cg
+  endgroup : HSEL_dt_cg
+
+  covergroup HSIZE_df_cg(input bit [SIZE_WIDTH:0] position, ref bit [SIZE_WIDTH:0] vector);
+    df: coverpoint (vector & position) != 0;
+    option.per_instance = 1;
+  endgroup : HSIZE_df_cg
+
+  covergroup HSIZE_dt_cg(input bit [SIZE_WIDTH:0] position, ref bit [SIZE_WIDTH:0] vector);
+    dt: coverpoint (vector & position) != 0 {
+    bins tr[] = (0 => 1, 1 => 0);
+    }
+    option.per_instance = 1;
+  endgroup : HSIZE_dt_cg  
 
 class coverage extends uvm_subscriber #(sequence_item);
   `uvm_component_utils(coverage);
@@ -115,6 +127,10 @@ class coverage extends uvm_subscriber #(sequence_item);
   HSEL_df_cg  HSEL_df_cg_bits   [BITS_FOR_SUBORDINATES-1:0];
   HSEL_dt_cg  HSEL_dt_cg_bits   [BITS_FOR_SUBORDINATES-1:0];
 
+  HSIZE_df_cg HSIZE_df_cg_bits  [SIZE_WIDTH:0];
+  HSIZE_dt_cg HSIZE_dt_cg_bits  [SIZE_WIDTH:0];
+
+
   // Covergroup for RESET-related coverage
   covergroup RESET_covgrp;
 
@@ -157,29 +173,35 @@ class coverage extends uvm_subscriber #(sequence_item);
     /* --------------------------------------------------------------------------------------Data Frame coverage of the current operation (either write or read)---------------------------------------------------------------------------------------------- */
     df_operation: coverpoint HTRANS_cov iff (HRESETn_cov) {
       bins IDLE_Operation   = {IDLE};
-      bins BUSY_Operation   =  {BUSY};
+      // bins BUSY_Operation   =  {BUSY};
       bins NONSEQ_Operation =  {NONSEQ};
       bins SEQ_Operation    =  {SEQ};
     }
 
     /* -------------------------------------------------------------------------------Data Transition coverage of the current operation (from write to read and vice versa)---------------------------------------------------------------------------------------------- */
     dt_operation: coverpoint HTRANS_cov iff(HRESETn_cov) {
-      bins IDLE_BUSY_Transition       = (IDLE => BUSY);
+      bins IDLE_IDLE_Transition       = (IDLE => IDLE);    
+      // bins IDLE_BUSY_Transition       = (IDLE => BUSY);
       bins IDLE_NONSEQ_Transition     = (IDLE => NONSEQ);
-      bins IDLE_SEQ_Transition        = (IDLE => SEQ);
+      // bins IDLE_SEQ_Transition        = (IDLE => SEQ);
 
-      bins BUSY_IDLE_Transition       = (BUSY => IDLE);
-      bins BUSY_NONSEQ_Transition     = (BUSY => NONSEQ);
-      bins BUSY_SEQ_Transition        = (BUSY => SEQ);
+      // bins BUSY_BUSY_Transition       = (BUSY => BUSY);
+      // bins BUSY_IDLE_Transition       = (BUSY => IDLE);
+      // bins BUSY_NONSEQ_Transition     = (BUSY => NONSEQ);
+      // bins BUSY_SEQ_Transition        = (BUSY => SEQ);
 
+      bins NONSEQ_NONSEQ_Transition    = (NONSEQ => NONSEQ);
       bins NONSEQ_IDLE_Transition     = (NONSEQ => IDLE);
-      bins NONSEQ_BUSY_Transition     = (NONSEQ => BUSY);
+      // bins NONSEQ_BUSY_Transition     = (NONSEQ => BUSY);
       bins NONSEQ_SEQ_Transition      = (NONSEQ => SEQ);
 
+      bins SEQ_SEQ_Transition       = (SEQ => SEQ);
       bins SEQ_WRITE_Transition       = (SEQ => IDLE);
-      bins SEQ_BUSY_Transition        = (SEQ => BUSY);
-      bins SEQ_NONSEQ_Transition      = (SEQ => NONSEQ);
+      // bins SEQ_BUSY_Transition        = (SEQ => BUSY);
+      // bins SEQ_NONSEQ_Transition      = (SEQ => NONSEQ);
+
       //bins WRITE_Operation_for_FIFO_SIZE = (WRITE [* 8]);
+
       bins SEQ_Operation_BURST4_OPERATIONS = (SEQ [* 3]);
       bins SEQ_Operation_BURST8_OPERATIONS = (SEQ [* 7]);
       bins SEQ_Operation_BURST16_OPERATIONS = (SEQ [* 15]);
@@ -216,67 +238,18 @@ class coverage extends uvm_subscriber #(sequence_item);
 
 
       bins INCR_SINGLE_Transition      = (INCR => SINGLE);
-      bins INCR_INCR_Transition        = (INCR => INCR);
-      bins INCR_WRAP4_Transition       = (INCR => WRAP4);
-      bins INCR_INCR4_Transition       = (INCR => INCR4);
-      bins INCR_WRAP8_Transition       = (INCR => WRAP8);
-      bins INCR_INCR8_Transition       = (INCR => INCR8);
-      bins INCR_WRAP16_Transition      = (INCR => WRAP16);
-      bins INCR_INCR16_Transition      = (INCR => INCR16);
 
       bins WRAP4_SINGLE_Transition     = (WRAP4 => SINGLE);
-      bins WRAP4_INCR_Transition       = (WRAP4 => INCR);
-      bins WRAP4_WRAP4_Transition      = (WRAP4 => INCR4);
-      bins WRAP4_INCR4_Transition      = (WRAP4 => WRAP4);
-      bins WRAP4_WRAP8_Transition      = (WRAP4 => WRAP8);
-      bins WRAP4_INCR8_Transition      = (WRAP4 => INCR8);
-      bins WRAP4_WRAP16_Transition     = (WRAP4 => WRAP16);
-      bins WRAP4_INCR16_Transition     = (WRAP4 => INCR16);
 
       bins INCR4_SINGLE_Transition     = (INCR4 => SINGLE);
-      bins INCR4_INCR_Transition       = (INCR4 => INCR);
-      bins INCR4_WRAP4_Transition      = (INCR4 => WRAP4);
-      bins INCR4_INCR4_Transition      = (INCR4 => INCR4);
-      bins INCR4_WRAP8_Transition      = (INCR4 => WRAP8);
-      bins INCR4_INCR8_Transition      = (INCR4 => INCR8);
-      bins INCR4_WRAP16_Transition     = (INCR4 => WRAP16);
-      bins INCR4_INCR16_Transition     = (INCR4 => INCR16);
 
       bins WRAP8_SINGLE_Transition     = (WRAP8 => SINGLE);
-      bins WRAP8_INCR_Transition       = (WRAP8 => INCR);
-      bins WRAP8_WRAP4_Transition      = (WRAP8 => WRAP4);
-      bins WRAP8_INCR4_Transition      = (WRAP8 => INCR4);
-      bins WRAP8_WRAP8_Transition      = (WRAP8 => WRAP8);
-      bins WRAP8_INCR8_Transition      = (WRAP8 => INCR8);
-      bins WRAP8_WRAP16_Transition     = (WRAP8 => WRAP16);
-      bins WRAP8_INCR16_Transition     = (WRAP8 => INCR16);
 
       bins INCR8_SINGLE_Transition     = (INCR8 => SINGLE);
-      bins INCR8_INCR_Transition       = (INCR8 => INCR);
-      bins INCR8_WRAP4_Transition      = (INCR8 => WRAP4);
-      bins INCR8_INCR4_Transition      = (INCR8 => INCR4);
-      bins INCR8_WRAP8_Transition      = (INCR8 => WRAP8);
-      bins INCR8_INCR8_Transition      = (INCR8 => INCR8);
-      bins INCR8_WRAP16_Transition     = (INCR8 => WRAP16);
-      bins INCR8_INCR16_Transition     = (INCR8 => INCR16);
 
       bins WRAP16_SINGLE_Transition    = (WRAP16 => SINGLE);
-      bins WRAP16_INCR_Transition      = (WRAP16 => INCR);
-      bins WRAP16_WRAP4_Transition     = (WRAP16 => WRAP4);
-      bins WRAP16_INCR4_Transition     = (WRAP16 => INCR4);
-      bins WRAP16_WRAP8_Transition     = (WRAP16 => WRAP8);
-      bins WRAP16_INCR8_Transition     = (WRAP16 => INCR8);
-      bins WRAP16_WRAP16_Transition    = (WRAP16 => WRAP16);
-      bins WRAP16_INCR16_Transition    = (WRAP16 => INCR16);
 
       bins INCR16_SINGLE_Transition    = (INCR16 => SINGLE);
-      bins INCR16_INCR_Transition      = (INCR16 => INCR);
-      bins INCR16_WRAP4_Transition     = (INCR16 => WRAP4);
-      bins INCR16_INCR4_Transition     = (INCR16 => INCR4);
-      bins INCR16_WRAP8_Transition     = (INCR16 => WRAP8);
-      bins INCR16_INCR8_Transition     = (INCR16 => INCR8);
-      bins INCR16_WRAP16_Transition    = (INCR16 => WRAP16);
-      bins INCR16_INCR16_Transition    = (INCR16 => INCR16);
     }
 
   endgroup 
@@ -287,30 +260,125 @@ class coverage extends uvm_subscriber #(sequence_item);
 
     /* --------------------------------------------------------------------------------------Data Frame coverage of the current operation (either write or read)---------------------------------------------------------------------------------------------- */
     df_operation: coverpoint HSIZE_cov iff (HRESETn_cov) {
+    `ifdef HWDATA_WIDTH32
       bins BYTE_Operation       =  {BYTE};
       bins HALFWORD_Operation   =  {HALFWORD};
       bins WORD_Operation       =  {WORD};
-
+    `endif
+    `ifdef HWDATA_WIDTH64
       bins INCR4_Operation      =  {WORD2};
+    `endif
+    `ifdef HWDATA_WIDTH128
       bins WRAP8_Operation      =  {WORD4};
+    `endif
+    `ifdef HWDATA_WIDTH256
       bins INCR8_Operation      =  {WORD8};
+    `endif
+    `ifdef HWDATA_WIDTH512
       bins WRAP16_Operation     =  {WORD16};
+    `endif
+    `ifdef HWDATA_WIDTH1024
       bins INCR16_Operation     =  {WORD32};
+    `endif
     }
 
     /* -------------------------------------------------------------------------------Data Transition coverage of the current operation (from write to read and vice versa)---------------------------------------------------------------------------------------------- */
     dt_operation: coverpoint HSIZE_cov iff(HRESETn_cov) {
+    `ifdef HWDATA_WIDTH32
+
       bins BYTE_BYTE_Transition          = (BYTE => BYTE);
       bins BYTE_HALFWORD_Transition      = (BYTE => HALFWORD);
       bins BYTE_WORD_Transition          = (BYTE => WORD);
+      bins BYTE_WORD2_Transition         = (BYTE => WORD2);
+      bins BYTE_WORD4_Transition         = (BYTE => WORD4);
+      bins BYTE_WORD8_Transition         = (BYTE => WORD8);
+      bins BYTE_WORD16_Transition        = (BYTE => WORD16);
+      bins BYTE_WORD32_Transition        = (BYTE => WORD32);
+
 
       bins HALFWORD_BYTE_Transition      = (HALFWORD => BYTE);
       bins HALFWORD_HALFWORD_Transition  = (HALFWORD => HALFWORD);
       bins HALFWORD_WORD_Transition      = (HALFWORD => WORD);
+      bins HALFWORD_WORD2_Transition     = (HALFWORD => WORD2);
+      bins HALFWORD_WORD4_Transition     = (HALFWORD => WORD4);
+      bins HALFWORD_WORD8_Transition     = (HALFWORD => WORD8);
+      bins HALFWORD_WORD16_Transition    = (HALFWORD => WORD16);
+      bins HALFWORD_WORD32_Transition      = (HALFWORD => WORD32);
 
       bins WORD_BYTE_Transition          = (WORD => BYTE);
       bins WORD_HALFWORD_Transition      = (WORD => HALFWORD);
       bins WORD_WORD_Transition          = (WORD => WORD);
+      bins WORD_WORD2_Transition         = (WORD => WORD2);
+      bins WORD_WORD4_Transition         = (WORD => WORD4);
+      bins WORD_WORD8_Transition         = (WORD => WORD8);
+      bins WORD_WORD16_Transition        = (WORD => WORD16);
+      bins WORD_WORD32_Transition        = (WORD => WORD32);
+
+    `endif
+
+    `ifdef HWDATA_WIDTH64
+
+      bins WORD2_BYTE_Transition          = (WORD2 => BYTE);
+      bins WORD2_HALFWORD_Transition      = (WORD2 => HALFWORD);
+      bins WORD2_WORD_Transition          = (WORD2 => WORD);
+      bins WORD2_WORD2_Transition         = (WORD2 => WORD2);
+      bins WORD2_WORD4_Transition         = (WORD2 => WORD4);
+      bins WORD2_WORD8_Transition         = (WORD2 => WORD8);
+      bins WORD2_WORD16_Transition        = (WORD2 => WORD16);
+      bins WORD2_WORD32_Transition        = (WORD2 => WORD32);
+
+    `endif
+    `ifdef HWDATA_WIDTH128
+
+      bins WORD4_BYTE_Transition          = (WORD4 => BYTE);
+      bins WORD4_HALFWORD_Transition      = (WORD4 => HALFWORD);
+      bins WORD4_WORD_Transition          = (WORD4 => WORD);
+      bins WORD4_WORD2_Transition         = (WORD4 => WORD2);
+      bins WORD4_WORD4_Transition         = (WORD4 => WORD4);
+      bins WORD4_WORD8_Transition         = (WORD4 => WORD8);
+      bins WORD4_WORD16_Transition        = (WORD4 => WORD16);
+      bins WORD4_WORD32_Transition        = (WORD4 => WORD32);
+
+    `endif
+
+    `ifdef HWDATA_WIDTH256 
+
+      bins WORD8_BYTE_Transition          = (WORD8 => BYTE);
+      bins WORD8_HALFWORD_Transition      = (WORD8 => HALFWORD);
+      bins WORD8_WORD_Transition          = (WORD8 => WORD);
+      bins WORD8_WORD2_Transition         = (WORD8 => WORD2);
+      bins WORD8_WORD4_Transition         = (WORD8 => WORD4);
+      bins WORD8_WORD8_Transition         = (WORD8 => WORD8);
+      bins WORD8_WORD16_Transition        = (WORD8 => WORD16);
+      bins WORD8_WORD32_Transition        = (WORD8 => WORD32);
+
+    `endif 
+
+    `ifdef HWDATA_WIDTH512
+
+      bins WORD16_BYTE_Transition          = (WORD16 => BYTE);
+      bins WORD16_HALFWORD_Transition      = (WORD16 => HALFWORD);
+      bins WORD16_WORD_Transition          = (WORD16 => WORD);
+      bins WORD16_WORD2_Transition         = (WORD16 => WORD2);
+      bins WORD16_WORD4_Transition         = (WORD16 => WORD4);
+      bins WORD16_WORD8_Transition         = (WORD16 => WORD8);
+      bins WORD16_WORD16_Transition        = (WORD16 => WORD16);
+      bins WORD16_WORD32_Transition        = (WORD16 => WORD32);
+
+    `endif
+
+    `ifdef HWDATA_WIDTH1024
+
+      bins WORD32_BYTE_Transition          = (WORD32 => BYTE);
+      bins WORD32_HALFWORD_Transition      = (WORD32 => HALFWORD);
+      bins WORD32_WORD_Transition          = (WORD32 => WORD);
+      bins WORD32_WORD2_Transition         = (WORD32 => WORD2);
+      bins WORD32_WORD4_Transition         = (WORD32 => WORD4);
+      bins WORD32_WORD8_Transition         = (WORD32 => WORD8);
+      bins WORD32_WORD16_Transition        = (WORD32 => WORD16);
+      bins WORD32_WORD32_Transition        = (WORD32 => WORD32);
+
+    `endif
     }
 
   endgroup
@@ -351,12 +419,14 @@ class coverage extends uvm_subscriber #(sequence_item);
   endgroup 
 
   covergroup ADDR_covgrp;
-    /* --------------------------------------------------------------------------------------Data Frame coverage of the current operation (either write or read)---------------------------------------------------------------------------------------------- */
+    /* --------------------------------------------------------------------------------------Data Frame coverage of the current operation (either write or read)---------------------------------------------------------------------------------------------- */  
+    `ifdef ADDR_WIDTH32
     df_operation: coverpoint HADDR_cov[ADDR_WIDTH-BITS_FOR_SUBORDINATES-1: 0] iff ( HRESETn_cov ) {
-      bins ADDR_values_others          =  {['hE:'h1]};
+      bins ADDR_values_others          =  {[(2**(ADDR_WIDTH-BITS_FOR_SUBORDINATES))-2:'h1]};
       bins ADDR_values_zeros           =  {'h0};
-      bins ADDR_values_ones            =  {'hF};
+      bins ADDR_values_ones            =  {(2**(ADDR_WIDTH-BITS_FOR_SUBORDINATES))-1};
     }
+    `endif
   endgroup 
 
  `ifdef HWDATA_WIDTH32
@@ -476,7 +546,7 @@ class coverage extends uvm_subscriber #(sequence_item);
     SIZE_covgrp         = new;
     SUBORDINATE_SELECT_covgrp = new;
     ADDR_covgrp         = new;
-    HWDATA_covgrp        = new;
+    HWDATA_covgrp       = new;
 
     foreach(HWDATA_df_cg_bits[i]) HWDATA_df_cg_bits[i] = new(1'b1<<i,HWDATA_cov);
     foreach(HWDATA_dt_cg_bits[i]) HWDATA_dt_cg_bits[i] = new(1'b1<<i,HWDATA_cov);
@@ -486,6 +556,9 @@ class coverage extends uvm_subscriber #(sequence_item);
 
     foreach(HSEL_df_cg_bits[i]) HSEL_df_cg_bits[i] = new(1'b1<<i,HSEL_cov);
     foreach(HSEL_dt_cg_bits[i]) HSEL_dt_cg_bits[i] = new(1'b1<<i,HSEL_cov);
+
+    foreach(HSIZE_df_cg_bits[i]) HSIZE_df_cg_bits[i] = new(1'b1<<i,HSIZE_cov);
+    foreach(HSIZE_dt_cg_bits[i]) HSIZE_dt_cg_bits[i] = new(1'b1<<i,HSIZE_cov);
 
   endfunction
 

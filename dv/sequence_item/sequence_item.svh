@@ -60,11 +60,6 @@ rand int unsigned INCR_CONTROL;
                           RESET_op == WORKING  -> HRESETn == 1;
       }
 
-      // constraint operation_c { operation_e == RESETING -> HRESETn == 1'b0 && TRANS_op == IDLE  && WRITE_op == READ  && HADDR[ADDR_WIDTH-1:ADDR_WIDTH-BITS_FOR_SUBORDINATES] == 0                              && HADDR[ADDR_WIDTH-BITS_FOR_SUBORDINATES-1:0] == 0;
-      //                          operation_e == WRITTING -> HRESETn == 1'b1 &&                      WRITE_op == WRITE && HADDR[ADDR_WIDTH-1:ADDR_WIDTH-BITS_FOR_SUBORDINATES] dist {1:/30, 2:/30, 3:/30, 4:/10} && HADDR[ADDR_WIDTH-BITS_FOR_SUBORDINATES-1:0] dist {0:/1, (ADDR_DEPTH-1):/1, ['h00000001 : (ADDR_DEPTH-2)]:=40};
-      //                          operation_e == READ     -> HRESETn == 1'b1 &&                      WRITE_op == READ  && HADDR[ADDR_WIDTH-1:ADDR_WIDTH-BITS_FOR_SUBORDINATES] dist {1:/30, 2:/30, 3:/30, 4:/10} && HADDR[ADDR_WIDTH-BITS_FOR_SUBORDINATES-1:0] dist {0:/1, (ADDR_DEPTH-1):/1, ['h00000001 : (ADDR_DEPTH-2)]:=40};
-      //                          operation_e == IDLE     -> HRESETn == 1'b1 && TRANS_op == IDLE  && WRITE_op == READ;  
-      // }
 
       constraint HWRITE_rand_c { WRITE_op dist { WRITE:=50, READ:=50 };
       }
@@ -84,12 +79,10 @@ rand int unsigned INCR_CONTROL;
       }
 
 
-      constraint HADDR_SEL_c { /*HRESETn == 1  -> */HADDR[ADDR_WIDTH-1:ADDR_WIDTH-BITS_FOR_SUBORDINATES] dist {1:/30, 2:/30, 3:/30, 4:/10};
-                               //HRESETn == 0  -> HADDR[ADDR_WIDTH-1:ADDR_WIDTH-BITS_FOR_SUBORDINATES] == 0;
+      constraint HADDR_SEL_c { HADDR[ADDR_WIDTH-1:ADDR_WIDTH-BITS_FOR_SUBORDINATES] dist {1:/30, 2:/30, 3:/30, 4:/10};
       }
 
-      constraint HADDR_c { /*RESET_op == WORKING  ->*/ HADDR[ADDR_WIDTH-BITS_FOR_SUBORDINATES-1:0] dist {0:/1, (ADDR_DEPTH-1):/1, ['h00000001 : (ADDR_DEPTH-2)]:=40};
-                           //RESET_op == RESETING -> HADDR[(ADDR_WIDTH-BITS_FOR_SUBORDINATES)-1:0] == 0;
+      constraint HADDR_c {  HADDR[ADDR_WIDTH-BITS_FOR_SUBORDINATES-1:0] dist {0:=1, (ADDR_DEPTH-1):=1, ['h00000001 : (ADDR_DEPTH-2)]:=1};
 
       }
 
@@ -115,19 +108,21 @@ rand int unsigned INCR_CONTROL;
       }
 
 
-      constraint SIZE_c1 { DATA_WIDTH == BYTE_WIDTH      -> SIZE_op == 0;
-                           DATA_WIDTH == HALFWORD_WIDTH  -> SIZE_op inside {[0:1]};
-                           DATA_WIDTH == WORD_WIDTH      -> SIZE_op inside {[0:2]};
-                           DATA_WIDTH == WORD2_WIDTH     -> SIZE_op inside {[0:3]};
-                           DATA_WIDTH == WORD4_WIDTH     -> SIZE_op inside {[0:4]};
-                           DATA_WIDTH == WORD8_WIDTH     -> SIZE_op inside {[0:5]};
-                           DATA_WIDTH == WORD16_WIDTH    -> SIZE_op inside {[0:6]};
-                           DATA_WIDTH == WORD32_WIDTH    -> SIZE_op inside {[0:7]};
+      constraint SIZE_c1 {
+                           DATA_WIDTH == BYTE_WIDTH      -> SIZE_op == 0;
+                           DATA_WIDTH == HALFWORD_WIDTH  -> SIZE_op dist {0:=1, 1:=1};
+                           DATA_WIDTH == WORD_WIDTH      -> SIZE_op dist {0:=1, 1:=1, 2:=1};
+                           DATA_WIDTH == WORD2_WIDTH     -> SIZE_op dist {0:=1, 1:=1, 2:=1, 3:=1};
+                           DATA_WIDTH == WORD4_WIDTH     -> SIZE_op dist {0:=1, 1:=1, 2:=1, 3:=1, 4:=1};
+                           DATA_WIDTH == WORD8_WIDTH     -> SIZE_op dist {0:=1, 1:=1, 2:=1, 3:=1, 4:=1, 5:=1};
+                           DATA_WIDTH == WORD16_WIDTH    -> SIZE_op dist {0:=1, 1:=1, 2:=1, 3:=1, 4:=1, 5:=1, 6:=1};
+                           DATA_WIDTH == WORD32_WIDTH    -> SIZE_op dist {0:=1, 1:=1, 2:=1, 3:=1, 4:=1, 5:=1, 6:=1, 7:=1};
       }
 
-      constraint SIZE_c  {SIZE_op == BYTE       -> HSIZE == 3'b000;
+      constraint SIZE_c  {
+                          SIZE_op == BYTE       -> HSIZE == 3'b000;
                           SIZE_op == HALFWORD   -> HSIZE == 3'b001;
-                          SIZE_op == WORD       -> HSIZE == 3'b010; 
+                          SIZE_op == WORD       -> HSIZE == 3'b010;
                           SIZE_op == WORD2      -> HSIZE == 3'b011;
                           SIZE_op == WORD4      -> HSIZE == 3'b100;
                           SIZE_op == WORD8      -> HSIZE == 3'b101;
@@ -135,14 +130,14 @@ rand int unsigned INCR_CONTROL;
                           SIZE_op == WORD32     -> HSIZE == 3'b111;
       }
 
-      constraint HWDATA_c { HSIZE == BYTE     -> HWDATA dist {'h0:/1, 'h000000FF:/1, ['h01 : 'h000000FE]:/40};
-                            HSIZE == HALFWORD -> HWDATA dist {'h0:/1, 'h0000FFFF:/1, ['h01 : 'h0000FFFE]:/40};
-                            HSIZE == WORD     -> HWDATA dist {'h0:/1, 'h0FFFFFFFF:/1, ['h01 : 'h0FFFFFFFE]:/40};
-                            HSIZE == WORD2    -> HWDATA dist {'h0:/1, 'h0FFFFFFFFFFFFFFFF:/1, ['h01: 'h0FFFFFFFFFFFFFFFE]:/40};
-                            HSIZE == WORD4    -> HWDATA dist {'h0:/1, 'h0FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF:/1, ['h01: 'h0FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFE]:/40};
-                            HSIZE == WORD8    -> HWDATA dist {'h0:/1, 'h0FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF:/1, ['h01: 'h0FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFE]:/40};
-                            HSIZE == WORD16   -> HWDATA dist {'h0:/1, 'h0FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF:/1, ['h01: 'h0FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFE]:/40};
-                            HSIZE == WORD32   -> HWDATA dist {'h0:/1, 'h0FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF:/1, ['h01: 'h0FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFE]:/40};
+      constraint HWDATA_c { HSIZE == BYTE     -> HWDATA dist {'h0:=1, 'h000000FF:=1, ['h01 : 'h000000FE]:=1};
+                            HSIZE == HALFWORD -> HWDATA dist {'h0:=1, 'h0000FFFF:=1, ['h01 : 'h0000FFFE]:=1};
+                            HSIZE == WORD     -> HWDATA dist {'h0:=1, 'h0FFFFFFFF:=1, ['h01 : 'h0FFFFFFFE]:=1};
+                            HSIZE == WORD2    -> HWDATA dist {'h0:=1, 'h0FFFFFFFFFFFFFFFF:=1, ['h01: 'h0FFFFFFFFFFFFFFFE]:=1};
+                            HSIZE == WORD4    -> HWDATA dist {'h0:=1, 'h0FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF:=1, ['h01: 'h0FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFE]:=1};
+                            HSIZE == WORD8    -> HWDATA dist {'h0:=1, 'h0FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF:=1, ['h01: 'h0FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFE]:=1};
+                            HSIZE == WORD16   -> HWDATA dist {'h0:=1, 'h0FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF:=1, ['h01: 'h0FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFE]:=1};
+                            HSIZE == WORD32   -> HWDATA dist {'h0:=1, 'h0FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF:=1, ['h01: 'h0FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFE]:=1};
       }
 
       constraint randomized_test_number_c { randomized_number_of_tests inside {[450:500]};    
