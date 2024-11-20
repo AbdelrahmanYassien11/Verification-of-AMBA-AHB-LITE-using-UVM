@@ -9,30 +9,6 @@
  * 
  * Copyright (c) 2024 Abdelrahman Mohamad Yassien. All Rights Reserved.
  ******************************************************************/
-  `ifdef HWDATA_WIDTH64
-    `define HWDATA_WIDTH32
-  `elsif HWDATA_WIDTH128
-    `define HWDATA_WIDTH32
-    `define HWDATA_WIDTH64
-  `elsif HWDATA_WIDTH256
-    `define HWDATA_WIDTH32
-    `define HWDATA_WIDTH64
-    `define HWDATA_WIDTH128
-  `elsif HWDATA_WIDTH512
-    `define HWDATA_WIDTH32
-    `define HWDATA_WIDTH64
-    `define HWDATA_WIDTH128
-    `define HWDATA_WIDTH256
-  `elsif HWDATA_WIDTH1024
-    `define HWDATA_WIDTH32
-    `define HWDATA_WIDTH64
-    `define HWDATA_WIDTH128
-    `define HWDATA_WIDTH256
-    `define HWDATA_WIDTH512
-  `else 
-    `define HWDATA_WIDTH32
-  `endif
-
  covergroup HWDATA_df_cg(input bit [DATA_WIDTH-1:0] position, ref bit [DATA_WIDTH-1:0] vector);
     df: coverpoint (vector & position) != 0;
     option.per_instance = 1;
@@ -69,17 +45,17 @@
     option.per_instance = 1;
   endgroup : HSEL_dt_cg
 
-  covergroup HSIZE_df_cg(input bit [SIZE_WIDTH:0] position, ref bit [SIZE_WIDTH:0] vector);
-    df: coverpoint (vector & position) != 0;
-    option.per_instance = 1;
-  endgroup : HSIZE_df_cg
+  // covergroup HSIZE_df_cg(input bit [SIZE_WIDTH:0] position, ref bit [SIZE_WIDTH:0] vector);
+  //   df: coverpoint (vector & position) != 0;
+  //   option.per_instance = 1;
+  // endgroup : HSIZE_df_cg
 
-  covergroup HSIZE_dt_cg(input bit [SIZE_WIDTH:0] position, ref bit [SIZE_WIDTH:0] vector);
-    dt: coverpoint (vector & position) != 0 {
-    bins tr[] = (0 => 1, 1 => 0);
+  covergroup HSIZE_dt_cg_try(input bit [SIZE_WIDTH:0] position, ref bit [SIZE_WIDTH:0] vector);
+    dt:coverpoint vector {
+      bins tr[] = (vector => position);
     }
     option.per_instance = 1;
-  endgroup : HSIZE_dt_cg  
+  endgroup : HSIZE_dt_cg_try  
 
 class coverage extends uvm_subscriber #(sequence_item);
   `uvm_component_utils(coverage);
@@ -127,8 +103,10 @@ class coverage extends uvm_subscriber #(sequence_item);
   HSEL_df_cg  HSEL_df_cg_bits   [BITS_FOR_SUBORDINATES-1:0];
   HSEL_dt_cg  HSEL_dt_cg_bits   [BITS_FOR_SUBORDINATES-1:0];
 
-  HSIZE_df_cg HSIZE_df_cg_bits  [SIZE_WIDTH:0];
-  HSIZE_dt_cg HSIZE_dt_cg_bits  [SIZE_WIDTH:0];
+  // HSIZE_df_cg HSIZE_df_cg_bits  [SIZE_WIDTH:0];
+  //HSIZE_dt_cg HSIZE_dt_cg_bits  [SIZE_WIDTH:0];
+
+  HSIZE_dt_cg_try HSIZE_dt_cg_try_t [AVAILABLE_SIZES-1:0];
 
 
   // Covergroup for RESET-related coverage
@@ -522,6 +500,8 @@ class coverage extends uvm_subscriber #(sequence_item);
     ADDR_covgrp.sample();
     HWDATA_covgrp.sample();
 
+    foreach(HSIZE_dt_cg_try_t[i]) HSIZE_dt_cg_try_t[i].sample();
+
     foreach(HWDATA_df_cg_bits[i]) HWDATA_df_cg_bits[i].sample();
     foreach(HWDATA_dt_cg_bits[i]) HWDATA_dt_cg_bits[i].sample();
 
@@ -557,8 +537,11 @@ class coverage extends uvm_subscriber #(sequence_item);
     foreach(HSEL_df_cg_bits[i]) HSEL_df_cg_bits[i] = new(1'b1<<i,HSEL_cov);
     foreach(HSEL_dt_cg_bits[i]) HSEL_dt_cg_bits[i] = new(1'b1<<i,HSEL_cov);
 
-    foreach(HSIZE_df_cg_bits[i]) HSIZE_df_cg_bits[i] = new(1'b1<<i,HSIZE_cov);
-    foreach(HSIZE_dt_cg_bits[i]) HSIZE_dt_cg_bits[i] = new(1'b1<<i,HSIZE_cov);
+    // foreach(HSIZE_df_cg_bits[i]) HSIZE_df_cg_bits[i] = new(1'b1<<i,HSIZE_cov);
+
+    //foreach(HSIZE_dt_cg_bits[i]) HSIZE_dt_cg_bits[i] = new(1'b1<<i,HSIZE_cov);
+
+    foreach(HSIZE_dt_cg_try_t[i]) HSIZE_dt_cg_try_t[i]= new(i, HSIZE_cov);
 
   endfunction
 

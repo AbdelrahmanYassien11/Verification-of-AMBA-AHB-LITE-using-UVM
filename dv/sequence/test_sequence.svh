@@ -54,8 +54,29 @@ class test_sequence extends base_sequence;
       seq_item.last_item = 1'b1;
 
 
-    READ_INCR8_sequence_h.start(sequencer_h);
+    //READ_INCR8_sequence_h.start(sequencer_h);
+    // Start the sequence item
+    start_item(seq_item);
+    
+    // Configure the sequence item for the write operation
+    seq_item.RESET_op.rand_mode(0);
+    seq_item.WRITE_op.rand_mode(0);
+    seq_item.TRANS_op.rand_mode(0);
+    seq_item.BURST_op.rand_mode(0);
+    seq_item.SIZE_op.rand_mode(0);
 
+    // Set the operation type to WRITE
+    seq_item.RESET_op = WORKING;
+    seq_item.WRITE_op = WRITE;
+    seq_item.TRANS_op = NONSEQ;
+    seq_item.BURST_op = SINGLE;
+    seq_item.SIZE_op  = HALFWORD;
+
+    assert(seq_item.randomize()); // Randomize the sequence item
+    // Set the control signals for writing
+
+    // Finish the sequence item
+    finish_item(seq_item);
 
   endtask : body
 

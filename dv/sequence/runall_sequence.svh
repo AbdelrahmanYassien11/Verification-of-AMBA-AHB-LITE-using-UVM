@@ -163,7 +163,7 @@ class runall_sequence extends base_sequence;
       seq_item.randomized_number_of_tests.rand_mode(0);
       assert(seq_item.randomize());
 
-      `uvm_info("runall_sequence", {seq_item.convert2string()}, UVM_LOW)
+      //`uvm_info("runall_sequence", {seq_item.convert2string()}, UVM_LOW)
 
       if(seq_item.RESET_op == WORKING) begin
         if(seq_item.TRANS_op !== IDLE)begin

@@ -2,9 +2,9 @@
  * File: WRITE_SINGLE_sequence.sv
  * Author: Abdelrahman Mohamad Yassien
  * Email: Abdelrahman.Yassien11@gmail.com
- * Date: 25/08/2024
+ * Date: 01/11/2024
  * Description: This class defines a sequence that performs a write 
- *              operation to the FIFO once. It inherits from 
+ *              operation to the AHB_lite once. It inherits from 
  *              `base_sequence` and includes functionality to start 
  *              the reset sequence if needed and perform a write 
  *              operation with randomized sequence item values.

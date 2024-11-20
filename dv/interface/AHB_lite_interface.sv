@@ -54,10 +54,6 @@ logic   [DATA_WIDTH-1:0]  HRDATA_reg;
 logic   [RESP_WIDTH:0]  HRESP_reg; 
 logic   [READY_WIDTH:0]  HREADY_reg; 
 
-event transaction_finished;
-event starting_phases;
-event interconnect_is_resetting;
-
 bit RECEIVING_PHASE_FLAG;
 bit CONTROL_PHASE_FLAG;
 bit DATA_PHASE_FLAG;
@@ -67,7 +63,6 @@ bit OUTPUTS_PHASE_FLAG_3;
 
 // bit last_test;
 
-mailbox mbx = new(1);
 // Monitor handles
 inputs_monitor inputs_monitor_h;    // Handle to input monitor
 outputs_monitor outputs_monitor_h;  // Handle to output monitor
@@ -285,7 +280,7 @@ sequence_item previous_seq_item, seq_item;
     end
 
     // Task: Write data into the AHB 
-    task write_AHB(input bit [ADDR_WIDTH-1:0] iHWDATA);
+    task write_AHB(input bit [DATA_WIDTH-1:0] iHWDATA);
         case(HTRANS_reg)
             IDLE, BUSY: begin
             end

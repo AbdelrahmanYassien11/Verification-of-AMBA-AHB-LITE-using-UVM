@@ -12,7 +12,7 @@ rand HRESET_e     RESET_op;
 rand HWRITE_e     WRITE_op;
 rand HTRANS_e     TRANS_op;
 rand HBURST_e     BURST_op;
-rand HSIZE_e      SIZE_op;
+randc HSIZE_e      SIZE_op;
      HRESP_e      RESP_op;
 
 //operation_e operation_o;

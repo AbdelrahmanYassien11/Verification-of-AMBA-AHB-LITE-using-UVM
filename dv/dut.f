@@ -1,4 +1,4 @@
-AHB_subordinate_defines.vh
+config/AHB_subordinate_defines.vh
 ../rtl/ahb_default_subordinate.v
 ../rtl/ahb_subordinate.v
 ../rtl/ahb_mux.v

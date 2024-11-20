@@ -1,4 +1,4 @@
-AHB_subordinate_config.svh
++incdir+config
 +incdir+sequence
 +incdir+sequence_item
 +incdir+tests

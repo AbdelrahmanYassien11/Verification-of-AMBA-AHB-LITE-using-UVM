@@ -1,2 +1,0 @@
-`define HWDATA_WIDTH32
-`define ADDR_WIDTH32

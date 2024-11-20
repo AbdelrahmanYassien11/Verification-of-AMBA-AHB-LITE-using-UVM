@@ -1,3 +1,4 @@
+`include "../dv/config/AHB_subordinate_defines.vh"
 `timescale 1ns/1ns
 
 module ahb_lite #(parameter BITS_FOR_SUBORDINATES, ADDR_WIDTH, DATA_WIDTH, ADDR_DEPTH, NO_OF_SUBORDINATES)

@@ -13,8 +13,8 @@ package AHB_pkg;
 
 	import uvm_pkg::*;
 	`include "uvm_macros.svh"
-	`include "AHB_subordinate_defines.vh"
-	`include "AHB_subordinate_config.svh"
+	`include "config/AHB_subordinate_defines.vh"
+	`include "config/AHB_subordinate_config.svh"
 
 	AHB_SUBORDINATE_config subordinate_cfg = new();
 
@@ -23,6 +23,7 @@ package AHB_pkg;
 	parameter ADDR_DEPTH 			= subordinate_cfg.ADDR_DEPTH;
 	parameter BITS_FOR_SUBORDINATES = subordinate_cfg.BITS_FOR_SUBORDINATES;
 	parameter NO_OF_SUBORDINATES    = subordinate_cfg.NO_OF_SUBORDINATES;
+	parameter AVAILABLE_SIZES 		= subordinate_cfg.AVAILABLE_SIZES;
 
 	parameter CLOCK_PERIOD = 5;
 
