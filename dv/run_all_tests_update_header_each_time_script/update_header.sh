@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Define the path to the Verilog header file
-HEADER_FILE="config/ahb_subordinate_defines.vh"
+HEADER_FILE="../config/ahb_subordinate_defines.vh"
 
 # Arguments passed from the do file
 HWDATA_WIDTH=$1

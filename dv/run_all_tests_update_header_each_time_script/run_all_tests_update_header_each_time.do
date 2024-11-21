@@ -1,3 +1,5 @@
+system("if not exist \\reports mkdir \\reports");
+
 set test_names {"runall_test" "WRITE_READ_INCR_test"}
 set test_data_defines {"32" "64"}
 set test_addr_defines {"32" "64"}
@@ -16,6 +18,8 @@ foreach test_name $test_names {
         # Run the bash script to update the header file with both data and address defines
         exec bash ./update_header.sh $test_data_define $test_addr_define
 
+        do log.do
+
         # Run the simulation
         vopt top_test_uvm -o top_optimized +acc +cover=bcefsx+ahb_lite(rtl)
         vsim top_optimized -cover -solvefaildebug=2 +UVM_TESTNAME=$test_name
@@ -25,8 +29,8 @@ foreach test_name $test_names {
         onbreak {resume}
         log /* -r
         run -all
-        coverage report -assert -details -zeros -verbose -output reports/assertion_based_coverage_report.txt -append /.
-        coverage report -detail -cvg -directive -comments -option -memory -output reports/functional_coverage_report.txt {}
+        coverage report -assert -details -zeros -verbose -output /reports/assertion_based_coverage_report.txt -append /.
+        coverage report -detail -cvg -directive -comments -option -memory -output /reports/functional_coverage_report.txt {}
 
         coverage attribute -name TESTNAME -value $test_name
         coverage save reports/$test_name.ucdb

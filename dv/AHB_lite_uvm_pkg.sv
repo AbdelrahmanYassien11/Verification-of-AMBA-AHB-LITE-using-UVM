@@ -43,8 +43,6 @@ package AHB_pkg;
 	typedef enum {NOT_READY, READY} HREADY_e;
 
 
-	//typedef enum {RESETTING, IDLE, WRITING, READING} operation_e;
-
 
 	//HSIZE PARAMETERS
 	parameter BYTE_P		= 3'b000;

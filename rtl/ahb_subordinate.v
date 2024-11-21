@@ -111,29 +111,29 @@ module ahb_subordinate
 
    `define HSIZE_conditional_WRITE_def(counter) \
       `ifdef HWDATA_WIDTH32 \
-                          HSIZE_BYTE      : mem[HADDR_reg_d + counter]  = HWDATA_reg_d[7:0]; \
-                          HSIZE_HALFWORD  : mem[HADDR_reg_d + counter]  = HWDATA_reg_d[15:0]; \
-                          HSIZE_WORD      : mem[HADDR_reg_d + counter]  = HWDATA_reg_d[31:0]; \
+                          HSIZE_BYTE      : mem[HADDR_reg_d + counter] [BYTE_WIDTH-1:0]     = HWDATA_reg_d[7:0]; \
+                          HSIZE_HALFWORD  : mem[HADDR_reg_d + counter] [HALFWORD_WIDTH-1:0] = HWDATA_reg_d[15:0]; \
+                          HSIZE_WORD      : mem[HADDR_reg_d + counter] [WORD_WIDTH-1:0]     = HWDATA_reg_d[31:0]; \
       `endif \
       `ifdef HWDATA_WIDTH64 \
-                          HSIZE_WORD2     : mem[HADDR_reg_d + counter]  = HWDATA_reg_d[63:0]; \
+                          HSIZE_WORD2     : mem[HADDR_reg_d + counter] [WORD2_WIDTH-1:0]    = HWDATA_reg_d[63:0]; \
       `endif \
       `ifdef HWDATA_WIDTH128 \
-                          HSIZE_WORD4     : mem[HADDR_reg_d + counter]  = HWDATA_reg_d[127:0]; \
+                          HSIZE_WORD4     : mem[HADDR_reg_d + counter] [WORD4_WIDTH-1:0]    = HWDATA_reg_d[127:0]; \
       `endif \
       `ifdef HWDATA_WIDTH256 \
-                          HSIZE_WORD8     : mem[HADDR_reg_d + counter]  = HWDATA_reg_d[255:0]; \
+                          HSIZE_WORD8     : mem[HADDR_reg_d + counter] [WORD8_WIDTH-1:0]    = HWDATA_reg_d[255:0]; \
       `endif \
       `ifdef HWDATA_WIDTH512 \
-                          HSIZE_WORD16    : mem[HADDR_reg_d + counter]  = HWDATA_reg_d[511:0]; \
+                          HSIZE_WORD16    : mem[HADDR_reg_d + counter] [WORD16_WIDTH-1:0]   = HWDATA_reg_d[511:0]; \
       `endif \
       `ifdef HWDATA_WIDTH1024 \
-                          HSIZE_WORD32    : mem[HADDR_reg_d + counter]  = HWDATA_reg_d[1023:0]; \
+                          HSIZE_WORD32    : mem[HADDR_reg_d + counter] [WORD32_WIDTH-1:0]   = HWDATA_reg_d[1023:0]; \
       `endif
 
   `define HSIZE_conditional_READ_def(counter) \
     `ifdef HWDATA_WIDTH32 \
-                        HSIZE_BYTE      : HRDATA_reg_d[7:0]   = mem[HADDR_reg_d+counter]; \
+                        HSIZE_BYTE      : HRDATA_reg_d[7:0]    = mem[HADDR_reg_d+counter]; \
                         HSIZE_HALFWORD  : HRDATA_reg_d[15:0]   = mem[HADDR_reg_d+counter]; \
                         HSIZE_WORD      : HRDATA_reg_d[31:0]   = mem[HADDR_reg_d+counter]; \
     `endif \

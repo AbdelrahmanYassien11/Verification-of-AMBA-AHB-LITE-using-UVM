@@ -291,8 +291,6 @@ class predictor extends uvm_subscriber #(sequence_item);
               end
               else begin
                 write_process(burst_counter);
-                // if(HADDR_VALID + burst_counter < ADDR_DEPTH)
-                //   burst_counter = burst_counter +1;
               end
             end
             WRAP4, WRAP8, WRAP16: begin
@@ -336,6 +334,8 @@ class predictor extends uvm_subscriber #(sequence_item);
     task write_process(input int counter);
       if(undo_on) $display("RE_WRITE_PROCESS");
       if(((HADDR_VALID + counter) < ADDR_DEPTH) /*& ((HADDR_VALID + counter) > 0)*/) begin
+        undo_counter_old = 'hx;
+        undo_HWDATA_older = 'hx;
         case (HSIZE)
         `ifdef HWDATA_WIDTH32
           BYTE_P: begin
@@ -344,14 +344,14 @@ class predictor extends uvm_subscriber #(sequence_item);
                 if(~undo_on) begin 
                   undo_counter_old <= counter; undo_HWDATA_old[BYTE_WIDTH-1:0] <= subordinate1[HADDR_VALID + counter];
                 end
-                subordinate1[HADDR_VALID + counter] = HWDATA[BYTE_WIDTH-1:0];
+                subordinate1[HADDR_VALID + counter] [BYTE_WIDTH-1:0] = HWDATA[BYTE_WIDTH-1:0];
                 `uvm_info("PREDICTOR", {"WRITE_subordinate1:", $sformatf("%0h, %0h, %0h", subordinate1[HADDR_VALID+counter], HWDATA[BYTE_WIDTH-1:0], (HADDR + counter))}, UVM_LOW)
               end
               3'b010: begin
                 if(~undo_on) begin 
                   undo_counter_old <= counter; undo_HWDATA_old[BYTE_WIDTH-1:0] <= subordinate2[HADDR_VALID + counter];
                 end
-                subordinate2[HADDR_VALID + counter] = HWDATA[BYTE_WIDTH-1:0];
+                subordinate2[HADDR_VALID + counter] [BYTE_WIDTH-1:0] = HWDATA[BYTE_WIDTH-1:0];
                 `uvm_info("PREDICTOR", {"WRITE_subordinate2:", $sformatf("%0h, %0h, %0h", subordinate2[HADDR_VALID+counter], HWDATA[BYTE_WIDTH-1:0], (HADDR + counter))}, UVM_LOW)
 
               end
@@ -359,7 +359,7 @@ class predictor extends uvm_subscriber #(sequence_item);
                 if(~undo_on) begin 
                   undo_counter_old <= counter; undo_HWDATA_old[BYTE_WIDTH-1:0] <= subordinate3[HADDR_VALID + counter];
                 end
-                subordinate3[HADDR_VALID + counter] = HWDATA[BYTE_WIDTH-1:0];
+                subordinate3[HADDR_VALID + counter] [BYTE_WIDTH-1:0] = HWDATA[BYTE_WIDTH-1:0];
                 `uvm_info("PREDICTOR", {"WRITE_subordinate3:", $sformatf("%0h, %0h, %0h", subordinate3[HADDR_VALID+counter], HWDATA[BYTE_WIDTH-1:0], (HADDR + counter))}, UVM_LOW)
               end
               default: begin
@@ -376,22 +376,27 @@ class predictor extends uvm_subscriber #(sequence_item);
                 if(~undo_on) begin 
                   undo_counter_old <= counter; undo_HWDATA_old[HALFWORD_WIDTH-1:0] <= subordinate1[HADDR_VALID + counter];
                 end
-                subordinate1[HADDR_VALID + counter] = HWDATA[HALFWORD_WIDTH-1:0];
+                subordinate1[HADDR_VALID + counter] [HALFWORD_WIDTH-1:0] = HWDATA[HALFWORD_WIDTH-1:0];
                 `uvm_info("PREDICTOR", {"WRITE_subordinate1:", $sformatf("%0h, %0h", subordinate1[HADDR_VALID+counter], HWDATA[HALFWORD_WIDTH-1:0])}, UVM_LOW)
               end
               3'b010: begin
                 if(~undo_on) begin 
-                  undo_counter_old <= counter; undo_HWDATA_old[HALFWORD_WIDTH-1:0] <= subordinate2[HADDR_VALID + counter];
+                  undo_counter_old <= counter; undo_HWDATA_old[HALFWORD_WIDTH-1:0] <= subordinate2[HADDR_VALID + counter] /*[HALFWORD_WIDTH-1]*/;
                 end
-                subordinate2[HADDR_VALID + counter] = HWDATA[HALFWORD_WIDTH-1:0];
+                // if(HWDATA[HALFWORD_WIDTH-1:0] === 'h31bf) begin
+                //   $display("subordinate2 MEM AFTER 31bf: %p", subordinate2);
+                // end
+                subordinate2[HADDR_VALID + counter] [HALFWORD_WIDTH-1:0] = HWDATA[HALFWORD_WIDTH-1:0];
                 `uvm_info("PREDICTOR", {"WRITE_subordinate2:", $sformatf("%0h, %0h", subordinate2[HADDR_VALID+counter], HWDATA[HALFWORD_WIDTH-1:0])}, UVM_LOW)
-
+                // if(HWDATA[HALFWORD_WIDTH-1:0] === 'h31bf) begin
+                //   $display("subordinate2 MEM AFTER 31bf: %p", subordinate2);
+                // end
               end
               3'b011: begin
                 if(~undo_on) begin 
                   undo_counter_old <= counter; undo_HWDATA_old[HALFWORD_WIDTH-1:0] <= subordinate3[HADDR_VALID + counter];
                 end
-                subordinate3[HADDR_VALID + counter] = HWDATA[HALFWORD_WIDTH-1:0];
+                subordinate3[HADDR_VALID + counter] [HALFWORD_WIDTH-1:0] = HWDATA[HALFWORD_WIDTH-1:0];
                 `uvm_info("PREDICTOR", {"WRITE_subordinate3:", $sformatf("%0h, %0h", subordinate3[HADDR_VALID+counter], HWDATA[HALFWORD_WIDTH-1:0])}, UVM_LOW)
               end
               default: begin
@@ -407,14 +412,14 @@ class predictor extends uvm_subscriber #(sequence_item);
                 if(~undo_on) begin 
                   undo_counter_old <= counter; undo_HWDATA_old[WORD_WIDTH-1:0] <= subordinate1[HADDR_VALID + counter];
                 end
-                subordinate1[HADDR_VALID + counter] = HWDATA[WORD_WIDTH-1:0];
+                subordinate1[HADDR_VALID + counter] [WORD_WIDTH-1:0] = HWDATA[WORD_WIDTH-1:0];
                 `uvm_info("PREDICTOR", {"WRITE_subordinate1:", $sformatf("%0h, %0h", subordinate1[HADDR_VALID+counter], HWDATA[WORD_WIDTH-1:0])}, UVM_LOW)
               end
               3'b010: begin
                 if(~undo_on) begin 
                   undo_counter_old <= counter; undo_HWDATA_old[WORD_WIDTH-1:0] <= subordinate2[HADDR_VALID + counter];
                 end
-                subordinate2[HADDR_VALID + counter] = HWDATA[WORD_WIDTH-1:0];
+                subordinate2[HADDR_VALID + counter] [WORD_WIDTH-1:0] = HWDATA[WORD_WIDTH-1:0];
                 `uvm_info("PREDICTOR", {"WRITE_subordinate2:", $sformatf("%0h, %0h", subordinate2[HADDR_VALID+counter], HWDATA[WORD_WIDTH-1:0])}, UVM_LOW)
 
               end
@@ -422,7 +427,7 @@ class predictor extends uvm_subscriber #(sequence_item);
                 if(~undo_on) begin 
                   undo_counter_old <= counter; undo_HWDATA_old[WORD_WIDTH-1:0] <= subordinate3[HADDR_VALID + counter];
                 end
-                subordinate3[HADDR_VALID + counter] = HWDATA[WORD_WIDTH-1:0];
+                subordinate3[HADDR_VALID + counter] [WORD_WIDTH-1:0] = HWDATA[WORD_WIDTH-1:0];
                 `uvm_info("PREDICTOR", {"WRITE_subordinate3:", $sformatf("%0h, %0h", subordinate3[HADDR_VALID+counter], HWDATA[WORD_WIDTH-1:0])}, UVM_LOW)
               end
               default: begin
@@ -441,14 +446,14 @@ class predictor extends uvm_subscriber #(sequence_item);
                 if(~undo_on) begin 
                   undo_counter_old <= counter; undo_HWDATA_old[WORD2_WIDTH-1:0] <= subordinate1[HADDR_VALID + counter];
                 end
-                subordinate1[HADDR_VALID + counter] = HWDATA[WORD2_WIDTH-1:0];
+                subordinate1[HADDR_VALID + counter] [WORD2_WIDTH-1:0] = HWDATA[WORD2_WIDTH-1:0];
                 `uvm_info("PREDICTOR", {"WRITE_subordinate1:", $sformatf("%0h, %0h", subordinate1[HADDR_VALID+counter], HWDATA[WORD2_WIDTH-1:0])}, UVM_LOW)
               end
               3'b010: begin
                 if(~undo_on) begin 
                   undo_counter_old <= counter; undo_HWDATA_old[WORD2_WIDTH-1:0] <= subordinate2[HADDR_VALID + counter];
                 end
-                subordinate2[HADDR_VALID + counter] = HWDATA[WORD2_WIDTH-1:0];
+                subordinate2[HADDR_VALID + counter] [WORD2_WIDTH-1:0] = HWDATA[WORD2_WIDTH-1:0];
                 `uvm_info("PREDICTOR", {"WRITE_subordinate2:", $sformatf("%0h, %0h", subordinate2[HADDR_VALID+counter], HWDATA[WORD2_WIDTH-1:0])}, UVM_LOW)
 
               end
@@ -456,7 +461,7 @@ class predictor extends uvm_subscriber #(sequence_item);
                 if(~undo_on) begin 
                   undo_counter_old <= counter; undo_HWDATA_old[WORD2_WIDTH-1:0] <= subordinate3[HADDR_VALID + counter];
                 end
-                subordinate3[HADDR_VALID + counter] = HWDATA[WORD2_WIDTH-1:0];
+                subordinate3[HADDR_VALID + counter] [WORD2_WIDTH-1:0] = HWDATA[WORD2_WIDTH-1:0];
                 `uvm_info("PREDICTOR", {"WRITE_subordinate3:", $sformatf("%0h, %0h", subordinate3[HADDR_VALID+counter], HWDATA[WORD2_WIDTH-1:0])}, UVM_LOW)
               end
               default: begin
@@ -716,7 +721,7 @@ class predictor extends uvm_subscriber #(sequence_item);
                 `uvm_info("PREDICTOR", {"READ_subordinate1:", $sformatf("%0h", subordinate1[HADDR_VALID+counter])}, UVM_LOW)
               end
               3'b010: begin
-                HRDATA_expected1[HALFWORD_WIDTH-1:0] = subordinate2[HADDR_VALID+counter];
+                HRDATA_expected1[HALFWORD_WIDTH-1:0] = subordinate2[HADDR_VALID+counter] /*[HALFWORD_WIDTH-1:0]*/;
                 `uvm_info("PREDICTOR", {"READ_subordinate2:", $sformatf("%0h", subordinate2[HADDR_VALID+counter])}, UVM_LOW)
               end
               3'b011: begin
@@ -896,11 +901,11 @@ class predictor extends uvm_subscriber #(sequence_item);
 
     function void undo_last_operation();
       $display("TIME : %0t correcting the predictor mem", $time());
-        // $display("SSsubordinate1 MEM AFTER RESET: %p", subordinate1);
-        // $display("SSsubordinate2 MEM AFTER RESET: %p", subordinate2);
-        // $display("SSsubordinate3 MEM AFTER RESET: %p", subordinate3);
+        $display("SSsubordinate1 MEM AFTER RESET: %p", subordinate1);
+        $display("SSsubordinate2 MEM AFTER RESET: %p", subordinate2);
+        $display("SSsubordinate3 MEM AFTER RESET: %p", subordinate3);
       if(seq_item_old.HWRITE == 1) begin
-        `uvm_info("PREDICTOR: ", {"seq_item_oldest: ", seq_item_old.convert2string()}, UVM_LOW)
+        `uvm_info("PREDICTOR: ", {"seq_item_old: ", seq_item_old.convert2string()}, UVM_LOW)
         undo_on = 1;
         HRESETn     = seq_item_old.HRESETn;
         HWRITE      = seq_item_old.HWRITE;
@@ -913,6 +918,7 @@ class predictor extends uvm_subscriber #(sequence_item);
         HADDR_VALID = HADDR[ADDR_WIDTH-BITS_FOR_SUBORDINATES-1:0];//29:0
         HSEL        = HADDR[ADDR_WIDTH-1:ADDR_WIDTH-BITS_FOR_SUBORDINATES];//31:30
         `uvm_info("PREDICTOR: ", {$sformatf("undo_counter_old %0d: ", undo_counter_old)}, UVM_LOW)
+        `uvm_info("PREDICTOR: ", {$sformatf("undo_HWDATA_old %0h: ", undo_HWDATA_old)}, UVM_LOW)
         case(HBURST)
           WRAP4, WRAP8, WRAP16: begin
             wrap_counter = undo_counter_old;
@@ -952,19 +958,33 @@ class predictor extends uvm_subscriber #(sequence_item);
         endcase
         write_AHB();
         undo_on     = 0;
-      // $display("DDsubordinate1 MEM AFTER RESET: %p", subordinate1);
-      // $display("DDsubordinate2 MEM AFTER RESET: %p", subordinate2);
-      // $display("DDsubordinate3 MEM AFTER RESET: %p", subordinate3);
+      $display("DDsubordinate1 MEM AFTER RESET: %p", subordinate1);
+      $display("DDsubordinate2 MEM AFTER RESET: %p", subordinate2);
+      $display("DDsubordinate3 MEM AFTER RESET: %p", subordinate3);
       end
 
       $display("TIME : %0t AFTER correcting the predictor mem", $time());
+      // undo_HWDATA_older = 'hx;
+      // undo_HWDATA_old = 'hx;
       
     endfunction : undo_last_operation
 
     function void display_subordinates();
-      $display("subordinate1 MEM AFTER fail: %p", subordinate1);
-      $display("subordinate2 MEM AFTER fail: %p", subordinate2);
-      $display("subordinate3 MEM AFTER fail: %p", subordinate3);
+      $display("subordinate1 MEM AFTER fail:");
+      foreach(subordinate1[i]) begin
+        $display("%0h", subordinate1[i]);
+      end
+      $display("subordinate2 MEM AFTER fail:");
+      foreach(subordinate2[i]) begin
+        $display("%0h", subordinate2[i]);
+      end
+      $display("subordinate3 MEM AFTER fail:");
+      foreach(subordinate3[i]) begin
+        $display("%0h", subordinate3[i]);
+      end
+
+      // $display("subordinate2 MEM AFTER fail: %p", subordinate2);
+      // $display("subordinate3 MEM AFTER fail: %p", subordinate3);
     endfunction 
 
 
