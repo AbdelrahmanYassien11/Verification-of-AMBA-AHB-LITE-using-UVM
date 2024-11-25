@@ -140,6 +140,21 @@ module AHB_subordinate_sva #(parameter TRANS_WIDTH = 1, SIZE_WIDTH = 2, BURST_WI
 	wrap8_idle_assert: 			assert property (wrap8_idle);
 	wrap16_idle_assert: 		assert property (wrap16_idle);
 
+	burst_trans_seq_cover:     cover property (burst_trans_seq);
+	burst_trans_nonseq_cover:  cover property (burst_trans_nonseq);
+	reset_duration_cover:  	cover property (reset_duration);
+	reset_addr_cover: 			cover property (reset_addr);
+	idle_ready_cover: 			cover property (idle_ready);
+	idle_inputs_cover: 		cover property (idle_inputs);
+
+	incr4_idle_cover: 			cover property (incr4_idle);
+	incr8_idle_cover: 			cover property (incr8_idle);
+	incr16_idle_cover: 		cover property (incr16_idle);
+
+	wrap4_idle_cover: 			cover property (wrap4_idle);
+	wrap8_idle_cover: 			cover property (wrap8_idle);
+	wrap16_idle_cover: 		cover property (wrap16_idle);
+
 
 
 

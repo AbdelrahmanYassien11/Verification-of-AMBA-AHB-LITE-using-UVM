@@ -26,7 +26,7 @@ class WRITE_READ_INCR_test extends base_test;
    // Build phase where configuration and setup occur
    function void build_phase(uvm_phase phase);
       // Override the type of sequence used by the base_sequence class
-      base_sequence::type_id::set_type_override(READ_INCR_sequence::type_id::get());
+      base_sequence::type_id::set_type_override(WRITE_READ_INCR_sequence::type_id::get());
       // Call the build_phase method of the base class
       super.build_phase(phase);
       // Display a message indicating the build phase of the test

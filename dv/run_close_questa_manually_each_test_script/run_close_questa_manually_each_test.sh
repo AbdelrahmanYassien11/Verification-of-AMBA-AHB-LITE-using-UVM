@@ -38,17 +38,15 @@ modify_do_file() {
     echo "Test name set to: $test_name"
 }
 
-# Run log.do first (this will run inside the same vsim session)
-echo "Running log.do script inside Questa"
-vsim -do $LOG_FILE  # This will open Questa, run vlog commands, and block until done
 
 # After log.do finishes, proceed with the test simulations
 echo "log.do completed. Starting simulations..."
 
 # Loop through different configurations for HWDATA_WIDTH, addr_WIDTH, and test names
-HWDATA_WIDTH_values=("32" "64")
-addr_WIDTH_values=("32" "32")
-TEST_NAMES=("runall_test" "WRITE_READ_INCR_test")
+HWDATA_WIDTH_values=("32" "64" "128" "256" "512" "1024")
+addr_WIDTH_values=("32" "32" "32" "32" "32" "32")
+TEST_NAMES=("runall_test" "WRITE_READ_INCR_test" "WRITE_READ_INCR4_test" "WRITE_READ_INCR8_test" "WRITE_READ_INCR16_test" "WRITE_READ_WRAP4_test" "WRITE_READ_WRAP8_test" "WRITE_READ_WRAP16_test")
+)
 
 # Loop over the configurations
 for (( j = 0; j < ${#TEST_NAMES[@]}; j++ )); do
@@ -65,6 +63,10 @@ for (( j = 0; j < ${#TEST_NAMES[@]}; j++ )); do
         # Step 2: Modify the .do file with the new test name
         modify_do_file $test_name
         
+        # Run log.do first (this will run inside the same vsim session)
+        echo "Running log.do script inside Questa"
+        vsim -do $LOG_FILE  # This will open Questa, run vlog commands, and block until done
+                
         # Step 3: Execute the .do file for simulation
         echo "Running the .do file with test $test_name"
         vsim -do $DO_FILE  # Run the simulation for the given configuration
