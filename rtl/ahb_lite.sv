@@ -1,7 +1,7 @@
 `include "../dv/config/AHB_subordinate_defines.vh"
 `timescale 1ns/1ns
 
-module ahb_lite #(parameter BITS_FOR_SUBORDINATES, ADDR_WIDTH, DATA_WIDTH, ADDR_DEPTH, NO_OF_SUBORDINATES)
+module ahb_lite #(parameter BITS_FOR_SUBORDINATES = 5, ADDR_WIDTH = 32, DATA_WIDTH = 32, ADDR_DEPTH = 256, NO_OF_SUBORDINATES = 4)
 (
       input   wire                   HRESETn,
       input   wire                   HCLK,

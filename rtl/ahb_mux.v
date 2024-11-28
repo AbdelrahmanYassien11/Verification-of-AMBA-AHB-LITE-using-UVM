@@ -101,7 +101,7 @@ module ahb_mux #(parameter ADDR_WIDTH, NO_OF_SUBORDINATES, BITS_FOR_SUBORDINATES
       P_HSEL_bus3: HRDATA <= HRDATA3;
       P_HSEL_busd: HRDATA <= HRDATAd;
       P_HSEL_bus_reset: HRDATA <= 0;
-      default: HRDATA <= HRDATA;
+      default: HRDATA <= 'h0;
     endcase
   end
 

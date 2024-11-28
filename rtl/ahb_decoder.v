@@ -10,7 +10,7 @@ module ahb_decoder #(parameter ADDR_WIDTH, NO_OF_SUBORDINATES, BITS_FOR_SUBORDIN
 
 	// combinational always block to asser tthe correct HSELx accoridng to the bits allocated for management from HADDR PERIPHERAL
 	always@(*) begin
-		if(HREADY) begin
+		//if(HREADY) begin
 			case(HADDR[ADDR_WIDTH-1:ADDR_WIDTH-BITS_FOR_SUBORDINATES])
 
 				'h0: begin
@@ -55,13 +55,13 @@ module ahb_decoder #(parameter ADDR_WIDTH, NO_OF_SUBORDINATES, BITS_FOR_SUBORDIN
 					HSELd = 0;
 				end	
 			endcase // HADDR
-		end
-		else begin
-			HSEL1 = HSEL1;
-			HSEL2 = HSEL2;
-			HSEL3 = HSEL3;
-			HSELd = HSELd;
-		end
+//		end
+//		else begin
+//			HSEL1 = HSEL1;
+//			HSEL2 = HSEL2;
+//			HSEL3 = HSEL3;
+//			HSELd = HSELd;
+//		end
 	end
 
 endmodule
