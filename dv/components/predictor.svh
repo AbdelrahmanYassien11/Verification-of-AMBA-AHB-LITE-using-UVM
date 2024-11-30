@@ -38,9 +38,11 @@ class predictor extends uvm_subscriber #(sequence_item);
 
   integer undo_counter_old;
   integer undo_counter_older;
+  integer undo_counter_oldest;
 
   logic   [DATA_WIDTH-1:0]  undo_HWDATA_old;
   logic   [DATA_WIDTH-1:0]  undo_HWDATA_older;
+  logic   [DATA_WIDTH-1:0]  undo_HWDATA_oldest;
 
   // AHB lite Control Signals
   bit     HRESETn;    // reset (active low)
@@ -152,7 +154,12 @@ class predictor extends uvm_subscriber #(sequence_item);
     seq_item_oldest  <= seq_item_older.clone_me();
 
     undo_counter_older <= undo_counter_old;
+    undo_counter_oldest <= undo_counter_older;
+
     undo_HWDATA_older  <= undo_HWDATA_old;
+    undo_HWDATA_oldest <= undo_HWDATA_older;
+
+
     //$display("async_reset_time: %0t and actual time: %0t",async_reset_time, $time());
     if(async_reset_time === ($time()-5)) begin
       undo_last_operation();
@@ -247,6 +254,12 @@ class predictor extends uvm_subscriber #(sequence_item);
       HTRANS           = IDLE;
       wrap_counter     = -10;
       burst_counter    = 0;
+
+      foreach(subordinate1[i]) begin
+        subordinate1[i] <= 0;
+        subordinate2[i] <= 0;
+        subordinate3[i] <= 0;
+      end
       // $display("AAAAsubordinate1 MEM AFTER RESET: %p", subordinate1);
       // $display("AAAAsubordinate2 MEM AFTER RESET: %p", subordinate2);
       // $display("AAAAsubordinate3 MEM AFTER RESET: %p", subordinate3);
@@ -959,6 +972,36 @@ class predictor extends uvm_subscriber #(sequence_item);
       $display("DDsubordinate2 MEM AFTER RESET: %p", subordinate2);
       $display("DDsubordinate3 MEM AFTER RESET: %p", subordinate3);
       end
+      if(seq_item_oldest.HWRITE == 1) begin
+      `uvm_info("PREDICTOR: ", {"seq_item_oldest: ", seq_item_oldest.convert2string()}, UVM_LOW) 
+      `uvm_info("PREDICTOR: ", {"seq_item_old: ", seq_item_old.convert2string()}, UVM_LOW) 
+      `uvm_info("PREDICTOR: ", {$sformatf("undo_HWDATA_oldest: %0h ", undo_HWDATA_oldest)}, UVM_LOW) 
+        undo_on     = 1;
+        HRESETn     = seq_item_oldest.HRESETn;
+        HWRITE      = seq_item_oldest.HWRITE;
+        HTRANS      = seq_item_oldest.HTRANS;
+        HADDR       = seq_item_oldest.HADDR;
+        HSIZE       = seq_item_oldest.HSIZE;
+        HBURST      = seq_item_oldest.HBURST;
+        HPROT       = seq_item_oldest.HPROT;
+        HWDATA      = undo_HWDATA_oldest;
+        HADDR_VALID = HADDR[ADDR_WIDTH-BITS_FOR_SUBORDINATES-1:0];//29:0
+        HSEL        = HADDR[ADDR_WIDTH-1:ADDR_WIDTH-BITS_FOR_SUBORDINATES];//31:30
+        `uvm_info("PREDICTOR: ", {$sformatf("undo_counter_oldest %0d: ", undo_counter_oldest)}, UVM_LOW)
+        case(HBURST)
+          WRAP4, WRAP8, WRAP16: begin
+            wrap_counter = undo_counter_oldest;
+          end
+          INCR, INCR4, INCR8, INCR16: begin
+            burst_counter = undo_counter_oldest;
+          end
+        endcase
+        write_AHB();
+        undo_on     = 0;
+      $display("DDsubordinate1 MEM AFTER RESET: %p", subordinate1);
+      $display("DDsubordinate2 MEM AFTER RESET: %p", subordinate2);
+      $display("DDsubordinate3 MEM AFTER RESET: %p", subordinate3);
+      end
 
       $display("TIME : %0t AFTER correcting the predictor mem", $time());
       // undo_HWDATA_older = 'hx;
@@ -967,19 +1010,21 @@ class predictor extends uvm_subscriber #(sequence_item);
     endfunction : undo_last_operation
 
     function void display_subordinates();
-      $display("subordinate1 MEM AFTER fail:");
-      foreach(subordinate1[i]) begin
-        $display("%0h", subordinate1[i]);
-      end
-      $display("subordinate2 MEM AFTER fail:");
-      foreach(subordinate2[i]) begin
-        $display("%0h", subordinate2[i]);
-      end
-      $display("subordinate3 MEM AFTER fail:");
-      foreach(subordinate3[i]) begin
-        $display("%0h", subordinate3[i]);
-      end
-
+      // $display("subordinate1 MEM AFTER fail:");
+      // foreach(subordinate1[i]) begin
+      //   $display("%0h", subordinate1[i]);
+      // end
+      // $display("subordinate2 MEM AFTER fail:");
+      // foreach(subordinate2[i]) begin
+      //   $display("%0h", subordinate2[i]);
+      // end
+      // $display("subordinate3 MEM AFTER fail:");
+      // foreach(subordinate3[i]) begin
+      //   $display("%0h", subordinate3[i]);
+      // end
+      $display("subordinate1 MEM AFTER FAIL: %p", subordinate1);
+      $display("subordinate2 MEM AFTER FAIL: %p", subordinate2);
+      $display("subordinate3 MEM AFTER FAIL: %p", subordinate3);
       // $display("subordinate2 MEM AFTER fail: %p", subordinate2);
       // $display("subordinate3 MEM AFTER fail: %p", subordinate3);
     endfunction 
