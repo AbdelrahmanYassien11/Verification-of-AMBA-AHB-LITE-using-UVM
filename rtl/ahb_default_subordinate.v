@@ -24,7 +24,7 @@ module ahb_default_subordinate #(parameter ADDR_WIDTH, DATA_WIDTH)
        input   wire  [DATA_WIDTH-1:0] HWDATA,
        input   wire                   HREADYin,
 
-       output  reg  [DATA_WIDTH-1:0]  HRDATA,
+       output  reg   [DATA_WIDTH-1:0]  HRDATA,
        output  reg   [ 1:0]           HRESP,
        output  reg                    HREADYout
 );

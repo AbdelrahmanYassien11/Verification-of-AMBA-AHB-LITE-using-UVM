@@ -53,7 +53,7 @@ rand int unsigned INCR_CONTROL;
       // constraint randomized_seq { randomized_sequences inside {[0:17]};
       // }
 
-      constraint RESET_cmd {RESET_op dist {0:/5, 1:/95}; 
+      constraint RESET_cmd {RESET_op dist {0:/1, 1:/99}; 
       }
 
       constraint RESET_c {RESET_op == RESETING -> HRESETn == 0;

@@ -16105,3 +16105,287 @@ Name                 Assertion   Design     Design     Lang File(Line)          
 
 Total Coverage By Instance (filtered view): 91.66%
 
+Coverage Report by instance with details
+
+=================================================================================
+=== Instance: /top_test_uvm/DUT/subordinate1/sva
+=== Design Unit: work.AHB_subordinate_sva
+=================================================================================
+
+Assertion Coverage:
+    Assertions                      12        11         1    91.66%
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Name                 Assertion   Design     Design     Lang File(Line)                Enable    Failure      Pass  FPSA   Failure Pass    Failure EOS  Formal       Formal
+                     Type        Unit       UnitType                                            Count        Count Action Log     Log     Limit   Note Status       Radius
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+/top_test_uvm/DUT/subordinate1/sva/reset_duration_assert
+                     Concurrent  AHB_subordinate_sva
+                                            Verilog    SVA  sva/AHB_subordinate_sva.sv(130)
+                                                                                        on            4          1 CCCC   -       -     unlimited off                     
+
+=================================================================================
+=== Instance: /top_test_uvm/DUT/subordinate2/sva
+=== Design Unit: work.AHB_subordinate_sva
+=================================================================================
+
+Assertion Coverage:
+    Assertions                      12        11         1    91.66%
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Name                 Assertion   Design     Design     Lang File(Line)                Enable    Failure      Pass  FPSA   Failure Pass    Failure EOS  Formal       Formal
+                     Type        Unit       UnitType                                            Count        Count Action Log     Log     Limit   Note Status       Radius
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+/top_test_uvm/DUT/subordinate2/sva/reset_duration_assert
+                     Concurrent  AHB_subordinate_sva
+                                            Verilog    SVA  sva/AHB_subordinate_sva.sv(130)
+                                                                                        on            4          1 CCCC   -       -     unlimited off                     
+
+=================================================================================
+=== Instance: /top_test_uvm/DUT/subordinate3/sva
+=== Design Unit: work.AHB_subordinate_sva
+=================================================================================
+
+Assertion Coverage:
+    Assertions                      12        11         1    91.66%
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Name                 Assertion   Design     Design     Lang File(Line)                Enable    Failure      Pass  FPSA   Failure Pass    Failure EOS  Formal       Formal
+                     Type        Unit       UnitType                                            Count        Count Action Log     Log     Limit   Note Status       Radius
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+/top_test_uvm/DUT/subordinate3/sva/reset_duration_assert
+                     Concurrent  AHB_subordinate_sva
+                                            Verilog    SVA  sva/AHB_subordinate_sva.sv(130)
+                                                                                        on            4          1 CCCC   -       -     unlimited off                     
+
+
+ASSERTION RESULTS:
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Name                 Assertion   Design     Design     Lang File(Line)                Enable    Failure      Pass  FPSA   Failure Pass    Failure EOS  Formal       Formal
+                     Type        Unit       UnitType                                            Count        Count Action Log     Log     Limit   Note Status       Radius
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+/top_test_uvm/DUT/subordinate1/sva/reset_duration_assert
+                     Concurrent  AHB_subordinate_sva
+                                            Verilog    SVA  sva/AHB_subordinate_sva.sv(130)
+                                                                                        on            4          1 CCCC   -       -     unlimited off                     
+/top_test_uvm/DUT/subordinate2/sva/reset_duration_assert
+                     Concurrent  AHB_subordinate_sva
+                                            Verilog    SVA  sva/AHB_subordinate_sva.sv(130)
+                                                                                        on            4          1 CCCC   -       -     unlimited off                     
+/top_test_uvm/DUT/subordinate3/sva/reset_duration_assert
+                     Concurrent  AHB_subordinate_sva
+                                            Verilog    SVA  sva/AHB_subordinate_sva.sv(130)
+                                                                                        on            4          1 CCCC   -       -     unlimited off                     
+
+Total Coverage By Instance (filtered view): 91.66%
+
+Coverage Report by instance with details
+
+=================================================================================
+=== Instance: /top_test_uvm/DUT/subordinate1/sva
+=== Design Unit: work.AHB_subordinate_sva
+=================================================================================
+
+Assertion Coverage:
+    Assertions                      12        11         1    91.66%
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Name                 Assertion   Design     Design     Lang File(Line)                Enable    Failure      Pass  FPSA   Failure Pass    Failure EOS  Formal       Formal
+                     Type        Unit       UnitType                                            Count        Count Action Log     Log     Limit   Note Status       Radius
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+/top_test_uvm/DUT/subordinate1/sva/reset_duration_assert
+                     Concurrent  AHB_subordinate_sva
+                                            Verilog    SVA  sva/AHB_subordinate_sva.sv(130)
+                                                                                        on            2          1 CCCC   -       -     unlimited off                     
+
+=================================================================================
+=== Instance: /top_test_uvm/DUT/subordinate2/sva
+=== Design Unit: work.AHB_subordinate_sva
+=================================================================================
+
+Assertion Coverage:
+    Assertions                      12        11         1    91.66%
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Name                 Assertion   Design     Design     Lang File(Line)                Enable    Failure      Pass  FPSA   Failure Pass    Failure EOS  Formal       Formal
+                     Type        Unit       UnitType                                            Count        Count Action Log     Log     Limit   Note Status       Radius
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+/top_test_uvm/DUT/subordinate2/sva/reset_duration_assert
+                     Concurrent  AHB_subordinate_sva
+                                            Verilog    SVA  sva/AHB_subordinate_sva.sv(130)
+                                                                                        on            2          1 CCCC   -       -     unlimited off                     
+
+=================================================================================
+=== Instance: /top_test_uvm/DUT/subordinate3/sva
+=== Design Unit: work.AHB_subordinate_sva
+=================================================================================
+
+Assertion Coverage:
+    Assertions                      12        11         1    91.66%
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Name                 Assertion   Design     Design     Lang File(Line)                Enable    Failure      Pass  FPSA   Failure Pass    Failure EOS  Formal       Formal
+                     Type        Unit       UnitType                                            Count        Count Action Log     Log     Limit   Note Status       Radius
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+/top_test_uvm/DUT/subordinate3/sva/reset_duration_assert
+                     Concurrent  AHB_subordinate_sva
+                                            Verilog    SVA  sva/AHB_subordinate_sva.sv(130)
+                                                                                        on            2          1 CCCC   -       -     unlimited off                     
+
+
+ASSERTION RESULTS:
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Name                 Assertion   Design     Design     Lang File(Line)                Enable    Failure      Pass  FPSA   Failure Pass    Failure EOS  Formal       Formal
+                     Type        Unit       UnitType                                            Count        Count Action Log     Log     Limit   Note Status       Radius
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+/top_test_uvm/DUT/subordinate1/sva/reset_duration_assert
+                     Concurrent  AHB_subordinate_sva
+                                            Verilog    SVA  sva/AHB_subordinate_sva.sv(130)
+                                                                                        on            2          1 CCCC   -       -     unlimited off                     
+/top_test_uvm/DUT/subordinate2/sva/reset_duration_assert
+                     Concurrent  AHB_subordinate_sva
+                                            Verilog    SVA  sva/AHB_subordinate_sva.sv(130)
+                                                                                        on            2          1 CCCC   -       -     unlimited off                     
+/top_test_uvm/DUT/subordinate3/sva/reset_duration_assert
+                     Concurrent  AHB_subordinate_sva
+                                            Verilog    SVA  sva/AHB_subordinate_sva.sv(130)
+                                                                                        on            2          1 CCCC   -       -     unlimited off                     
+
+Total Coverage By Instance (filtered view): 91.66%
+
+Coverage Report by instance with details
+
+=================================================================================
+=== Instance: /top_test_uvm/DUT/subordinate1/sva
+=== Design Unit: work.AHB_subordinate_sva
+=================================================================================
+
+Assertion Coverage:
+    Assertions                      12        11         1    91.66%
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Name                 Assertion   Design     Design     Lang File(Line)                Enable    Failure      Pass  FPSA   Failure Pass    Failure EOS  Formal       Formal
+                     Type        Unit       UnitType                                            Count        Count Action Log     Log     Limit   Note Status       Radius
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+/top_test_uvm/DUT/subordinate1/sva/reset_duration_assert
+                     Concurrent  AHB_subordinate_sva
+                                            Verilog    SVA  sva/AHB_subordinate_sva.sv(130)
+                                                                                        on            2          1 CCCC   -       -     unlimited off                     
+
+=================================================================================
+=== Instance: /top_test_uvm/DUT/subordinate2/sva
+=== Design Unit: work.AHB_subordinate_sva
+=================================================================================
+
+Assertion Coverage:
+    Assertions                      12        11         1    91.66%
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Name                 Assertion   Design     Design     Lang File(Line)                Enable    Failure      Pass  FPSA   Failure Pass    Failure EOS  Formal       Formal
+                     Type        Unit       UnitType                                            Count        Count Action Log     Log     Limit   Note Status       Radius
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+/top_test_uvm/DUT/subordinate2/sva/reset_duration_assert
+                     Concurrent  AHB_subordinate_sva
+                                            Verilog    SVA  sva/AHB_subordinate_sva.sv(130)
+                                                                                        on            2          1 CCCC   -       -     unlimited off                     
+
+=================================================================================
+=== Instance: /top_test_uvm/DUT/subordinate3/sva
+=== Design Unit: work.AHB_subordinate_sva
+=================================================================================
+
+Assertion Coverage:
+    Assertions                      12        11         1    91.66%
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Name                 Assertion   Design     Design     Lang File(Line)                Enable    Failure      Pass  FPSA   Failure Pass    Failure EOS  Formal       Formal
+                     Type        Unit       UnitType                                            Count        Count Action Log     Log     Limit   Note Status       Radius
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+/top_test_uvm/DUT/subordinate3/sva/reset_duration_assert
+                     Concurrent  AHB_subordinate_sva
+                                            Verilog    SVA  sva/AHB_subordinate_sva.sv(130)
+                                                                                        on            2          1 CCCC   -       -     unlimited off                     
+
+
+ASSERTION RESULTS:
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Name                 Assertion   Design     Design     Lang File(Line)                Enable    Failure      Pass  FPSA   Failure Pass    Failure EOS  Formal       Formal
+                     Type        Unit       UnitType                                            Count        Count Action Log     Log     Limit   Note Status       Radius
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+/top_test_uvm/DUT/subordinate1/sva/reset_duration_assert
+                     Concurrent  AHB_subordinate_sva
+                                            Verilog    SVA  sva/AHB_subordinate_sva.sv(130)
+                                                                                        on            2          1 CCCC   -       -     unlimited off                     
+/top_test_uvm/DUT/subordinate2/sva/reset_duration_assert
+                     Concurrent  AHB_subordinate_sva
+                                            Verilog    SVA  sva/AHB_subordinate_sva.sv(130)
+                                                                                        on            2          1 CCCC   -       -     unlimited off                     
+/top_test_uvm/DUT/subordinate3/sva/reset_duration_assert
+                     Concurrent  AHB_subordinate_sva
+                                            Verilog    SVA  sva/AHB_subordinate_sva.sv(130)
+                                                                                        on            2          1 CCCC   -       -     unlimited off                     
+
+Total Coverage By Instance (filtered view): 91.66%
+
+Coverage Report by instance with details
+
+=================================================================================
+=== Instance: /top_test_uvm/DUT/subordinate1/sva
+=== Design Unit: work.AHB_subordinate_sva
+=================================================================================
+
+Assertion Coverage:
+    Assertions                      12        11         1    91.66%
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Name                 Assertion   Design     Design     Lang File(Line)                Enable    Failure      Pass  FPSA   Failure Pass    Failure EOS  Formal       Formal
+                     Type        Unit       UnitType                                            Count        Count Action Log     Log     Limit   Note Status       Radius
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+/top_test_uvm/DUT/subordinate1/sva/reset_duration_assert
+                     Concurrent  AHB_subordinate_sva
+                                            Verilog    SVA  sva/AHB_subordinate_sva.sv(130)
+                                                                                        on            2          1 CCCC   -       -     unlimited off                     
+
+=================================================================================
+=== Instance: /top_test_uvm/DUT/subordinate2/sva
+=== Design Unit: work.AHB_subordinate_sva
+=================================================================================
+
+Assertion Coverage:
+    Assertions                      12        11         1    91.66%
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Name                 Assertion   Design     Design     Lang File(Line)                Enable    Failure      Pass  FPSA   Failure Pass    Failure EOS  Formal       Formal
+                     Type        Unit       UnitType                                            Count        Count Action Log     Log     Limit   Note Status       Radius
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+/top_test_uvm/DUT/subordinate2/sva/reset_duration_assert
+                     Concurrent  AHB_subordinate_sva
+                                            Verilog    SVA  sva/AHB_subordinate_sva.sv(130)
+                                                                                        on            2          1 CCCC   -       -     unlimited off                     
+
+=================================================================================
+=== Instance: /top_test_uvm/DUT/subordinate3/sva
+=== Design Unit: work.AHB_subordinate_sva
+=================================================================================
+
+Assertion Coverage:
+    Assertions                      12        11         1    91.66%
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Name                 Assertion   Design     Design     Lang File(Line)                Enable    Failure      Pass  FPSA   Failure Pass    Failure EOS  Formal       Formal
+                     Type        Unit       UnitType                                            Count        Count Action Log     Log     Limit   Note Status       Radius
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+/top_test_uvm/DUT/subordinate3/sva/reset_duration_assert
+                     Concurrent  AHB_subordinate_sva
+                                            Verilog    SVA  sva/AHB_subordinate_sva.sv(130)
+                                                                                        on            2          1 CCCC   -       -     unlimited off                     
+
+
+ASSERTION RESULTS:
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Name                 Assertion   Design     Design     Lang File(Line)                Enable    Failure      Pass  FPSA   Failure Pass    Failure EOS  Formal       Formal
+                     Type        Unit       UnitType                                            Count        Count Action Log     Log     Limit   Note Status       Radius
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+/top_test_uvm/DUT/subordinate1/sva/reset_duration_assert
+                     Concurrent  AHB_subordinate_sva
+                                            Verilog    SVA  sva/AHB_subordinate_sva.sv(130)
+                                                                                        on            2          1 CCCC   -       -     unlimited off                     
+/top_test_uvm/DUT/subordinate2/sva/reset_duration_assert
+                     Concurrent  AHB_subordinate_sva
+                                            Verilog    SVA  sva/AHB_subordinate_sva.sv(130)
+                                                                                        on            2          1 CCCC   -       -     unlimited off                     
+/top_test_uvm/DUT/subordinate3/sva/reset_duration_assert
+                     Concurrent  AHB_subordinate_sva
+                                            Verilog    SVA  sva/AHB_subordinate_sva.sv(130)
+                                                                                        on            2          1 CCCC   -       -     unlimited off                     
+
+Total Coverage By Instance (filtered view): 91.66%
+
