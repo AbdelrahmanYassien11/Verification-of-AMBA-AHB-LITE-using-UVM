@@ -58,14 +58,14 @@ module ahb_subordinate
       localparam HSIZE_WORD32   = 3'b111;
 
       //WIDTH PARAMETERS
-      parameter BYTE_WIDTH        = 8;
-      parameter HALFWORD_WIDTH    = 16;
-      parameter WORD_WIDTH        = 32;
-      parameter WORD2_WIDTH       = 64;
-      parameter WORD4_WIDTH       = 128;
-      parameter WORD8_WIDTH       = 256;
-      parameter WORD16_WIDTH      = 512;
-      parameter WORD32_WIDTH      = 1024;
+      localparam BYTE_WIDTH        = 8;
+      localparam HALFWORD_WIDTH    = 16;
+      localparam WORD_WIDTH        = 32;
+      localparam WORD2_WIDTH       = 64;
+      localparam WORD4_WIDTH       = 128;
+      localparam WORD8_WIDTH       = 256;
+      localparam WORD16_WIDTH      = 512;
+      localparam WORD32_WIDTH      = 1024;
 
    /*********************************************************/ 
 
