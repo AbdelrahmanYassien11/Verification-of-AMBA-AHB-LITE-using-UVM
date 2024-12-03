@@ -45,17 +45,26 @@
     option.per_instance = 1;
   endgroup : HSEL_dt_cg
 
-  // covergroup HSIZE_df_cg(input bit [SIZE_WIDTH:0] position, ref bit [SIZE_WIDTH:0] vector);
-  //   df: coverpoint (vector & position) != 0;
-  //   option.per_instance = 1;
-  // endgroup : HSIZE_df_cg
-
-  covergroup HSIZE_dt_cg_bits(input bit [SIZE_WIDTH:0] position, ref bit [SIZE_WIDTH:0] vector);
+  covergroup HSIZE_dt_val_cg(input bit [SIZE_WIDTH:0] position, ref bit [SIZE_WIDTH:0] vector);
     dt:coverpoint vector {
       bins tr[] = (vector => position);
     }
     option.per_instance = 1;
-  endgroup : HSIZE_dt_cg_bits  
+  endgroup : HSIZE_dt_val_cg
+
+  covergroup HSIZE_dt_val_cg2 (input bit [SIZE_WIDTH:0] position, input bit [SIZE_WIDTH:0] atlas, ref bit [SIZE_WIDTH:0] vector);
+    dt:coverpoint vector {
+      bins tr[] = ((vector == atlas) => position); //0-0, 0-1, 0-2......1-0, 1-1, 1-2...........2-0, 2-1, 2-2
+    }
+    option.per_instance = 1;
+  endgroup : HSIZE_dt_val_cg2
+
+  covergroup HBURST_dt_val_cg(input bit [BURST_WIDTH:0] position, ref bit [BURST_WIDTH:0] vector);
+    dt:coverpoint vector {
+      bins tr[] = (vector => position);
+    }
+    option.per_instance = 1;
+  endgroup : HBURST_dt_val_cg   
 
 class coverage extends uvm_subscriber #(sequence_item);
   `uvm_component_utils(coverage);
@@ -103,10 +112,10 @@ class coverage extends uvm_subscriber #(sequence_item);
   HSEL_df_cg  HSEL_df_cg_bits   [BITS_FOR_SUBORDINATES-1:0];
   HSEL_dt_cg  HSEL_dt_cg_bits   [BITS_FOR_SUBORDINATES-1:0];
 
-  // HSIZE_df_cg HSIZE_df_cg_bits  [SIZE_WIDTH:0];
-  //HSIZE_dt_cg HSIZE_dt_cg_bits  [SIZE_WIDTH:0];
+  HSIZE_dt_val_cg  HSIZE_dt_val_cg_bits [AVAILABLE_SIZES-1:0];
+  HBURST_dt_val_cg HBURST_dt_val_cg_bits    [(2**BURST_WIDTH)-1:0];
 
-  HSIZE_dt_cg_bits HSIZE_dt_cg_bits_t [AVAILABLE_SIZES-1:0];
+  HSIZE_dt_val_cg2 HSIZE_dt_val_cg_bits2 [AVAILABLE_SIZES-1:0];
 
 
   // Covergroup for RESET-related coverage
@@ -116,7 +125,6 @@ class coverage extends uvm_subscriber #(sequence_item);
     df_operation: coverpoint HRESETn_cov {
       bins RESET_Operation     =  {RESETING};
       bins NON_RESET_Operation =  {WORKING};
-      //bins READ_Operation_for_FIFO_SIZE = (READ [* 8]);
     }
 
     /* -------------------------------------------------------------------------------Data Transition coverage of the current operation (from write to read and vice versa)---------------------------------------------------------------------------------------------- */
@@ -134,7 +142,6 @@ class coverage extends uvm_subscriber #(sequence_item);
     df_operation: coverpoint HWRITE_cov iff (HRESETn_cov) {
       bins WRITE_Operation = {WRITE};
       bins READ_Operation =  {READ};
-      //bins READ_Operation_for_FIFO_SIZE = (READ [* 8]);
     }
 
     /* -------------------------------------------------------------------------------Data Transition coverage of the current operation (from write to read and vice versa)---------------------------------------------------------------------------------------------- */
@@ -500,7 +507,8 @@ class coverage extends uvm_subscriber #(sequence_item);
     ADDR_covgrp.sample();
     HWDATA_covgrp.sample();
 
-    foreach(HSIZE_dt_val_cg_bits[i]) HSIZE_dt_val_cg_bits[i].sample();
+    foreach(HSIZE_dt_val_cg_bits[i])  HSIZE_dt_val_cg_bits[i].sample();
+    foreach(HBURST_dt_val_cg_bits[i]) HBURST_dt_val_cg_bits[i].sample();
 
     foreach(HWDATA_df_cg_bits[i]) HWDATA_df_cg_bits[i].sample();
 
@@ -511,6 +519,9 @@ class coverage extends uvm_subscriber #(sequence_item);
 
     foreach(HSEL_df_cg_bits[i]) HSEL_df_cg_bits[i].sample();
     foreach(HSEL_dt_cg_bits[i]) HSEL_dt_cg_bits[i].sample();
+
+    foreach(HSIZE_dt_val_cg_bits2[i]) HSIZE_dt_val_cg_bits2[i].sample();
+
 
     `uvm_info("COVERAGE", {"SAMPLE: ", t.convert2string}, UVM_HIGH)
   endfunction
@@ -538,11 +549,15 @@ class coverage extends uvm_subscriber #(sequence_item);
     foreach(HSEL_df_cg_bits[i]) HSEL_df_cg_bits[i] = new(1'b1<<i,HSEL_cov);
     foreach(HSEL_dt_cg_bits[i]) HSEL_dt_cg_bits[i] = new(1'b1<<i,HSEL_cov);
 
-    // foreach(HSIZE_df_cg_bits[i]) HSIZE_df_cg_bits[i] = new(1'b1<<i,HSIZE_cov);
 
-    //foreach(HSIZE_dt_cg_bits[i]) HSIZE_dt_cg_bits[i] = new(1'b1<<i,HSIZE_cov);
+    foreach(HSIZE_dt_val_cg_bits[i]) HSIZE_dt_val_cg_bits[i] = new(i, HSIZE_cov);
+    foreach(HBURST_dt_val_cg_bits[i]) HBURST_dt_val_cg_bits[i] = new(i, HBURST_cov);
 
-    foreach(HSIZE_dt_val_cg_bits[i]) HSIZE_dt_val_cg_bits[i]= new(i, HSIZE_cov);
+    foreach(HSIZE_dt_val_cg_bits2[j]) begin
+      foreach(HSIZE_dt_val_cg_bits2[i]) HSIZE_dt_val_cg_bits2[i] = new(i, j, HSIZE_cov);      
+    end
+
+
 
   endfunction
 
