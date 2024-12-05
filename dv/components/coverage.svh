@@ -53,8 +53,8 @@
   endgroup : HSIZE_dt_val_cg
 
   covergroup HSIZE_dt_val_cg2 (input bit [SIZE_WIDTH:0] position, input bit [SIZE_WIDTH:0] atlas, ref bit [SIZE_WIDTH:0] vector);
-    dt:coverpoint vector {
-      bins tr[] = ((vector == atlas) => position); //0-0, 0-1, 0-2......1-0, 1-1, 1-2...........2-0, 2-1, 2-2
+    dt:coverpoint vector iff(vector == atlas) {
+      bins tr[] = (vector => position); //0-0, 0-1, 0-2......1-0, 1-1, 1-2...........2-0, 2-1, 2-2
     }
     option.per_instance = 1;
   endgroup : HSIZE_dt_val_cg2
@@ -115,7 +115,7 @@ class coverage extends uvm_subscriber #(sequence_item);
   HSIZE_dt_val_cg  HSIZE_dt_val_cg_bits [AVAILABLE_SIZES-1:0];
   HBURST_dt_val_cg HBURST_dt_val_cg_bits    [(2**BURST_WIDTH)-1:0];
 
-  HSIZE_dt_val_cg2 HSIZE_dt_val_cg_bits2 [AVAILABLE_SIZES-1:0];
+  HSIZE_dt_val_cg2 HSIZE_dt_val_cg_bits2 [AVAILABLE_SIZES-1:0] [AVAILABLE_SIZES-1:0];
 
 
   // Covergroup for RESET-related coverage
@@ -520,7 +520,15 @@ class coverage extends uvm_subscriber #(sequence_item);
     foreach(HSEL_df_cg_bits[i]) HSEL_df_cg_bits[i].sample();
     foreach(HSEL_dt_cg_bits[i]) HSEL_dt_cg_bits[i].sample();
 
-    foreach(HSIZE_dt_val_cg_bits2[i]) HSIZE_dt_val_cg_bits2[i].sample();
+    foreach(HSIZE_dt_val_cg_bits2[j]) begin
+      foreach(HSIZE_dt_val_cg_bits2[j][i]) HSIZE_dt_val_cg_bits2[j][i].sample();
+    end
+
+    HSIZE_dt_val_cg_bits2[1][0].sample();
+        HSIZE_dt_val_cg_bits2[1][1].sample();
+            HSIZE_dt_val_cg_bits2[1][2].sample();
+
+
 
 
     `uvm_info("COVERAGE", {"SAMPLE: ", t.convert2string}, UVM_HIGH)
@@ -554,7 +562,7 @@ class coverage extends uvm_subscriber #(sequence_item);
     foreach(HBURST_dt_val_cg_bits[i]) HBURST_dt_val_cg_bits[i] = new(i, HBURST_cov);
 
     foreach(HSIZE_dt_val_cg_bits2[j]) begin
-      foreach(HSIZE_dt_val_cg_bits2[i]) HSIZE_dt_val_cg_bits2[i] = new(i, j, HSIZE_cov);      
+      foreach(HSIZE_dt_val_cg_bits2[j][i]) HSIZE_dt_val_cg_bits2[j][i] = new(i, j, HSIZE_cov);      
     end
 
 

@@ -23,6 +23,7 @@ class env extends uvm_env;
   // Instances of agents and other components
   passive_agent passive_agent_h;
   active_agent active_agent_h;
+  reactive_agent reactive_agent_h;
   scoreboard scoreboard_h;
   coverage coverage_h;
 
@@ -67,6 +68,7 @@ class env extends uvm_env;
     // Create instances of the agents and components
     active_agent_h = active_agent::type_id::create("active_agent_h", this);
     passive_agent_h = passive_agent::type_id::create("passive_agent_h", this);
+    reactive_agent_h = reactive_agent::type_id::create("reactive_agent_h", this);
     scoreboard_h = scoreboard::type_id::create("scoreboard_h", this);
     coverage_h = coverage::type_id::create("coverage_h", this);
 
@@ -81,6 +83,9 @@ class env extends uvm_env;
     active_agent_h.tlm_analysis_port_inputs.connect(coverage_h.analysis_export);
     active_agent_h.tlm_analysis_port_inputs.connect(scoreboard_h.analysis_export_inputs);
     passive_agent_h.tlm_analysis_port_outputs.connect(scoreboard_h.analysis_export_outputs);
+
+    reactive_agent_h.driver_control = active_agent_h.driver_control;
+
 
     $display("env connect phase");
   endfunction
