@@ -54,20 +54,14 @@ logic   [DATA_WIDTH-1:0]  HRDATA_reg;
 logic   [RESP_WIDTH:0]  HRESP_reg; 
 logic   [READY_WIDTH:0]  HREADY_reg; 
 
-bit RECEIVING_PHASE_FLAG;
-bit CONTROL_PHASE_FLAG;
-bit DATA_PHASE_FLAG;
-bit OUTPUTS_PHASE_FLAG_1;
-bit OUTPUTS_PHASE_FLAG_2;
-bit OUTPUTS_PHASE_FLAG_3;
-
-// bit last_test;
+bit pipeline_lock1;
+bit pipeline_lock2;
+bit pipeline_lock3;
+bit pipeline_lock4;
 
 // Monitor handles
 inputs_monitor inputs_monitor_h;    // Handle to input monitor
 outputs_monitor outputs_monitor_h;  // Handle to output monitor
-
-logic HRESETn_global;
 
 HRESET_e     RESET_op;
 HWRITE_e     WRITE_op;
@@ -76,260 +70,242 @@ HTRANS_e     TRANS_op;
 HBURST_e     BURST_op;
 HSIZE_e      SIZE_op;
 
-int counter;
-
 sequence_item previous_seq_item, seq_item;
 
+sequence_item command_tr;
+sequence_item data_tr;
+sequence_item subordinate_sampling_tr;
+sequence_item mux_sampling_tr;
+sequence_item top_sampling_tr;
 
+event do_data_phase;
+event do_subordinate_sampling_phase;
+event do_mux_sampling_phase;
+event do_top_sampling_phase;
+
+driver driver_h;
 
   modport SVA (input clk, HRESETn, HWRITE, HTRANS, HSIZE, HBURST, HPROT, HADDR, HWDATA, HRDATA, HRESP, HREADY);
 
 // Task: Handle generic receiving operations based on reset and enable signals
-    task generic_reciever( input bit iHRESETn, input bit   iHWRITE, input bit  [TRANS_WIDTH:0] iHTRANS, 
-                            input bit  [SIZE_WIDTH:0] iHSIZE, input bit  [BURST_WIDTH:0] iHBURST,
-                            input bit  [PROT_WIDTH:0] iHPROT, input bit  [ADDR_WIDTH-1:0] iHADDR,     
-                            input bit  [DATA_WIDTH-1:0] iHWDATA, input HRESET_e iRESET_op,
-                            input HWRITE_e iWRITE_op, input HTRANS_e iTRANS_op,
-                            input HBURST_e iBURST_op, input HSIZE_e iSIZE_op, input bit last_item
-    );  
+    task begin_transfer( sequence_item p_seq_item );  
 
-        wait((counter == 0 || counter >= 2) && CONTROL_PHASE_FLAG );
-        //#1step;
-        if(HRESP === RETRY) begin
-            iHRESETn    = previous_seq_item.HRESETn;
-            iHWRITE     = previous_seq_item.HWRITE;
-            iHTRANS     = previous_seq_item.HTRANS;
-            iHSIZE      = previous_seq_item.HSIZE;  
-            iHBURST     = previous_seq_item.HBURST; 
-            iHPROT      = previous_seq_item.HPROT;  
-            iHADDR     = previous_seq_item.HADDR; 
-            iHWDATA     = previous_seq_item.HWDATA;
+        command_phase(p_seq_item);
 
-            iRESET_op = previous_seq_item.RESET_op;
-            iWRITE_op = previous_seq_item.WRITE_op;
-            iTRANS_op = previous_seq_item.TRANS_op;
-            iBURST_op = previous_seq_item.BURST_op;
-            iSIZE_op  = previous_seq_item.SIZE_op;
+        if(p_seq_item.HRESETn) begin
+            $display("A SAILOR, A GREAT PRETENDER");
+            pipeline_lock_get1();
+
+            command_tr = p_seq_item;
+            ->do_data_phase;
         end
-            //$display("RECIEVING PHASE: ASSSINGING RANDOMIZED VALUES");
-            
-            seq_item.RESET_op = iRESET_op;
-            seq_item.WRITE_op = iWRITE_op;
-            seq_item.TRANS_op = iTRANS_op;
-            seq_item.BURST_op = iBURST_op;
-            seq_item.SIZE_op  = iSIZE_op;
 
-            seq_item.HRESETn    = iHRESETn;
-            seq_item.HWRITE     = iHWRITE;
-            seq_item.HTRANS     = iHTRANS;
-            seq_item.HSIZE      = iHSIZE;  
-            seq_item.HBURST     = iHBURST; 
-            seq_item.HPROT      = iHPROT;  
-            seq_item.HADDR      = iHADDR; 
-            seq_item.HWDATA     = iHWDATA;
 
-            HRESETn_global      = iHRESETn;
+        //$display("RECIEVING PHASE: ASSSINGING RANDOMIZED VALUES");
+    endtask : begin_transfer
 
-            if(iHRESETn) begin
-                counter <= counter +1;
-            end
+    task command_phase(sequence_item p_seq_item);
+            HRESETn <= p_seq_item.HRESETn;
+            HWRITE  <= p_seq_item.HWRITE;
+            HTRANS  <= p_seq_item.HTRANS;
+            HSIZE   <= p_seq_item.HSIZE;
+            HBURST  <= p_seq_item.HBURST;
+            HPROT   <= p_seq_item.HPROT;
+            HADDR   <= p_seq_item.HADDR;
 
-            if(~HRESETn_global) begin
-                fork
-                    begin
-                        @(negedge clk);
-                        send_inputs(seq_item.HRESETn, seq_item.HWRITE, seq_item.HTRANS, seq_item.HSIZE, seq_item.HBURST, seq_item.HPROT, seq_item.HADDR, seq_item.HWDATA, seq_item.RESET_op, seq_item.WRITE_op, seq_item.TRANS_op, seq_item.BURST_op, seq_item.SIZE_op);
-                    end
-                join_none
-            end
-            
-
-        RECEIVING_PHASE_FLAG = 1;
-
-        if(last_item)begin
-            //$display("RECIEVING PHASE: TIME: %0t WAITING FOR COUNTERS ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~",$time());
-            wait(HRESETn && !RECEIVING_PHASE_FLAG && (sequence_item::COMPARATOR_transaction_counter == sequence_item::PREDICTOR_transaction_counter) /*&& !OUTPUTS_PHASE_FLAG && !DATA_PHASE_FLAG*/); //so the driver doesnt keep driving when the sequence is already driven to the interface/dut
+        //so the HWDATA is assigned in the command phase if the reset is asserted since there is no data_phase if that happens.
+        if(~p_seq_item.HRESETn) begin
+            HWDATA <= p_seq_item.HWDATA;
         end
-        else begin
-            $display("RECIEVING PHASE: TIME: %0t WAITING FOR CONTROL PHASE TO transaction_finished",$time());
-             wait(HRESETn && !RECEIVING_PHASE_FLAG);
+
+        send_inputs(p_seq_item);
+
+        @(posedge clk);
+
+        if(~p_seq_item.HRESETn) begin
+            wait_for_reset;
         end
-    endtask : generic_reciever
 
-
-    always@(posedge clk or negedge HRESETn_global ) begin //CONTROL_PHASE
-        if(HRESETn_global)begin
-            if(counter >= 1 && RECEIVING_PHASE_FLAG) begin
-                //$display("CONTROL PHASE: TIME:%0t ASSIGINING SIGNALS", $time());
-             		HRESETn <= seq_item.HRESETn;
-                    HWRITE  <= seq_item.HWRITE;
-                    HTRANS  <= seq_item.HTRANS;
-                    HSIZE   <= seq_item.HSIZE;
-                    HBURST  <= seq_item.HBURST;
-                    HPROT   <= seq_item.HPROT;
-                    HADDR   <= seq_item.HADDR;
-
-                    HRESETn_reg <= seq_item.HRESETn;
-                    HWRITE_reg  <= seq_item.HWRITE;
-                    HTRANS_reg  <= seq_item.HTRANS;
-                    HSIZE_reg   <= seq_item.HSIZE;
-                    HBURST_reg  <= seq_item.HBURST;
-                    HPROT_reg   <= seq_item.HPROT;
-                    HADDR_reg   <= seq_item.HADDR;
-                    HWDATA_reg  <= seq_item.HWDATA;
-
-                    //$display("seq_item.HADDR: %0h ", seq_item.HADDR);
-
-                    send_inputs(seq_item.HRESETn, seq_item.HWRITE, seq_item.HTRANS, seq_item.HSIZE, seq_item.HBURST, seq_item.HPROT, seq_item.HADDR, seq_item.HWDATA, seq_item.RESET_op, seq_item.WRITE_op, seq_item.TRANS_op, seq_item.BURST_op, seq_item.SIZE_op);
-
-
-                if(seq_item.HRESETn) begin
-                    counter <= counter + 1;
-                    DATA_PHASE_FLAG = 1;
-                end
-            end
-            CONTROL_PHASE_FLAG = 1; //probably obslete
-            RECEIVING_PHASE_FLAG = 0;
+        while(~HREADY) begin
+            @(posedge clk);
         end
-        else begin
-            HRESETn <= seq_item.HRESETn; //forced design reset at the start of any sim
-            HADDR   <= seq_item.HADDR;
-            CONTROL_PHASE_FLAG = 1;
-        end
+    endtask : command_phase
+
+    always begin
+        @do_data_phase;
+        @(posedge clk);
+
+        data_phase(command_tr);
+
+        pipeline_lock_put1();
+        pipeline_lock_get2();
     end
 
-    always@(negedge HRESETn_global) begin
-        //$display("DATA_PHASE: TIME:%0t ASSERTING RESET", $time());
-        reset_AHB();
+    task data_phase(sequence_item p_seq_item);
+        while(~HREADY) begin
+            @(posedge clk);
+        end
+
+        if(p_seq_item.HWRITE) begin
+            HWDATA <= p_seq_item.HWDATA;
+        end
+
+        data_tr = p_seq_item;
+        ->do_subordinate_sampling_phase;
+    endtask : data_phase
+
+    always begin
+        @do_subordinate_sampling_phase;
+        @(posedge clk);
+
+        subordinate_sampling_phase(data_tr);
+
+        pipeline_lock_put2();
+        pipeline_lock_get3();
     end
 
-    // Task: Reset AHB pointers and flags
-    task reset_AHB();
+    task subordinate_sampling_phase(sequence_item p_seq_item);
+        while(~HREADY) begin
+            @(posedge clk);
+        end
+
+        subordinate_sampling_tr = p_seq_item;
+
+        ->do_mux_sampling_phase;
+
+    endtask : subordinate_sampling_phase
+
+    always begin
+        @do_mux_sampling_phase;
+        @(posedge clk);
+
+        mux_sampling_phase(subordinate_sampling_tr);
+
+        pipeline_lock_put3();
+        pipeline_lock_get4();
+    end
+
+    task mux_sampling_phase(sequence_item p_seq_item);
+        while(~HREADY) begin
+            @(posedge clk);
+        end
+
+        mux_sampling_tr = p_seq_item;
+
+        ->do_top_sampling_phase;
+        
+    endtask : mux_sampling_phase
+
+    always begin
+        @do_top_sampling_phase;
+        @(posedge clk);
+
+        top_sampling_phase(mux_sampling_tr);
+
+        driver_h.send_tr_back(top_sampling_tr);
+
+        pipeline_lock_put4();
+    end
+
+    task top_sampling_phase(sequence_item p_seq_item);
+        while(~HREADY) begin
+            @(posedge clk);
+        end
+
+        p_seq_item.HRESP = HRESP;
+        p_seq_item.HRDATA = HRDATA;
+        p_seq_item.HREADY = HREADY;
+
+        send_outputs();
+
+        //dont think this is valid, because HRDATA then would be = to x and sent to the sequencer? whats the point of that?
+        // if(~p_seq_item.HWRITE) begin
+        //     p_seq_item.HRDATA = HRDATA;
+        // end
+
+        top_sampling_tr = p_seq_item;
+        
+    endtask : top_sampling_phase
+
+
+    task wait_for_reset();
         repeat(15) begin
             @(posedge clk);
         end
-        HRESETn_global = 1'b1; //to prevent the control phase always block from re-itterating right after finishing the reset_task & before a new sequence is driven (it causes an endless)
-        HRESETn <= 1'b1;
-        counter = 0;
-    endtask : reset_AHB
-
-    always@(posedge HRESETn_global) begin
-        //$display("OUTPUT_PHASE_RESET: TIME:%0t SENDING OUTPUTS", $time());
         send_outputs();
-        OUTPUTS_PHASE_FLAG_1 = 0;
-        OUTPUTS_PHASE_FLAG_2 = 0;
-        OUTPUTS_PHASE_FLAG_3 = 0;
-    end
+    endtask
 
-    always@(posedge clk) begin //DATA_PHASE //DATA_PHASE_FLAG might be obselete
-        if((counter >= 2) && HRESETn /*&& DATA_PHASE_FLAG*/ ) begin // HRESETn to make it work after the reset cycle is done
-            //$display("DATA_PHASE: TIME:%0t ASSIGNING SIGNALS", $time());
-            // The counter & data_phase_flag to make it work after a transaction is sent after reset cycle is done
-            //send_inputs(HRESETn_reg, HWRITE_reg, HTRANS_reg, HSIZE_reg, HBURST_reg, HPROT_reg, HADDR_reg, HWDATA_reg, seq_item.RESET_op, seq_item.WRITE_op, seq_item.TRANS_op, seq_item.BURST_op, seq_item.SIZE_op);
-            if(HWRITE_reg == 1'b1) begin
-                //$display("DATA_PHASE_WRITE: TIME:%0t ASSIGNING SIGNALS", $time());
-                write_AHB(HWDATA_reg);
-            end
-            else if(HWRITE_reg == 1'b0) begin
-                //$display("DATA_PHASE_READ: TIME:%0t ASSIGNING SIGNALS", $time());
-                read_AHB();
-            end
-            counter <= counter + 1;
-            DATA_PHASE_FLAG = 0;
-            OUTPUTS_PHASE_FLAG_1 = 1;
-        end
-        else if(counter == 2) begin
-            if(HWRITE_reg == 1'b1) begin
-                //$display("DATA_PHASE_WRITE: TIME:%0t ASSIGNING SIGNALS", $time());
-                write_AHB(HWDATA_reg);
-            end
-            else if(HWRITE_reg == 1'b0) begin
-                //$display("DATA_PHASE_READ: TIME:%0t ASSIGNING SIGNALS", $time());
-                read_AHB();
-            end
-            counter <= counter + 1;
-            DATA_PHASE_FLAG = 0;
-            OUTPUTS_PHASE_FLAG_1 = 1;
-        end
-    end
+    task pipeline_lock_get1();
+      while (pipeline_lock1) begin
+        @(posedge clk);
+      end
+      pipeline_lock1 = 1;
+    endtask: pipeline_lock_get1
 
-    always@(posedge clk) begin
-        if(HRESETn && counter >= 3 && OUTPUTS_PHASE_FLAG_1) begin
-            //$display("OUTPUT_1_PHASE_SIGNALS: TIME:%0t ", $time());
-            counter = counter + 1;
-            OUTPUTS_PHASE_FLAG_1 = 0;
-            OUTPUTS_PHASE_FLAG_2 = 1;
-        end
-    end
+    function void pipeline_lock_put1();
+      pipeline_lock1 = 0;
+    endfunction: pipeline_lock_put1
 
-    always@(posedge clk) begin
-        if(HRESETn && counter >= 4 && OUTPUTS_PHASE_FLAG_2) begin
-            //$display("OUTPUT_2_PHASE_SIGNALS: TIME:%0t", $time());
-            counter = counter + 1;
-            OUTPUTS_PHASE_FLAG_2 = 0;
-            OUTPUTS_PHASE_FLAG_3 = 1;
-        end
-    end
 
-    always@(posedge clk) begin
-        if(HRESETn && counter >= 5 && OUTPUTS_PHASE_FLAG_3) begin
-            //$display("OUTPUT_3_PHASE_SIGNALS: TIME:%0t SENDING OUTPUTS", $time());
-            send_outputs();
-            OUTPUTS_PHASE_FLAG_3 = 0;
-        end
-    end
 
-    // Task: Write data into the AHB 
-    task write_AHB(input bit [DATA_WIDTH-1:0] iHWDATA);
-        case(HTRANS_reg)
-            IDLE, BUSY: begin
-            end
+    task pipeline_lock_get2();
+      while (pipeline_lock2) begin
+        @(posedge clk);
+      end
+      pipeline_lock2 = 1;
+    endtask: pipeline_lock_get2
 
-            NONSEQ, SEQ: begin
-                //wait(HREADY == 1'b1);
-                HWDATA <= iHWDATA;
-            end
-        endcase // HTRANS
-    endtask : write_AHB
+    function void pipeline_lock_put2();
+      pipeline_lock2 = 0;
+    endfunction: pipeline_lock_put2
 
-    // Task: Read data from the AHB 
-    task read_AHB();
-        case(HTRANS)
-            IDLE, BUSY: begin
-            end
 
-            NONSEQ, SEQ: begin
-                //wait(HREADY == 1'b1);
-            end
-        endcase // HTRANS
-    endtask : read_AHB
 
+    task pipeline_lock_get3();
+      while (pipeline_lock3) begin
+        @(posedge clk);
+      end
+      pipeline_lock3 = 1;
+    endtask: pipeline_lock_get3
+
+    function void pipeline_lock_put3();
+      pipeline_lock3 = 0;
+    endfunction: pipeline_lock_put3
+
+
+
+
+    task pipeline_lock_get4();
+      while (pipeline_lock4) begin
+        @(posedge clk);
+      end
+      pipeline_lock4 = 1;
+    endtask: pipeline_lock_get4
+
+    function void pipeline_lock_put4();
+      pipeline_lock4 = 0;
+    endfunction: pipeline_lock_put4
 
 
     // Function to send inputs to the input monitor
-    function void send_inputs( input bit iHRESETn, input bit   iHWRITE, input bit  [TRANS_WIDTH:0] iHTRANS, 
-                               input bit  [SIZE_WIDTH:0] iHSIZE, input bit  [BURST_WIDTH:0] iHBURST,
-                               input bit  [PROT_WIDTH:0] iHPROT, input bit  [ADDR_WIDTH-1:0] iHADDR,     
-                               input bit  [DATA_WIDTH-1:0] iHWDATA, input HRESET_e iRESET_op,
-                               input HWRITE_e iWRITE_op, input HTRANS_e iTRANS_op,
-                               input HBURST_e iBURST_op, input HSIZE_e iSIZE_op);
+    function void send_inputs( sequence_item input_seq_item);
 
-        previous_seq_item.HRESETn = iHRESETn;
-        previous_seq_item.HWRITE = iHWRITE;
-        previous_seq_item.HTRANS = iHTRANS;
-        previous_seq_item.HSIZE  = iHSIZE;
-        previous_seq_item.HBURST = iHBURST;
-        previous_seq_item.HPROT  = iHPROT;
-        previous_seq_item.HADDR  = iHADDR;
-        previous_seq_item.HWDATA = iHWDATA;
+        // previous_seq_item.HRESETn = iHRESETn;
+        // previous_seq_item.HWRITE = iHWRITE;
+        // previous_seq_item.HTRANS = iHTRANS;
+        // previous_seq_item.HSIZE  = iHSIZE;
+        // previous_seq_item.HBURST = iHBURST;
+        // previous_seq_item.HPROT  = iHPROT;
+        // previous_seq_item.HADDR  = iHADDR;
+        // previous_seq_item.HWDATA = iHWDATA;
 
-        previous_seq_item.RESET_op = iRESET_op;
-        previous_seq_item.WRITE_op = iWRITE_op;
-        previous_seq_item.TRANS_op = iTRANS_op;
-        previous_seq_item.SIZE_op  = iSIZE_op;
-        previous_seq_item.BURST_op = iBURST_op;
+        // previous_seq_item.RESET_op = iRESET_op;
+        // previous_seq_item.WRITE_op = iWRITE_op;
+        // previous_seq_item.TRANS_op = iTRANS_op;
+        // previous_seq_item.SIZE_op  = iSIZE_op;
+        // previous_seq_item.BURST_op = iBURST_op;
 
-        inputs_monitor_h.write_to_monitor(iHRESETn, iHWRITE, iHTRANS, iHSIZE, iHBURST, iHPROT, iHADDR, iHWDATA, iRESET_op, iWRITE_op, iTRANS_op, iBURST_op, iSIZE_op);
+        inputs_monitor_h.write_to_monitor(input_seq_item.HRESETn, input_seq_item.HWRITE, input_seq_item.HTRANS, input_seq_item.HSIZE, input_seq_item.HBURST, input_seq_item.HPROT, input_seq_item.HADDR, input_seq_item.HWDATA, input_seq_item.RESET_op, input_seq_item.WRITE_op, input_seq_item.TRANS_op, input_seq_item.BURST_op, input_seq_item.SIZE_op);
     endfunction : send_inputs
 
     // Function to send outputs to the output monitor

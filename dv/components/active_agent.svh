@@ -88,7 +88,6 @@ class active_agent extends uvm_agent;
       driver_h.seq_item_port.connect(sequencer_h.seq_item_export);
     end
 
-    driver_control = driver_h.driver_control;
     // Display message indicating the connect phase is complete
     $display("my_active_agent connect phase");
   endfunction
