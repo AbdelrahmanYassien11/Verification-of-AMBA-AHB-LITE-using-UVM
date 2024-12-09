@@ -59,7 +59,7 @@ bit CONTROL_PHASE_FLAG;
 bit DATA_PHASE_FLAG;
 bit OUTPUTS_PHASE_FLAG_1;
 bit OUTPUTS_PHASE_FLAG_2;
-bit OUTPUTS_PHASE_FLAG_3;
+//bit OUTPUTS_PHASE_FLAG_3;
 
 // bit last_test;
 
@@ -218,7 +218,7 @@ sequence_item previous_seq_item, seq_item;
         send_outputs();
         OUTPUTS_PHASE_FLAG_1 = 0;
         OUTPUTS_PHASE_FLAG_2 = 0;
-        OUTPUTS_PHASE_FLAG_3 = 0;
+        //OUTPUTS_PHASE_FLAG_3 = 0;
     end
 
     always@(posedge clk) begin //DATA_PHASE //DATA_PHASE_FLAG might be obselete
@@ -265,19 +265,19 @@ sequence_item previous_seq_item, seq_item;
     always@(posedge clk) begin
         if(HRESETn && counter >= 4 && OUTPUTS_PHASE_FLAG_2) begin
             //$display("OUTPUT_2_PHASE_SIGNALS: TIME:%0t", $time());
-            counter = counter + 1;
+            send_outputs();
             OUTPUTS_PHASE_FLAG_2 = 0;
-            OUTPUTS_PHASE_FLAG_3 = 1;
+            //OUTPUTS_PHASE_FLAG_3 = 1;
         end
     end
 
-    always@(posedge clk) begin
-        if(HRESETn && counter >= 5 && OUTPUTS_PHASE_FLAG_3) begin
-            //$display("OUTPUT_3_PHASE_SIGNALS: TIME:%0t SENDING OUTPUTS", $time());
-            send_outputs();
-            OUTPUTS_PHASE_FLAG_3 = 0;
-        end
-    end
+    // always@(posedge clk) begin
+    //     if(HRESETn && counter >= 5 && OUTPUTS_PHASE_FLAG_3) begin
+    //         //$display("OUTPUT_3_PHASE_SIGNALS: TIME:%0t SENDING OUTPUTS", $time());
+    //         send_outputs();
+    //         OUTPUTS_PHASE_FLAG_3 = 0;
+    //     end
+    // end
 
     // Task: Write data into the AHB 
     task write_AHB(input bit [DATA_WIDTH-1:0] iHWDATA);
