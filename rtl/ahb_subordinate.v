@@ -79,16 +79,16 @@ module ahb_subordinate
   integer i;
 
 
-  reg [ADDR_WIDTH-1:0] HADDR_reg_c;
+  wire [ADDR_WIDTH-1:0] HADDR_reg_c;
   //reg [DATA_WIDTH-1:0] HWDATA_reg_c;
   //reg        HREADYout_reg_c;
-  reg [ 2:0] HBURST_reg_c;
-  reg [ 1:0] HTRANS_reg_c;
-  reg        HREADYin_reg_c;
-  reg        HSEL_reg_c;
-  reg [2:0] HSIZE_reg_c;
+  wire [ 2:0] HBURST_reg_c;
+  wire [ 1:0] HTRANS_reg_c;
+  wire        HREADYin_reg_c;
+  wire        HSEL_reg_c;
+  wire [2:0] HSIZE_reg_c;
 
-  reg HWRITE_reg_c;
+  wire HWRITE_reg_c;
 
   reg [ADDR_WIDTH-1:0] HADDR_reg_d;  
   reg [DATA_WIDTH-1:0] HWDATA_reg_d;
@@ -212,9 +212,9 @@ module ahb_subordinate
     `endif
 
 
-always @(posedge HCLK or negedge HRESETn) begin        
+always @(*) begin        
       if(~HRESETn) begin
-        wrap_counter_reg  <= -10;
+        wrap_counter_reg  = -10;
       end 
       else begin
         if(HWRITE == 1 || HWRITE == 0) begin
@@ -223,23 +223,23 @@ always @(posedge HCLK or negedge HRESETn) begin
               if(HSEL && HREADYin) begin
                 if(/*(HADDR_reg_c + burst_counter_reg < ADDR_DEPTH) &*/ ($signed(HADDR[ADDR_WIDTH-BITS_FOR_SUBORDINATES-1:0] + wrap_counter_reg) < ADDR_DEPTH)) begin
                   case(HBURST)
-                    INCR, INCR4, INCR8, INCR16: wrap_counter_reg <= wrap_counter_reg;
-                    WRAP4:  wrap_counter_reg <= 1;
-                    WRAP8:  wrap_counter_reg <= 3;
-                    WRAP16: wrap_counter_reg <= 7;
+                    INCR, INCR4, INCR8, INCR16: wrap_counter_reg = wrap_counter_reg;
+                    WRAP4:  wrap_counter_reg = 1;
+                    WRAP8:  wrap_counter_reg = 3;
+                    WRAP16: wrap_counter_reg = 7;
                     default: begin
                       $display("time: %0t, I AM HERE NOW SINGLE ", $time());
-                      wrap_counter_reg <= wrap_counter_reg;
+                      wrap_counter_reg = wrap_counter_reg;
                     end
                   endcase // HBURST_reg_d
                 end
                 else begin
                   $display("a7eeh1");
-                  wrap_counter_reg <= wrap_counter_reg;
+                  wrap_counter_reg = wrap_counter_reg;
                 end
               end
               else begin
-                wrap_counter_reg <= wrap_counter_reg;
+                wrap_counter_reg = wrap_counter_reg;
               end
             end
             2'b11: begin
@@ -247,46 +247,46 @@ always @(posedge HCLK or negedge HRESETn) begin
                 if(/*(HADDR_reg_c + burst_counter_reg < ADDR_DEPTH) &*/ ($signed(HADDR[ADDR_WIDTH-BITS_FOR_SUBORDINATES-1:0] + wrap_counter_reg) < ADDR_DEPTH)) begin
                   case(HBURST_reg_c)
                     INCR, INCR4, INCR8, INCR16: begin
-                      wrap_counter_reg <= wrap_counter_reg;
+                      wrap_counter_reg = wrap_counter_reg;
                       $display("time: %0t, I AM HERE NOW BURST ", $time());
                     end
                     WRAP4, WRAP8, WRAP16: begin
-                      wrap_counter_reg <= wrap_counter_reg - 1;
+                      wrap_counter_reg = wrap_counter_reg - 1;
                       $display("time: %0t, I AM HERE NOW WRAP ", $time());
                     end
                     default: begin
                       $display("time: %0t, I AM HERE NOW SINGLE ", $time());
-                      wrap_counter_reg <= wrap_counter_reg;
+                      wrap_counter_reg = wrap_counter_reg;
                     end
                   endcase // HBURST_reg_d
                 end
                 else begin
                   $display("a7eeh2");
-                  wrap_counter_reg <= wrap_counter_reg;
+                  wrap_counter_reg = wrap_counter_reg;
                 end
               end
               else begin
-                wrap_counter_reg <= wrap_counter_reg;
+                wrap_counter_reg = wrap_counter_reg;
               end
             end
             2'b01: begin
-                wrap_counter_reg <= wrap_counter_reg;       
+                wrap_counter_reg = wrap_counter_reg;       
             end
             default: begin
-              wrap_counter_reg <= -10;
+              wrap_counter_reg = -10;
             end
           endcase // HTRANS_reg_d
         end
         else begin
-            wrap_counter_reg <= wrap_counter_reg;
+            wrap_counter_reg = wrap_counter_reg;
         end
       end
     end
 
 
-always @(posedge HCLK or negedge HRESETn) begin        
+always @(*) begin        
       if(~HRESETn) begin
-        burst_counter_reg  <= 0;
+        burst_counter_reg  = 0;
       end 
       else begin
         if(HWRITE_reg_c == 1 || HWRITE_reg_c == 0) begin
@@ -295,21 +295,21 @@ always @(posedge HCLK or negedge HRESETn) begin
               if(HSEL_reg_c && HREADYin) begin
                 if(((HADDR_reg_c + burst_counter_reg) < ADDR_DEPTH)) begin
                   case(HBURST_reg_c)
-                    INCR, INCR4, INCR8, INCR16: burst_counter_reg <= burst_counter_reg + 1;
-                    WRAP4, WRAP8, WRAP16: burst_counter_reg <= burst_counter_reg;
+                    INCR, INCR4, INCR8, INCR16: burst_counter_reg = burst_counter_reg + 1;
+                    WRAP4, WRAP8, WRAP16: burst_counter_reg = burst_counter_reg;
                     default: begin
                       $display("time: %0t, I AM HERE NOW SINGLE ", $time());
-                      burst_counter_reg <= burst_counter_reg;
+                      burst_counter_reg = burst_counter_reg;
                     end
                   endcase // HBURST_reg_d
                 end
                 else begin
                   $display("a7eeh1");
-                  burst_counter_reg <= burst_counter_reg;
+                  burst_counter_reg = burst_counter_reg;
                 end
               end
               else begin
-                burst_counter_reg <= burst_counter_reg;
+                burst_counter_reg = burst_counter_reg;
               end
             end
             2'b11: begin
@@ -317,38 +317,38 @@ always @(posedge HCLK or negedge HRESETn) begin
                 if(((HADDR_reg_c + burst_counter_reg) < ADDR_DEPTH)) begin
                   case(HBURST_reg_c)
                     INCR, INCR4, INCR8, INCR16: begin
-                      burst_counter_reg <= burst_counter_reg+1;
+                      burst_counter_reg = burst_counter_reg+1;
                       $display("time: %0t, I AM HERE NOW BURST ", $time());
                     end
                     WRAP4, WRAP8, WRAP16: begin
-                      burst_counter_reg <= burst_counter_reg;
+                      burst_counter_reg = burst_counter_reg;
                       $display("time: %0t, I AM HERE NOW WRAP ", $time());
                     end
                     default: begin
                       $display("time: %0t, I AM HERE NOW SINGLE ", $time());
-                      burst_counter_reg <= burst_counter_reg;
+                      burst_counter_reg = burst_counter_reg;
                     end
                   endcase // HBURST_reg_d
                 end
                 else begin
                   $display("a7eeh2");
-                  burst_counter_reg <= burst_counter_reg;
+                  burst_counter_reg = burst_counter_reg;
                 end
               end
               else begin
-                burst_counter_reg <= burst_counter_reg;
+                burst_counter_reg = burst_counter_reg;
               end
             end
             2'b01: begin
-                burst_counter_reg <= burst_counter_reg;       
+                burst_counter_reg = burst_counter_reg;       
             end
             default: begin
-              burst_counter_reg <= 0;
+              burst_counter_reg = 0;
             end
           endcase // HTRANS_reg_d
         end
         else begin
-            burst_counter_reg <= burst_counter_reg;
+            burst_counter_reg = burst_counter_reg;
         end
       end
     end
@@ -402,7 +402,7 @@ always @(posedge HCLK or negedge HRESETn) begin
               end
 
               2'b10, 2'b11: begin
-                if((HADDR_reg_d + burst_counter < ADDR_DEPTH) & ($signed(HADDR_reg_d + wrap_counter) < ADDR_DEPTH)) begin
+                if((HADDR_reg_d + burst_counter_reg < ADDR_DEPTH) & ($signed(HADDR_reg_d + wrap_counter) < ADDR_DEPTH)) begin
                   case(HBURST_reg_d)
                     INCR, INCR4, INCR8, INCR16: begin
                       case(HSIZE_reg_d) 
@@ -541,29 +541,44 @@ always @(posedge HCLK or negedge HRESETn) begin
         // burst_counter_reg <= 0;
         // wrap_counter_reg  <= 0;
 
-        HADDR_reg_c       <= 0;
-        HBURST_reg_c      <= 0;
-        HTRANS_reg_c      <= 0;
-        HSEL_reg_c        <= 0;
-        HREADYin_reg_c    <= 1;
-        HSIZE_reg_c       <= 0;
-        HWRITE_reg_c      <= 0;     
+        // HADDR_reg_c       <= 0;
+        // HBURST_reg_c      <= 0;
+        // HTRANS_reg_c      <= 0;
+        // HSEL_reg_c        <= 0;
+        // HREADYin_reg_c    <= 1;
+        // HSIZE_reg_c       <= 0;
+        // HWRITE_reg_c      <= 0;
+
+        burst_counter <= 0;
+        wrap_counter  <= -10;
+
       end 
       else begin 
         state             <= next_state;
 
-        HBURST_reg_c      <= HBURST;
-        HTRANS_reg_c      <= HTRANS;
-        HSEL_reg_c        <= HSEL;
-        HADDR_reg_c       <= HADDR[ADDR_WIDTH-BITS_FOR_SUBORDINATES-1:0];
-        HREADYin_reg_c    <= HREADYin;
-        HSIZE_reg_c       <= HSIZE;
-        HWRITE_reg_c      <= HWRITE;
+        // HBURST_reg_c      <= HBURST;
+        // HTRANS_reg_c      <= HTRANS;
+        // HSEL_reg_c        <= HSEL;
+        // HADDR_reg_c       <= HADDR[ADDR_WIDTH-BITS_FOR_SUBORDINATES-1:0];
+        // HREADYin_reg_c    <= HREADYin;
+        // HSIZE_reg_c       <= HSIZE;
+        // HWRITE_reg_c      <= HWRITE;
 
         burst_counter     <= burst_counter_reg;
         wrap_counter      <= wrap_counter_reg;
       end
     end
+
+    assign HBURST_reg_c      = HBURST;
+    assign HTRANS_reg_c      = HTRANS;
+    assign HSEL_reg_c        = HSEL;
+    assign HADDR_reg_c       = HADDR[ADDR_WIDTH-BITS_FOR_SUBORDINATES-1:0];
+    assign HREADYin_reg_c    = HREADYin;
+    assign HSIZE_reg_c       = HSIZE;
+    assign HWRITE_reg_c      = HWRITE;
+
+
+
 
     // always block to manage DATA_phase signals
     always @ (posedge HCLK or negedge HRESETn) begin

@@ -41,17 +41,12 @@ module ahb_mux #(parameter ADDR_WIDTH, NO_OF_SUBORDINATES, BITS_FOR_SUBORDINATES
   reg  [3:0] HSEL_bus_reg_c, HSEL_bus_reg_d, HSEL_bus_reg_s;
 
 
-  always @(posedge HCLK or negedge HRESETn) begin //DATA_PHASE_SYNC
+  always @(*) begin //DATA_PHASE_SYNC
     if(~HRESETn) begin
        HSEL_bus_reg_s <= 0;
     end
     else begin
-      if(HREADY1 && HREADY2 && HREADY3 && HREADYd) begin
-        HSEL_bus_reg_s <= HSEL_bus_reg_d;
-      end
-      else begin
-        HSEL_bus_reg_s <= HSEL_bus_reg_s;
-      end
+      HSEL_bus_reg_s = HSEL_bus_reg_d;
     end
   end  
 
@@ -60,12 +55,7 @@ module ahb_mux #(parameter ADDR_WIDTH, NO_OF_SUBORDINATES, BITS_FOR_SUBORDINATES
        HSEL_bus_reg_d <= 0;
     end
     else begin
-      if(HREADY1 && HREADY2 && HREADY3 && HREADYd) begin
-        HSEL_bus_reg_d <= HSEL_bus_reg_c;
-      end
-      else begin
-        HSEL_bus_reg_d <= HSEL_bus_reg_d;
-      end
+      HSEL_bus_reg_d <= HSEL_bus_reg_c;
     end
   end  
 
@@ -74,45 +64,40 @@ module ahb_mux #(parameter ADDR_WIDTH, NO_OF_SUBORDINATES, BITS_FOR_SUBORDINATES
       HSEL_bus_reg_c <= 'h0;
     end
     else begin
-      if(HREADY1 && HREADY2 && HREADY3 && HREADYd) begin
-        HSEL_bus_reg_c <= HSEL_bus;
-      end
-      else begin
-        HSEL_bus_reg_c <= HSEL_bus_reg_c;
-      end
+      HSEL_bus_reg_c <= HSEL_bus;
     end
   end
 
   always @(*) begin
     case(HSEL_bus_reg_s) 
-      P_HSEL_bus1: HREADY <= HREADY1; 
-      P_HSEL_bus2: HREADY <= HREADY2;
-      P_HSEL_bus3: HREADY <= HREADY3;
-      P_HSEL_busd: HREADY <= HREADYd;
-      P_HSEL_bus_reset: HREADY <= 1'b1;
-      default: HREADY <= 1'b1;
+      P_HSEL_bus1: HREADY = HREADY1; 
+      P_HSEL_bus2: HREADY = HREADY2;
+      P_HSEL_bus3: HREADY = HREADY3;
+      P_HSEL_busd: HREADY = HREADYd;
+      P_HSEL_bus_reset: HREADY = 1'b1;
+      default: HREADY = 1'b1;
     endcase
   end
 
   always @(*) begin
     case(HSEL_bus_reg_s) 
-      P_HSEL_bus1: HRDATA <= HRDATA1;
-      P_HSEL_bus2: HRDATA <= HRDATA2;
-      P_HSEL_bus3: HRDATA <= HRDATA3;
-      P_HSEL_busd: HRDATA <= HRDATAd;
-      P_HSEL_bus_reset: HRDATA <= 0;
-      default: HRDATA <= 'h0;
+      P_HSEL_bus1: HRDATA = HRDATA1;
+      P_HSEL_bus2: HRDATA = HRDATA2;
+      P_HSEL_bus3: HRDATA = HRDATA3;
+      P_HSEL_busd: HRDATA = HRDATAd;
+      P_HSEL_bus_reset: HRDATA = 0;
+      default: HRDATA = 'h0;
     endcase
   end
 
   always @(*) begin
     case(HSEL_bus_reg_s) 
-      P_HSEL_bus1: HRESP <= HRESP1;
-      P_HSEL_bus2: HRESP <= HRESP2;
-      P_HSEL_bus3: HRESP <= HRESP3;
-      P_HSEL_busd: HRESP <= HRESPd;
-      P_HSEL_bus_reset: HRESP <= 2'b00;
-      default: HRESP <= 2'b01; 
+      P_HSEL_bus1: HRESP = HRESP1;
+      P_HSEL_bus2: HRESP = HRESP2;
+      P_HSEL_bus3: HRESP = HRESP3;
+      P_HSEL_busd: HRESP = HRESPd;
+      P_HSEL_bus_reset: HRESP = 2'b00;
+      default: HRESP = 2'b01; 
     endcase
   end
   

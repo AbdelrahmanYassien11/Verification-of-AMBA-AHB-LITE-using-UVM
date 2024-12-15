@@ -33,7 +33,7 @@ module ahb_default_subordinate #(parameter ADDR_WIDTH, DATA_WIDTH)
     localparam IDLE   = 1'b0, ERROR = 1'b1;
    /*********************************************************/
     reg [1:0] HRESP_reg;
-    reg  HSEL_reg;
+    wire  HSEL_reg;
 
   //always block to manage OUTPUT/SAMPLING _phase signals
   always @(posedge HCLK or negedge HRESETn) begin
@@ -54,9 +54,8 @@ module ahb_default_subordinate #(parameter ADDR_WIDTH, DATA_WIDTH)
       //HRESP_reg     <= 2'b00;
     end 
     else begin 
-		HREADYout 	  <= 1'b1;
-		HRDATA 		  <= 'b0;
-      HSEL_reg      <= HSEL;
+		  HREADYout 	  <= 1'b1;
+		  HRDATA   		  <= 'b0;
       state         <= next_state;
     end 
   end 
@@ -86,5 +85,7 @@ module ahb_default_subordinate #(parameter ADDR_WIDTH, DATA_WIDTH)
 
     endcase // state
   end
+
+  assign HSEL_reg  = HSEL;
 
 endmodule
