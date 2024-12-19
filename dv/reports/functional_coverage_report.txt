@@ -27,7 +27,7 @@ Name                                     Design Design   Lang File(Line)      Hi
                                                                                195 Covered   
 /top_test_uvm/DUT/subordinate1/sva/idle_ready_cover 
                                          AHB_subordinate_sva Verilog  SVA  sva/AHB_subordinate_sva.sv(147)
-                                                                              1051 Covered   
+                                                                              1046 Covered   
 /top_test_uvm/DUT/subordinate1/sva/idle_inputs_cover 
                                          AHB_subordinate_sva Verilog  SVA  sva/AHB_subordinate_sva.sv(148)
                                                                               1055 Covered   
@@ -77,7 +77,7 @@ Name                                     Design Design   Lang File(Line)      Hi
                                                                                195 Covered   
 /top_test_uvm/DUT/subordinate2/sva/idle_ready_cover 
                                          AHB_subordinate_sva Verilog  SVA  sva/AHB_subordinate_sva.sv(147)
-                                                                              1051 Covered   
+                                                                              1046 Covered   
 /top_test_uvm/DUT/subordinate2/sva/idle_inputs_cover 
                                          AHB_subordinate_sva Verilog  SVA  sva/AHB_subordinate_sva.sv(148)
                                                                               1055 Covered   
@@ -127,7 +127,7 @@ Name                                     Design Design   Lang File(Line)      Hi
                                                                                195 Covered   
 /top_test_uvm/DUT/subordinate3/sva/idle_ready_cover 
                                          AHB_subordinate_sva Verilog  SVA  sva/AHB_subordinate_sva.sv(147)
-                                                                              1051 Covered   
+                                                                              1046 Covered   
 /top_test_uvm/DUT/subordinate3/sva/idle_inputs_cover 
                                          AHB_subordinate_sva Verilog  SVA  sva/AHB_subordinate_sva.sv(148)
                                                                               1055 Covered   
@@ -9088,7 +9088,7 @@ Name                                     Design Design   Lang File(Line)      Hi
                                                                                195 Covered   
 /top_test_uvm/DUT/subordinate1/sva/idle_ready_cover 
                                          AHB_subordinate_sva Verilog  SVA  sva/AHB_subordinate_sva.sv(147)
-                                                                              1051 Covered   
+                                                                              1046 Covered   
 /top_test_uvm/DUT/subordinate1/sva/idle_inputs_cover 
                                          AHB_subordinate_sva Verilog  SVA  sva/AHB_subordinate_sva.sv(148)
                                                                               1055 Covered   
@@ -9124,7 +9124,7 @@ Name                                     Design Design   Lang File(Line)      Hi
                                                                                195 Covered   
 /top_test_uvm/DUT/subordinate2/sva/idle_ready_cover 
                                          AHB_subordinate_sva Verilog  SVA  sva/AHB_subordinate_sva.sv(147)
-                                                                              1051 Covered   
+                                                                              1046 Covered   
 /top_test_uvm/DUT/subordinate2/sva/idle_inputs_cover 
                                          AHB_subordinate_sva Verilog  SVA  sva/AHB_subordinate_sva.sv(148)
                                                                               1055 Covered   
@@ -9160,7 +9160,7 @@ Name                                     Design Design   Lang File(Line)      Hi
                                                                                195 Covered   
 /top_test_uvm/DUT/subordinate3/sva/idle_ready_cover 
                                          AHB_subordinate_sva Verilog  SVA  sva/AHB_subordinate_sva.sv(147)
-                                                                              1051 Covered   
+                                                                              1046 Covered   
 /top_test_uvm/DUT/subordinate3/sva/idle_inputs_cover 
                                          AHB_subordinate_sva Verilog  SVA  sva/AHB_subordinate_sva.sv(148)
                                                                               1055 Covered   
@@ -9191,5 +9191,5 @@ Total Coverage By Instance (filtered view): 91.63%
 COVERGROUP MEMORY USAGE: Total 1.1MB, Peak 1.1MB at time 116606 ns for total 160 coverpoints/crosses.
 ASSERT/COVER MEMORY USAGE: Total 1.9KB Peak 2.6KB at time 195 ns for total 24 threads.
 CONSTRAINT SOLVER MEMORY USAGE: Total 9.3MB,Peak 9.8MB at time 86795 ns for total 12446 randomize() calls.
-CLASS OBJECTS MEMORY USAGE: Total Memory 91.8MB and Peak Memory 91.8MB used at time 116606 ns for total 156215 class objects.
-DYNAMIC OBJECTS MEMORY USAGE: Total Memory 7.1MB and Peak Memory 7.1MB used at time 116606 ns for total 120712 dynamic objects.
+CLASS OBJECTS MEMORY USAGE: Total Memory 91.7MB and Peak Memory 91.7MB used at time 116606 ns for total 156240 class objects.
+DYNAMIC OBJECTS MEMORY USAGE: Total Memory 7.1MB and Peak Memory 7.1MB used at time 116606 ns for total 120731 dynamic objects.

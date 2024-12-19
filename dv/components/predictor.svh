@@ -68,9 +68,9 @@ class predictor extends uvm_subscriber #(sequence_item);
         logic   [DATA_WIDTH-1:0]  HRDATA_expected2;
           logic   [DATA_WIDTH-1:0]  HRDATA_expected3;
 
-  logic [DATA_WIDTH-1:0] subordinate1 [ADDR_DEPTH-1:0];
-  logic [DATA_WIDTH-1:0] subordinate2 [ADDR_DEPTH-1:0];
-  logic [DATA_WIDTH-1:0] subordinate3 [ADDR_DEPTH-1:0];
+  bit [DATA_WIDTH-1:0] subordinate1 [ADDR_DEPTH-1:0];
+  bit [DATA_WIDTH-1:0] subordinate2 [ADDR_DEPTH-1:0];
+  bit [DATA_WIDTH-1:0] subordinate3 [ADDR_DEPTH-1:0];
 
   HRESET_e     RESET_op;
   HWRITE_e     WRITE_op;
@@ -231,11 +231,11 @@ class predictor extends uvm_subscriber #(sequence_item);
       wrap_counter     = -10;
       burst_counter    = 0;
 
-      foreach(subordinate1[i]) begin
-        subordinate1[i] <= 0;
-        subordinate2[i] <= 0;
-        subordinate3[i] <= 0;
-      end
+      // foreach(subordinate1[i]) begin
+      //   subordinate1[i] = 0;
+      //   subordinate2[i] = 0;
+      //   subordinate3[i] = 0;
+      // end
       // $display("AAAAsubordinate1 MEM AFTER RESET: %p", subordinate1);
       // $display("AAAAsubordinate2 MEM AFTER RESET: %p", subordinate2);
       // $display("AAAAsubordinate3 MEM AFTER RESET: %p", subordinate3);
