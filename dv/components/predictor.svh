@@ -228,7 +228,7 @@ class predictor extends uvm_subscriber #(sequence_item);
       HRDATA_expected2  = 0;
       HRDATA_expected3  = 0;
       HTRANS           = IDLE;
-      wrap_counter     = -10;
+      wrap_counter     = 0;
       burst_counter    = 0;
 
       // foreach(subordinate1[i]) begin
@@ -253,7 +253,7 @@ class predictor extends uvm_subscriber #(sequence_item);
         IDLE, BUSY: begin
           if(undo_on) $display("HTRANS : %0d", HTRANS);
           if(HBURST == SINGLE) begin
-            if(~( (int'(HADDR_VALID + wrap_counter + 10) >= 0) & ((HADDR_VALID + burst_counter) < ADDR_DEPTH) & (int'(HADDR_VALID + wrap_counter) < ADDR_DEPTH))) begin
+            if(~( (int'(HADDR_VALID + wrap_counter) >= 0) & ((HADDR_VALID + burst_counter) < ADDR_DEPTH) & (int'(HADDR_VALID + wrap_counter) < ADDR_DEPTH))) begin
               HRESP_expected = ERROR;
               $display("HADDR+WRAP:%0d",(int'(HADDR_VALID+wrap_counter)), HADDR_VALID, wrap_counter);
               `uvm_error("PREDICTOR", "This shouldnt be hit, please check why either counter is incrementing above address width in IDLE TRANSFER");
@@ -261,12 +261,12 @@ class predictor extends uvm_subscriber #(sequence_item);
           end
           else begin
             `uvm_error("PREDICTOR", "This shouldnt be hit, please check why HBURST is not SINGLE during IDLE TRANSFER")
-            if(~( (int'(HADDR_VALID + wrap_counter +10) >= 0) & ((HADDR_VALID + burst_counter) < ADDR_DEPTH) & (int'(HADDR_VALID + wrap_counter) < ADDR_DEPTH))) begin
+            if(~( (int'(HADDR_VALID + wrap_counter) >= 0) & ((HADDR_VALID + burst_counter) < ADDR_DEPTH) & (int'(HADDR_VALID + wrap_counter) < ADDR_DEPTH))) begin
               HRESP_expected = ERROR;
               `uvm_error("PREDICTOR", "This shouldnt be hit, please check why either counter is incrementing above address width when HBURST is NOT SINGLE during IDLE TRANSFER");
             end       
           end
-          wrap_counter  = -10;
+          wrap_counter  = 0;
           burst_counter = 0;
         end
 
@@ -285,19 +285,21 @@ class predictor extends uvm_subscriber #(sequence_item);
             end
             WRAP4, WRAP8, WRAP16: begin
               if(~undo_on) begin
-                if(wrap_counter == -10) begin
-                  case(HBURST)
-                    WRAP4:  wrap_counter = 1;
-                    WRAP8:  wrap_counter = 3;
-                    WRAP16: wrap_counter = 7;
-                  endcase // HBURST
-                end
                 write_process(wrap_counter);
                 if((int'(HADDR_VALID + wrap_counter) > 0) & (int'(HADDR_VALID + wrap_counter) < ADDR_DEPTH-1)) begin
-                  wrap_counter = wrap_counter -1;
+                  wrap_counter = wrap_counter + 1;
                 end
                 else begin
                   `uvm_error("PREDICTOR", "THE WRAP COUNTER BYPASSED ADDR_DEPTH")
+                end
+                if(wrap_counter == 2 && HBURST == WRAP4) begin
+                  wrap_counter = (~wrap_counter) +1;
+                end
+                else if (wrap_counter == 4 && HBURST == WRAP8) begin
+                  wrap_counter = (~wrap_counter) +1 ;
+                end
+                else if (wrap_counter == 8 && HBURST == WRAP16) begin                
+                  wrap_counter = (~wrap_counter) +1 ;
                 end
               end
               else begin
@@ -611,7 +613,7 @@ class predictor extends uvm_subscriber #(sequence_item);
 
         IDLE, BUSY: begin
           if(HBURST == SINGLE) begin  
-            if(~( (int'(HADDR_VALID + wrap_counter + 10) >= 0 ) & ((HADDR_VALID + burst_counter) < ADDR_DEPTH) & (int'(wrap_counter+(HADDR_VALID)) < ADDR_DEPTH))) begin
+            if(~( (int'(HADDR_VALID + wrap_counter ) >= 0 ) & ((HADDR_VALID + burst_counter) < ADDR_DEPTH) & (int'(wrap_counter+(HADDR_VALID)) < ADDR_DEPTH))) begin
               $display("HADDR+WRAP:%0d, HADDR:%0d, wrap_counter:%0d",(int'(HADDR_VALID+wrap_counter)), HADDR_VALID, wrap_counter);
               HRESP_expected = ERROR;
               `uvm_error("PREDICTOR", "This shouldnt be hit, please check why either counter is incrementing above address width in IDLE TRANSFER");
@@ -619,12 +621,12 @@ class predictor extends uvm_subscriber #(sequence_item);
           end
           else begin
             `uvm_error("PREDICTOR", "This shouldnt be hit, please check why HBURST is not SINGLE during IDLE TRANSFER")
-            if(~( (int'(HADDR_VALID + wrap_counter + 10) >= 0) & ((HADDR_VALID + burst_counter) < ADDR_DEPTH) & (int'(HADDR_VALID + wrap_counter) < ADDR_DEPTH))) begin //might be obsolete
+            if(~( (int'(HADDR_VALID + wrap_counter ) >= 0) & ((HADDR_VALID + burst_counter) < ADDR_DEPTH) & (int'(HADDR_VALID + wrap_counter) < ADDR_DEPTH))) begin //might be obsolete
               HRESP_expected = ERROR;
               `uvm_error("PREDICTOR", "This shouldnt be hit, please check why either counter is incrementing above address width when HBURST is NOT SINGLE during IDLE TRANSFER");
             end       
           end
-          wrap_counter = -10;
+          wrap_counter = 0;
           burst_counter = 0;  
           HRDATA_expected = HRDATA_expected;
         end
@@ -639,19 +641,26 @@ class predictor extends uvm_subscriber #(sequence_item);
             end
 
             WRAP4, WRAP8, WRAP16: begin
-              if(wrap_counter == -10) begin
-                case(HBURST)
-                  WRAP4:  wrap_counter = 1;
-                  WRAP8:  wrap_counter = 3;
-                  WRAP16: wrap_counter = 7;
-                endcase // HBURST
-              end
-              read_process(wrap_counter);
-              if( (int'(HADDR_VALID + wrap_counter) > 0) & (int'(wrap_counter+HADDR_VALID) < ADDR_DEPTH-1)) begin
-                wrap_counter = wrap_counter -1;
+              if(~undo_on) begin
+                read_process(wrap_counter);
+                if((int'(HADDR_VALID + wrap_counter) > 0) & (int'(HADDR_VALID + wrap_counter) < ADDR_DEPTH-1)) begin
+                  wrap_counter = wrap_counter + 1;
+                end
+                else begin
+                  `uvm_error("PREDICTOR", "THE WRAP COUNTER BYPASSED ADDR_DEPTH")
+                end
+                if(wrap_counter == 2 && HBURST == WRAP4) begin
+                  wrap_counter = (~wrap_counter) +1;
+                end
+                else if (wrap_counter == 4 && HBURST == WRAP8) begin
+                  wrap_counter = (~wrap_counter) +1;
+                end
+                else if (wrap_counter == 8 && HBURST == WRAP16) begin                
+                  wrap_counter = (~wrap_counter) +1;
+                end
               end
               else begin
-                `uvm_error("PREDICTOR", "THE WRAP COUNTER BYPASSED ADDR_DEPTH");
+                read_process(wrap_counter);
               end
             end
 

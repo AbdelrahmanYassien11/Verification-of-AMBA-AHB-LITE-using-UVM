@@ -125,48 +125,48 @@ module ahb_subordinate
 
    `define HSIZE_conditional_WRITE_def(counter) \
       `ifdef HWDATA_WIDTH1024 \
-                          HSIZE_BYTE      : begin mem[HADDR_reg_d + counter] [BYTE_WIDTH-1:0]     <= HWDATA_reg_d[BYTE_WIDTH-1:0];     mem[HADDR_reg_d + counter] [DATA_WIDTH-1:BYTE_WIDTH]     <= mem[HADDR_reg_d + counter] [DATA_WIDTH-1:BYTE_WIDTH];     HREADYout <= 1; HRESP <= 2'b00; end \
-                          HSIZE_HALFWORD  : begin mem[HADDR_reg_d + counter] [HALFWORD_WIDTH-1:0] <= HWDATA_reg_d[HALFWORD_WIDTH-1:0]; mem[HADDR_reg_d + counter] [DATA_WIDTH-1:HALFWORD_WIDTH] <= mem[HADDR_reg_d + counter] [DATA_WIDTH-1:HALFWORD_WIDTH]; HREADYout <= 1; HRESP <= 2'b00; end \
-                          HSIZE_WORD      : begin mem[HADDR_reg_d + counter] [WORD_WIDTH-1:0]     <= HWDATA_reg_d[WORD_WIDTH-1:0];     mem[HADDR_reg_d + counter] [DATA_WIDTH-1:WORD_WIDTH]     <= mem[HADDR_reg_d + counter] [DATA_WIDTH-1:WORD_WIDTH];     HREADYout <= 1; HRESP <= 2'b00; end \
-                          HSIZE_WORD2     : begin mem[HADDR_reg_d + counter] [WORD2_WIDTH-1:0]    <= HWDATA_reg_d[WORD2_WIDTH-1:0];    mem[HADDR_reg_d + counter] [DATA_WIDTH-1:WORD2_WIDTH]    <= mem[HADDR_reg_d + counter] [DATA_WIDTH-1:WORD2_WIDTH];    HREADYout <= 1; HRESP <= 2'b00; end \
-                          HSIZE_WORD4     : begin mem[HADDR_reg_d + counter] [WORD4_WIDTH-1:0]    <= HWDATA_reg_d[WORD4_WIDTH-1:0];    mem[HADDR_reg_d + counter] [DATA_WIDTH-1:WORD4_WIDTH]    <= mem[HADDR_reg_d + counter] [DATA_WIDTH-1:WORD4_WIDTH];    HREADYout <= 1; HRESP <= 2'b00; end \
-                          HSIZE_WORD8     : begin mem[HADDR_reg_d + counter] [WORD8_WIDTH-1:0]    <= HWDATA_reg_d[WORD8_WIDTH-1:0];    mem[HADDR_reg_d + counter] [DATA_WIDTH-1:WORD8_WIDTH]    <= mem[HADDR_reg_d + counter] [DATA_WIDTH-1:WORD8_WIDTH];    HREADYout <= 1; HRESP <= 2'b00; end \
-                          HSIZE_WORD16    : begin mem[HADDR_reg_d + counter] [WORD16_WIDTH-1:0]   <= HWDATA_reg_d[WORD16_WIDTH-1:0];   mem[HADDR_reg_d + counter] [DATA_WIDTH-1:WORD16_WIDTH]   <= mem[HADDR_reg_d + counter] [DATA_WIDTH-1:WORD16_WIDTH];   HREADYout <= 1; HRESP <= 2'b00; end \
-                          HSIZE_WORD32    : begin mem[HADDR_reg_d + counter] [WORD32_WIDTH-1:0]   <= HWDATA_reg_d[WORD32_WIDTH-1:0];                                                                                                                         HREADYout <= 1; HRESP <= 2'b00; end \
+                          HSIZE_BYTE      : begin mem[HADDR_reg_d + counter] [BYTE_WIDTH-1:0]     <= HWDATA[BYTE_WIDTH-1:0];     mem[HADDR_reg_d + counter] [DATA_WIDTH-1:BYTE_WIDTH]     <= mem[HADDR_reg_d + counter] [DATA_WIDTH-1:BYTE_WIDTH];     HREADYout <= 1; HRESP <= 2'b00; end \
+                          HSIZE_HALFWORD  : begin mem[HADDR_reg_d + counter] [HALFWORD_WIDTH-1:0] <= HWDATA[HALFWORD_WIDTH-1:0]; mem[HADDR_reg_d + counter] [DATA_WIDTH-1:HALFWORD_WIDTH] <= mem[HADDR_reg_d + counter] [DATA_WIDTH-1:HALFWORD_WIDTH]; HREADYout <= 1; HRESP <= 2'b00; end \
+                          HSIZE_WORD      : begin mem[HADDR_reg_d + counter] [WORD_WIDTH-1:0]     <= HWDATA[WORD_WIDTH-1:0];     mem[HADDR_reg_d + counter] [DATA_WIDTH-1:WORD_WIDTH]     <= mem[HADDR_reg_d + counter] [DATA_WIDTH-1:WORD_WIDTH];     HREADYout <= 1; HRESP <= 2'b00; end \
+                          HSIZE_WORD2     : begin mem[HADDR_reg_d + counter] [WORD2_WIDTH-1:0]    <= HWDATA[WORD2_WIDTH-1:0];    mem[HADDR_reg_d + counter] [DATA_WIDTH-1:WORD2_WIDTH]    <= mem[HADDR_reg_d + counter] [DATA_WIDTH-1:WORD2_WIDTH];    HREADYout <= 1; HRESP <= 2'b00; end \
+                          HSIZE_WORD4     : begin mem[HADDR_reg_d + counter] [WORD4_WIDTH-1:0]    <= HWDATA[WORD4_WIDTH-1:0];    mem[HADDR_reg_d + counter] [DATA_WIDTH-1:WORD4_WIDTH]    <= mem[HADDR_reg_d + counter] [DATA_WIDTH-1:WORD4_WIDTH];    HREADYout <= 1; HRESP <= 2'b00; end \
+                          HSIZE_WORD8     : begin mem[HADDR_reg_d + counter] [WORD8_WIDTH-1:0]    <= HWDATA[WORD8_WIDTH-1:0];    mem[HADDR_reg_d + counter] [DATA_WIDTH-1:WORD8_WIDTH]    <= mem[HADDR_reg_d + counter] [DATA_WIDTH-1:WORD8_WIDTH];    HREADYout <= 1; HRESP <= 2'b00; end \
+                          HSIZE_WORD16    : begin mem[HADDR_reg_d + counter] [WORD16_WIDTH-1:0]   <= HWDATA[WORD16_WIDTH-1:0];   mem[HADDR_reg_d + counter] [DATA_WIDTH-1:WORD16_WIDTH]   <= mem[HADDR_reg_d + counter] [DATA_WIDTH-1:WORD16_WIDTH];   HREADYout <= 1; HRESP <= 2'b00; end \
+                          HSIZE_WORD32    : begin mem[HADDR_reg_d + counter] [WORD32_WIDTH-1:0]   <= HWDATA[WORD32_WIDTH-1:0];                                                                                                                         HREADYout <= 1; HRESP <= 2'b00; end \
       `elsif HWDATA_WIDTH512 \
-                          HSIZE_BYTE      : begin mem[HADDR_reg_d + counter] [BYTE_WIDTH-1:0]     <= HWDATA_reg_d[BYTE_WIDTH-1:0];     mem[HADDR_reg_d + counter] [DATA_WIDTH-1:BYTE_WIDTH]     <= mem[HADDR_reg_d + counter] [DATA_WIDTH-1:BYTE_WIDTH];     HREADYout <= 1; HRESP <= 2'b00; end \
-                          HSIZE_HALFWORD  : begin mem[HADDR_reg_d + counter] [HALFWORD_WIDTH-1:0] <= HWDATA_reg_d[HALFWORD_WIDTH-1:0]; mem[HADDR_reg_d + counter] [DATA_WIDTH-1:HALFWORD_WIDTH] <= mem[HADDR_reg_d + counter] [DATA_WIDTH-1:HALFWORD_WIDTH]; HREADYout <= 1; HRESP <= 2'b00; end \
-                          HSIZE_WORD      : begin mem[HADDR_reg_d + counter] [WORD_WIDTH-1:0]     <= HWDATA_reg_d[WORD_WIDTH-1:0];     mem[HADDR_reg_d + counter] [DATA_WIDTH-1:WORD_WIDTH]     <= mem[HADDR_reg_d + counter] [DATA_WIDTH-1:WORD_WIDTH];     HREADYout <= 1; HRESP <= 2'b00; end \
-                          HSIZE_WORD2     : begin mem[HADDR_reg_d + counter] [WORD2_WIDTH-1:0]    <= HWDATA_reg_d[WORD2_WIDTH-1:0];    mem[HADDR_reg_d + counter] [DATA_WIDTH-1:WORD2_WIDTH]    <= mem[HADDR_reg_d + counter] [DATA_WIDTH-1:WORD2_WIDTH];    HREADYout <= 1; HRESP <= 2'b00; end \
-                          HSIZE_WORD4     : begin mem[HADDR_reg_d + counter] [WORD4_WIDTH-1:0]    <= HWDATA_reg_d[WORD4_WIDTH-1:0];    mem[HADDR_reg_d + counter] [DATA_WIDTH-1:WORD4_WIDTH]    <= mem[HADDR_reg_d + counter] [DATA_WIDTH-1:WORD4_WIDTH];    HREADYout <= 1; HRESP <= 2'b00; end \
-                          HSIZE_WORD8     : begin mem[HADDR_reg_d + counter] [WORD8_WIDTH-1:0]    <= HWDATA_reg_d[WORD8_WIDTH-1:0];    mem[HADDR_reg_d + counter] [DATA_WIDTH-1:WORD8_WIDTH]    <= mem[HADDR_reg_d + counter] [DATA_WIDTH-1:WORD8_WIDTH];    HREADYout <= 1; HRESP <= 2'b00; end \
-                          HSIZE_WORD16    : begin mem[HADDR_reg_d + counter] [WORD16_WIDTH-1:0]   <= HWDATA_reg_d[WORD16_WIDTH-1:0];                                                                                                                         HREADYout <= 1; HRESP <= 2'b00; end \
+                          HSIZE_BYTE      : begin mem[HADDR_reg_d + counter] [BYTE_WIDTH-1:0]     <= HWDATA[BYTE_WIDTH-1:0];     mem[HADDR_reg_d + counter] [DATA_WIDTH-1:BYTE_WIDTH]     <= mem[HADDR_reg_d + counter] [DATA_WIDTH-1:BYTE_WIDTH];     HREADYout <= 1; HRESP <= 2'b00; end \
+                          HSIZE_HALFWORD  : begin mem[HADDR_reg_d + counter] [HALFWORD_WIDTH-1:0] <= HWDATA[HALFWORD_WIDTH-1:0]; mem[HADDR_reg_d + counter] [DATA_WIDTH-1:HALFWORD_WIDTH] <= mem[HADDR_reg_d + counter] [DATA_WIDTH-1:HALFWORD_WIDTH]; HREADYout <= 1; HRESP <= 2'b00; end \
+                          HSIZE_WORD      : begin mem[HADDR_reg_d + counter] [WORD_WIDTH-1:0]     <= HWDATA[WORD_WIDTH-1:0];     mem[HADDR_reg_d + counter] [DATA_WIDTH-1:WORD_WIDTH]     <= mem[HADDR_reg_d + counter] [DATA_WIDTH-1:WORD_WIDTH];     HREADYout <= 1; HRESP <= 2'b00; end \
+                          HSIZE_WORD2     : begin mem[HADDR_reg_d + counter] [WORD2_WIDTH-1:0]    <= HWDATA[WORD2_WIDTH-1:0];    mem[HADDR_reg_d + counter] [DATA_WIDTH-1:WORD2_WIDTH]    <= mem[HADDR_reg_d + counter] [DATA_WIDTH-1:WORD2_WIDTH];    HREADYout <= 1; HRESP <= 2'b00; end \
+                          HSIZE_WORD4     : begin mem[HADDR_reg_d + counter] [WORD4_WIDTH-1:0]    <= HWDATA[WORD4_WIDTH-1:0];    mem[HADDR_reg_d + counter] [DATA_WIDTH-1:WORD4_WIDTH]    <= mem[HADDR_reg_d + counter] [DATA_WIDTH-1:WORD4_WIDTH];    HREADYout <= 1; HRESP <= 2'b00; end \
+                          HSIZE_WORD8     : begin mem[HADDR_reg_d + counter] [WORD8_WIDTH-1:0]    <= HWDATA[WORD8_WIDTH-1:0];    mem[HADDR_reg_d + counter] [DATA_WIDTH-1:WORD8_WIDTH]    <= mem[HADDR_reg_d + counter] [DATA_WIDTH-1:WORD8_WIDTH];    HREADYout <= 1; HRESP <= 2'b00; end \
+                          HSIZE_WORD16    : begin mem[HADDR_reg_d + counter] [WORD16_WIDTH-1:0]   <= HWDATA[WORD16_WIDTH-1:0];                                                                                                                         HREADYout <= 1; HRESP <= 2'b00; end \
       `elsif HWDATA_WIDTH256 \
-                          HSIZE_BYTE      : begin mem[HADDR_reg_d + counter] [BYTE_WIDTH-1:0]     <= HWDATA_reg_d[BYTE_WIDTH-1:0];     mem[HADDR_reg_d + counter] [DATA_WIDTH-1:BYTE_WIDTH]     <= mem[HADDR_reg_d + counter] [DATA_WIDTH-1:BYTE_WIDTH];     HREADYout <= 1; HRESP <= 2'b00; end \
-                          HSIZE_HALFWORD  : begin mem[HADDR_reg_d + counter] [HALFWORD_WIDTH-1:0] <= HWDATA_reg_d[HALFWORD_WIDTH-1:0]; mem[HADDR_reg_d + counter] [DATA_WIDTH-1:HALFWORD_WIDTH] <= mem[HADDR_reg_d + counter] [DATA_WIDTH-1:HALFWORD_WIDTH]; HREADYout <= 1; HRESP <= 2'b00; end \
-                          HSIZE_WORD      : begin mem[HADDR_reg_d + counter] [WORD_WIDTH-1:0]     <= HWDATA_reg_d[WORD_WIDTH-1:0];     mem[HADDR_reg_d + counter] [DATA_WIDTH-1:WORD_WIDTH]     <= mem[HADDR_reg_d + counter] [DATA_WIDTH-1:WORD_WIDTH];     HREADYout <= 1; HRESP <= 2'b00; end \
-                          HSIZE_WORD2     : begin mem[HADDR_reg_d + counter] [WORD2_WIDTH-1:0]    <= HWDATA_reg_d[WORD2_WIDTH-1:0];    mem[HADDR_reg_d + counter] [DATA_WIDTH-1:WORD2_WIDTH]    <= mem[HADDR_reg_d + counter] [DATA_WIDTH-1:WORD2_WIDTH];    HREADYout <= 1; HRESP <= 2'b00; end \
-                          HSIZE_WORD4     : begin mem[HADDR_reg_d + counter] [WORD4_WIDTH-1:0]    <= HWDATA_reg_d[WORD4_WIDTH-1:0];    mem[HADDR_reg_d + counter] [DATA_WIDTH-1:WORD4_WIDTH]    <= mem[HADDR_reg_d + counter] [DATA_WIDTH-1:WORD4_WIDTH];    HREADYout <= 1; HRESP <= 2'b00; end \
-                          HSIZE_WORD8     : begin mem[HADDR_reg_d + counter] [WORD8_WIDTH-1:0]    <= HWDATA_reg_d[WORD8_WIDTH-1:0];                                                                                                                          HREADYout <= 1; HRESP <= 2'b00; end \
+                          HSIZE_BYTE      : begin mem[HADDR_reg_d + counter] [BYTE_WIDTH-1:0]     <= HWDATA[BYTE_WIDTH-1:0];     mem[HADDR_reg_d + counter] [DATA_WIDTH-1:BYTE_WIDTH]     <= mem[HADDR_reg_d + counter] [DATA_WIDTH-1:BYTE_WIDTH];     HREADYout <= 1; HRESP <= 2'b00; end \
+                          HSIZE_HALFWORD  : begin mem[HADDR_reg_d + counter] [HALFWORD_WIDTH-1:0] <= HWDATA[HALFWORD_WIDTH-1:0]; mem[HADDR_reg_d + counter] [DATA_WIDTH-1:HALFWORD_WIDTH] <= mem[HADDR_reg_d + counter] [DATA_WIDTH-1:HALFWORD_WIDTH]; HREADYout <= 1; HRESP <= 2'b00; end \
+                          HSIZE_WORD      : begin mem[HADDR_reg_d + counter] [WORD_WIDTH-1:0]     <= HWDATA[WORD_WIDTH-1:0];     mem[HADDR_reg_d + counter] [DATA_WIDTH-1:WORD_WIDTH]     <= mem[HADDR_reg_d + counter] [DATA_WIDTH-1:WORD_WIDTH];     HREADYout <= 1; HRESP <= 2'b00; end \
+                          HSIZE_WORD2     : begin mem[HADDR_reg_d + counter] [WORD2_WIDTH-1:0]    <= HWDATA[WORD2_WIDTH-1:0];    mem[HADDR_reg_d + counter] [DATA_WIDTH-1:WORD2_WIDTH]    <= mem[HADDR_reg_d + counter] [DATA_WIDTH-1:WORD2_WIDTH];    HREADYout <= 1; HRESP <= 2'b00; end \
+                          HSIZE_WORD4     : begin mem[HADDR_reg_d + counter] [WORD4_WIDTH-1:0]    <= HWDATA[WORD4_WIDTH-1:0];    mem[HADDR_reg_d + counter] [DATA_WIDTH-1:WORD4_WIDTH]    <= mem[HADDR_reg_d + counter] [DATA_WIDTH-1:WORD4_WIDTH];    HREADYout <= 1; HRESP <= 2'b00; end \
+                          HSIZE_WORD8     : begin mem[HADDR_reg_d + counter] [WORD8_WIDTH-1:0]    <= HWDATA[WORD8_WIDTH-1:0];                                                                                                                          HREADYout <= 1; HRESP <= 2'b00; end \
       `elsif HWDATA_WIDTH128 \
-                          HSIZE_BYTE      : begin mem[HADDR_reg_d + counter] [BYTE_WIDTH-1:0]     <= HWDATA_reg_d[BYTE_WIDTH-1:0];     mem[HADDR_reg_d + counter] [DATA_WIDTH-1:BYTE_WIDTH]     <= mem[HADDR_reg_d + counter] [DATA_WIDTH-1:BYTE_WIDTH];     HREADYout <= 1; HRESP <= 2'b00; end \
-                          HSIZE_HALFWORD  : begin mem[HADDR_reg_d + counter] [HALFWORD_WIDTH-1:0] <= HWDATA_reg_d[HALFWORD_WIDTH-1:0]; mem[HADDR_reg_d + counter] [DATA_WIDTH-1:HALFWORD_WIDTH] <= mem[HADDR_reg_d + counter] [DATA_WIDTH-1:HALFWORD_WIDTH]; HREADYout <= 1; HRESP <= 2'b00; end \
-                          HSIZE_WORD      : begin mem[HADDR_reg_d + counter] [WORD_WIDTH-1:0]     <= HWDATA_reg_d[WORD_WIDTH-1:0];     mem[HADDR_reg_d + counter] [DATA_WIDTH-1:WORD_WIDTH]     <= mem[HADDR_reg_d + counter] [DATA_WIDTH-1:WORD_WIDTH];     HREADYout <= 1; HRESP <= 2'b00; end \
-                          HSIZE_WORD2     : begin mem[HADDR_reg_d + counter] [WORD2_WIDTH-1:0]    <= HWDATA_reg_d[WORD2_WIDTH-1:0];    mem[HADDR_reg_d + counter] [DATA_WIDTH-1:WORD2_WIDTH]    <= mem[HADDR_reg_d + counter] [DATA_WIDTH-1:WORD2_WIDTH];    HREADYout <= 1; HRESP <= 2'b00; end \
-                          HSIZE_WORD4     : begin mem[HADDR_reg_d + counter] [WORD4_WIDTH-1:0]    <= HWDATA_reg_d[WORD4_WIDTH-1:0];                                                                                                                          HREADYout <= 1; HRESP <= 2'b00; end \
+                          HSIZE_BYTE      : begin mem[HADDR_reg_d + counter] [BYTE_WIDTH-1:0]     <= HWDATA[BYTE_WIDTH-1:0];     mem[HADDR_reg_d + counter] [DATA_WIDTH-1:BYTE_WIDTH]     <= mem[HADDR_reg_d + counter] [DATA_WIDTH-1:BYTE_WIDTH];     HREADYout <= 1; HRESP <= 2'b00; end \
+                          HSIZE_HALFWORD  : begin mem[HADDR_reg_d + counter] [HALFWORD_WIDTH-1:0] <= HWDATA[HALFWORD_WIDTH-1:0]; mem[HADDR_reg_d + counter] [DATA_WIDTH-1:HALFWORD_WIDTH] <= mem[HADDR_reg_d + counter] [DATA_WIDTH-1:HALFWORD_WIDTH]; HREADYout <= 1; HRESP <= 2'b00; end \
+                          HSIZE_WORD      : begin mem[HADDR_reg_d + counter] [WORD_WIDTH-1:0]     <= HWDATA[WORD_WIDTH-1:0];     mem[HADDR_reg_d + counter] [DATA_WIDTH-1:WORD_WIDTH]     <= mem[HADDR_reg_d + counter] [DATA_WIDTH-1:WORD_WIDTH];     HREADYout <= 1; HRESP <= 2'b00; end \
+                          HSIZE_WORD2     : begin mem[HADDR_reg_d + counter] [WORD2_WIDTH-1:0]    <= HWDATA[WORD2_WIDTH-1:0];    mem[HADDR_reg_d + counter] [DATA_WIDTH-1:WORD2_WIDTH]    <= mem[HADDR_reg_d + counter] [DATA_WIDTH-1:WORD2_WIDTH];    HREADYout <= 1; HRESP <= 2'b00; end \
+                          HSIZE_WORD4     : begin mem[HADDR_reg_d + counter] [WORD4_WIDTH-1:0]    <= HWDATA[WORD4_WIDTH-1:0];                                                                                                                          HREADYout <= 1; HRESP <= 2'b00; end \
       `elsif HWDATA_WIDTH64 \
-                          HSIZE_BYTE      : begin mem[HADDR_reg_d + counter] [BYTE_WIDTH-1:0]     <= HWDATA_reg_d[BYTE_WIDTH-1:0];     mem[HADDR_reg_d + counter] [DATA_WIDTH-1:BYTE_WIDTH]     <= mem[HADDR_reg_d + counter] [DATA_WIDTH-1:BYTE_WIDTH];     HREADYout <= 1; HRESP <= 2'b00; end \
-                          HSIZE_HALFWORD  : begin mem[HADDR_reg_d + counter] [HALFWORD_WIDTH-1:0] <= HWDATA_reg_d[HALFWORD_WIDTH-1:0]; mem[HADDR_reg_d + counter] [DATA_WIDTH-1:HALFWORD_WIDTH] <= mem[HADDR_reg_d + counter] [DATA_WIDTH-1:HALFWORD_WIDTH]; HREADYout <= 1; HRESP <= 2'b00; end \
-                          HSIZE_WORD      : begin mem[HADDR_reg_d + counter] [WORD_WIDTH-1:0]     <= HWDATA_reg_d[WORD_WIDTH-1:0];     mem[HADDR_reg_d + counter] [DATA_WIDTH-1:WORD_WIDTH]     <= mem[HADDR_reg_d + counter] [DATA_WIDTH-1:WORD_WIDTH];     HREADYout <= 1; HRESP <= 2'b00; end \
-                          HSIZE_WORD2     : begin mem[HADDR_reg_d + counter] [WORD2_WIDTH-1:0]    <= HWDATA_reg_d[WORD2_WIDTH-1:0];                                                                                                                          HREADYout <= 1; HRESP <= 2'b00; end \
+                          HSIZE_BYTE      : begin mem[HADDR_reg_d + counter] [BYTE_WIDTH-1:0]     <= HWDATA[BYTE_WIDTH-1:0];     mem[HADDR_reg_d + counter] [DATA_WIDTH-1:BYTE_WIDTH]     <= mem[HADDR_reg_d + counter] [DATA_WIDTH-1:BYTE_WIDTH];     HREADYout <= 1; HRESP <= 2'b00; end \
+                          HSIZE_HALFWORD  : begin mem[HADDR_reg_d + counter] [HALFWORD_WIDTH-1:0] <= HWDATA[HALFWORD_WIDTH-1:0]; mem[HADDR_reg_d + counter] [DATA_WIDTH-1:HALFWORD_WIDTH] <= mem[HADDR_reg_d + counter] [DATA_WIDTH-1:HALFWORD_WIDTH]; HREADYout <= 1; HRESP <= 2'b00; end \
+                          HSIZE_WORD      : begin mem[HADDR_reg_d + counter] [WORD_WIDTH-1:0]     <= HWDATA[WORD_WIDTH-1:0];     mem[HADDR_reg_d + counter] [DATA_WIDTH-1:WORD_WIDTH]     <= mem[HADDR_reg_d + counter] [DATA_WIDTH-1:WORD_WIDTH];     HREADYout <= 1; HRESP <= 2'b00; end \
+                          HSIZE_WORD2     : begin mem[HADDR_reg_d + counter] [WORD2_WIDTH-1:0]    <= HWDATA[WORD2_WIDTH-1:0];                                                                                                                          HREADYout <= 1; HRESP <= 2'b00; end \
       `elsif HWDATA_WIDTH32 \
-                          HSIZE_BYTE      : begin mem[HADDR_reg_d + counter] [BYTE_WIDTH-1:0]     <= HWDATA_reg_d[BYTE_WIDTH-1:0];     mem[HADDR_reg_d + counter] [DATA_WIDTH-1:BYTE_WIDTH]     <= mem[HADDR_reg_d + counter] [DATA_WIDTH-1:BYTE_WIDTH];     HREADYout <= 1; HRESP <= 2'b00; end \
-                          HSIZE_HALFWORD  : begin mem[HADDR_reg_d + counter] [HALFWORD_WIDTH-1:0] <= HWDATA_reg_d[HALFWORD_WIDTH-1:0]; mem[HADDR_reg_d + counter] [DATA_WIDTH-1:HALFWORD_WIDTH] <= mem[HADDR_reg_d + counter] [DATA_WIDTH-1:HALFWORD_WIDTH]; HREADYout <= 1; HRESP <= 2'b00; end \
-                          HSIZE_WORD      : begin mem[HADDR_reg_d + counter] [WORD_WIDTH-1:0]     <= HWDATA_reg_d[WORD_WIDTH-1:0];                                                                                                                           HREADYout <= 1; HRESP <= 2'b00; end \
+                          HSIZE_BYTE      : begin mem[HADDR_reg_d + counter] [BYTE_WIDTH-1:0]     <= HWDATA[BYTE_WIDTH-1:0];     mem[HADDR_reg_d + counter] [DATA_WIDTH-1:BYTE_WIDTH]     <= mem[HADDR_reg_d + counter] [DATA_WIDTH-1:BYTE_WIDTH];     HREADYout <= 1; HRESP <= 2'b00; end \
+                          HSIZE_HALFWORD  : begin mem[HADDR_reg_d + counter] [HALFWORD_WIDTH-1:0] <= HWDATA[HALFWORD_WIDTH-1:0]; mem[HADDR_reg_d + counter] [DATA_WIDTH-1:HALFWORD_WIDTH] <= mem[HADDR_reg_d + counter] [DATA_WIDTH-1:HALFWORD_WIDTH]; HREADYout <= 1; HRESP <= 2'b00; end \
+                          HSIZE_WORD      : begin mem[HADDR_reg_d + counter] [WORD_WIDTH-1:0]     <= HWDATA[WORD_WIDTH-1:0];                                                                                                                           HREADYout <= 1; HRESP <= 2'b00; end \
       `else \
-                          HSIZE_BYTE      : begin mem[HADDR_reg_d + counter] [BYTE_WIDTH-1:0]     <= HWDATA_reg_d[BYTE_WIDTH-1:0];     mem[HADDR_reg_d + counter] [DATA_WIDTH-1:BYTE_WIDTH]     <= mem[HADDR_reg_d + counter] [DATA_WIDTH-1:BYTE_WIDTH];     HREADYout <= 1; HRESP <= 2'b00; end \
-                          HSIZE_HALFWORD  : begin mem[HADDR_reg_d + counter] [HALFWORD_WIDTH-1:0] <= HWDATA_reg_d[HALFWORD_WIDTH-1:0]; mem[HADDR_reg_d + counter] [DATA_WIDTH-1:HALFWORD_WIDTH] <= mem[HADDR_reg_d + counter] [DATA_WIDTH-1:HALFWORD_WIDTH]; HREADYout <= 1; HRESP <= 2'b00; end \
-                          HSIZE_WORD      : begin mem[HADDR_reg_d + counter] [WORD_WIDTH-1:0]     <= HWDATA_reg_d[WORD_WIDTH-1:0];                                                                                                                           HREADYout <= 1; HRESP <= 2'b00; end \
+                          HSIZE_BYTE      : begin mem[HADDR_reg_d + counter] [BYTE_WIDTH-1:0]     <= HWDATA[BYTE_WIDTH-1:0];     mem[HADDR_reg_d + counter] [DATA_WIDTH-1:BYTE_WIDTH]     <= mem[HADDR_reg_d + counter] [DATA_WIDTH-1:BYTE_WIDTH];     HREADYout <= 1; HRESP <= 2'b00; end \
+                          HSIZE_HALFWORD  : begin mem[HADDR_reg_d + counter] [HALFWORD_WIDTH-1:0] <= HWDATA[HALFWORD_WIDTH-1:0]; mem[HADDR_reg_d + counter] [DATA_WIDTH-1:HALFWORD_WIDTH] <= mem[HADDR_reg_d + counter] [DATA_WIDTH-1:HALFWORD_WIDTH]; HREADYout <= 1; HRESP <= 2'b00; end \
+                          HSIZE_WORD      : begin mem[HADDR_reg_d + counter] [WORD_WIDTH-1:0]     <= HWDATA[WORD_WIDTH-1:0];                                                                                                                           HREADYout <= 1; HRESP <= 2'b00; end \
       `endif
 
   `define HSIZE_conditional_READ_def(counter) \
@@ -215,7 +215,7 @@ module ahb_subordinate
                         HSIZE_WORD      : begin HRDATA[WORD_WIDTH-1:0]      <= mem[HADDR_reg_d+counter][WORD_WIDTH-1:0];     HREADYout <= 1;                                                                             HRESP <= 2'b00; end \
     `endif
 
-
+    //wrap counter always block
     always @(posedge HCLK or negedge HRESETn) begin        
       if(~HRESETn) begin
         wrap_counter_reg <= 0;
@@ -228,22 +228,9 @@ module ahb_subordinate
                 if(/*(HADDR_reg_c + burst_counter_reg < ADDR_DEPTH) &*/ ($signed(HADDR[ADDR_WIDTH-BITS_FOR_SUBORDINATES-1:0] + wrap_counter_reg) < ADDR_DEPTH)) begin
                   case(HBURST)
                     INCR, INCR4, INCR8, INCR16: wrap_counter_reg <= wrap_counter_reg;
-                    // WRAP4:  wrap_counter_reg <= 1;
-                    // WRAP8:  wrap_counter_reg <= 3;
-                    // WRAP16: wrap_counter_reg <= 7;
                     WRAP4, WRAP8, WRAP16: begin
-                      if(half_of_wrap) begin
-                        wrap_counter_reg <= wrap_counter_reg + 1;
-                      end
-                      else /*if(wrap_counter_reg == 3)*/ begin
-                        wrap_counter_reg <= (~(wrap_counter_reg) + 1) -1;
-                      end
-                      // else begin
-                      //   wrap_counter_reg <= wrap_counter_reg + 1;
-                      // end
+                      wrap_counter_reg <= wrap_counter_reg + 1;
                     end
-                    // WRAP8:  wrap_counter_reg <= 3;
-                    // WRAP16: wrap_counter_reg <= 7;
                     default: begin
                       $display("time: %0t, I AM HERE NOW SINGLE ", $time());
                       wrap_counter_reg <= wrap_counter_reg;
@@ -251,7 +238,7 @@ module ahb_subordinate
                   endcase // HBURST_reg_d
                 end
                 else begin
-                  $display("a7eeh1");
+                  $display("a7eeh1w");
                   wrap_counter_reg <= wrap_counter_reg;
                 end
               end
@@ -261,14 +248,19 @@ module ahb_subordinate
             end
             2'b11: begin
               if(HSEL_reg_d && HREADYin)begin
-                if(/*(HADDR_reg_c + burst_counter_reg < ADDR_DEPTH) &*/ ($signed(HADDR[ADDR_WIDTH-BITS_FOR_SUBORDINATES-1:0] + wrap_counter_reg) < ADDR_DEPTH)) begin
+                if(/*(HADDR_reg_c + burst_counter_reg < ADDR_DEPTH) &*/ ($signed(HADDR_reg_d + wrap_counter_reg) < ADDR_DEPTH)) begin
                   case(HBURST_reg_d)
                     INCR, INCR4, INCR8, INCR16: begin
                       wrap_counter_reg <= wrap_counter_reg;
                       $display("time: %0t, I AM HERE NOW BURST ", $time());
                     end
                     WRAP4, WRAP8, WRAP16: begin
-                      wrap_counter_reg <= wrap_counter_reg - 1;
+                      if(~half_of_wrap) begin
+                        wrap_counter_reg <= wrap_counter_reg + 1;
+                      end
+                      else /*if(wrap_counter_reg == 3)*/ begin
+                        wrap_counter_reg <= (~(wrap_counter_reg) + 1) -1;
+                      end
                       $display("time: %0t, I AM HERE NOW WRAP ", $time());
                     end
                     default: begin
@@ -290,7 +282,7 @@ module ahb_subordinate
                 wrap_counter_reg <= wrap_counter_reg;       
             end
             default: begin
-              wrap_counter_reg <= -10;
+              wrap_counter_reg <= 0;
             end
           endcase // HTRANS_reg_d
         end
@@ -300,18 +292,18 @@ module ahb_subordinate
       end
     end
 
-
+    //burst counter always block
     always @(posedge HCLK or negedge HRESETn) begin        
       if(~HRESETn) begin
         burst_counter_reg <= 0;
       end 
       else begin
-        if(HWRITE_reg_d == 1 || HWRITE_reg_d == 0) begin
-          case (HTRANS_reg_d)
+        if(HWRITE == 1 || HWRITE == 0) begin
+          case (HTRANS)
             2'b10: begin
-              if(HSEL_reg_d && HREADYin) begin
-                if(((HADDR_reg_d + burst_counter_reg) < ADDR_DEPTH)) begin
-                  case(HBURST_reg_d)
+              if(HSEL && HREADYin) begin
+                if(((HADDR[ADDR_WIDTH-BITS_FOR_SUBORDINATES-1:0] + burst_counter_reg) < ADDR_DEPTH)) begin
+                  case(HBURST)
                     INCR, INCR4, INCR8, INCR16: burst_counter_reg <= burst_counter_reg + 1;
                     WRAP4, WRAP8, WRAP16: burst_counter_reg <= burst_counter_reg;
                     default: begin
@@ -321,7 +313,7 @@ module ahb_subordinate
                   endcase // HBURST_reg_d
                 end
                 else begin
-                  $display("a7eeh1");
+                  $display("a7eeh1b");
                   burst_counter_reg <= burst_counter_reg;
                 end
               end
@@ -419,7 +411,7 @@ module ahb_subordinate
               end
 
               2'b10, 2'b11: begin
-                if((HADDR_reg_d + burst_counter_reg < ADDR_DEPTH) & ($signed(HADDR_reg_d + wrap_counter) < ADDR_DEPTH)) begin
+                if((HADDR_reg_d + burst_counter < ADDR_DEPTH) & ($signed(HADDR_reg_d + wrap_counter) < ADDR_DEPTH)) begin
                   case(HBURST_reg_d)
                     INCR, INCR4, INCR8, INCR16: begin
                       case(HSIZE_reg_d) 
@@ -567,7 +559,7 @@ module ahb_subordinate
         // HWRITE_reg_c      <= 0;
 
         burst_counter <= 0;
-        wrap_counter  <= -10;
+        wrap_counter  <= 0;
 
       end 
       else begin 
@@ -610,6 +602,8 @@ module ahb_subordinate
 
         HWRITE_reg_d      <= 0;
 
+        HREADYin_reg_d    <= 1;
+
         // HRDATA_reg_d      <= 0;
         // HRESP_reg_d       <= 0;
         // HREADYout_reg_d   <= 1;
@@ -624,6 +618,8 @@ module ahb_subordinate
         HWDATA_reg_d     <= HWDATA;
 
         HWRITE_reg_d     <= HWRITE_reg_c;
+
+        HREADYin_reg_d   <= HREADYin_reg_c;
       end 
    end
 
@@ -733,7 +729,7 @@ module ahb_subordinate
     endcase
   end
 
-  always@(HBURST) begin
+  always@(*) begin
     case(HBURST)
       WRAP4: begin
         if(wrap_counter_reg == 1) begin half_of_wrap = 1; end
@@ -747,7 +743,7 @@ module ahb_subordinate
         if(wrap_counter_reg == 7) begin half_of_wrap = 1; end
         else                      begin half_of_wrap = 0; end
       end
-      default: half_of_wrap = half_of_wrap;
+      default: half_of_wrap = 0;
     endcase // HBURST
   end
 
