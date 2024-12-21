@@ -286,7 +286,7 @@ class predictor extends uvm_subscriber #(sequence_item);
             WRAP4, WRAP8, WRAP16: begin
               if(~undo_on) begin
                 write_process(wrap_counter);
-                if((int'(HADDR_VALID + wrap_counter) > 0) & (int'(HADDR_VALID + wrap_counter) < ADDR_DEPTH-1)) begin
+                if((int'(HADDR_VALID + wrap_counter) > 0) & (int'(HADDR_VALID + wrap_counter) < ADDR_DEPTH)) begin
                   wrap_counter = wrap_counter + 1;
                 end
                 else begin
@@ -643,7 +643,7 @@ class predictor extends uvm_subscriber #(sequence_item);
             WRAP4, WRAP8, WRAP16: begin
               if(~undo_on) begin
                 read_process(wrap_counter);
-                if((int'(HADDR_VALID + wrap_counter) > 0) & (int'(HADDR_VALID + wrap_counter) < ADDR_DEPTH-1)) begin
+                if((int'(HADDR_VALID + wrap_counter) > 0) & (int'(HADDR_VALID + wrap_counter) < ADDR_DEPTH)) begin
                   wrap_counter = wrap_counter + 1;
                 end
                 else begin
@@ -957,36 +957,36 @@ class predictor extends uvm_subscriber #(sequence_item);
       $display("DDsubordinate2 MEM AFTER RESET: %p", subordinate2);
       $display("DDsubordinate3 MEM AFTER RESET: %p", subordinate3);
       end
-      if(seq_item_oldest.HWRITE == 1) begin
-      `uvm_info("PREDICTOR: ", {"seq_item_oldest: ", seq_item_oldest.convert2string()}, UVM_LOW) 
-      `uvm_info("PREDICTOR: ", {"seq_item_old: ", seq_item_old.convert2string()}, UVM_LOW) 
-      `uvm_info("PREDICTOR: ", {$sformatf("undo_HWDATA_oldest: %0h ", undo_HWDATA_oldest)}, UVM_LOW) 
-        undo_on     = 1;
-        HRESETn     = seq_item_oldest.HRESETn;
-        HWRITE      = seq_item_oldest.HWRITE;
-        HTRANS      = seq_item_oldest.HTRANS;
-        HADDR       = seq_item_oldest.HADDR;
-        HSIZE       = seq_item_oldest.HSIZE;
-        HBURST      = seq_item_oldest.HBURST;
-        HPROT       = seq_item_oldest.HPROT;
-        HWDATA      = undo_HWDATA_oldest;
-        HADDR_VALID = HADDR[ADDR_WIDTH-BITS_FOR_SUBORDINATES-1:0];//29:0
-        HSEL        = HADDR[ADDR_WIDTH-1:ADDR_WIDTH-BITS_FOR_SUBORDINATES];//31:30
-        `uvm_info("PREDICTOR: ", {$sformatf("undo_counter_oldest %0d: ", undo_counter_oldest)}, UVM_LOW)
-        case(HBURST)
-          WRAP4, WRAP8, WRAP16: begin
-            wrap_counter = undo_counter_oldest;
-          end
-          INCR, INCR4, INCR8, INCR16: begin
-            burst_counter = undo_counter_oldest;
-          end
-        endcase
-        write_AHB();
-        undo_on     = 0;
-      $display("DDsubordinate1 MEM AFTER RESET: %p", subordinate1);
-      $display("DDsubordinate2 MEM AFTER RESET: %p", subordinate2);
-      $display("DDsubordinate3 MEM AFTER RESET: %p", subordinate3);
-      end
+      // if(seq_item_oldest.HWRITE == 1) begin
+      // `uvm_info("PREDICTOR: ", {"seq_item_oldest: ", seq_item_oldest.convert2string()}, UVM_LOW) 
+      // `uvm_info("PREDICTOR: ", {"seq_item_old: ", seq_item_old.convert2string()}, UVM_LOW) 
+      // `uvm_info("PREDICTOR: ", {$sformatf("undo_HWDATA_oldest: %0h ", undo_HWDATA_oldest)}, UVM_LOW) 
+      //   undo_on     = 1;
+      //   HRESETn     = seq_item_oldest.HRESETn;
+      //   HWRITE      = seq_item_oldest.HWRITE;
+      //   HTRANS      = seq_item_oldest.HTRANS;
+      //   HADDR       = seq_item_oldest.HADDR;
+      //   HSIZE       = seq_item_oldest.HSIZE;
+      //   HBURST      = seq_item_oldest.HBURST;
+      //   HPROT       = seq_item_oldest.HPROT;
+      //   HWDATA      = undo_HWDATA_oldest;
+      //   HADDR_VALID = HADDR[ADDR_WIDTH-BITS_FOR_SUBORDINATES-1:0];//29:0
+      //   HSEL        = HADDR[ADDR_WIDTH-1:ADDR_WIDTH-BITS_FOR_SUBORDINATES];//31:30
+      //   `uvm_info("PREDICTOR: ", {$sformatf("undo_counter_oldest %0d: ", undo_counter_oldest)}, UVM_LOW)
+      //   case(HBURST)
+      //     WRAP4, WRAP8, WRAP16: begin
+      //       wrap_counter = undo_counter_oldest;
+      //     end
+      //     INCR, INCR4, INCR8, INCR16: begin
+      //       burst_counter = undo_counter_oldest;
+      //     end
+      //   endcase
+      //   write_AHB();
+      //   undo_on     = 0;
+      // $display("DDsubordinate1 MEM AFTER RESET: %p", subordinate1);
+      // $display("DDsubordinate2 MEM AFTER RESET: %p", subordinate2);
+      // $display("DDsubordinate3 MEM AFTER RESET: %p", subordinate3);
+      // end
 
       $display("TIME : %0t AFTER correcting the predictor mem", $time());
       // undo_HWDATA_older = 'hx;

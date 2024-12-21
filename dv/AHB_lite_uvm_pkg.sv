@@ -139,6 +139,7 @@ package AHB_pkg;
 
 	`include "runall_sequence.svh"
 	`include "test_sequence.svh"
+	`include "ADDRESS_ERROR_INJECTION_sequence.svh"
 
 
 
@@ -195,5 +196,6 @@ package AHB_pkg;
 
 	`include "runall_test.svh"
 	`include "test_test.svh"
+	`include "ADDRESS_ERROR_INJECTION_test.svh"
 
 endpackage : AHB_pkg

@@ -43,7 +43,7 @@ module ahb_mux #(parameter ADDR_WIDTH, NO_OF_SUBORDINATES, BITS_FOR_SUBORDINATES
 
   always @(*) begin //DATA_PHASE_SYNC
     if(~HRESETn) begin
-       HSEL_bus_reg_s <= 0;
+       HSEL_bus_reg_s = 0;
     end
     else begin
       HSEL_bus_reg_s = HSEL_bus_reg_d;
