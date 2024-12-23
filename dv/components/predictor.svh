@@ -148,9 +148,9 @@ class predictor extends uvm_subscriber #(sequence_item);
     last_cycle_error_response();
     send_results();
   end
-  else if (HSEL != 4 && HRESP_expected == ERROR && HTRANS != IDLE) begin
-    waited_cycle_error_response();
-  end
+  // else if (HSEL != 4 && HRESP_expected == ERROR && HTRANS != IDLE) begin
+  //   waited_cycle_error_response();
+  // end
   else begin
     HTRANS      = t.HTRANS;
     HRESETn     = t.HRESETn;
@@ -264,7 +264,7 @@ class predictor extends uvm_subscriber #(sequence_item);
         IDLE, BUSY: begin
           if(undo_on) $display("HTRANS : %0d", HTRANS);
           if(HBURST == SINGLE) begin
-            if(~( (int'(HADDR_VALID + wrap_counter) >= 0) & ((HADDR_VALID + burst_counter) < ADDR_DEPTH) & (int'(HADDR_VALID + wrap_counter) < ADDR_DEPTH))) begin
+            if(~( (int'(HADDR_VALID + wrap_counter +1) >= 0) & ((HADDR_VALID + burst_counter -1) < ADDR_DEPTH) & (int'(HADDR_VALID + wrap_counter -1) < ADDR_DEPTH))) begin
               HRESP_expected = ERROR; HREADY_expected = READY;
               $display("HADDR+WRAP:%0d",(int'(HADDR_VALID+wrap_counter)), HADDR_VALID, wrap_counter);
               `uvm_warning("PREDICTOR", "This shouldnt be hit, please check why either counter is incrementing above address width in IDLE TRANSFER");
@@ -275,7 +275,7 @@ class predictor extends uvm_subscriber #(sequence_item);
           end
           else begin
             `uvm_warning("PREDICTOR", "This shouldnt be hit, please check why HBURST is not SINGLE during IDLE TRANSFER")
-            if(~( (int'(HADDR_VALID + wrap_counter) >= 0) & ((HADDR_VALID + burst_counter) < ADDR_DEPTH) & (int'(HADDR_VALID + wrap_counter) < ADDR_DEPTH))) begin
+            if(~( (int'(HADDR_VALID + wrap_counter +1) >= 0) & ((HADDR_VALID + burst_counter -1) < ADDR_DEPTH) & (int'(HADDR_VALID + wrap_counter -1) < ADDR_DEPTH))) begin
               HRESP_expected = ERROR; HREADY_expected = READY;
               `uvm_warning("PREDICTOR", "This shouldnt be hit, please check why either counter is incrementing above address width when HBURST is NOT SINGLE during IDLE TRANSFER");
             end
@@ -632,7 +632,7 @@ class predictor extends uvm_subscriber #(sequence_item);
 
         IDLE, BUSY: begin
           if(HBURST == SINGLE) begin
-            if(~( (int'(HADDR_VALID + wrap_counter ) >= 0 ) & ((HADDR_VALID + burst_counter) < ADDR_DEPTH) & (int'(wrap_counter+(HADDR_VALID)) < ADDR_DEPTH))) begin
+            if(~( (int'(HADDR_VALID + wrap_counter +1 ) >= 0 ) & ((HADDR_VALID + burst_counter - 1) < ADDR_DEPTH) & (int'(wrap_counter+(HADDR_VALID - 1)) < ADDR_DEPTH))) begin
               $display("HADDR+WRAP:%0d, HADDR:%0d, wrap_counter:%0d",(int'(HADDR_VALID+wrap_counter)), HADDR_VALID, wrap_counter);
               HRESP_expected = ERROR;
               `uvm_warning("PREDICTOR", "This shouldnt be hit, please check why either counter is incrementing above address width in IDLE TRANSFER");
@@ -644,7 +644,7 @@ class predictor extends uvm_subscriber #(sequence_item);
           else begin
             HRESP_expected = ERROR; HREADY_expected = READY;
             `uvm_warning("PREDICTOR", "This shouldnt be hit, please check why HBURST is not SINGLE during IDLE TRANSFER")
-            if(~( (int'(HADDR_VALID + wrap_counter ) >= 0) & ((HADDR_VALID + burst_counter) < ADDR_DEPTH) & (int'(HADDR_VALID + wrap_counter) < ADDR_DEPTH))) begin //might be obsolete
+            if(~( (int'(HADDR_VALID + wrap_counter +1 ) >= 0) & ((HADDR_VALID + burst_counter - 1) < ADDR_DEPTH) & (int'(HADDR_VALID + wrap_counter - 1) < ADDR_DEPTH))) begin //might be obsolete
               HRESP_expected = OKAY; HREADY_expected = READY;
               `uvm_warning("PREDICTOR", "This shouldnt be hit, please check why either counter is incrementing above address width when HBURST is NOT SINGLE during IDLE TRANSFER");
             end       
@@ -950,36 +950,36 @@ class predictor extends uvm_subscriber #(sequence_item);
         undo_on = 0;
 
       end
-      if(seq_item_older.HWRITE == 1) begin
-      `uvm_info("PREDICTOR: ", {"seq_item_older: ", seq_item_older.convert2string()}, UVM_LOW) 
-      `uvm_info("PREDICTOR: ", {"seq_item_old: ", seq_item_old.convert2string()}, UVM_LOW) 
-      `uvm_info("PREDICTOR: ", {$sformatf("undo_HWDATA_older: %0h ", undo_HWDATA_older)}, UVM_LOW) 
-        undo_on     = 1;
-        HRESETn     = seq_item_older.HRESETn;
-        HWRITE      = seq_item_older.HWRITE;
-        HTRANS      = seq_item_older.HTRANS;
-        HADDR       = seq_item_older.HADDR;
-        HSIZE       = seq_item_older.HSIZE;
-        HBURST      = seq_item_older.HBURST;
-        HPROT       = seq_item_older.HPROT;
-        HWDATA      = undo_HWDATA_older;
-        HADDR_VALID = HADDR[ADDR_WIDTH-BITS_FOR_SUBORDINATES-1:0];//29:0
-        HSEL        = HADDR[ADDR_WIDTH-1:ADDR_WIDTH-BITS_FOR_SUBORDINATES];//31:30
-        `uvm_info("PREDICTOR: ", {$sformatf("undo_counter_older %0d: ", undo_counter_older)}, UVM_LOW)
-        case(HBURST)
-          WRAP4, WRAP8, WRAP16: begin
-            wrap_counter = undo_counter_older;
-          end
-          INCR, INCR4, INCR8, INCR16: begin
-            burst_counter = undo_counter_older;
-          end
-        endcase
-        write_AHB();
-        undo_on     = 0;
-      $display("DDsubordinate1 MEM AFTER RESET: %p", subordinate1);
-      $display("DDsubordinate2 MEM AFTER RESET: %p", subordinate2);
-      $display("DDsubordinate3 MEM AFTER RESET: %p", subordinate3);
-      end
+      // if(seq_item_older.HWRITE == 1) begin
+      // `uvm_info("PREDICTOR: ", {"seq_item_older: ", seq_item_older.convert2string()}, UVM_LOW) 
+      // `uvm_info("PREDICTOR: ", {"seq_item_old: ", seq_item_old.convert2string()}, UVM_LOW) 
+      // `uvm_info("PREDICTOR: ", {$sformatf("undo_HWDATA_older: %0h ", undo_HWDATA_older)}, UVM_LOW) 
+      //   undo_on     = 1;
+      //   HRESETn     = seq_item_older.HRESETn;
+      //   HWRITE      = seq_item_older.HWRITE;
+      //   HTRANS      = seq_item_older.HTRANS;
+      //   HADDR       = seq_item_older.HADDR;
+      //   HSIZE       = seq_item_older.HSIZE;
+      //   HBURST      = seq_item_older.HBURST;
+      //   HPROT       = seq_item_older.HPROT;
+      //   HWDATA      = undo_HWDATA_older;
+      //   HADDR_VALID = HADDR[ADDR_WIDTH-BITS_FOR_SUBORDINATES-1:0];//29:0
+      //   HSEL        = HADDR[ADDR_WIDTH-1:ADDR_WIDTH-BITS_FOR_SUBORDINATES];//31:30
+      //   `uvm_info("PREDICTOR: ", {$sformatf("undo_counter_older %0d: ", undo_counter_older)}, UVM_LOW)
+      //   case(HBURST)
+      //     WRAP4, WRAP8, WRAP16: begin
+      //       wrap_counter = undo_counter_older;
+      //     end
+      //     INCR, INCR4, INCR8, INCR16: begin
+      //       burst_counter = undo_counter_older;
+      //     end
+      //   endcase
+      //   write_AHB();
+      //   undo_on     = 0;
+      // $display("DDsubordinate1 MEM AFTER RESET: %p", subordinate1);
+      // $display("DDsubordinate2 MEM AFTER RESET: %p", subordinate2);
+      // $display("DDsubordinate3 MEM AFTER RESET: %p", subordinate3);
+      // end
       // if(seq_item_oldest.HWRITE == 1) begin
       // `uvm_info("PREDICTOR: ", {"seq_item_oldest: ", seq_item_oldest.convert2string()}, UVM_LOW) 
       // `uvm_info("PREDICTOR: ", {"seq_item_old: ", seq_item_old.convert2string()}, UVM_LOW) 

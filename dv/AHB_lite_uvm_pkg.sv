@@ -111,6 +111,8 @@ package AHB_pkg;
 	`include "READ_SINGLE_sequence.svh"
 	`include "write_twice_sequence.svh"
 
+	`include "WRITE_READ_SINGLE_sequence.svh"
+
 
 	`include "WRITE_WRAP4_sequence.svh"
 	`include "WRITE_WRAP8_sequence.svh"
@@ -142,7 +144,6 @@ package AHB_pkg;
 	`include "ADDRESS_ERROR_INJECTION_sequence.svh"
 
 
-
 	`include "driver.svh"
 	`include "inputs_monitor.svh"
 	`include "outputs_monitor.svh"
@@ -167,6 +168,8 @@ package AHB_pkg;
 
 	`include "WRITE_SINGLE_test.svh"
 	`include "READ_SINGLE_test.svh"
+
+	`include "WRITE_READ_SINGLE_test.svh"
 
 	`include "WRITE_WRAP4_test.svh"
 	`include "WRITE_WRAP8_test.svh"
