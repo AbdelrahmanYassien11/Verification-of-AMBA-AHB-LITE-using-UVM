@@ -26,6 +26,8 @@ class env extends uvm_env;
   scoreboard scoreboard_h;
   coverage coverage_h;
 
+  // reactive_agent reactive_agent_h;
+
   // List for handling port connections
   uvm_port_list list;
 
@@ -60,6 +62,7 @@ class env extends uvm_env;
     uvm_config_db#(passive_agent_config)::set(this, "passive_agent_h", "config", passive_agent_config_h);
     uvm_config_db#(active_agent_config)::set(this, "active_agent_h", "active_config", active_agent_config_h);
 
+
     // Configure virtual interfaces
     uvm_config_db#(virtual inf)::set(this, "coverage_h", "my_vif", my_vif);
     uvm_config_db#(virtual inf)::set(this, "scoreboard_h", "my_vif", my_vif);
@@ -69,6 +72,11 @@ class env extends uvm_env;
     passive_agent_h = passive_agent::type_id::create("passive_agent_h", this);
     scoreboard_h = scoreboard::type_id::create("scoreboard_h", this);
     coverage_h = coverage::type_id::create("coverage_h", this);
+
+
+
+    // uvm_config_db#(active_agent_config)::set(this, "reactive_agent_h", "reactive_config", active_agent_config_h);   
+    // reactive_agent_h = reactive_agent::type_id::create("reactive_agent_h", this);    
 
     $display("env build phase");
   endfunction
@@ -81,6 +89,9 @@ class env extends uvm_env;
     active_agent_h.tlm_analysis_port_inputs.connect(coverage_h.analysis_export);
     active_agent_h.tlm_analysis_port_inputs.connect(scoreboard_h.analysis_export_inputs);
     passive_agent_h.tlm_analysis_port_outputs.connect(scoreboard_h.analysis_export_outputs);
+
+    // reactive_agent_h.tlm_analysis_port_inputs.connect(coverage.analysis_export_inputs);
+    // reactive_agent_h.tlm_analysis_port_inputs.connect(scoreboard_h.analysis_export_inputs);
 
     $display("env connect phase");
   endfunction

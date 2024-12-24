@@ -196,7 +196,7 @@ sequence_item previous_seq_item, seq_item;
             HADDR   <= seq_item.HADDR;
             CONTROL_PHASE_FLAG = 1;
         end
-        wait(HREADY);
+        //wait(HREADY);
     end
 
     always@(negedge HRESETn_global) begin
@@ -223,7 +223,7 @@ sequence_item previous_seq_item, seq_item;
     end
 
     always@(posedge clk) begin //DATA_PHASE //DATA_PHASE_FLAG might be obselete
-        if((counter >= 2) && HRESETn /*&& DATA_PHASE_FLAG*/ /*&& HREADY*/) begin // HRESETn to make it work after the reset cycle is done
+        if((counter >= 2) && (HRESETn === 1) /*&& DATA_PHASE_FLAG*/ /*&& HREADY*/) begin // HRESETn to make it work after the reset cycle is done
             //$display("DATA_PHASE: TIME:%0t ASSIGNING SIGNALS", $time());
             // The counter & data_phase_flag to make it work after a transaction is sent after reset cycle is done
             //send_inputs(HRESETn_reg, HWRITE_reg, HTRANS_reg, HSIZE_reg, HBURST_reg, HPROT_reg, HADDR_reg, HWDATA_reg, seq_item.RESET_op, seq_item.WRITE_op, seq_item.TRANS_op, seq_item.BURST_op, seq_item.SIZE_op);
@@ -239,24 +239,24 @@ sequence_item previous_seq_item, seq_item;
             DATA_PHASE_FLAG = 0;
             OUTPUTS_PHASE_FLAG_1 = 1;
         end
-        else if(counter == 2 && HREADY) begin
-            if(HWRITE_reg == 1'b1) begin
-                //$display("DATA_PHASE_WRITE: TIME:%0t ASSIGNING SIGNALS", $time());
-                write_AHB(HWDATA_reg);
-            end
-            else if(HWRITE_reg == 1'b0) begin
-                //$display("DATA_PHASE_READ: TIME:%0t ASSIGNING SIGNALS", $time());
-                read_AHB();
-            end
-            counter <= counter + 1;
-            DATA_PHASE_FLAG = 0;
-            OUTPUTS_PHASE_FLAG_1 = 1;
-        end
-        //wait(HREADY);
+        // else if(counter == 2 && (HRESETn === 1)) begin
+        //     if(HWRITE_reg == 1'b1) begin
+        //         //$display("DATA_PHASE_WRITE: TIME:%0t ASSIGNING SIGNALS", $time());
+        //         write_AHB(HWDATA_reg);
+        //     end
+        //     else if(HWRITE_reg == 1'b0) begin
+        //         //$display("DATA_PHASE_READ: TIME:%0t ASSIGNING SIGNALS", $time());
+        //         read_AHB();
+        //     end
+        //     counter <= counter + 1;
+        //     DATA_PHASE_FLAG = 0;
+        //     OUTPUTS_PHASE_FLAG_1 = 1;
+        // end
+        wait(HREADY);
     end
 
     always@(posedge clk) begin
-        if(HRESETn && counter >= 3 && OUTPUTS_PHASE_FLAG_1 /*&& HREADY*/) begin
+        if( (HRESETn === 1) && counter >= 3 && OUTPUTS_PHASE_FLAG_1 /*&& HREADY*/) begin
             //$display("OUTPUT_1_PHASE_SIGNALS: TIME:%0t ", $time());
             //counter = counter + 1;
             OUTPUTS_PHASE_FLAG_1 = 0;
