@@ -145,11 +145,13 @@ package AHB_pkg;
 
 
 	`include "driver.svh"
+	`include "reactive_driver.svh"
 	`include "inputs_monitor.svh"
 	`include "outputs_monitor.svh"
 
 	`include "active_agent.svh"
-	`include "passive_agent.svh"	
+	`include "passive_agent.svh"
+	`include "reactive_agent.svh"	
 
 	`include "scoreboard.svh"
 	`include "coverage.svh"

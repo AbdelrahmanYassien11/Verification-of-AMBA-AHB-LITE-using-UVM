@@ -26,7 +26,7 @@ class env extends uvm_env;
   scoreboard scoreboard_h;
   coverage coverage_h;
 
-  // reactive_agent reactive_agent_h;
+  reactive_agent reactive_agent_h;
 
   // List for handling port connections
   uvm_port_list list;
@@ -75,8 +75,8 @@ class env extends uvm_env;
 
 
 
-    // uvm_config_db#(active_agent_config)::set(this, "reactive_agent_h", "reactive_config", active_agent_config_h);   
-    // reactive_agent_h = reactive_agent::type_id::create("reactive_agent_h", this);    
+    uvm_config_db#(active_agent_config)::set(this, "reactive_agent_h", "reactive_config", active_agent_config_h);   
+    reactive_agent_h = reactive_agent::type_id::create("reactive_agent_h", this);    
 
     $display("env build phase");
   endfunction

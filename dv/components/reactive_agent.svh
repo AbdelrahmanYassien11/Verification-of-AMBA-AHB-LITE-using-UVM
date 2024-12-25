@@ -22,10 +22,12 @@ class reactive_agent extends uvm_agent;
   sequencer sequencer_h;
 
   reactive_driver reactive_driver_h;
-  ouputs_monitor outputs_monitor_h;
+  // ouputs_monitor outputs_monitor_h;
+  // inputs_monitor inputs_monitor_h;
 
   // Analysis port for sequence items
-  uvm_analysis_port #(sequence_item) tlm_analysis_port_outputs;
+  //uvm_analysis_port #(sequence_item) tlm_analysis_port_outputs;
+  //uvm_analysis_port #(sequence_item) tlm_analysis_port_inputs;
 
   // Port list for TLM connections (currently unused)
   uvm_port_list list;
@@ -43,7 +45,7 @@ class reactive_agent extends uvm_agent;
     super.build_phase(phase);
 
     // Retrieve the configuration object from the UVM config database
-    if(!uvm_config_db#(active_agent_config)::get(this, "", "active_config", reactive_agent_config_h)) begin
+    if(!uvm_config_db#(active_agent_config)::get(this, "", "reactive_config", reactive_agent_config_h)) begin
       `uvm_fatal("reactive_agent", "Failed to get reactive_agent_config object");
     end
 
@@ -53,21 +55,22 @@ class reactive_agent extends uvm_agent;
     // Create sequencer and reactive_driver if the agent is active
     if (get_is_active() == UVM_ACTIVE) begin
       sequencer_h = sequencer::type_id::create("sequencer_h", this);
-      burst_sequencer_h = sequencer::type_id::create("burst_sequencer_h", this);
-      runall_sequencer_h = sequencer::type_id::create("runall_sequencer_h", this);
 
       reactive_driver_h = reactive_driver::type_id::create("reactive_driver_h", this);
     end    
 
     // Create the inputs_monitor component
-    outputs_monitor_h = outputs_monitor::type_id::create("outputs_monitor_h", this);
+    // outputs_monitor_h = outputs_monitor::type_id::create("outputs_monitor_h", this);
+    // inputs_monitor_h = inputs_monitor::type_id::create("inputs_monitor_h", this);
 
     // Set the virtual interface for reactive_driver and inputs_monitor from the configuration
     uvm_config_db#(virtual inf)::set(this, "reactive_driver_h", "my_vif", reactive_agent_config_h.active_agent_config_my_vif);
-    uvm_config_db#(virtual inf)::set(this, "outputs_monitor_h", "my_vif", reactive_agent_config_h.active_agent_config_my_vif);
+    // uvm_config_db#(virtual inf)::set(this, "outputs_monitor_h", "my_vif", reactive_agent_config_h.active_agent_config_my_vif);
+
+    // uvm_config_db#(virtual inf)::set(this, "inputs_monitor_h", "my_vif", reactive_agent_config_h.active_agent_config_my_vif);
 
     // Create the TLM analysis port
-    tlm_analysis_port_inputs = new("tlm_analysis_port_inputs", this);
+    // tlm_analysis_port_inputs = new("tlm_analysis_port_inputs", this);
 
     // Display message indicating the build phase is complete
     $display("my_reactive_agent build phase");
@@ -78,7 +81,7 @@ class reactive_agent extends uvm_agent;
     super.connect_phase(phase);
 
     // Connect the inputs_monitor's TLM analysis port to the TLM analysis port of the agent
-    outputs_monitor_h.tlm_analysis_port.connect(tlm_analysis_port_outputs);
+    // inputs_monitor_h.tlm_analysis_port.connect(tlm_analysis_port_inputs);
 
     // Connect the reactive_driver’s sequence item port to the sequencer’s sequence item export if the agent is active
     if (get_is_active() == UVM_ACTIVE) begin
@@ -100,25 +103,24 @@ class reactive_agent extends uvm_agent;
   task run_phase(uvm_phase phase);
     super.run_phase(phase);
     // Display message indicating the run phase is active
-    react_to_dut_output();
+    //react_to_dut_output();
     $display("my_reactive_agent run phase");
   endtask
 
   task react_to_dut_output;
     // Monitor DUT output signal and react
-    forever begin
-      @(reactive_agent_config_h.active_agent_config_my_vif.HREADY or reactive_agent_config_h.active_agent_config_my_vif.HRESP); // Wait for output signal change
-      if ((reactive_agent_config_h.active_agent_config_my_vif.HREADY == '0 ) & (reactive_agent_config_h.active_agent_config_my_vif.HRESP == '1) ) begin
-        driver_control = 1;
-        // React based on output signal
-        // Generate input signal or initiate next phase of verification
-        IDLE_sequence_h.start(sequencer_h);
-      end
-      else begin
-        driver_control = '0;
-      end
+    // forever begin
+    //   @(reactive_agent_config_h.active_agent_config_my_vif.HREADY or reactive_agent_config_h.active_agent_config_my_vif.HRESP); // Wait for output signal change
+    //   if ((reactive_agent_config_h.active_agent_config_my_vif.HREADY === '0 ) & (reactive_agent_config_h.active_agent_config_my_vif.HRESP === '1) ) begin
+    //     // React based on output signal
+    //     // Generate input signal or initiate next phase of verification
+    //     IDLE_sequence_h.start(sequencer_h);
+    //   end
+    //   else begin
+    //     driver_control = '0;
+    //   end
       
-    end
+    // end
   endtask
 
 endclass

@@ -131,7 +131,7 @@ sequence_item previous_seq_item, seq_item;
             HRESETn_global      = iHRESETn;
 
             if(iHRESETn) begin
-                counter <= counter +1;
+                counter = counter +1;
             end
 
             if(~HRESETn_global) begin
@@ -160,7 +160,7 @@ sequence_item previous_seq_item, seq_item;
     always@(posedge clk or negedge HRESETn_global ) begin //CONTROL_PHASE
         if(HRESETn_global /*&& HREADY*/)begin
             if(counter >= 1 && RECEIVING_PHASE_FLAG) begin
-                //$display("CONTROL PHASE: TIME:%0t ASSIGINING SIGNALS", $time());
+                $display("CONTROL PHASE: TIME:%0t ASSIGINING SIGNALS", $time());
              		HRESETn <= seq_item.HRESETn;
                     HWRITE  <= seq_item.HWRITE;
                     HTRANS  <= seq_item.HTRANS;
@@ -184,7 +184,7 @@ sequence_item previous_seq_item, seq_item;
 
 
                 if(seq_item.HRESETn) begin
-                    counter <= counter + 1;
+                    counter = counter + 1;
                     DATA_PHASE_FLAG = 1;
                 end
             end
@@ -223,8 +223,8 @@ sequence_item previous_seq_item, seq_item;
     end
 
     always@(posedge clk) begin //DATA_PHASE //DATA_PHASE_FLAG might be obselete
-        if((counter >= 2) && (HRESETn === 1) /*&& DATA_PHASE_FLAG*/ /*&& HREADY*/) begin // HRESETn to make it work after the reset cycle is done
-            //$display("DATA_PHASE: TIME:%0t ASSIGNING SIGNALS", $time());
+        if((counter >= 3) && (HRESETn === 1) /*&& DATA_PHASE_FLAG*/ /*&& HREADY*/) begin // HRESETn to make it work after the reset cycle is done
+            $display("DATA_PHASE: TIME:%0t ASSIGNING SIGNALS", $time());
             // The counter & data_phase_flag to make it work after a transaction is sent after reset cycle is done
             //send_inputs(HRESETn_reg, HWRITE_reg, HTRANS_reg, HSIZE_reg, HBURST_reg, HPROT_reg, HADDR_reg, HWDATA_reg, seq_item.RESET_op, seq_item.WRITE_op, seq_item.TRANS_op, seq_item.BURST_op, seq_item.SIZE_op);
             if(HWRITE_reg == 1'b1) begin
@@ -235,29 +235,19 @@ sequence_item previous_seq_item, seq_item;
                 //$display("DATA_PHASE_READ: TIME:%0t ASSIGNING SIGNALS", $time());
                 read_AHB();
             end
-            counter <= counter + 1;
+            counter = counter + 1;
             DATA_PHASE_FLAG = 0;
             OUTPUTS_PHASE_FLAG_1 = 1;
+            OUTPUTS_PHASE_FLAG_2 = 1;
         end
-        // else if(counter == 2 && (HRESETn === 1)) begin
-        //     if(HWRITE_reg == 1'b1) begin
-        //         //$display("DATA_PHASE_WRITE: TIME:%0t ASSIGNING SIGNALS", $time());
-        //         write_AHB(HWDATA_reg);
-        //     end
-        //     else if(HWRITE_reg == 1'b0) begin
-        //         //$display("DATA_PHASE_READ: TIME:%0t ASSIGNING SIGNALS", $time());
-        //         read_AHB();
-        //     end
-        //     counter <= counter + 1;
-        //     DATA_PHASE_FLAG = 0;
-        //     OUTPUTS_PHASE_FLAG_1 = 1;
-        // end
+        $display("%0t BEFORE WAIT",$time());
         wait(HREADY);
+        //$display("%0t AFTER WAIT",$time());
     end
 
     always@(posedge clk) begin
-        if( (HRESETn === 1) && counter >= 3 && OUTPUTS_PHASE_FLAG_1 /*&& HREADY*/) begin
-            //$display("OUTPUT_1_PHASE_SIGNALS: TIME:%0t ", $time());
+        if( (HRESETn === 1) && counter >= 5 && OUTPUTS_PHASE_FLAG_1 /*&& HREADY*/) begin
+            $display("OUTPUT_1_PHASE_SIGNALS: TIME:%0t ", $time());
             //counter = counter + 1;
             OUTPUTS_PHASE_FLAG_1 = 0;
             //OUTPUTS_PHASE_FLAG_2 = 1;
@@ -309,7 +299,14 @@ sequence_item previous_seq_item, seq_item;
         endcase // HTRANS
     endtask : read_AHB
 
-
+    // initial begin
+    //     fork
+    //         forever begin
+    //             $monitor("TIME:%0t counter: %0d",$time(), counter);
+    //             $monitor("TIME:%0t OUTPUTS_PHASE_FLAG_1: %0d",$time(), OUTPUTS_PHASE_FLAG_1);
+    //         end
+    //     join_none
+    // end
 
     // Function to send inputs to the input monitor
     function void send_inputs( input bit iHRESETn, input bit   iHWRITE, input bit  [TRANS_WIDTH:0] iHTRANS, 

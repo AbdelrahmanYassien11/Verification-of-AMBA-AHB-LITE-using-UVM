@@ -15,8 +15,13 @@ class driver extends uvm_driver #(sequence_item);
   // Sequence item to be driven
   sequence_item seq_item;
 
+
   // Virtual interface to the DUT
   virtual inf my_vif;
+
+  sequence_item req_seq_items [$];
+  int sequence_ids [$];
+
 
   // Constructor for the driver component
   function new(string name = "driver", uvm_component parent);
@@ -60,6 +65,11 @@ class driver extends uvm_driver #(sequence_item);
 
       //create_sequence_item();
 
+      req_seq_items.push_back(seq_item.clone_me());
+      // sequence_ids.push_back(seq_item.sequence_id);
+
+      rsp = sequence_item::type_id::create("rsp");
+
       #1ps
       `uvm_info(get_full_name(), { "DRIVEN_ITEM:", seq_item.input2string} , UVM_LOW)
       //$display("HWRITE ========================================================== HWRITE = %0d", seq_item.HWRITE);
@@ -69,7 +79,27 @@ class driver extends uvm_driver #(sequence_item);
                                seq_item.SIZE_op, seq_item.last_item );
 
       // Indicate that the item has been processed
-      seq_item_port.item_done();
+      if(my_vif.counter === 0) begin
+        $display("%0t RESPONSE: RESET", $time());
+        rsp.do_copy(req_seq_items.pop_front());
+        rsp.HRESP  = my_vif.HRESP;
+        rsp.HREADY = my_vif.HREADY;
+        rsp.HRDATA = my_vif.HRDATA;
+        seq_item_port.item_done(rsp);        
+      end
+      else if(my_vif.counter >= 5) begin
+        $display("%0t RESPONSE: NORMAL", $time());
+        rsp.do_copy(req_seq_items.pop_front());
+        rsp.HRESP  = my_vif.HRESP;
+        rsp.HREADY = my_vif.HREADY;
+        rsp.HRDATA = my_vif.HRDATA;
+        seq_item_port.item_done(rsp);
+      end
+      else begin
+        $display("%0t NO_RESPONSE: ",$time());
+        seq_item_port.item_done();
+      end
+
     end
 
     $display("my_driver run phase");
