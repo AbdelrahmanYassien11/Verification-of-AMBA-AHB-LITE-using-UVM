@@ -111,6 +111,8 @@ package AHB_pkg;
 	`include "READ_SINGLE_sequence.svh"
 	`include "write_twice_sequence.svh"
 
+	`include "WRITE_READ_SINGLE_sequence.svh"
+
 
 	`include "WRITE_WRAP4_sequence.svh"
 	`include "WRITE_WRAP8_sequence.svh"
@@ -139,14 +141,17 @@ package AHB_pkg;
 
 	`include "runall_sequence.svh"
 	`include "test_sequence.svh"
+	`include "ADDRESS_ERROR_INJECTION_sequence.svh"
 
 
 	`include "driver.svh"
+	`include "reactive_driver.svh"
 	`include "inputs_monitor.svh"
 	`include "outputs_monitor.svh"
 
 	`include "active_agent.svh"
 	`include "passive_agent.svh"
+	`include "reactive_agent.svh"	
 
 	`include "scoreboard.svh"
 	`include "coverage.svh"
@@ -165,6 +170,8 @@ package AHB_pkg;
 
 	`include "WRITE_SINGLE_test.svh"
 	`include "READ_SINGLE_test.svh"
+
+	`include "WRITE_READ_SINGLE_test.svh"
 
 	`include "WRITE_WRAP4_test.svh"
 	`include "WRITE_WRAP8_test.svh"
@@ -194,5 +201,6 @@ package AHB_pkg;
 
 	`include "runall_test.svh"
 	`include "test_test.svh"
+	`include "ADDRESS_ERROR_INJECTION_test.svh"
 
 endpackage : AHB_pkg

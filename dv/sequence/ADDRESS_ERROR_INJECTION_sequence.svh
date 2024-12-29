@@ -1,5 +1,5 @@
 /******************************************************************
- * File: WRITE_READ_INCR4_sequence.sv
+ * File: ADDRESS_ERROR_INJECTION_sequence.sv
  * Author: Abdelrahman Mohamad Yassien
  * Email: Abdelrahman.Yassien11@gmail.com
  * Date: 25/08/2024
@@ -12,8 +12,8 @@
  * Copyright (c) 2024 Abdelrahman Mohamad Yassien. All Rights Reserved.
  ******************************************************************/
 
-class WRITE_READ_INCR4_sequence extends base_sequence;
-  `uvm_object_utils(WRITE_READ_INCR4_sequence);
+class ADDRESS_ERROR_INJECTION_sequence extends base_sequence;
+  `uvm_object_utils(ADDRESS_ERROR_INJECTION_sequence);
 
   // Static flag to determine if reset is needed
   static bit reset_flag;
@@ -21,11 +21,10 @@ class WRITE_READ_INCR4_sequence extends base_sequence;
 
   // Handle to the reset sequence
   reset_sequence reset_sequence_h;
-  sequence_item cloned_seq_item;
 
 
   // Constructor
-  function new(string name = "WRITE_READ_INCR4_sequence");
+  function new(string name = "ADDRESS_ERROR_INJECTION_sequence");
     super.new(name);
   endfunction
 
@@ -35,7 +34,6 @@ class WRITE_READ_INCR4_sequence extends base_sequence;
     super.pre_body(); // Call the base class pre_body
     // Create an instance of the reset sequence
     reset_sequence_h = reset_sequence::type_id::create("reset_sequence_h");
-    cloned_seq_item  = sequence_item::type_id::create("cloned_seq_item");
   endtask : pre_body
 
   // Main task body for executing the write operation
@@ -43,8 +41,7 @@ class WRITE_READ_INCR4_sequence extends base_sequence;
 
     reset_sequence::last_test = 1'b1;
 
-    //READ_INCR4_sequence::last_test = 1'b1;
-    `uvm_info("WRITE_READ_INCR4_sequence: ", "STARTING" , UVM_HIGH)
+    `uvm_info("ADDRESS_ERROR_INJECTION_sequence: ", "STARTING" , UVM_HIGH)
 
     if(~reset_flag)
       reset_sequence_h.start(sequencer_h);
@@ -53,12 +50,14 @@ class WRITE_READ_INCR4_sequence extends base_sequence;
       seq_item.WRITE_op.rand_mode(0);
       seq_item.TRANS_op.rand_mode(0);
       seq_item.BURST_op.rand_mode(0);
-      //seq_item.SIZE_op.rand_mode(0);
+      seq_item.HADDR_VAL_BURST.constraint_mode(0);
+      seq_item.HADDR_SEL_c.constraint_mode(0);
+
+
 
     /***************************************************************************************/
     //                                 STARTING WRITE_INCR4
-    /**************************************************************************************/
-
+    /**************************************************************************************/   
     start_item(seq_item); // Start the sequence item
 
       // Set the operation type to WRITE
@@ -67,18 +66,16 @@ class WRITE_READ_INCR4_sequence extends base_sequence;
       seq_item.TRANS_op = NONSEQ;
       seq_item.BURST_op = INCR4;
 
-      assert(seq_item.randomize()); // Randomize the sequence item
-      cloned_seq_item = seq_item.clone_me();
+      assert(seq_item.randomize() with {HADDR[ADDR_WIDTH-BITS_FOR_SUBORDINATES-1:0] == 254; HADDR[ADDR_WIDTH-1:ADDR_WIDTH-BITS_FOR_SUBORDINATES] == 2;}); // Randomize the sequence item
 
     finish_item(seq_item);
 
     for (int i = 0; i < 3; i++) begin
       start_item(seq_item); // Start the sequence item
-       $display("seq_item: %p", seq_item);
+
         seq_item.SIZE_op.rand_mode(0);
         seq_item.HADDR.rand_mode(0);
         
-        seq_item.HADDR = cloned_seq_item.HADDR;
         // Set the operation type to WRITE
         seq_item.RESET_op = WORKING;
         seq_item.WRITE_op = WRITE;
@@ -92,25 +89,25 @@ class WRITE_READ_INCR4_sequence extends base_sequence;
 
     start_item(seq_item); // Start the sequence item
 
-      seq_item.HADDR = cloned_seq_item.HADDR;
       // Set the operation type to READ
       seq_item.RESET_op = WORKING;
       seq_item.WRITE_op = READ;
       seq_item.TRANS_op = IDLE;
       seq_item.BURST_op = SINGLE;
+      //seq_item.SIZE_op  = BYTE;
 
       // Randomize the sequence item
       assert(seq_item.randomize()); 
 
     finish_item(seq_item);
 
+
     /***************************************************************************************/
     //                                 STARTING READ_INCR4
-    /**************************************************************************************/
+    /**************************************************************************************/       
 
     start_item(seq_item); // Start the sequence item
 
-      seq_item.HADDR = cloned_seq_item.HADDR;
       // Set the operation type to READ
       seq_item.RESET_op = WORKING;
       seq_item.WRITE_op = READ;
@@ -124,10 +121,8 @@ class WRITE_READ_INCR4_sequence extends base_sequence;
     for (int i = 0; i < 3; i++) begin
       //seq_item.HREAD_rand_c.constraint_mode(0);
 
-
       start_item(seq_item); // Start the sequence item
 
-        seq_item.HADDR = cloned_seq_item.HADDR;        
         // Set the operation type to READ
         seq_item.RESET_op = WORKING;
         seq_item.WRITE_op = READ;
@@ -143,7 +138,6 @@ class WRITE_READ_INCR4_sequence extends base_sequence;
 
     start_item(seq_item); // Start the sequence item
 
-      seq_item.HADDR = cloned_seq_item.HADDR;
       // Set the operation type to READ
       seq_item.RESET_op = WORKING;
       seq_item.WRITE_op = READ;

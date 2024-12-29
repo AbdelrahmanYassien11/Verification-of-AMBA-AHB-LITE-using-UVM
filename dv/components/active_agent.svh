@@ -25,8 +25,6 @@ class active_agent extends uvm_agent;
   driver driver_h;
   inputs_monitor inputs_monitor_h;
 
-  bit driver_control;
-
   // Analysis port for sequence items
   uvm_analysis_port #(sequence_item) tlm_analysis_port_inputs;
 
