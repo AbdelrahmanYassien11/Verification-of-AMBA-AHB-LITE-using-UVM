@@ -193,13 +193,15 @@ bit pipeline_locked2;
         repeat(14) begin
             @(posedge clk);
         end
-        -> do_sampling_phase;
+        -> do_data_phase;
     endtask : wait_for_reset
 
     always begin
         @do_data_phase;
         $display("starting data_phase1");
-        data_phase(pipeline_seq_item1);
+        if(pipeline_seq_item1.HRESETn) begin
+            data_phase(pipeline_seq_item1);
+        end
 
         pipeline_lock_put1();
         pipeline_lock_get2();
@@ -214,17 +216,20 @@ bit pipeline_locked2;
         while(~HREADY) begin
             @(posedge clk);
         end
-                $display("starting data_phase2");
-        HWDATA <= data_phase_item.HWDATA;
+        $display("starting data_phase2");
+        if(data_phase_item.HWRITE) begin
+            HWDATA <= data_phase_item.HWDATA;
+        end
+
         //@(posedge clk);
         //T2
     endtask : data_phase
 
     always begin
         @do_sampling_phase;
-        @(posedge clk);
                 $display("starting sampling_phase");
         //T3
+        @(posedge clk);
         send_outputs();
         pipeline_seq_item2.HRESP  = HRESP;
         pipeline_seq_item2.HREADY = HREADY;
@@ -232,6 +237,7 @@ bit pipeline_locked2;
         driver_h.end_transfer(pipeline_seq_item2);
 
         pipeline_lock_put2();
+
         //pipeline_s2.put();
     end
 
@@ -259,159 +265,6 @@ bit pipeline_locked2;
         pipeline_locked2 = 0;
     endtask : pipeline_lock_put2
 
-
-
-
-    // always@(posedge clk or negedge HRESETn_global ) begin //CONTROL_PHASE
-    //     if(HRESETn_global /*&& HREADY*/)begin
-    //         if(counter >= 1 && RECEIVING_PHASE_FLAG) begin
-    //             $display("CONTROL PHASE: TIME:%0t ASSIGINING SIGNALS", $time());
-    //          		HRESETn <= seq_item.HRESETn;
-    //                 HWRITE  <= seq_item.HWRITE;
-    //                 HTRANS  <= seq_item.HTRANS;
-    //                 HSIZE   <= seq_item.HSIZE;
-    //                 HBURST  <= seq_item.HBURST;
-    //                 HPROT   <= seq_item.HPROT;
-    //                 HADDR   <= seq_item.HADDR;
-
-    //                 HRESETn_reg <= seq_item.HRESETn;
-    //                 HWRITE_reg  <= seq_item.HWRITE;
-    //                 HTRANS_reg  <= seq_item.HTRANS;
-    //                 HSIZE_reg   <= seq_item.HSIZE;
-    //                 HBURST_reg  <= seq_item.HBURST;
-    //                 HPROT_reg   <= seq_item.HPROT;
-    //                 HADDR_reg   <= seq_item.HADDR;
-    //                 HWDATA_reg  <= seq_item.HWDATA;
-
-    //                 //$display("seq_item.HADDR: %0h ", seq_item.HADDR);
-
-    //                 send_inputs(seq_item.HRESETn, seq_item.HWRITE, seq_item.HTRANS, seq_item.HSIZE, seq_item.HBURST, seq_item.HPROT, seq_item.HADDR, seq_item.HWDATA, seq_item.RESET_op, seq_item.WRITE_op, seq_item.TRANS_op, seq_item.BURST_op, seq_item.SIZE_op);
-
-
-    //             if(seq_item.HRESETn) begin
-    //                 counter = counter + 1;
-    //                 DATA_PHASE_FLAG = 1;
-    //             end
-    //         end
-    //         CONTROL_PHASE_FLAG = 1; //probably obslete
-    //         RECEIVING_PHASE_FLAG = 0;
-    //     end
-    //     else begin
-    //         HRESETn <= seq_item.HRESETn; //forced design reset at the start of any sim
-    //         HADDR   <= seq_item.HADDR;
-    //         CONTROL_PHASE_FLAG = 1;
-    //     end
-    //     //wait(HREADY);
-    // end
-
-    // always@(negedge HRESETn_global) begin
-    //     //$display("DATA_PHASE: TIME:%0t ASSERTING RESET", $time());
-    //     reset_AHB();
-    // end
-
-    // // Task: Reset AHB pointers and flags
-    // task reset_AHB();
-    //     repeat(15) begin
-    //         @(posedge clk);
-    //     end
-    //     HRESETn_global = 1'b1; //to prevent the control phase always block from re-itterating right after finishing the reset_task & before a new sequence is driven (it causes an endless)
-    //     HRESETn <= 1'b1;
-    //     counter = 0;
-    // endtask : reset_AHB
-
-    // always@(posedge HRESETn_global) begin
-    //     //$display("OUTPUT_PHASE_RESET: TIME:%0t SENDING OUTPUTS", $time());
-    //     send_outputs();
-    //     OUTPUTS_PHASE_FLAG_1 = 0;
-    //     OUTPUTS_PHASE_FLAG_2 = 0;
-    //     //OUTPUTS_PHASE_FLAG_3 = 0;
-    // end
-
-    // always@(posedge clk) begin //DATA_PHASE //DATA_PHASE_FLAG might be obselete
-    //     if((counter >= 3) && (HRESETn === 1) /*&& DATA_PHASE_FLAG*/ /*&& HREADY*/) begin // HRESETn to make it work after the reset cycle is done
-    //         $display("DATA_PHASE: TIME:%0t ASSIGNING SIGNALS", $time());
-    //         // The counter & data_phase_flag to make it work after a transaction is sent after reset cycle is done
-    //         //send_inputs(HRESETn_reg, HWRITE_reg, HTRANS_reg, HSIZE_reg, HBURST_reg, HPROT_reg, HADDR_reg, HWDATA_reg, seq_item.RESET_op, seq_item.WRITE_op, seq_item.TRANS_op, seq_item.BURST_op, seq_item.SIZE_op);
-    //         if(HWRITE_reg == 1'b1) begin
-    //             //$display("DATA_PHASE_WRITE: TIME:%0t ASSIGNING SIGNALS", $time());
-    //             write_AHB(HWDATA_reg);
-    //         end
-    //         else if(HWRITE_reg == 1'b0) begin
-    //             //$display("DATA_PHASE_READ: TIME:%0t ASSIGNING SIGNALS", $time());
-    //             read_AHB();
-    //         end
-    //         counter = counter + 1;
-    //         DATA_PHASE_FLAG = 0;
-    //         OUTPUTS_PHASE_FLAG_1 = 1;
-    //         OUTPUTS_PHASE_FLAG_2 = 1;
-    //     end
-    //     $display("%0t BEFORE WAIT",$time());
-    //     wait(HREADY);
-    //     //$display("%0t AFTER WAIT",$time());
-    // end
-
-    // always@(posedge clk) begin
-    //     if( (HRESETn === 1) && counter >= 5 && OUTPUTS_PHASE_FLAG_1 /*&& HREADY*/) begin
-    //         $display("OUTPUT_1_PHASE_SIGNALS: TIME:%0t ", $time());
-    //         //counter = counter + 1;
-    //         OUTPUTS_PHASE_FLAG_1 = 0;
-    //         //OUTPUTS_PHASE_FLAG_2 = 1;
-    //         send_outputs();
-    //     end
-    //     //wait(HREADY);
-    // end
-
-    // always@(posedge clk) begin
-    //     if(HRESETn && counter >= 4 && OUTPUTS_PHASE_FLAG_2 && HREADY) begin
-    //         //$display("OUTPUT_2_PHASE_SIGNALS: TIME:%0t", $time());
-    //         send_outputs();
-    //         OUTPUTS_PHASE_FLAG_2 = 0;
-    //         //OUTPUTS_PHASE_FLAG_3 = 1;
-    //     end
-    //     wait(HREADY);
-    // end
-
-    // always@(posedge clk) begin
-    //     if(HRESETn && counter >= 5 && OUTPUTS_PHASE_FLAG_3) begin
-    //         //$display("OUTPUT_3_PHASE_SIGNALS: TIME:%0t SENDING OUTPUTS", $time());
-    //         send_outputs();
-    //         OUTPUTS_PHASE_FLAG_3 = 0;
-    //     end
-    // end
-
-    // Task: Write data into the AHB 
-    // task write_AHB(input bit [DATA_WIDTH-1:0] iHWDATA);
-    //     case(HTRANS_reg)
-    //         IDLE, BUSY: begin
-    //         end
-
-    //         NONSEQ, SEQ: begin
-    //             //wait(HREADY == 1'b1);
-    //             HWDATA <= iHWDATA;
-    //         end
-    //     endcase // HTRANS
-    // endtask : write_AHB
-
-    // // Task: Read data from the AHB 
-    // task read_AHB();
-    //     case(HTRANS)
-    //         IDLE, BUSY: begin
-    //         end
-
-    //         NONSEQ, SEQ: begin
-    //             //wait(HREADY == 1'b1);
-    //         end
-    //     endcase // HTRANS
-    // endtask : read_AHB
-
-    // initial begin
-    //     fork
-    //         forever begin
-    //             $monitor("TIME:%0t counter: %0d",$time(), counter);
-    //             $monitor("TIME:%0t OUTPUTS_PHASE_FLAG_1: %0d",$time(), OUTPUTS_PHASE_FLAG_1);
-    //         end
-    //     join_none
-    // end
 
     // Function to send inputs to the input monitor
     function void send_inputs( input bit iHRESETn, input bit   iHWRITE, input bit  [TRANS_WIDTH:0] iHTRANS, 
