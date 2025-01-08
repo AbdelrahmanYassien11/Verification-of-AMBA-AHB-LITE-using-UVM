@@ -20,7 +20,6 @@ class driver extends uvm_driver #(sequence_item);
   virtual inf my_vif;
 
   sequence_item req_seq_items [$];
-  int sequence_ids [$];
 
 
   // Constructor for the driver component
@@ -46,63 +45,45 @@ class driver extends uvm_driver #(sequence_item);
   // Connect phase for setting up connections between components
   function void connect_phase(uvm_phase phase);
     super.connect_phase(phase);
+    my_vif.driver_h = this;
     $display("my_driver connect phase");
   endfunction
 
-  // function to create interface sequence items
-  // function void create_sequence_item();
-  //   //$display("CREATEDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD");
-  //   my_vif.seq_item = sequence_item::type_id::create("seq_item");
-  //   my_vif.previous_seq_item = sequence_item::type_id::create("previous_seq_item");
-  // endfunction
-
   // Run phase where the driver executes and interacts with the DUT
   task run_phase(uvm_phase phase);
-    super.run_phase(phase);
+    //super.run_phase(phase);
+    sequence_item req;
+    req = sequence_item::type_id::create("req");
     forever begin
-      // Get the next sequence item from the sequence
-      seq_item_port.get_next_item(seq_item);
+      seq_item_port.get_next_item(req);
+      `uvm_info(get_full_name(), { "DRIVEN_ITEM:", req.input2string} , UVM_LOW)
+      accept_tr(req, $time);
+      void'(begin_tr(req, "pipelined_driver"));
 
-      //create_sequence_item();
-
-      req_seq_items.push_back(seq_item.clone_me());
-      // sequence_ids.push_back(seq_item.sequence_id);
-
-      rsp = sequence_item::type_id::create("rsp");
-
-      #1ps
-      `uvm_info(get_full_name(), { "DRIVEN_ITEM:", seq_item.input2string} , UVM_LOW)
-      //$display("HWRITE ========================================================== HWRITE = %0d", seq_item.HWRITE);
-      // Send the sequence item data to the DUT via the virtual interface
-      my_vif.generic_reciever( seq_item.HRESETn, seq_item.HWRITE, seq_item.HTRANS, seq_item.HSIZE, seq_item.HBURST, seq_item.HPROT,
-                               seq_item.HADDR, seq_item.HWDATA, seq_item.RESET_op, seq_item.WRITE_op, seq_item.TRANS_op, seq_item.BURST_op, 
-                               seq_item.SIZE_op, seq_item.last_item );
-
-      // Indicate that the item has been processed
-      if(my_vif.counter === 0) begin
-        $display("%0t RESPONSE: RESET", $time());
-        rsp.do_copy(req_seq_items.pop_front());
-        rsp.HRESP  = my_vif.HRESP;
-        rsp.HREADY = my_vif.HREADY;
-        rsp.HRDATA = my_vif.HRDATA;
-        seq_item_port.item_done(rsp);        
-      end
-      else if(my_vif.counter >= 5) begin
-        $display("%0t RESPONSE: NORMAL", $time());
-        rsp.do_copy(req_seq_items.pop_front());
-        rsp.HRESP  = my_vif.HRESP;
-        rsp.HREADY = my_vif.HREADY;
-        rsp.HRDATA = my_vif.HRDATA;
-        seq_item_port.item_done(rsp);
-      end
-      else begin
-        $display("%0t NO_RESPONSE: ",$time());
-        seq_item_port.item_done();
-      end
-
+      // This blocking call performs the cmd phase of the request and then returns
+      // right away before completing the data phase, thus allowing the cmd phase of 
+      // the subsequent request (next loop iteration) to occur in parallel with the 
+      // data phase of the current request, and so implementing the pipeline
+      my_vif.generic_reciever(req);
+      req_seq_items.push_back(req);
+      seq_item_port.item_done();
     end
 
     $display("my_driver run phase");
   endtask
+
+  // Function to complete the sequence item - driver handshake back to the sequence 
+  // item, decoupled from the point of the originating request
+  function void end_transfer(sequence_item req);
+    sequence_item rsp = req_seq_items.pop_front();
+    $display("ALOOOOOOOOOOOOOO");
+    rsp.do_copy(req);
+    $display("ALOOOOOOOOOOOOOO1");
+    //seq_item_port.put(rsp); // End of req item
+    //put_response is a function instead of task:
+    seq_item_port.put_response(rsp); // End of req item
+        $display("ALOOOOOOOOOOOOOO2");    
+    end_tr(rsp);
+  endfunction: end_transfer
 
 endclass

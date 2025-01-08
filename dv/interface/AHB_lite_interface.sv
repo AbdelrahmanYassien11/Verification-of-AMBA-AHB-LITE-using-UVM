@@ -79,58 +79,38 @@ HSIZE_e      SIZE_op;
 int counter;
 
 sequence_item previous_seq_item, seq_item;
+sequence_item pipeline1, pipeline2, pipeline3;
 
-
+driver driver_h;
+string s;
 
   modport SVA (input clk, HRESETn, HWRITE, HTRANS, HSIZE, HBURST, HPROT, HADDR, HWDATA, HRDATA, HRESP, HREADY);
 
 // Task: Handle generic receiving operations based on reset and enable signals
-    task generic_reciever( input bit iHRESETn, input bit   iHWRITE, input bit  [TRANS_WIDTH:0] iHTRANS, 
+    task generic_reciever( sequence_item req /*input bit iHRESETn, input bit   iHWRITE, input bit  [TRANS_WIDTH:0] iHTRANS, 
                             input bit  [SIZE_WIDTH:0] iHSIZE, input bit  [BURST_WIDTH:0] iHBURST,
                             input bit  [PROT_WIDTH:0] iHPROT, input bit  [ADDR_WIDTH-1:0] iHADDR,     
                             input bit  [DATA_WIDTH-1:0] iHWDATA, input HRESET_e iRESET_op,
                             input HWRITE_e iWRITE_op, input HTRANS_e iTRANS_op,
                             input HBURST_e iBURST_op, input HSIZE_e iSIZE_op, input bit last_item
-    );  
+    */);  
 
         wait((counter == 0 || counter >= 2) && CONTROL_PHASE_FLAG );
         //#1step;
         if(HRESP === RETRY) begin
-            iHRESETn    = previous_seq_item.HRESETn;
-            iHWRITE     = previous_seq_item.HWRITE;
-            iHTRANS     = previous_seq_item.HTRANS;
-            iHSIZE      = previous_seq_item.HSIZE;  
-            iHBURST     = previous_seq_item.HBURST; 
-            iHPROT      = previous_seq_item.HPROT;  
-            iHADDR     = previous_seq_item.HADDR; 
-            iHWDATA     = previous_seq_item.HWDATA;
-
-            iRESET_op = previous_seq_item.RESET_op;
-            iWRITE_op = previous_seq_item.WRITE_op;
-            iTRANS_op = previous_seq_item.TRANS_op;
-            iBURST_op = previous_seq_item.BURST_op;
-            iSIZE_op  = previous_seq_item.SIZE_op;
+            seq_item.do_copy(previous_seq_item);
         end
+        else begin
+            seq_item.do_copy(req);
             //$display("RECIEVING PHASE: ASSSINGING RANDOMIZED VALUES");
-            
-            seq_item.RESET_op = iRESET_op;
-            seq_item.WRITE_op = iWRITE_op;
-            seq_item.TRANS_op = iTRANS_op;
-            seq_item.BURST_op = iBURST_op;
-            seq_item.SIZE_op  = iSIZE_op;
+        end
 
-            seq_item.HRESETn    = iHRESETn;
-            seq_item.HWRITE     = iHWRITE;
-            seq_item.HTRANS     = iHTRANS;
-            seq_item.HSIZE      = iHSIZE;  
-            seq_item.HBURST     = iHBURST; 
-            seq_item.HPROT      = iHPROT;  
-            seq_item.HADDR      = iHADDR; 
-            seq_item.HWDATA     = iHWDATA;
+            HRESETn_global      = seq_item.HRESETn;
 
-            HRESETn_global      = iHRESETn;
-
-            if(iHRESETn) begin
+            pipeline1.do_copy(seq_item);
+            $display("[INTERFACE] PIPELINE1: %s", pipeline1.input2string);
+            //$sformatf("[INTERFACE] PIPELINE1: %s", pipeline1.input2string());   
+            if(seq_item.HRESETn) begin
                 counter = counter +1;
             end
 
@@ -146,7 +126,7 @@ sequence_item previous_seq_item, seq_item;
 
         RECEIVING_PHASE_FLAG = 1;
 
-        if(last_item)begin
+        if(seq_item.last_item)begin
             //$display("RECIEVING PHASE: TIME: %0t WAITING FOR COUNTERS ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~",$time());
             wait(HRESETn && !RECEIVING_PHASE_FLAG && (sequence_item::COMPARATOR_transaction_counter == sequence_item::PREDICTOR_transaction_counter /*&& HREADY*/) /*&& !OUTPUTS_PHASE_FLAG && !DATA_PHASE_FLAG*/); //so the driver doesnt keep driving when the sequence is already driven to the interface/dut
         end
@@ -178,6 +158,12 @@ sequence_item previous_seq_item, seq_item;
                     HADDR_reg   <= seq_item.HADDR;
                     HWDATA_reg  <= seq_item.HWDATA;
 
+                    //$sformatf("[INTERFACE] PIPELINE1: %s", pipeline1.input2string());
+                    $display("[INTERFACE] PIPELINE1: %s", pipeline1.input2string);            
+                    pipeline2.do_copy(pipeline1);
+                    //$sformatf("[INTERFACE] PIPELINE2: %s", pipeline2.input2string());
+                    $display("[INTERFACE] PIPELINE2: %s", pipeline2.input2string);
+
                     //$display("seq_item.HADDR: %0h ", seq_item.HADDR);
 
                     send_inputs(seq_item.HRESETn, seq_item.HWRITE, seq_item.HTRANS, seq_item.HSIZE, seq_item.HBURST, seq_item.HPROT, seq_item.HADDR, seq_item.HWDATA, seq_item.RESET_op, seq_item.WRITE_op, seq_item.TRANS_op, seq_item.BURST_op, seq_item.SIZE_op);
@@ -201,6 +187,11 @@ sequence_item previous_seq_item, seq_item;
 
     always@(negedge HRESETn_global) begin
         //$display("DATA_PHASE: TIME:%0t ASSERTING RESET", $time());
+        //$sformatf("[INTERFACE] PIPELINE1: %s", pipeline1.input2string());
+        $display("[INTERFACE] PIPELINE1: %s", pipeline1.input2string);        
+        pipeline2.do_copy(pipeline1);
+        //$sformatf("[INTERFACE] PIPELINE2: %s", pipeline2.input2string());
+        $display("[INTERFACE] PIPELINE2: %s", pipeline2.input2string);
         reset_AHB();
     end
 
@@ -217,6 +208,15 @@ sequence_item previous_seq_item, seq_item;
     always@(posedge HRESETn_global) begin
         //$display("OUTPUT_PHASE_RESET: TIME:%0t SENDING OUTPUTS", $time());
         send_outputs();
+        pipeline2.HREADY = HREADY;
+        pipeline2.HRDATA = HRDATA;
+        pipeline2.HRESP  = HRESP;
+        //$sformatf("[INTERFACE] PIPELINE2: %s", pipeline2.output2string());
+        //$sformatf("[INTERFACE] PIPELINE2: %s", pipeline2.input2string());
+        $display("[INTERFACE] PIPELINE2: %s", pipeline2.output2string);
+        $display("[INTERFACE] PIPELINE2: %s", pipeline2.input2string);
+        driver_h.end_transfer(pipeline2);
+
         OUTPUTS_PHASE_FLAG_1 = 0;
         OUTPUTS_PHASE_FLAG_2 = 0;
         //OUTPUTS_PHASE_FLAG_3 = 0;
@@ -225,6 +225,11 @@ sequence_item previous_seq_item, seq_item;
     always@(posedge clk) begin //DATA_PHASE //DATA_PHASE_FLAG might be obselete
         if((counter >= 3) && (HRESETn === 1) /*&& DATA_PHASE_FLAG*/ /*&& HREADY*/) begin // HRESETn to make it work after the reset cycle is done
             $display("DATA_PHASE: TIME:%0t ASSIGNING SIGNALS", $time());
+            //$sformatf("[INTERFACE] PIPELINE2: %s", pipeline2.input2string());
+            $display("[INTERFACE] PIPELINE2: %s", pipeline2.input2string);
+            pipeline3.do_copy(pipeline2);
+            // $sformatf("[INTERFACE] PIPELINE3: %s", pipeline3.input2string());
+            $display("[INTERFACE] PIPELINE3: %s", pipeline3.input2string());
             // The counter & data_phase_flag to make it work after a transaction is sent after reset cycle is done
             //send_inputs(HRESETn_reg, HWRITE_reg, HTRANS_reg, HSIZE_reg, HBURST_reg, HPROT_reg, HADDR_reg, HWDATA_reg, seq_item.RESET_op, seq_item.WRITE_op, seq_item.TRANS_op, seq_item.BURST_op, seq_item.SIZE_op);
             if(HWRITE_reg == 1'b1) begin
@@ -240,7 +245,7 @@ sequence_item previous_seq_item, seq_item;
             OUTPUTS_PHASE_FLAG_1 = 1;
             OUTPUTS_PHASE_FLAG_2 = 1;
         end
-        $display("%0t BEFORE WAIT",$time());
+        //$display("%0t BEFORE WAIT",$time());
         wait(HREADY);
         //$display("%0t AFTER WAIT",$time());
     end
@@ -249,6 +254,14 @@ sequence_item previous_seq_item, seq_item;
         if( (HRESETn === 1) && counter >= 5 && OUTPUTS_PHASE_FLAG_1 /*&& HREADY*/) begin
             $display("OUTPUT_1_PHASE_SIGNALS: TIME:%0t ", $time());
             //counter = counter + 1;
+            pipeline3.HREADY = HREADY;
+            pipeline3.HRDATA = HRDATA;
+            pipeline3.HRESP  = HRESP;
+            // $sformatf("[INTERFACE] PIPELINE3: %s", pipeline3.output2string());
+            // $sformatf("[INTERFACE] PIPELINE3: %s", pipeline3.input2string());
+            $display("[INTERFACE PIPELINE3: %s", pipeline3.output2string());
+            $display("[INTERFACE PIPELINE3: %s", pipeline3.input2string());
+            driver_h.end_transfer(pipeline3);
             OUTPUTS_PHASE_FLAG_1 = 0;
             //OUTPUTS_PHASE_FLAG_2 = 1;
             send_outputs();
@@ -343,10 +356,14 @@ sequence_item previous_seq_item, seq_item;
     function void create_sequence_item();
         seq_item = sequence_item::type_id::create("seq_item");
         previous_seq_item = sequence_item::type_id::create("previous_seq_item");
+        pipeline1 = sequence_item::type_id::create("pipeline1");
+        pipeline2 = sequence_item::type_id::create("pipeline2");
+        pipeline3 = sequence_item::type_id::create("pipeline3");
     endfunction
 
     initial begin
         create_sequence_item();
+        //driver_h  = driver::type_id::create("driver_h", uvm_component);
         HRESETn <= 1'b1;
     end
 

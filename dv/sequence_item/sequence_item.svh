@@ -173,12 +173,14 @@ rand int unsigned INCR_CONTROL;
     function void do_copy(uvm_object rhs);
       sequence_item to_be_copied;
 
+      $display("YOOOOOOOO1");
       assert(rhs != null) else
         $fatal(1,"Tried to copy null transaction");
-
+      $display("YOOOOOOO2");
       assert($cast(to_be_copied,rhs)) else
         $fatal(1,"Faied cast in do_copy");
 
+      $display("YOOOOOO3");
       super.do_copy(rhs);	// give all the variables to the parent class, so it can be used by to_be_copied
         HRESETn    = to_be_copied.HRESETn;
         HWRITE     = to_be_copied.HWRITE;
@@ -193,6 +195,34 @@ rand int unsigned INCR_CONTROL;
         HRESP      = to_be_copied.HRESP;
         HREADY     = to_be_copied.HREADY;
     endfunction : do_copy
+
+
+
+    function void do_copy_nb(uvm_object rhs);
+      sequence_item to_be_copied;
+
+      $display("YOOOOOOOO1");
+      assert(rhs != null) else
+        $fatal(1,"Tried to copy null transaction");
+      $display("YOOOOOOO2");
+      assert($cast(to_be_copied,rhs)) else
+        $fatal(1,"Faied cast in do_copy");
+
+      $display("YOOOOOO3");
+      super.do_copy(rhs); // give all the variables to the parent class, so it can be used by to_be_copied
+        HRESETn    <= to_be_copied.HRESETn;
+        HWRITE     <= to_be_copied.HWRITE;
+        HTRANS     <= to_be_copied.HTRANS;
+        HSIZE      <= to_be_copied.HSIZE;  
+        HBURST     <= to_be_copied.HBURST; 
+        HPROT      <= to_be_copied.HPROT;  
+        HADDR      <= to_be_copied.HADDR; 
+        HWDATA     <= to_be_copied.HWDATA;
+
+        HRDATA     <= to_be_copied.HRDATA;
+        HRESP      <= to_be_copied.HRESP;
+        HREADY     <= to_be_copied.HREADY;
+    endfunction : do_copy_nb
 
     function sequence_item clone_me();
       sequence_item clone;
