@@ -21,6 +21,7 @@ class WRITE_READ_INCR4_sequence extends base_sequence;
 
   // Handle to the reset sequence
   reset_sequence reset_sequence_h;
+  sequence_item rsp;
 
 
   // Constructor
@@ -34,11 +35,13 @@ class WRITE_READ_INCR4_sequence extends base_sequence;
     super.pre_body(); // Call the base class pre_body
     // Create an instance of the reset sequence
     reset_sequence_h = reset_sequence::type_id::create("reset_sequence_h");
+    rsp = sequence_item::type_id::create("rsp");
+
   endtask : pre_body
 
   // Main task body for executing the write operation
   virtual task body();
-
+    super.body();
     reset_sequence::last_test = 1'b1;
 
     //READ_INCR4_sequence::last_test = 1'b1;

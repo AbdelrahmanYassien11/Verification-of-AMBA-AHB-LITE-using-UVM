@@ -19,7 +19,7 @@ class driver extends uvm_driver #(sequence_item);
   // Virtual interface to the DUT
   virtual inf my_vif;
 
-  sequence_item req_seq_items [$];
+  local sequence_item req_seq_items [$];
 
 
   // Constructor for the driver component
@@ -53,7 +53,7 @@ class driver extends uvm_driver #(sequence_item);
   task run_phase(uvm_phase phase);
     //super.run_phase(phase);
     sequence_item req;
-    req = sequence_item::type_id::create("req");
+    //req = sequence_item::type_id::create("req");
     forever begin
       seq_item_port.get_next_item(req);
       `uvm_info(get_full_name(), { "DRIVEN_ITEM:", req.input2string} , UVM_LOW)
@@ -64,8 +64,11 @@ class driver extends uvm_driver #(sequence_item);
       // right away before completing the data phase, thus allowing the cmd phase of 
       // the subsequent request (next loop iteration) to occur in parallel with the 
       // data phase of the current request, and so implementing the pipeline
-      my_vif.generic_reciever(req);
       req_seq_items.push_back(req);
+      my_vif.generic_reciever(req);
+
+      $display("QUEUE SIZE: %0d",req_seq_items.size());
+
       seq_item_port.item_done();
     end
 
@@ -74,10 +77,15 @@ class driver extends uvm_driver #(sequence_item);
 
   // Function to complete the sequence item - driver handshake back to the sequence 
   // item, decoupled from the point of the originating request
-  function void end_transfer(sequence_item req);
-    sequence_item rsp = req_seq_items.pop_front();
+  function void end_transfer(sequence_item t);
+    sequence_item rsp;
+    $display("QUEUE SIZE: %0d",req_seq_items.size());
+    //`uvm_info("DRIVER",("QUEUE NUM: %0d",req_seq_items.size()), UVM_LOW)
+    rsp = req_seq_items.pop_front();
+    `uvm_info("DRIVER", {"REQ: ", t.convert2string()}, UVM_LOW)
+    `uvm_info("DRIVER", {"RSP: ", rsp.convert2string()}, UVM_LOW)
     $display("ALOOOOOOOOOOOOOO");
-    rsp.do_copy(req);
+    rsp.do_copy(t);
     $display("ALOOOOOOOOOOOOOO1");
     //seq_item_port.put(rsp); // End of req item
     //put_response is a function instead of task:

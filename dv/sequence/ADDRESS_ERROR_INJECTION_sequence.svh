@@ -38,7 +38,7 @@ class ADDRESS_ERROR_INJECTION_sequence extends base_sequence;
 
   // Main task body for executing the write operation
   virtual task body();
-
+    super.body();
     reset_sequence::last_test = 1'b1;
 
     `uvm_info("ADDRESS_ERROR_INJECTION_sequence: ", "STARTING" , UVM_HIGH)
@@ -66,7 +66,7 @@ class ADDRESS_ERROR_INJECTION_sequence extends base_sequence;
       seq_item.TRANS_op = NONSEQ;
       seq_item.BURST_op = INCR4;
 
-      assert(seq_item.randomize() with {HADDR[ADDR_WIDTH-BITS_FOR_SUBORDINATES-1:0] == 254; HADDR[ADDR_WIDTH-1:ADDR_WIDTH-BITS_FOR_SUBORDINATES] == 2;}); // Randomize the sequence item
+      assert(seq_item.randomize() with {HADDR[ADDR_WIDTH-BITS_FOR_SUBORDINATES-1:0] == 255; HADDR[ADDR_WIDTH-1:ADDR_WIDTH-BITS_FOR_SUBORDINATES] == 2;}); // Randomize the sequence item
 
     finish_item(seq_item);
 
