@@ -19,6 +19,8 @@ class base_sequence extends uvm_sequence #(sequence_item);
   sequencer sequencer_h;
   sequencer burst_sequencer_h;
   sequencer runall_sequencer_h;
+  event finished;
+  bit execute_idle;
 
   // Constructor
   function new(string name = "base_sequence");
@@ -51,20 +53,23 @@ class base_sequence extends uvm_sequence #(sequence_item);
       get_response(req);
       `uvm_info("SEQUENCE", $sformatf("RESPONSE_RETRIEVED: ", req.output2string()), UVM_LOW)
       if (req.HREADY == NOT_READY) begin
+        // wait(finished.triggered());
         `uvm_info("SEQUENCE NOT_READY: ", req.output2string(), UVM_LOW)
-        start_item(seq_item); // Start the sequence item
+        execute_idle = 1;
+        //sequencer_h.stop_sequences();
+        // start_item(seq_item); // Start the sequence item
 
-          // Set the operation type to READ
-          seq_item.RESET_op = WORKING;
-          seq_item.WRITE_op = READ;
-          seq_item.TRANS_op = IDLE;
-          seq_item.BURST_op = SINGLE;
-          seq_item.SIZE_op  = BYTE;
+        //   // Set the operation type to READ
+        //   seq_item.RESET_op = WORKING;
+        //   seq_item.WRITE_op = READ;
+        //   seq_item.TRANS_op = IDLE;
+        //   seq_item.BURST_op = SINGLE;
+        //   seq_item.SIZE_op  = BYTE;
 
-          // Randomize the sequence item
-          assert(seq_item.randomize()); 
+        //   // Randomize the sequence item
+        //   assert(seq_item.randomize());
 
-        finish_item(seq_item);
+        // finish_item(seq_item);
 
       end
     end

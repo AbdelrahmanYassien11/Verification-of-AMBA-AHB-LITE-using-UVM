@@ -47,7 +47,7 @@ class WRITE_SINGLE_sequence extends base_sequence;
     `uvm_info("WRITE_SINGLE_SEQUENCE: ", "STARTING", UVM_HIGH)
 
     // If reset_flag is not set, start the reset sequence
-    if (!reset_flag)
+    if (~reset_flag)
       reset_sequence_h.start(sequencer_h);
 
     if(~last_test)
@@ -55,22 +55,8 @@ class WRITE_SINGLE_sequence extends base_sequence;
     
     // Start the sequence item
     start_item(seq_item);
-    
-    // Configure the sequence item for the write operation
-    seq_item.RESET_op.rand_mode(0);
-    seq_item.WRITE_op.rand_mode(0);
-    seq_item.TRANS_op.rand_mode(0);
-    seq_item.BURST_op.rand_mode(0);
-    //seq_item.SIZE_op.rand_mode(0);
 
-    // Set the operation type to WRITE
-    seq_item.RESET_op = WORKING;
-    seq_item.WRITE_op = WRITE;
-    seq_item.TRANS_op = NONSEQ;
-    seq_item.BURST_op = SINGLE;
-    //seq_item.SIZE_op  = BYTE;
-
-    assert(seq_item.randomize()); // Randomize the sequence item
+    assert(seq_item.randomize() with {RESET_op == WORKING; WRITE_op == WRITE; TRANS_op == NONSEQ; BURST_op == SINGLE;}); // Randomize the sequence item
     // Set the control signals for writing
 
     // Finish the sequence item

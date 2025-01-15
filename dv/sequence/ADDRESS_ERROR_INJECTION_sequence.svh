@@ -3,8 +3,8 @@
  * Author: Abdelrahman Mohamad Yassien
  * Email: Abdelrahman.Yassien11@gmail.com
  * Date: 25/08/2024
- * Description: This class defines a sequence that performs a INCR4 WRITE 
- *              and INCR4 READ from the same addresses. It inherits from 
+ * Description: This class defines a sequence that performs a INCR8 WRITE 
+ *              and INCR8 READ from the same addresses. It inherits from 
  *              `base_sequence` and includes functionality to start 
  *              the reset sequence if needed and perform a the  
  *              operation with randomized sequence item values.
@@ -56,7 +56,7 @@ class ADDRESS_ERROR_INJECTION_sequence extends base_sequence;
 
 
     /***************************************************************************************/
-    //                                 STARTING WRITE_INCR4
+    //                                 STARTING WRITE_INCR8
     /**************************************************************************************/   
     start_item(seq_item); // Start the sequence item
 
@@ -64,23 +64,43 @@ class ADDRESS_ERROR_INJECTION_sequence extends base_sequence;
       seq_item.RESET_op = WORKING;
       seq_item.WRITE_op = WRITE;
       seq_item.TRANS_op = NONSEQ;
-      seq_item.BURST_op = INCR4;
+      seq_item.BURST_op = INCR8;
 
       assert(seq_item.randomize() with {HADDR[ADDR_WIDTH-BITS_FOR_SUBORDINATES-1:0] == 255; HADDR[ADDR_WIDTH-1:ADDR_WIDTH-BITS_FOR_SUBORDINATES] == 2;}); // Randomize the sequence item
 
     finish_item(seq_item);
 
-    for (int i = 0; i < 3; i++) begin
+    for (int i = 0; i < 7; i++) begin
+              seq_item.SIZE_op.rand_mode(0);
+        seq_item.HADDR.rand_mode(0);
+
+      if(execute_idle) begin
+        $display("EXECUTE IDLE");
+        start_item(seq_item); // Start the sequence item
+        // Set the operation type to READ
+        seq_item.RESET_op = WORKING;
+        seq_item.WRITE_op = READ;
+        seq_item.TRANS_op = IDLE;
+        seq_item.BURST_op = SINGLE;
+        //seq_item.SIZE_op  = BYTE;
+
+        // Randomize the sequence item
+        assert(seq_item.randomize()); 
+
+        finish_item(seq_item);
+        execute_idle = 0;
+        break;
+      end
       start_item(seq_item); // Start the sequence item
 
-        seq_item.SIZE_op.rand_mode(0);
-        seq_item.HADDR.rand_mode(0);
+        // seq_item.SIZE_op.rand_mode(0);
+        // seq_item.HADDR.rand_mode(0);
         
         // Set the operation type to WRITE
         seq_item.RESET_op = WORKING;
         seq_item.WRITE_op = WRITE;
         seq_item.TRANS_op = SEQ;
-        seq_item.BURST_op = INCR4;
+        seq_item.BURST_op = INCR8;
 
         assert(seq_item.randomize()); // Randomize the sequence item
 
@@ -103,7 +123,7 @@ class ADDRESS_ERROR_INJECTION_sequence extends base_sequence;
 
 
     /***************************************************************************************/
-    //                                 STARTING READ_INCR4
+    //                                 STARTING READ_INCR8
     /**************************************************************************************/       
 
     start_item(seq_item); // Start the sequence item
@@ -112,13 +132,29 @@ class ADDRESS_ERROR_INJECTION_sequence extends base_sequence;
       seq_item.RESET_op = WORKING;
       seq_item.WRITE_op = READ;
       seq_item.TRANS_op = NONSEQ;
-      seq_item.BURST_op = INCR4;
+      seq_item.BURST_op = INCR8;
 
       assert(seq_item.randomize()); // Randomize the sequence item
 
     finish_item(seq_item);
 
-    for (int i = 0; i < 3; i++) begin
+    for (int i = 0; i < 7; i++) begin
+      if(execute_idle) begin
+        start_item(seq_item); // Start the sequence item
+
+        // Set the operation type to READ
+        seq_item.RESET_op = WORKING;
+        seq_item.WRITE_op = READ;
+        seq_item.TRANS_op = IDLE;
+        seq_item.BURST_op = SINGLE;
+        //seq_item.SIZE_op  = BYTE;
+
+        // Randomize the sequence item
+        assert(seq_item.randomize()); 
+
+        finish_item(seq_item);
+        break;
+      end
       //seq_item.HREAD_rand_c.constraint_mode(0);
 
       start_item(seq_item); // Start the sequence item
@@ -127,7 +163,7 @@ class ADDRESS_ERROR_INJECTION_sequence extends base_sequence;
         seq_item.RESET_op = WORKING;
         seq_item.WRITE_op = READ;
         seq_item.TRANS_op = SEQ;
-        seq_item.BURST_op = INCR4;
+        seq_item.BURST_op = INCR8;
         assert(seq_item.randomize()); // Randomize the sequence item
 
       finish_item(seq_item);

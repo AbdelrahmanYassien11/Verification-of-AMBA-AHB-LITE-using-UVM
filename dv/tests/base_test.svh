@@ -6,7 +6,8 @@
 class base_test extends uvm_test;
    `uvm_component_utils(base_test)
 // `endif
-
+   
+   event finished;
    // Virtual interface for connecting to the DUT
    virtual inf my_vif;
 
@@ -23,6 +24,7 @@ class base_test extends uvm_test;
 
    // Base sequence instance
    base_sequence base_sequence_h;
+
 
    // Constructor for the base_test class
    function new (string name = "base_test", uvm_component parent);
@@ -47,6 +49,7 @@ class base_test extends uvm_test;
       env_h = env::type_id::create("env_h", this);
       base_sequence_h = base_sequence::type_id::create("base_sequence_h");
 
+      // arb_type = UVM_SEQ_ARB_FIFO;
       // Display message indicating the build phase completion
       $display("base_test build phase");
    endfunction : build_phase
@@ -56,6 +59,8 @@ class base_test extends uvm_test;
       // Call the base class's connect_phase method
       super.connect_phase(phase);
       $display("my_test connect phase");
+      env_h.active_agent_h.driver_h.finished = this.finished;
+      base_sequence_h.finished = this.finished;
    endfunction
 
    // End of elaboration phase for final setup
@@ -90,6 +95,12 @@ class base_test extends uvm_test;
       // Display message indicating the run phase completion
       $display("my_test run phase");
    endtask
+
+   // virtual function void show_arb_cfg();
+   //       UVM_SEQ_ARB_TYPE cur_arb;
+   //    cur_arb = sequencer_h.get_arbitration();
+   //    `uvm_info("TEST", $sformatf("Seqr set to %s", cur_arb.name()), UVM_LOW)
+   // endfunction
 
    // Report phase for printing final results
    function void report_phase (uvm_phase phase);

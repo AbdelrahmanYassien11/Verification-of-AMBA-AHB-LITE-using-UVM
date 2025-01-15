@@ -52,21 +52,10 @@ class IDLE_sequence extends base_sequence;
 
     start_item(seq_item); // Start the sequence item
     
-      seq_item.RESET_op.rand_mode(0);
-      seq_item.WRITE_op.rand_mode(0);      
-      seq_item.TRANS_op.rand_mode(0);
-      seq_item.BURST_op.rand_mode(0);
-      seq_item.SIZE_op.rand_mode(0); 
-
-      // Set the operation type to READ
-      seq_item.RESET_op = WORKING;
-      seq_item.WRITE_op = READ;
-      seq_item.TRANS_op = IDLE;
-      seq_item.BURST_op = SINGLE;
-      seq_item.SIZE_op  = BYTE;
+      // seq_item.SIZE_op  = BYTE;
 
       // Randomize the sequence item
-      assert(seq_item.randomize()); 
+      assert(seq_item.randomize() with {RESET_op == WORKING; WRITE_op == READ; TRANS_op == IDLE; BURST_op == SINGLE;});
 
     finish_item(seq_item);
 

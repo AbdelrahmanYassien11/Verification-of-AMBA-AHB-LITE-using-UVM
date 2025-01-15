@@ -172,15 +172,12 @@ rand int unsigned INCR_CONTROL;
 
     function void do_copy(uvm_object rhs);
       sequence_item to_be_copied;
-
-      $display("YOOOOOOOO1");
+      
       assert(rhs != null) else
         $fatal(1,"Tried to copy null transaction");
-      $display("YOOOOOOO2");
       assert($cast(to_be_copied,rhs)) else
         $fatal(1,"Faied cast in do_copy");
 
-      $display("YOOOOOO3");
       super.do_copy(rhs);	// give all the variables to the parent class, so it can be used by to_be_copied
         HRESETn    = to_be_copied.HRESETn;
         HWRITE     = to_be_copied.HWRITE;

@@ -14,6 +14,7 @@ class driver extends uvm_driver #(sequence_item);
 
   // Sequence item to be driven
   sequence_item seq_item;
+  event finished;
 
 
   // Virtual interface to the DUT
@@ -67,9 +68,8 @@ class driver extends uvm_driver #(sequence_item);
       req_seq_items.push_back(req);
       my_vif.generic_reciever(req);
 
-      $display("QUEUE SIZE: %0d",req_seq_items.size());
-
       seq_item_port.item_done();
+      -> finished;
     end
 
     $display("my_driver run phase");
@@ -82,15 +82,10 @@ class driver extends uvm_driver #(sequence_item);
     $display("QUEUE SIZE: %0d",req_seq_items.size());
     //`uvm_info("DRIVER",("QUEUE NUM: %0d",req_seq_items.size()), UVM_LOW)
     rsp = req_seq_items.pop_front();
-    `uvm_info("DRIVER", {"REQ: ", t.convert2string()}, UVM_LOW)
-    `uvm_info("DRIVER", {"RSP: ", rsp.convert2string()}, UVM_LOW)
-    $display("ALOOOOOOOOOOOOOO");
     rsp.do_copy(t);
-    $display("ALOOOOOOOOOOOOOO1");
     //seq_item_port.put(rsp); // End of req item
     //put_response is a function instead of task:
-    seq_item_port.put_response(rsp); // End of req item
-        $display("ALOOOOOOOOOOOOOO2");    
+    seq_item_port.put_response(rsp); // End of req item 
     end_tr(rsp);
   endfunction: end_transfer
 

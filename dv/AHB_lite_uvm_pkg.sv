@@ -202,5 +202,6 @@ package AHB_pkg;
 	`include "runall_test.svh"
 	`include "test_test.svh"
 	`include "ADDRESS_ERROR_INJECTION_test.svh"
+	`include "runall_test_arb.svh"
 
 endpackage : AHB_pkg

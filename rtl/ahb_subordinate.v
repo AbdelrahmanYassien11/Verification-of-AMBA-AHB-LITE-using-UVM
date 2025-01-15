@@ -234,7 +234,7 @@ module ahb_subordinate
                       wrap_counter_reg <= wrap_counter_reg + 1;
                     end
                     default: begin
-                      $display("time: %0t, I AM HERE NOW SINGLE ", $time());
+                      //$display("time: %0t, I AM HERE NOW SINGLE ", $time());
                       wrap_counter_reg <= wrap_counter_reg;
                     end
                   endcase // HBURST_reg_d
@@ -266,7 +266,7 @@ module ahb_subordinate
                       $display("time: %0t, I AM HERE NOW WRAP ", $time());
                     end
                     default: begin
-                      $display("time: %0t, I AM HERE NOW SINGLE ", $time());
+                      //$display("time: %0t, I AM HERE NOW SINGLE ", $time());
                       wrap_counter_reg <= wrap_counter_reg;
                     end
                   endcase // HBURST_reg_d
@@ -309,7 +309,7 @@ module ahb_subordinate
                     INCR, INCR4, INCR8, INCR16: burst_counter_reg <= burst_counter_reg + 1;
                     WRAP4, WRAP8, WRAP16: burst_counter_reg <= burst_counter_reg;
                     default: begin
-                      $display("time: %0t, I AM HERE NOW SINGLE ", $time());
+                      //$display("time: %0t, I AM HERE NOW SINGLE ", $time());
                       burst_counter_reg <= burst_counter_reg;
                     end
                   endcase // HBURST_reg_d
@@ -336,7 +336,7 @@ module ahb_subordinate
                       $display("time: %0t, I AM HERE NOW WRAP ", $time());
                     end
                     default: begin
-                      $display("time: %0t, I AM HERE NOW SINGLE ", $time());
+                      //$display("time: %0t, I AM HERE NOW SINGLE ", $time());
                       burst_counter_reg <= burst_counter_reg;
                     end
                   endcase // HBURST_reg_d
@@ -714,12 +714,19 @@ module ahb_subordinate
           end
 
           else if(HSEL_reg_c && !HREADYin)begin
-            if(next_state == ERROR) begin
-              next_state = IDLE;
-            end
-            else begin
-              next_state = next_state;
-            end
+            case (HTRANS_reg_c)
+              2'b00: begin
+                  next_state = IDLE;
+              end
+              default: next_state = ERROR;
+            endcase
+
+            // if(HTRANS_reg_c == ) begin
+            //   next_state = ERROR;
+            // end
+            // else begin
+            //   next_state = next_state;
+            // end
           end
 
           else begin

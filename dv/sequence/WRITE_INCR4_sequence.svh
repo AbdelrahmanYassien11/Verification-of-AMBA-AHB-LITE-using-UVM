@@ -22,6 +22,9 @@ class WRITE_INCR4_sequence extends base_sequence;
   // Handle to the reset sequence
   reset_sequence reset_sequence_h;
   IDLE_sequence IDLE_sequence_h;
+  WRITE_SINGLE_sequence WRITE_SINGLE_sequence_h;
+
+
   // Constructor
   function new(string name = "WRITE_INCR4_sequence");
     super.new(name);

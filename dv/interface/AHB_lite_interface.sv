@@ -110,10 +110,12 @@ string s;
             pipeline1.do_copy(seq_item);
             $display("[INTERFACE] PIPELINE1: %s", pipeline1.input2string);
             //$sformatf("[INTERFACE] PIPELINE1: %s", pipeline1.input2string());   
-            if(seq_item.HRESETn) begin
-                counter = counter +1;
+            if(seq_item.HRESETn && seq_item.HBURST == SINGLE) begin
+                counter = counter + 2;
             end
-
+            else if(seq_item.HRESETn) begin
+                counter = counter + 1;
+            end
             if(~HRESETn_global) begin
                 fork
                     begin
