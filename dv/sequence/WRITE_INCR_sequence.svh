@@ -62,11 +62,11 @@ class WRITE_INCR_sequence extends base_sequence;
     seq_item.SIZE_op.rand_mode(0);
     seq_item.HADDR.rand_mode(0);
 
-    for (int i = 0; i < 5 /*seq_item.INCR_CONTROL*/; i++) begin
+    for (int i = 0; i < seq_item.INCR_CONTROL; i++) begin
 
       start_item(seq_item); // Start the sequence item
 
-        assert(seq_item.randomize() with {RESET_op == WORKING; WRITE_op == WRITE; TRANS_op == NONSEQ; BURST_op == INCR;}); 
+        assert(seq_item.randomize() with {RESET_op == WORKING; WRITE_op == WRITE; TRANS_op == SEQ; BURST_op == INCR;}); 
 
       finish_item(seq_item);
 
@@ -75,7 +75,7 @@ class WRITE_INCR_sequence extends base_sequence;
     //if()
 
     if(~last_test)
-      IDLE_sequence_h.seq_item.last_item = 1'b1;
+      seq_item.last_item = 1'b1;
 
     IDLE_sequence_h.start(sequencer_h);
 

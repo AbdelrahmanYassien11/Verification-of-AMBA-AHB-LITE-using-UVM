@@ -47,24 +47,15 @@ class WRITE_READ_SINGLE_sequence extends base_sequence;
     if(~reset_flag)
       reset_sequence_h.start(sequencer_h);
 
-      seq_item.RESET_op.rand_mode(0);
-      seq_item.WRITE_op.rand_mode(0);
-      seq_item.TRANS_op.rand_mode(0);
-      seq_item.BURST_op.rand_mode(0);
-
     /***************************************************************************************/
     //                                 STARTING WRITE_SINGLE
     /**************************************************************************************/
 
     start_item(seq_item); // Start the sequence item
 
-      // Set the operation type to WRITE
-      seq_item.RESET_op = WORKING;
-      seq_item.WRITE_op = WRITE;
-      seq_item.TRANS_op = NONSEQ;
-      seq_item.BURST_op = SINGLE;
-
-      assert(seq_item.randomize()); // Randomize the sequence item
+      // Set the operation type to READ
+      // Randomize the sequence item
+      assert(seq_item.randomize() with {RESET_op == WORKING; WRITE_op == WRITE; TRANS_op == NONSEQ; BURST_op == SINGLE;});
 
     finish_item(seq_item);
 
@@ -81,12 +72,8 @@ class WRITE_READ_SINGLE_sequence extends base_sequence;
     start_item(seq_item); // Start the sequence item
 
       // Set the operation type to READ
-      seq_item.RESET_op = WORKING;
-      seq_item.WRITE_op = READ;
-      seq_item.TRANS_op = NONSEQ;
-      seq_item.BURST_op = SINGLE;
-
-      assert(seq_item.randomize()); // Randomize the sequence item
+      // Randomize the sequence item
+      assert(seq_item.randomize() with {RESET_op == WORKING; WRITE_op == READ; TRANS_op == NONSEQ; BURST_op == SINGLE;});
 
     finish_item(seq_item);
 

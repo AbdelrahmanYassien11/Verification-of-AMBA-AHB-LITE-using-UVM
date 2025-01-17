@@ -60,46 +60,25 @@ class WRITE_READ_INCR_sequence extends base_sequence;
     start_item(seq_item); // Start the sequence item
 
       // Set the operation type to WRITE
-      seq_item.RESET_op = WORKING;
-      seq_item.WRITE_op = WRITE;
-      seq_item.TRANS_op = NONSEQ;
-      seq_item.BURST_op = INCR;
-
-      assert(seq_item.randomize()); // Randomize the sequence item
+      // Randomize the sequence item
+      assert(seq_item.randomize() with {RESET_op == WORKING; WRITE_op == WRITE; TRANS_op == NONSEQ; BURST_op == INCR;});
 
     finish_item(seq_item);
 
     seq_item.INCR_CONTROL.rand_mode(0);
 
     for (int i = 0; i < seq_item.INCR_CONTROL; i++) begin
+
       start_item(seq_item); // Start the sequence item
-
-        seq_item.SIZE_op.rand_mode(0);
-        seq_item.HADDR.rand_mode(0);
         
-        // Set the operation type to WRITE
-        seq_item.RESET_op = WORKING;
-        seq_item.WRITE_op = WRITE;
-        seq_item.TRANS_op = SEQ;
-        seq_item.BURST_op = INCR;
-
-        assert(seq_item.randomize()); // Randomize the sequence item
+      // Set the operation type to WRITE
+      // Randomize the sequence item
+      assert(seq_item.randomize() with {RESET_op == WORKING; WRITE_op == WRITE; TRANS_op == SEQ; BURST_op == INCR;});
 
       finish_item(seq_item);
     end
 
-    start_item(seq_item); // Start the sequence item 
-
-      // Set the operation type to READ
-      seq_item.RESET_op = WORKING;
-      seq_item.WRITE_op = READ;
-      seq_item.TRANS_op = IDLE;
-      seq_item.BURST_op = SINGLE;
-
-      // Randomize the sequence item
-      assert(seq_item.randomize()); 
-
-    finish_item(seq_item);
+    IDLE_sequence_h.start(sequencer_h);
 
     /***************************************************************************************/
     //                                 STARTING READ_INCR
@@ -107,46 +86,28 @@ class WRITE_READ_INCR_sequence extends base_sequence;
     start_item(seq_item); // Start the sequence item
 
       // Set the operation type to READ
-      seq_item.RESET_op = WORKING;
-      seq_item.WRITE_op = READ;
-      seq_item.TRANS_op = NONSEQ;
-      seq_item.BURST_op = INCR;
-
-      assert(seq_item.randomize()); // Randomize the sequence item
+      // Randomize the sequence item
+      assert(seq_item.randomize() with {RESET_op == WORKING; WRITE_op == READ; TRANS_op == NONSEQ; BURST_op == INCR;});
 
     finish_item(seq_item);
+    
+    seq_item.INCR_CONTROL.rand_mode(0);
 
     for (int i = 0; i < seq_item.INCR_CONTROL; i++) begin
-      //seq_item.HREAD_rand_c.constraint_mode(0);
 
       start_item(seq_item); // Start the sequence item
         
-        // Set the operation type to READ
-        seq_item.RESET_op = WORKING;
-        seq_item.WRITE_op = READ;
-        seq_item.TRANS_op = SEQ;
-        seq_item.BURST_op = INCR;
-        assert(seq_item.randomize()); // Randomize the sequence item
+      // Set the operation type to READ
+      // Randomize the sequence item
+      assert(seq_item.randomize() with {RESET_op == WORKING; WRITE_op == READ; TRANS_op == SEQ; BURST_op == INCR;});
 
       finish_item(seq_item);
     end
 
-     if(~last_test)
+    if(~last_test)
       seq_item.last_item = 1'b1;
 
-    start_item(seq_item); // Start the sequence item
-
-      // Set the operation type to READ
-      seq_item.RESET_op = WORKING;
-      seq_item.WRITE_op = READ;
-      seq_item.TRANS_op = IDLE;
-      seq_item.BURST_op = SINGLE;
-      seq_item.SIZE_op  = BYTE;
-
-      // Randomize the sequence item
-      assert(seq_item.randomize()); 
-
-    finish_item(seq_item);
+    IDLE_sequence_h.start(sequencer_h);
 
   endtask : body
 
