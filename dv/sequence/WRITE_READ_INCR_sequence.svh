@@ -21,6 +21,7 @@ class WRITE_READ_INCR_sequence extends base_sequence;
 
   // Handle to the reset sequence
   reset_sequence reset_sequence_h;
+  IDLE_sequence IDLE_sequence_h;
 
 
   // Constructor
@@ -34,24 +35,21 @@ class WRITE_READ_INCR_sequence extends base_sequence;
     super.pre_body(); // Call the base class pre_body
     // Create an instance of the reset sequence
     reset_sequence_h = reset_sequence::type_id::create("reset_sequence_h");
+    IDLE_sequence_h = IDLE_sequence::type_id::create("IDLE_sequence_h");
   endtask : pre_body
 
   // Main task body for executing the write operation
   virtual task body();
 
     reset_sequence::last_test = 1'b1;
+    IDLE_sequence::last_test = 1'b1;
+    IDLE_sequence::reset_flag = 1'b1;
 
     //READ_INCR_sequence::last_test = 1'b1;
     `uvm_info("WRITE_READ_INCR_sequence: ", "STARTING" , UVM_HIGH)
 
     if(~reset_flag)
       reset_sequence_h.start(sequencer_h);
-
-    seq_item.RESET_op.rand_mode(0);
-    seq_item.WRITE_op.rand_mode(0);
-    seq_item.TRANS_op.rand_mode(0);
-    seq_item.BURST_op.rand_mode(0);
-    //seq_item.SIZE_op.rand_mode(0);
 
     /**************************************************************************************/
     //                                  STARTING WRITE_INCR
@@ -65,8 +63,11 @@ class WRITE_READ_INCR_sequence extends base_sequence;
 
     finish_item(seq_item);
 
+    IDLE_sequence_h.HADDR_reserve = seq_item.HADDR;
     seq_item.INCR_CONTROL.rand_mode(0);
-
+    seq_item.SIZE_op.rand_mode(0);
+    seq_item.HADDR.rand_mode(0);
+    
     for (int i = 0; i < seq_item.INCR_CONTROL; i++) begin
 
       start_item(seq_item); // Start the sequence item

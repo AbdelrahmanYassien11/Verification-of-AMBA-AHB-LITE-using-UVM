@@ -75,7 +75,7 @@ class READ_INCR4_sequence extends base_sequence;
     if(~last_test)
       seq_item.last_item = 1'b1;
 
-    IDLE_sequence_h.start(sequencer);
+    IDLE_sequence_h.start(sequencer_h);
 
 
   endtask : body

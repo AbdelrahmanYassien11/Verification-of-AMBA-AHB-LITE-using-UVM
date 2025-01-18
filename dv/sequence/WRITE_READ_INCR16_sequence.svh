@@ -42,6 +42,8 @@ class WRITE_READ_INCR16_sequence extends base_sequence;
   virtual task body();
 
     reset_sequence::last_test = 1'b1;
+    IDLE_sequence::last_test = 1'b1;
+    IDLE_sequence::reset_flag = 1'b1;
 
     //READ_INCR16_sequence::last_test = 1'b1;
     `uvm_info("WRITE_READ_INCR16_sequence: ", "STARTING" , UVM_HIGH)
@@ -61,8 +63,11 @@ class WRITE_READ_INCR16_sequence extends base_sequence;
 
     finish_item(seq_item);
 
+    IDLE_sequence_h.HADDR_reserve = seq_item.HADDR;
     seq_item.SIZE_op.rand_mode(0);
     seq_item.HADDR.rand_mode(0);
+
+    //IDLE_sequence_h.seq_item.do_copy(seq_item);
 
     for (int i = 0; i < 15; i++) begin
       start_item(seq_item); // Start the sequence item

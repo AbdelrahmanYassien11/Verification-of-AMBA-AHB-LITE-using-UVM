@@ -69,7 +69,6 @@ class driver extends uvm_driver #(sequence_item);
       my_vif.generic_reciever(req);
 
       seq_item_port.item_done();
-      -> finished;
     end
 
     $display("my_driver run phase");

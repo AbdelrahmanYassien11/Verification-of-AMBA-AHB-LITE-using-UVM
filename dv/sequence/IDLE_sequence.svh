@@ -18,6 +18,8 @@ class IDLE_sequence extends base_sequence;
   // Static flag to determine if reset is needed
   static bit reset_flag;
   static bit last_test;
+  bit [ADDR_WIDTH-1:0] HADDR_reserve;
+
 
   // Handle to the reset sequence
   reset_sequence reset_sequence_h;
@@ -37,7 +39,10 @@ class IDLE_sequence extends base_sequence;
 
   // Main task body for executing the READ operation
   virtual task body();
-
+    super.body();
+    seq_item.HADDR = HADDR_reserve;
+    seq_item.HADDR.rand_mode(0);
+    $display("HADDR_reserve = %0h",HADDR_reserve);
     reset_sequence::last_test = 1'b1;
 
 
@@ -51,6 +56,8 @@ class IDLE_sequence extends base_sequence;
 
 
     start_item(seq_item); // Start the sequence item
+
+    $display("seq_item.HADDR = %0d",seq_item.HADDR);
 
       // Randomize the sequence item
       assert(seq_item.randomize() with {RESET_op == WORKING; WRITE_op == READ; TRANS_op == IDLE; BURST_op == SINGLE;});

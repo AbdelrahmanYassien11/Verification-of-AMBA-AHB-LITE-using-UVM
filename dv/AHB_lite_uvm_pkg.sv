@@ -136,7 +136,9 @@ package AHB_pkg;
 	`include "WRITE_READ_INCR_sequence.svh"
 	`include "WRITE_READ_INCR4_sequence.svh"
 	`include "WRITE_READ_WRAP4_sequence.svh"
+	`include "WRITE_READ_INCR8_sequence.svh"
 	`include "WRITE_READ_WRAP8_sequence.svh"
+	`include "WRITE_READ_INCR16_sequence.svh"
 	`include "WRITE_READ_WRAP16_sequence.svh"
 
 	`include "runall_sequence.svh"

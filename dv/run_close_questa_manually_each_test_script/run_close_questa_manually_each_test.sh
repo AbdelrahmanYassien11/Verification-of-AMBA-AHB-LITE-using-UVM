@@ -45,7 +45,7 @@ echo "log.do completed. Starting simulations..."
 # Loop through different configurations for HWDATA_WIDTH, addr_WIDTH, and test names
 HWDATA_WIDTH_values=("32" "64" "128" "256" "512" "1024")
 addr_WIDTH_values=("32" "32" "32" "32" "32" "32")
-TEST_NAMES=("WRITE_READ_INCR_test" "WRITE_READ_INCR4_test" "WRITE_READ_INCR8_test" "WRITE_READ_INCR16_test" "WRITE_READ_WRAP4_test" "WRITE_READ_WRAP8_test" "WRITE_READ_WRAP16_test")
+TEST_NAMES=("runall_test" "WRITE_READ_INCR_test" "WRITE_READ_INCR4_test" "WRITE_READ_INCR8_test" "WRITE_READ_INCR16_test" "WRITE_READ_WRAP4_test" "WRITE_READ_WRAP8_test" "WRITE_READ_WRAP16_test")
 )
 
 # Loop over the configurations
