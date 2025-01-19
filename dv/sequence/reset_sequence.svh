@@ -23,7 +23,8 @@ class reset_sequence extends base_sequence;
 
   // Main task body to perform the reset sequence
   task body();
-
+    seq_item.HADDR_c.constraint_mode(0);
+    seq_item.HADDR_SEL_c.constraint_mode(0);
     // Log information about the reset operation
     `uvm_info("RESET_SEQUENCE: ", "STARTING", UVM_HIGH);
 
@@ -34,7 +35,8 @@ class reset_sequence extends base_sequence;
     start_item(seq_item);
 
     // Set the reset signals
-    assert(seq_item.randomize() with {RESET_op == RESETING; seq_item.HADDR == 0;});
+    assert(seq_item.randomize() with {RESET_op == RESETING; HADDR[ADDR_WIDTH-1:ADDR_WIDTH-BITS_FOR_SUBORDINATES] == 0; HADDR[ADDR_WIDTH-BITS_FOR_SUBORDINATES-1:0] == 0;});
+
 
     // Finish the sequence item after setting the reset signals
     finish_item(seq_item);

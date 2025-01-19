@@ -102,13 +102,13 @@ string s;
         end
         else begin
             seq_item.do_copy(req);
-            //$display("RECIEVING PHASE: ASSSINGING RANDOMIZED VALUES");
+            $display("RECIEVING PHASE: ASSSINGING RANDOMIZED VALUES");
         end
 
             HRESETn_global      = seq_item.HRESETn;
 
             pipeline1.do_copy(seq_item);
-            $display("[INTERFACE] PIPELINE1: %s", pipeline1.input2string);
+            //$display("[INTERFACE] PIPELINE1: %s", pipeline1.input2string);
             //$sformatf("[INTERFACE] PIPELINE1: %s", pipeline1.input2string());   
             if(seq_item.HRESETn && seq_item.HBURST == SINGLE) begin
                 counter = counter + 2;
@@ -129,7 +129,7 @@ string s;
         RECEIVING_PHASE_FLAG = 1;
 
         if(seq_item.last_item)begin
-            //$display("RECIEVING PHASE: TIME: %0t WAITING FOR COUNTERS ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~",$time());
+            $display("RECIEVING PHASE: TIME: %0t WAITING FOR COUNTERS ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~",$time());
             wait(HRESETn && !RECEIVING_PHASE_FLAG && (sequence_item::COMPARATOR_transaction_counter == sequence_item::PREDICTOR_transaction_counter /*&& HREADY*/) /*&& !OUTPUTS_PHASE_FLAG && !DATA_PHASE_FLAG*/); //so the driver doesnt keep driving when the sequence is already driven to the interface/dut
         end
         else begin
@@ -161,10 +161,10 @@ string s;
                     HWDATA_reg  <= seq_item.HWDATA;
 
                     //$sformatf("[INTERFACE] PIPELINE1: %s", pipeline1.input2string());
-                    $display("[INTERFACE] PIPELINE1: %s", pipeline1.input2string);            
+                    //$display("[INTERFACE] PIPELINE1: %s", pipeline1.input2string);            
                     pipeline2.do_copy(pipeline1);
                     //$sformatf("[INTERFACE] PIPELINE2: %s", pipeline2.input2string());
-                    $display("[INTERFACE] PIPELINE2: %s", pipeline2.input2string);
+                    //$display("[INTERFACE] PIPELINE2: %s", pipeline2.input2string);
 
                     //$display("seq_item.HADDR: %0h ", seq_item.HADDR);
 
@@ -190,10 +190,10 @@ string s;
     always@(negedge HRESETn_global) begin
         //$display("DATA_PHASE: TIME:%0t ASSERTING RESET", $time());
         //$sformatf("[INTERFACE] PIPELINE1: %s", pipeline1.input2string());
-        $display("[INTERFACE] PIPELINE1: %s", pipeline1.input2string);        
+        //$display("[INTERFACE] PIPELINE1: %s", pipeline1.input2string);        
         pipeline2.do_copy(pipeline1);
         //$sformatf("[INTERFACE] PIPELINE2: %s", pipeline2.input2string());
-        $display("[INTERFACE] PIPELINE2: %s", pipeline2.input2string);
+        //$display("[INTERFACE] PIPELINE2: %s", pipeline2.input2string);
         reset_AHB();
     end
 
@@ -215,8 +215,8 @@ string s;
         pipeline2.HRESP  = HRESP;
         //$sformatf("[INTERFACE] PIPELINE2: %s", pipeline2.output2string());
         //$sformatf("[INTERFACE] PIPELINE2: %s", pipeline2.input2string());
-        $display("[INTERFACE] PIPELINE2: %s", pipeline2.output2string);
-        $display("[INTERFACE] PIPELINE2: %s", pipeline2.input2string);
+        //$display("[INTERFACE] PIPELINE2: %s", pipeline2.output2string);
+        //$display("[INTERFACE] PIPELINE2: %s", pipeline2.input2string);
         driver_h.end_transfer(pipeline2);
 
         OUTPUTS_PHASE_FLAG_1 = 0;
@@ -226,12 +226,12 @@ string s;
 
     always@(posedge clk) begin //DATA_PHASE //DATA_PHASE_FLAG might be obselete
         if((counter >= 3) && (HRESETn === 1) /*&& DATA_PHASE_FLAG*/ /*&& HREADY*/) begin // HRESETn to make it work after the reset cycle is done
-            $display("DATA_PHASE: TIME:%0t ASSIGNING SIGNALS", $time());
+            //$display("DATA_PHASE: TIME:%0t ASSIGNING SIGNALS", $time());
             //$sformatf("[INTERFACE] PIPELINE2: %s", pipeline2.input2string());
-            $display("[INTERFACE] PIPELINE2: %s", pipeline2.input2string);
+            //$display("[INTERFACE] PIPELINE2: %s", pipeline2.input2string);
             pipeline3.do_copy(pipeline2);
             // $sformatf("[INTERFACE] PIPELINE3: %s", pipeline3.input2string());
-            $display("[INTERFACE] PIPELINE3: %s", pipeline3.input2string());
+            //$display("[INTERFACE] PIPELINE3: %s", pipeline3.input2string());
             // The counter & data_phase_flag to make it work after a transaction is sent after reset cycle is done
             //send_inputs(HRESETn_reg, HWRITE_reg, HTRANS_reg, HSIZE_reg, HBURST_reg, HPROT_reg, HADDR_reg, HWDATA_reg, seq_item.RESET_op, seq_item.WRITE_op, seq_item.TRANS_op, seq_item.BURST_op, seq_item.SIZE_op);
             if(HWRITE_reg == 1'b1) begin
@@ -254,15 +254,15 @@ string s;
 
     always@(posedge clk) begin
         if( (HRESETn === 1) && counter >= 5 && OUTPUTS_PHASE_FLAG_1 /*&& HREADY*/) begin
-            $display("OUTPUT_1_PHASE_SIGNALS: TIME:%0t ", $time());
+            //$display("OUTPUT_1_PHASE_SIGNALS: TIME:%0t ", $time());
             //counter = counter + 1;
             pipeline3.HREADY = HREADY;
             pipeline3.HRDATA = HRDATA;
             pipeline3.HRESP  = HRESP;
             // $sformatf("[INTERFACE] PIPELINE3: %s", pipeline3.output2string());
             // $sformatf("[INTERFACE] PIPELINE3: %s", pipeline3.input2string());
-            $display("[INTERFACE PIPELINE3: %s", pipeline3.output2string());
-            $display("[INTERFACE PIPELINE3: %s", pipeline3.input2string());
+            //$display("[INTERFACE PIPELINE3: %s", pipeline3.output2string());
+            //$display("[INTERFACE PIPELINE3: %s", pipeline3.input2string());
             driver_h.end_transfer(pipeline3);
             OUTPUTS_PHASE_FLAG_1 = 0;
             //OUTPUTS_PHASE_FLAG_2 = 1;

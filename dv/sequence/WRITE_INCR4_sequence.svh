@@ -41,7 +41,7 @@ class WRITE_INCR4_sequence extends base_sequence;
 
   // Main task body for executing the WRITE operation
   virtual task body();
-
+    super.body();
     reset_sequence::last_test = 1'b1;
 
     IDLE_sequence::reset_flag = 1'b1;
@@ -59,12 +59,12 @@ class WRITE_INCR4_sequence extends base_sequence;
 
     finish_item(seq_item);
 
+    IDLE_sequence_h.HADDR_reserve = seq_item.HADDR;
+    seq_item.SIZE_op.rand_mode(0);
+    seq_item.HADDR.rand_mode(0);
     for (int i = 0; i < 3; i++) begin
 
       start_item(seq_item); // Start the sequence item
-
-        seq_item.SIZE_op.rand_mode(0);
-        seq_item.HADDR.rand_mode(0);
         
         assert(seq_item.randomize() with {RESET_op == WORKING; WRITE_op == WRITE; TRANS_op == SEQ; BURST_op == INCR4;}); 
 

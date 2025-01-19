@@ -44,9 +44,9 @@ class WRITE_READ_INCR4_sequence extends base_sequence;
 
   // Main task body for executing the write operation
   virtual task body();
-    super.body();
+    //super.body();
     reset_sequence::last_test = 1'b1;
-    reset_sequence::last_test = 1'b1;
+    IDLE_sequence::last_test = 1'b1;
     IDLE_sequence::reset_flag = 1'b1;
 
     //READ_INCR4_sequence::last_test = 1'b1;
@@ -84,6 +84,11 @@ class WRITE_READ_INCR4_sequence extends base_sequence;
 
     IDLE_sequence_h.start(sequencer_h);
 
+    // start_item(seq_item);
+
+    //   assert(seq_item.randomize() with {RESET_op == WORKING; WRITE_op == READ; TRANS_op == IDLE; BURST_op == SINGLE;});
+
+    // finish_item(seq_item);
     /***************************************************************************************/
     //                                 STARTING READ_INCR4
     /**************************************************************************************/

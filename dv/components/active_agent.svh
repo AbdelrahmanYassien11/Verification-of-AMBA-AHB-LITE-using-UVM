@@ -84,6 +84,7 @@ class active_agent extends uvm_agent;
     // Connect the driver’s sequence item port to the sequencer’s sequence item export if the agent is active
     if (get_is_active() == UVM_ACTIVE) begin
       driver_h.seq_item_port.connect(sequencer_h.seq_item_export);
+      //driver_h.seq_item_port.connect(runall_sequencer_h.seq_item_export);
     end
 
     // Display message indicating the connect phase is complete

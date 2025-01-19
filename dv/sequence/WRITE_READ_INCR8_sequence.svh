@@ -40,7 +40,7 @@ class WRITE_READ_INCR8_sequence extends base_sequence;
 
   // Main task body for executing the write operation
   virtual task body();
-
+    super.body();
     reset_sequence::last_test = 1'b1;
     IDLE_sequence::last_test = 1'b1;
     IDLE_sequence::reset_flag = 1'b1;

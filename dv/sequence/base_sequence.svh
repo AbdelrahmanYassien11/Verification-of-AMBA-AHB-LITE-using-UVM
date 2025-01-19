@@ -51,10 +51,10 @@ class base_sequence extends uvm_sequence #(sequence_item);
       sequence_item req;
       // Wait for the data phase to complete
       get_response(req);
-      `uvm_info("SEQUENCE", $sformatf("RESPONSE_RETRIEVED: ", req.output2string()), UVM_LOW)
+      ///`uvm_info("SEQUENCE", $sformatf("RESPONSE_RETRIEVED: ", req.output2string()), UVM_LOW)
       if (req.HREADY == NOT_READY) begin
         // wait(finished.triggered());
-        `uvm_info("SEQUENCE NOT_READY: ", req.output2string(), UVM_LOW)
+        //`uvm_info("SEQUENCE NOT_READY: ", req.output2string(), UVM_LOW)
         execute_idle = 1;
         //sequencer_h.stop_sequences();
         // start_item(seq_item); // Start the sequence item

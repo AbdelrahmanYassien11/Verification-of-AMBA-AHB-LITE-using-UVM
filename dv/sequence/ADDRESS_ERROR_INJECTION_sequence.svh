@@ -51,7 +51,7 @@ class ADDRESS_ERROR_INJECTION_sequence extends base_sequence;
       seq_item.TRANS_op.rand_mode(0);
       seq_item.BURST_op.rand_mode(0);
       seq_item.HADDR_VAL_BURST.constraint_mode(0);
-      seq_item.HADDR_SEL_c.constraint_mode(0);
+      // seq_item.HADDR_SEL_c.constraint_mode(0);
 
 
 

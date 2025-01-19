@@ -39,9 +39,7 @@ class IDLE_sequence extends base_sequence;
 
   // Main task body for executing the READ operation
   virtual task body();
-    super.body();
-    seq_item.HADDR = HADDR_reserve;
-    seq_item.HADDR.rand_mode(0);
+    //super.body();
     $display("HADDR_reserve = %0h",HADDR_reserve);
     reset_sequence::last_test = 1'b1;
 
@@ -60,7 +58,7 @@ class IDLE_sequence extends base_sequence;
     $display("seq_item.HADDR = %0d",seq_item.HADDR);
 
       // Randomize the sequence item
-      assert(seq_item.randomize() with {RESET_op == WORKING; WRITE_op == READ; TRANS_op == IDLE; BURST_op == SINGLE;});
+      assert(seq_item.randomize() with {RESET_op == WORKING; WRITE_op == READ; TRANS_op == IDLE; BURST_op == SINGLE; HADDR == HADDR_reserve;});
 
     finish_item(seq_item);
 

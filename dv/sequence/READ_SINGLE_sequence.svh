@@ -37,7 +37,7 @@ class READ_SINGLE_sequence extends base_sequence;
 
   // Main task body to perform the read operation
   task body();
-
+    super.body();
     // Log information about the read operation
     `uvm_info("READ_SINGLE_SEQUENCE: ", "STARTING", UVM_HIGH);
 
