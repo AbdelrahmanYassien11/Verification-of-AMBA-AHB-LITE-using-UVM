@@ -73,7 +73,7 @@ class WRITE_READ_WRAP16_sequence extends base_sequence;
       finish_item(seq_item);
     end
 
-    IDLE_sequence_h.start(sequencer_h);
+    IDLE_sequence_h.start(m_sequencer, this);
 
     /***************************************************************************************/
     //                                 STARTING READ_WRAP16
@@ -100,7 +100,7 @@ class WRITE_READ_WRAP16_sequence extends base_sequence;
     if(~last_test)
       seq_item.last_item = 1'b1;
 
-    IDLE_sequence_h.start(sequencer_h);
+    IDLE_sequence_h.start(m_sequencer, this);
 
   endtask : body
 

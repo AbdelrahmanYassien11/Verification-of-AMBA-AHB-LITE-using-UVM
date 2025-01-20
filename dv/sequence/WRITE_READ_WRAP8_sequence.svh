@@ -48,7 +48,7 @@ class WRITE_READ_WRAP8_sequence extends base_sequence;
     `uvm_info("WRITE_READ_WRAP8_sequence: ", "STARTING" , UVM_HIGH)
 
     if(~reset_flag)
-      reset_sequence_h.start(sequencer_h);
+      reset_sequence_h.start(m_sequencer, this);
 
     /***************************************************************************************/
     //                                 STARTING WRITE_WRAP8
@@ -73,7 +73,7 @@ class WRITE_READ_WRAP8_sequence extends base_sequence;
       finish_item(seq_item);
     end
 
-    IDLE_sequence_h.start(sequencer_h);
+    IDLE_sequence_h.start(m_sequencer, this);
 
 
     /***************************************************************************************/

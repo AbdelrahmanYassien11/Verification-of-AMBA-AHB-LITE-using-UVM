@@ -49,7 +49,7 @@ class WRITE_READ_INCR_sequence extends base_sequence;
     `uvm_info("WRITE_READ_INCR_sequence: ", "STARTING" , UVM_HIGH)
 
     if(~reset_flag)
-      reset_sequence_h.start(sequencer_h);
+      reset_sequence_h.start(m_sequencer, this);
 
     /**************************************************************************************/
     //                                  STARTING WRITE_INCR
@@ -79,7 +79,7 @@ class WRITE_READ_INCR_sequence extends base_sequence;
       finish_item(seq_item);
     end
 
-    IDLE_sequence_h.start(sequencer_h);
+    IDLE_sequence_h.start(m_sequencer, this);
 
     /***************************************************************************************/
     //                                 STARTING READ_INCR
@@ -108,7 +108,7 @@ class WRITE_READ_INCR_sequence extends base_sequence;
     if(~last_test)
       seq_item.last_item = 1'b1;
 
-    IDLE_sequence_h.start(sequencer_h);
+    IDLE_sequence_h.start(m_sequencer, this);
 
   endtask : body
 

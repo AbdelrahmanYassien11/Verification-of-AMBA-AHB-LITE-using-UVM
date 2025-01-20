@@ -78,7 +78,7 @@ class WRITE_READ_INCR8_sequence extends base_sequence;
     end
 
     //Starting IDLE sequence
-    IDLE_sequence_h.start(sequencer_h);
+    IDLE_sequence_h.start(m_sequencer, this);
 
     /***************************************************************************************/
     //                                 STARTING READ_INCR8
@@ -105,7 +105,7 @@ class WRITE_READ_INCR8_sequence extends base_sequence;
     if(~last_test)
       seq_item.last_item = 1'b1;
 
-    IDLE_sequence_h.start(sequencer_h);
+    IDLE_sequence_h.start(m_sequencer, this);
   endtask : body
 
 endclass
