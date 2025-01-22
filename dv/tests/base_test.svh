@@ -7,7 +7,6 @@ class base_test extends uvm_test;
    `uvm_component_utils(base_test)
 // `endif
    
-   event finished;
    // Virtual interface for connecting to the DUT
    virtual inf my_vif;
 
@@ -59,8 +58,8 @@ class base_test extends uvm_test;
       // Call the base class's connect_phase method
       super.connect_phase(phase);
       $display("my_test connect phase");
-      env_h.active_agent_h.driver_h.finished = this.finished;
-      base_sequence_h.finished = this.finished;
+      // env_h.active_agent_h.driver_h.finished = this.finished;
+      // base_sequence_h.finished = this.finished;
    endfunction
 
    // End of elaboration phase for final setup

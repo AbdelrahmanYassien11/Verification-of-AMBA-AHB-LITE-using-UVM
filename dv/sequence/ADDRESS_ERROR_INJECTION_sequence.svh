@@ -42,7 +42,8 @@ class ADDRESS_ERROR_INJECTION_sequence extends base_sequence;
   virtual task body();
     super.body();
     reset_sequence::last_test = 1'b1;
-
+    IDLE_sequence::reset_flag = 1'b1;
+    IDLE_sequence::last_test = 1'b1;
     `uvm_info("ADDRESS_ERROR_INJECTION_sequence: ", "STARTING" , UVM_HIGH)
 
     if(~reset_flag)
@@ -69,14 +70,14 @@ class ADDRESS_ERROR_INJECTION_sequence extends base_sequence;
     seq_item.HADDR.rand_mode(0);
     for (int i = 0; i < 7; i++) begin
 
-      if(execute_idle) begin
-        $display("EXECUTE IDLE");
+      // if(execute_idle) begin
+      //   $display("EXECUTE IDLE");
 
-        IDLE_sequence_h.start(m_sequencer, this);
+      //   IDLE_sequence_h.start(m_sequencer, this);
 
-        execute_idle = 0;
-        break;
-      end
+      //   execute_idle = 0;
+      //   break;
+      // end
 
       start_item(seq_item); // Start the sequence item
 
@@ -99,14 +100,14 @@ class ADDRESS_ERROR_INJECTION_sequence extends base_sequence;
 
 
     for (int i = 0; i < 7; i++) begin
-      if(execute_idle) begin
-        $display("EXECUTE IDLE");
+      // if(execute_idle) begin
+      //   $display("EXECUTE IDLE");
 
-        IDLE_sequence_h.start(m_sequencer, this);
+      //   IDLE_sequence_h.start(m_sequencer, this);
 
-        execute_idle = 0;
-        break;
-      end
+      //   execute_idle = 0;
+      //   break;
+      // end
       //seq_item.HREAD_rand_c.constraint_mode(0);
 
       start_item(seq_item); // Start the sequence item
@@ -121,6 +122,7 @@ class ADDRESS_ERROR_INJECTION_sequence extends base_sequence;
       seq_item.last_item = 1'b1;
 
     IDLE_sequence_h.start(m_sequencer, this);
+
   endtask : body
 
 endclass

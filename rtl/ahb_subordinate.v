@@ -647,7 +647,7 @@ module ahb_subordinate
                next_state    = BUSY; 
               end
 
-              2'b11, 2'b10: begin 
+              2'b10: begin 
                 if (HWRITE_reg_c) begin 
                  next_state = WRITE; 
                 end 
@@ -657,6 +657,10 @@ module ahb_subordinate
                 else begin 
                  next_state = ERROR;
                 end 
+              end
+
+              2'b11: begin
+                next_state = ERROR;
               end 
 
               default: begin

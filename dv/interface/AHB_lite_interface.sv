@@ -95,6 +95,8 @@ string s;
                             input HBURST_e iBURST_op, input HSIZE_e iSIZE_op, input bit last_item
     */);  
 
+        @(negedge clk);
+
         wait((counter == 0 || counter >= 2) && CONTROL_PHASE_FLAG );
         //#1step;
         if(HRESP === RETRY) begin
@@ -102,7 +104,7 @@ string s;
         end
         else begin
             seq_item.do_copy(req);
-            $display("RECIEVING PHASE: ASSSINGING RANDOMIZED VALUES");
+           // $display("RECIEVING PHASE: ASSSINGING RANDOMIZED VALUES");
         end
 
             HRESETn_global      = seq_item.HRESETn;
@@ -129,12 +131,18 @@ string s;
         RECEIVING_PHASE_FLAG = 1;
 
         if(seq_item.last_item)begin
-            $display("RECIEVING PHASE: TIME: %0t WAITING FOR COUNTERS ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~",$time());
+            //$display("RECIEVING PHASE: TIME: %0t WAITING FOR COUNTERS ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~",$time());
             wait(HRESETn && !RECEIVING_PHASE_FLAG && (sequence_item::COMPARATOR_transaction_counter == sequence_item::PREDICTOR_transaction_counter /*&& HREADY*/) /*&& !OUTPUTS_PHASE_FLAG && !DATA_PHASE_FLAG*/); //so the driver doesnt keep driving when the sequence is already driven to the interface/dut
         end
         else begin
-            $display("RECIEVING PHASE: TIME: %0t WAITING FOR CONTROL PHASE TO transaction_finished",$time());
-             wait(HRESETn && !RECEIVING_PHASE_FLAG /*&& HREADY*/);
+            //$display("RECIEVING PHASE: TIME: %0t WAITING FOR CONTROL PHASE TO transaction_finished",$time());
+            if(HREADY == NOT_READY && HRESP == OKAY) begin
+                $display("RECEIVING_PHASE: WAITING FOR HREADY", $time());
+                wait(HREADY && HRESETn && !RECEIVING_PHASE_FLAG);
+            end
+            else begin
+                wait(HRESETn && !RECEIVING_PHASE_FLAG /*&& HREADY*/);
+            end
         end
     endtask : generic_reciever
 
@@ -142,7 +150,7 @@ string s;
     always@(posedge clk or negedge HRESETn_global ) begin //CONTROL_PHASE
         if(HRESETn_global /*&& HREADY*/)begin
             if(counter >= 1 && RECEIVING_PHASE_FLAG) begin
-                $display("CONTROL PHASE: TIME:%0t ASSIGINING SIGNALS", $time());
+                //$display("CONTROL PHASE: TIME:%0t ASSIGINING SIGNALS", $time());
              		HRESETn <= seq_item.HRESETn;
                     HWRITE  <= seq_item.HWRITE;
                     HTRANS  <= seq_item.HTRANS;
@@ -184,7 +192,10 @@ string s;
             HADDR   <= seq_item.HADDR;
             CONTROL_PHASE_FLAG = 1;
         end
-        //wait(HREADY);
+        if(HREADY == NOT_READY && HRESP == OKAY) begin
+            $display("CONTROL_PHASE: WAITING FOR HREADY", $time());
+            wait(HREADY);
+        end
     end
 
     always@(negedge HRESETn_global) begin
@@ -248,7 +259,10 @@ string s;
             OUTPUTS_PHASE_FLAG_2 = 1;
         end
         //$display("%0t BEFORE WAIT",$time());
-        wait(HREADY);
+        if(HREADY == NOT_READY && HRESP == OKAY) begin
+            $display("DATA_PHASE: WAITING FOR HREADY", $time());
+            wait(HREADY);
+        end
         //$display("%0t AFTER WAIT",$time());
     end
 
@@ -262,13 +276,16 @@ string s;
             // $sformatf("[INTERFACE] PIPELINE3: %s", pipeline3.output2string());
             // $sformatf("[INTERFACE] PIPELINE3: %s", pipeline3.input2string());
             //$display("[INTERFACE PIPELINE3: %s", pipeline3.output2string());
-            //$display("[INTERFACE PIPELINE3: %s", pipeline3.input2string());
+            $display("[INTERFACE PIPELINE3: %s", pipeline3.input2string());
             driver_h.end_transfer(pipeline3);
             OUTPUTS_PHASE_FLAG_1 = 0;
             //OUTPUTS_PHASE_FLAG_2 = 1;
             send_outputs();
         end
-        //wait(HREADY);
+        if(HREADY == NOT_READY && HRESP == OKAY) begin
+            $display("SAMPLING_PHASE: WAITING FOR HREADY", $time());
+            wait(HREADY);
+        end
     end
 
     // always@(posedge clk) begin

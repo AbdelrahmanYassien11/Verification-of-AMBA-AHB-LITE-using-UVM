@@ -19,8 +19,7 @@ class base_sequence extends uvm_sequence #(sequence_item);
   sequencer sequencer_h;
   sequencer burst_sequencer_h;
   sequencer runall_sequencer_h;
-  event finished;
-  bit execute_idle;
+
 
   // Constructor
   function new(string name = "base_sequence");
@@ -31,48 +30,38 @@ class base_sequence extends uvm_sequence #(sequence_item);
   task pre_body();
     // Display a message indicating the start of the pre_body task
     $display("start of pre_body task");
-    
     // Create a new instance of the sequence item
     seq_item = sequence_item::type_id::create("seq_item");
   endtask : pre_body
+
+
 
   // Main task body, to be overridden by derived classes
   task body();
     // Report an error if the base_sequence is used directly
     // $fatal(1, "You cannot use base directly. You must override it");
     fork
-      check_response();
+      ccheck_response();
     join_none
 
   endtask : body
 
-  task check_response();
+  task ccheck_response();
     forever begin
-      sequence_item req;
+      sequence_item rsp;
       // Wait for the data phase to complete
-      get_response(req);
-      ///`uvm_info("SEQUENCE", $sformatf("RESPONSE_RETRIEVED: ", req.output2string()), UVM_LOW)
-      if (req.HREADY == NOT_READY) begin
-        // wait(finished.triggered());
-        //`uvm_info("SEQUENCE NOT_READY: ", req.output2string(), UVM_LOW)
-        execute_idle = 1;
-        //sequencer_h.stop_sequences();
-        // start_item(seq_item); // Start the sequence item
+      get_response(rsp);
+      //`uvm_info("PREDICTOR", {"WRITE_subordinate3:", $sformatf("%0h, %0h", subordinate3[HADDR_VALID+counter], HWDATA[WORD_WIDTH-1:0])}, UVM_LOW)
 
-        //   // Set the operation type to READ
-        //   seq_item.RESET_op = WORKING;
-        //   seq_item.WRITE_op = READ;
-        //   seq_item.TRANS_op = IDLE;
-        //   seq_item.BURST_op = SINGLE;
-        //   seq_item.SIZE_op  = BYTE;
+      `uvm_info("SEQUENCE", {"RESPONSE_RETRIEVED: ", rsp.output2string()}, UVM_LOW)
 
-        //   // Randomize the sequence item
-        //   assert(seq_item.randomize());
-
-        // finish_item(seq_item);
-
+      if (rsp.HREADY == NOT_READY && rsp.HRESP == ERROR) begin
+        $display("%0t ERROR DETECTED",$time());
+        seq_item.ERROR_ON_EXECUTE_IDLE = 1;
       end
     end
-  endtask: check_response
+  endtask : ccheck_response
+
+
 
 endclass : base_sequence

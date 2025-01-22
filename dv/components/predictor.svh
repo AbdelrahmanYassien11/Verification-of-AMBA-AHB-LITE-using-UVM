@@ -173,10 +173,14 @@ class predictor extends uvm_subscriber #(sequence_item);
   end
   endfunction
 
+  //AHB ERROR RESPONSE SECOND CYCLE
   function void last_cycle_error_response ();
     HRESP_expected = 1;
     HREADY_expected = 1;
-    HRDATA_expected = HRDATA_expected;
+    HRDATA_expected0 = HRDATA_expected0;
+    HRDATA_expected1 = HRDATA_expected1;
+    HRDATA_expected2 = HRDATA_expected2;
+    HRDATA_expected3 = HRDATA_expected3;
   endfunction : last_cycle_error_response
 
   // Task for processing AHB operations based on inputs
@@ -285,7 +289,7 @@ class predictor extends uvm_subscriber #(sequence_item);
           burst_counter = 0;
         end
 
-        NONSEQ, SEQ:  begin
+        NONSEQ:  begin
           case(HBURST)
             INCR, INCR4, INCR8, INCR16: begin
               if(~undo_on) begin
@@ -330,6 +334,58 @@ class predictor extends uvm_subscriber #(sequence_item);
             end
 
           endcase // HBURST
+        end
+        SEQ: begin
+          if(seq_item_old.HTRANS == NONSEQ || seq_item_old.HTRANS == SEQ) begin
+            case(HBURST)
+              INCR, INCR4, INCR8, INCR16: begin
+                if(~undo_on) begin
+                  write_process(burst_counter);
+                  if(HADDR_VALID + burst_counter < ADDR_DEPTH) begin
+                    burst_counter = burst_counter +1;
+                  end
+                  else begin
+                  //  HRESP_expected = ERROR; HREADY_expected = NOT_READY;
+                  end
+                end
+                else begin
+                  write_process(burst_counter);
+                end
+              end
+              WRAP4, WRAP8, WRAP16: begin
+                if(~undo_on) begin
+                  write_process(wrap_counter);
+                  if((int'(HADDR_VALID + wrap_counter) > 0) & (int'(HADDR_VALID + wrap_counter) < ADDR_DEPTH)) begin
+                    wrap_counter = wrap_counter + 1;
+                  end
+                  else begin
+                    `uvm_warning("PREDICTOR", "THE WRAP COUNTER BYPASSED ADDR_DEPTH")
+                  end
+                  if(wrap_counter == 2 && HBURST == WRAP4) begin
+                    wrap_counter = (~wrap_counter) +1;
+                  end
+                  else if (wrap_counter == 4 && HBURST == WRAP8) begin
+                    wrap_counter = (~wrap_counter) +1 ;
+                  end
+                  else if (wrap_counter == 8 && HBURST == WRAP16) begin                
+                    wrap_counter = (~wrap_counter) +1 ;
+                  end
+                end
+                else begin
+                  write_process(wrap_counter);
+                end
+              end
+
+              default: begin
+                write_process(0);
+              end
+
+            endcase // HBURST
+          end
+          else begin
+            HRESP_expected  = ERROR;
+            HREADY_expected = NOT_READY;
+          end
         end
       endcase // HTRANS
     end
@@ -651,7 +707,10 @@ class predictor extends uvm_subscriber #(sequence_item);
           end
           wrap_counter = 0;
           burst_counter = 0;  
-          HRDATA_expected = HRDATA_expected;
+          HRDATA_expected0 = HRDATA_expected0;
+          HRDATA_expected1 = HRDATA_expected1;
+          HRDATA_expected2 = HRDATA_expected2;
+          HRDATA_expected3 = HRDATA_expected3;
         end
 
         NONSEQ, SEQ: begin
@@ -693,11 +752,61 @@ class predictor extends uvm_subscriber #(sequence_item);
 
           endcase // HBURST
         end
+        SEQ: begin
+          if(seq_item_old.HTRANS == NONSEQ || seq_item_old.HTRANS == SEQ) begin
+            case(HBURST)
+
+              INCR, INCR4, INCR8, INCR16: begin
+                read_process(burst_counter);
+                if(HADDR_VALID + burst_counter < ADDR_DEPTH-1)
+                  burst_counter = burst_counter +1;
+              end
+
+              WRAP4, WRAP8, WRAP16: begin
+                if(~undo_on) begin
+                  read_process(wrap_counter);
+                  if((int'(HADDR_VALID + wrap_counter) > 0) & (int'(HADDR_VALID + wrap_counter) < ADDR_DEPTH)) begin
+                    wrap_counter = wrap_counter + 1;
+                  end
+                  else begin
+                    `uvm_warning("PREDICTOR", "THE WRAP COUNTER BYPASSED ADDR_DEPTH")
+                  end
+                  if(wrap_counter == 2 && HBURST == WRAP4) begin
+                    wrap_counter = (~wrap_counter) +1;
+                  end
+                  else if (wrap_counter == 4 && HBURST == WRAP8) begin
+                    wrap_counter = (~wrap_counter) +1;
+                  end
+                  else if (wrap_counter == 8 && HBURST == WRAP16) begin                
+                    wrap_counter = (~wrap_counter) +1;
+                  end
+                end
+                else begin
+                  read_process(wrap_counter);
+                end
+              end
+
+              default: begin
+                read_process(0);
+              end
+
+            endcase // HBURST
+          end
+          else begin
+            HRDATA_expected0 = HRDATA_expected0;
+            HRDATA_expected1 = HRDATA_expected1;
+            HRDATA_expected2 = HRDATA_expected2;
+            HRDATA_expected3 = HRDATA_expected3;
+            HREADY_expected  = NOT_READY;
+            HRESP_expected   = ERROR;
+          end
+        end
       endcase // HTRANS
     end
     else begin
-      HRESP_expected  = 1;
-      HRDATA_expected = 0;
+      HRESP_expected   = OKAY;
+      HREADY_expected  = READY;
+      HRDATA_expected3 = 0;
     end
   endtask : read_AHB
 
