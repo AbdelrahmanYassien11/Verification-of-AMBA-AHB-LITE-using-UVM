@@ -267,7 +267,7 @@ string s;
     end
 
     always@(posedge clk) begin
-        if( (HRESETn === 1) && counter >= 5 && OUTPUTS_PHASE_FLAG_1 /*&& HREADY*/) begin
+    	if( (HRESETn === 1) && counter > 5 /*&& OUTPUTS_PHASE_FLAG_1 /*&& HREADY*/) begin
             //$display("OUTPUT_1_PHASE_SIGNALS: TIME:%0t ", $time());
             //counter = counter + 1;
             pipeline3.HREADY = HREADY;
@@ -389,3 +389,4 @@ string s;
     //assign HRESETn_global = (seq_item.HRESETn)? 1:0;
 
 endinterface : inf
+
