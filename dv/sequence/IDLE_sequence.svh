@@ -52,7 +52,8 @@ class IDLE_sequence extends base_sequence;
      if(~last_test)
       seq_item.last_item = 1'b1;
 
-
+    seq_item.SIZE_op.rand_mode(0);
+    
     start_item(seq_item); // Start the sequence item
 
     $display("seq_item.HADDR = %0d",seq_item.HADDR);

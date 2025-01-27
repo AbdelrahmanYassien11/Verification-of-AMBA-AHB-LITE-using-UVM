@@ -60,22 +60,34 @@ class outputs_monitor extends uvm_monitor;
     $display("Outputs monitor end of elaboration phase complete.");
   endfunction
 
+  // // Virtual function to write data to the monitor
+  // virtual function void write_to_monitor ( input logic [DATA_WIDTH-1:0] iHRDATA, input logic [RESP_WIDTH:0] iHRESP, input logic iHREADY );
+
+  //   // Create a new sequence item and populate it with data
+  //   sequence_item seq_item;
+  //   seq_item = new("seq_item");
+
+  //   seq_item.HRDATA = iHRDATA;
+  //   seq_item.HRESP  = iHRESP;
+  //   seq_item.HREADY = iHREADY;
+  //   // Write the sequence item to the analysis port
+  //   tlm_analysis_port.write(seq_item);
+  //   //while(i < 5) begin
+  //     `uvm_info(get_full_name(),"OUTPUTS SENT TO THE COMPARATOR",UVM_LOW)
+  //   //   i++;
+  //   // end
+  // endfunction : write_to_monitor
+
   // Virtual function to write data to the monitor
-  virtual function void write_to_monitor ( input logic [DATA_WIDTH-1:0] iHRDATA, input logic [RESP_WIDTH:0] iHRESP, input logic iHREADY );
+  virtual function void write_to_monitor (sequence_item outputs_req);
 
-    // Create a new sequence item and populate it with data
-    sequence_item seq_item;
-    seq_item = new("seq_item");
-
-    seq_item.HRDATA = iHRDATA;
-    seq_item.HRESP  = iHRESP;
-    seq_item.HREADY = iHREADY;
     // Write the sequence item to the analysis port
-    tlm_analysis_port.write(seq_item);
+    tlm_analysis_port.write(outputs_req);
     //while(i < 5) begin
       `uvm_info(get_full_name(),"OUTPUTS SENT TO THE COMPARATOR",UVM_LOW)
     //   i++;
     // end
   endfunction : write_to_monitor
+
 
 endclass

@@ -189,6 +189,7 @@ bit ERROR_ON_EXECUTE_IDLE;
         this.ERROR_ON_EXECUTE_IDLE = 0;
         `uvm_info("SEQUENCE_ITEM", {"ERROR_RESPONSE: ", this.input2string()}, UVM_LOW)
       end
+      //this.ERROR_ON_EXECUTE_IDLE = 0;
     endfunction
 
     // task check_response1();

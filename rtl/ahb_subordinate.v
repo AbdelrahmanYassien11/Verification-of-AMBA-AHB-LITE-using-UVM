@@ -284,12 +284,17 @@ module ahb_subordinate
                 wrap_counter_reg <= wrap_counter_reg;       
             end
             default: begin
-              wrap_counter_reg <= 0;
+              // if(next_state == ERROR) begin
+              //     wrap_counter_reg <= wrap_counter_reg;
+              // end
+              // else begin
+                  wrap_counter_reg <= 0;
+              //end
             end
           endcase // HTRANS_reg_d
         end
         else begin
-            wrap_counter_reg <= wrap_counter_reg;
+          wrap_counter_reg <= wrap_counter_reg;
         end
       end
     end
@@ -354,12 +359,17 @@ module ahb_subordinate
                 burst_counter_reg <= burst_counter_reg;       
             end
             default: begin
-              burst_counter_reg <= 0;
+              // if(next_state == ERROR) begin
+              //     burst_counter_reg <= burst_counter_reg;
+              // end
+              // else begin
+                  burst_counter_reg <= 0;
+              //end
             end
           endcase // HTRANS_reg_d
         end
         else begin
-            burst_counter_reg <= burst_counter_reg;
+          burst_counter_reg <= burst_counter_reg;
         end
       end
     end
@@ -671,10 +681,13 @@ module ahb_subordinate
           end
           else if(HSEL_reg_c && !HREADYin)begin
             if(next_state == ERROR) begin
-              next_state = IDLE;
+              case (HTRANS_reg_c)
+                2'b00: next_state = IDLE;
+                default : next_state = ERROR;
+              endcase
             end
             else begin
-              next_state = next_state;
+              next_state = ERROR;
             end
           end
 
@@ -715,6 +728,7 @@ module ahb_subordinate
                 next_state = IDLE;
               end 
             endcase //HTRANS_reg_c
+
           end
 
           else if(HSEL_reg_c && !HREADYin)begin
@@ -724,13 +738,6 @@ module ahb_subordinate
               end
               default: next_state = ERROR;
             endcase
-
-            // if(HTRANS_reg_c == ) begin
-            //   next_state = ERROR;
-            // end
-            // else begin
-            //   next_state = next_state;
-            // end
           end
 
           else begin
@@ -739,7 +746,7 @@ module ahb_subordinate
         end
 
         ERROR: begin
-          if(HBURST == SINGLE) begin
+          if(HTRANS == 2'b00) begin
             next_state = IDLE;
           end
           else begin

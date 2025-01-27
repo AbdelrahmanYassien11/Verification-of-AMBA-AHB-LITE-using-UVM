@@ -68,11 +68,22 @@ class driver extends uvm_driver #(sequence_item);
       req_seq_items.push_back(req);
       my_vif.generic_reciever(req);
 
+
+      wait_for_reset(req);
       seq_item_port.item_done();
     end
 
     $display("my_driver run phase");
   endtask
+
+  task wait_for_reset(sequence_item req_reset);
+    if(~req_reset.HRESETn) begin
+      repeat(15) begin
+        @(posedge my_vif.clk);
+      end
+      -> my_vif.reset_finished;;
+    end
+  endtask : wait_for_reset
 
   // Function to complete the sequence item - driver handshake back to the sequence 
   // item, decoupled from the point of the originating request

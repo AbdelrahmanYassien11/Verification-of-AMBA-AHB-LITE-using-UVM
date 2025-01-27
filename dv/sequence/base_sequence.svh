@@ -20,6 +20,7 @@ class base_sequence extends uvm_sequence #(sequence_item);
   sequencer burst_sequencer_h;
   sequencer runall_sequencer_h;
 
+  bit break_burst;
 
   // Constructor
   function new(string name = "base_sequence");
@@ -56,12 +57,36 @@ class base_sequence extends uvm_sequence #(sequence_item);
       `uvm_info("SEQUENCE", {"RESPONSE_RETRIEVED: ", rsp.output2string()}, UVM_LOW)
 
       if (rsp.HREADY == NOT_READY && rsp.HRESP == ERROR) begin
-        $display("%0t ERROR DETECTED",$time());
+        break_burst = 1;
+        $display("%0t ERROR DETECTED",$time()); //180
         seq_item.ERROR_ON_EXECUTE_IDLE = 1;
       end
     end
   endtask : ccheck_response
 
+  task do_burst(input HBURST_e burst_type, input HWRITE_e write_type);
+    repeat(determine_burst_counter(burst_type)) begin
+      if(break_burst && (~seq_item.ERROR_ON_EXECUTE_IDLE)) begin
+        $display("BURST BROKEN %0t",$time());
+        break; //185
+      end
+      start_item(seq_item);
+        assert(seq_item.randomize() with {RESET_op == WORKING; WRITE_op == write_type; TRANS_op == SEQ; BURST_op == burst_type;});
+        $display("atlas %0t", $time()); //175
+      finish_item(seq_item);
+    end
+    break_burst = 0;
+  endtask : do_burst
+
+  function int determine_burst_counter (input HBURST_e burst_type);
+    case (burst_type)
+      SINGLE:         return 1;
+      INCR:           return seq_item.INCR_CONTROL;
+      WRAP4, INCR4:   return  3;
+      WRAP8, INCR8:   return  7;
+      WRAP16, INCR16: return 15;
+    endcase
+  endfunction : determine_burst_counter
 
 
 endclass : base_sequence

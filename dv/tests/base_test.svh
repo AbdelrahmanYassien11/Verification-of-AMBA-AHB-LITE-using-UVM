@@ -87,7 +87,7 @@ class base_test extends uvm_test;
       // Start the base sequence
       base_sequence_h.start(sequencer_h);
 
-
+      wait(sequence_item::PREDICTOR_transaction_counter == sequence_item::COMPARATOR_transaction_counter);
       // Drop the objection to allow the phase to end
       phase.drop_objection(this);
 

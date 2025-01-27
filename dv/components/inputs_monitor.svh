@@ -62,34 +62,41 @@ class inputs_monitor extends uvm_monitor;
   endfunction
 
   // Virtual function to write data to the monitor
-  virtual function void write_to_monitor ( input bit iHRESETn, input bit   iHWRITE, input bit  [TRANS_WIDTH:0] iHTRANS, 
-                        input bit  [SIZE_WIDTH:0] iHSIZE, input bit  [BURST_WIDTH:0] iHBURST,
-                        input bit  [PROT_WIDTH:0] iHPROT, input bit  [ADDR_WIDTH-1:0] iHADDR,     
-                        input bit  [DATA_WIDTH-1:0] iHWDATA, input HRESET_e iRESET_op,
-                        input HWRITE_e iWRITE_op, input HTRANS_e iTRANS_op,
-                        input HBURST_e iBURST_op, input HSIZE_e iSIZE_op
-  );
+  // virtual function void write_to_monitor ( input bit iHRESETn, input bit   iHWRITE, input bit  [TRANS_WIDTH:0] iHTRANS, 
+  //                       input bit  [SIZE_WIDTH:0] iHSIZE, input bit  [BURST_WIDTH:0] iHBURST,
+  //                       input bit  [PROT_WIDTH:0] iHPROT, input bit  [ADDR_WIDTH-1:0] iHADDR,     
+  //                       input bit  [DATA_WIDTH-1:0] iHWDATA, input HRESET_e iRESET_op,
+  //                       input HWRITE_e iWRITE_op, input HTRANS_e iTRANS_op,
+  //                       input HBURST_e iBURST_op, input HSIZE_e iSIZE_op
+  // );
 
-      // Create a new sequence item and populate it with data
-      sequence_item seq_item;
-      seq_item = new("seq_item");
-      seq_item.HRESETn    = iHRESETn;
-      seq_item.HWRITE     = iHWRITE;
-      seq_item.HTRANS     = iHTRANS;
-      seq_item.HSIZE      = iHSIZE;
-      seq_item.HBURST     = iHBURST;
-      seq_item.HPROT      = iHPROT;                
-      seq_item.HADDR      = iHADDR;
-      seq_item.HWDATA     = iHWDATA;
+  //     // Create a new sequence item and populate it with data
+  //     sequence_item seq_item;
+  //     seq_item = new("seq_item");
+  //     seq_item.HRESETn    = iHRESETn;
+  //     seq_item.HWRITE     = iHWRITE;
+  //     seq_item.HTRANS     = iHTRANS;
+  //     seq_item.HSIZE      = iHSIZE;
+  //     seq_item.HBURST     = iHBURST;
+  //     seq_item.HPROT      = iHPROT;                
+  //     seq_item.HADDR      = iHADDR;
+  //     seq_item.HWDATA     = iHWDATA;
       
-      seq_item.RESET_op   = iRESET_op;
-      seq_item.WRITE_op   = iWRITE_op;
-      seq_item.TRANS_op   = iTRANS_op;
-      seq_item.BURST_op   = iBURST_op;          
-      seq_item.SIZE_op    = iSIZE_op;
+  //     seq_item.RESET_op   = iRESET_op;
+  //     seq_item.WRITE_op   = iWRITE_op;
+  //     seq_item.TRANS_op   = iTRANS_op;
+  //     seq_item.BURST_op   = iBURST_op;          
+  //     seq_item.SIZE_op    = iSIZE_op;
+
+  //   // Write the sequence item to the analysis port
+  //   tlm_analysis_port.write(seq_item);
+
+  // endfunction : write_to_monitor
+
+  virtual function void write_to_monitor (sequence_item input_req);
 
     // Write the sequence item to the analysis port
-    tlm_analysis_port.write(seq_item);
+    tlm_analysis_port.write(input_req);
 
   endfunction : write_to_monitor
 
