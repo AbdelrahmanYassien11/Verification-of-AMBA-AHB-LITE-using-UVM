@@ -137,21 +137,10 @@ class predictor extends uvm_subscriber #(sequence_item);
 
 
     //$display("async_reset_time: %0t and actual time: %0t",async_reset_time, $time());
-    if(async_reset_time === ($time()-5)) begin
+    if(~t.HRESETn) begin
       undo_last_operation();
     end
-    async_reset_time = $time();
 
-  //Checking if this is the last cycle of a waited error response by any subordinate other than the default subordinate
-  if(HSEL != 4 && HRESP_expected == ERROR && t.HTRANS == IDLE && t.HBURST == SINGLE) begin
-    //assigning appropriate outputs to the last cycle of the error response exclaimed by the subordinate 
-    last_cycle_error_response();
-    send_results();
-  end
-  // else if (HSEL != 4 && HRESP_expected == ERROR && HTRANS != IDLE) begin
-  //   waited_cycle_error_response();
-  // end
-  else begin
     HTRANS      = t.HTRANS;
     HRESETn     = t.HRESETn;
     HWRITE      = t.HWRITE;
@@ -169,19 +158,20 @@ class predictor extends uvm_subscriber #(sequence_item);
     SIZE_op     = t.SIZE_op;
     data_str    = $sformatf("HRESETn:%0d, HWRITE:%0d, HTRANS:%0d, HSIZE:%0d, HBURST:%0d, HPROT:%0d, HADDR:%0d, HWDATA:%0d",
                            HRESETn, HWRITE, HTRANS, HSIZE, HBURST, HPROT, HADDR, HWDATA);
+    $display("INPUTS WRITTEN %0s",t.input2string);
+  //Checking if this is the last cycle of a waited error response by any subordinate other than the default subordinate
+  // if(HSEL != 4 && HRESP_expected == ERROR && t.HTRANS == IDLE && t.HBURST == SINGLE) begin
+  //   //assigning appropriate outputs to the last cycle of the error response exclaimed by the subordinate
+  //   last_cycle_error_response();
+  //   send_results();
+  // end
+  // else if (HSEL != 4 && HRESP_expected == ERROR && HTRANS != IDLE) begin
+  //   waited_cycle_error_response();
+  // end
+  // else begin
   -> inputs_written;
-  end
+  // end
   endfunction
-
-  //AHB ERROR RESPONSE SECOND CYCLE
-  function void last_cycle_error_response ();
-    HRESP_expected = 1;
-    HREADY_expected = 1;
-    HRDATA_expected0 = HRDATA_expected0;
-    HRDATA_expected1 = HRDATA_expected1;
-    HRDATA_expected2 = HRDATA_expected2;
-    HRDATA_expected3 = HRDATA_expected3;
-  endfunction : last_cycle_error_response
 
   // Task for processing AHB operations based on inputs
   task generic_predictor();
@@ -238,10 +228,10 @@ class predictor extends uvm_subscriber #(sequence_item);
     task reset_AHB();
       HRESP_expected   = OKAY;
       HREADY_expected  = READY;
-      HRDATA_expected0  = 0;
-      HRDATA_expected1  = 0;
-      HRDATA_expected2  = 0;
-      HRDATA_expected3  = 0;
+      HRDATA_expected0 = 0;
+      HRDATA_expected1 = 0;
+      HRDATA_expected2 = 0;
+      HRDATA_expected3 = 0;
       HTRANS           = IDLE;
       wrap_counter     = 0;
       burst_counter    = 0;
@@ -266,17 +256,20 @@ class predictor extends uvm_subscriber #(sequence_item);
     if(HSEL != 4) begin
       case(HTRANS)
         IDLE, BUSY: begin
-          if(undo_on) $display("HTRANS : %0d", HTRANS);
-          if(~( (int'(HADDR_VALID + wrap_counter +1) >= 0) & ((HADDR_VALID + burst_counter -1) < ADDR_DEPTH) & (int'(HADDR_VALID + wrap_counter -1) < ADDR_DEPTH))) begin
-            HRESP_expected = ERROR; HREADY_expected = READY;
-            $display("HADDR+WRAP:%0d",(int'(HADDR_VALID+wrap_counter)), HADDR_VALID, wrap_counter);
-            `uvm_warning("PREDICTOR", "This shouldnt be hit, please check why either counter is incrementing above address width in IDLE TRANSFER");
+          //if(undo_on) $display("HTRANS : %0d", HTRANS);
+          if (HBURST == SINGLE && HRESP_expected == ERROR) begin
+              HRESP_expected = ERROR; HREADY_expected = READY;
           end
+          // if(~( (int'(HADDR_VALID + wrap_counter +1) >= 0) & ((HADDR_VALID + burst_counter -1) < ADDR_DEPTH) & (int'(HADDR_VALID + wrap_counter -1) < ADDR_DEPTH))) begin
+          //   HRESP_expected = ERROR; HREADY_expected = READY;
+          //   $display("HADDR+WRAP:%0d",(int'(HADDR_VALID+wrap_counter)), HADDR_VALID, wrap_counter);
+          //   `uvm_warning("PREDICTOR", "This shouldnt be hit, please check why either counter is incrementing above address width in IDLE TRANSFER");
+          // end
           else begin
-            HRESP_expected = ERROR; HREADY_expected = READY;
+            HRESP_expected = OKAY; HREADY_expected = READY;
+          end
             wrap_counter  = 0;
             burst_counter = 0;
-          end
           // else begin
           //   `uvm_warning("PREDICTOR", "This shouldnt be hit, please check why HBURST is not SINGLE during IDLE TRANSFER")
           //   if(~( (int'(HADDR_VALID + wrap_counter +1) >= 0) & ((HADDR_VALID + burst_counter -1) < ADDR_DEPTH) & (int'(HADDR_VALID + wrap_counter -1) < ADDR_DEPTH))) begin
@@ -686,17 +679,20 @@ class predictor extends uvm_subscriber #(sequence_item);
       case(HTRANS)
 
         IDLE, BUSY: begin
-          HREADY_expected = READY;
-          if(~( (int'(HADDR_VALID + wrap_counter +1 ) >= 0 ) & ((HADDR_VALID + burst_counter - 1) < ADDR_DEPTH) & (int'(wrap_counter+(HADDR_VALID - 1)) < ADDR_DEPTH))) begin
-            $display("HADDR+WRAP:%0d, HADDR:%0d, wrap_counter:%0d",(int'(HADDR_VALID+wrap_counter)), HADDR_VALID, wrap_counter);
-            HRESP_expected = ERROR;
-            `uvm_warning("PREDICTOR", "This shouldnt be hit, please check why either counter is incrementing above address width in IDLE TRANSFER");
-          end
+          if(HRESP_expected == ERROR && HBURST == SINGLE) begin
+              HRESP_expected = ERROR; HREADY_expected = READY;
+          end          
+          // if(~( (int'(HADDR_VALID + wrap_counter +1 ) >= 0 ) & ((HADDR_VALID + burst_counter - 1) < ADDR_DEPTH) & (int'(wrap_counter+(HADDR_VALID - 1)) < ADDR_DEPTH))) begin
+          //   $display("HADDR+WRAP:%0d, HADDR:%0d, wrap_counter:%0d",(int'(HADDR_VALID+wrap_counter)), HADDR_VALID, wrap_counter);
+          //   HRESP_expected = ERROR; HREADY_expected = READY;
+          //   `uvm_warning("PREDICTOR", "This shouldnt be hit, please check why either counter is incrementing above address width in IDLE TRANSFER");
+          // end
           else begin
-            HRESP_expected = OKAY;
+            HRESP_expected = OKAY; HREADY_expected = READY;
+          end
+          $display("RESETING THE COUNTERS");
             wrap_counter = 0;
             burst_counter = 0;
-          end
           // else begin
           //   HRESP_expected = ERROR; HREADY_expected = READY;
           //   `uvm_warning("PREDICTOR", "This shouldnt be hit, please check why HBURST is not SINGLE during IDLE TRANSFER")
@@ -705,10 +701,10 @@ class predictor extends uvm_subscriber #(sequence_item);
           //     `uvm_warning("PREDICTOR", "This shouldnt be hit, please check why either counter is incrementing above address width when HBURST is NOT SINGLE during IDLE TRANSFER");
           //   end       
           // end
-          HRDATA_expected0 = HRDATA_expected0;
-          HRDATA_expected1 = HRDATA_expected1;
-          HRDATA_expected2 = HRDATA_expected2;
-          HRDATA_expected3 = HRDATA_expected3;
+          // HRDATA_expected0 = HRDATA_expected0;
+          // HRDATA_expected1 = HRDATA_expected1;
+          // HRDATA_expected2 = HRDATA_expected2;
+          // HRDATA_expected3 = HRDATA_expected3;
         end
 
         NONSEQ: begin
@@ -716,11 +712,12 @@ class predictor extends uvm_subscriber #(sequence_item);
 
             INCR, INCR4, INCR8, INCR16: begin
               read_process(burst_counter);
-              if(HADDR_VALID + burst_counter < ADDR_DEPTH-1) begin 
+              if(HADDR_VALID + burst_counter < ADDR_DEPTH) begin 
                 burst_counter = burst_counter +1;
               end
               else begin
                 HRESP_expected = ERROR; HREADY_expected = NOT_READY;
+                $display("HELLO counter %0d, %0t",burst_counter, $time());
               end
             end
 
@@ -761,8 +758,12 @@ class predictor extends uvm_subscriber #(sequence_item);
 
               INCR, INCR4, INCR8, INCR16: begin
                 read_process(burst_counter);
-                if(HADDR_VALID + burst_counter < ADDR_DEPTH-1)
+                if(HADDR_VALID + burst_counter < ADDR_DEPTH) begin
                   burst_counter = burst_counter +1;
+                end
+                else begin
+                    HRESP_expected = ERROR; HREADY_expected = NOT_READY;
+                end
               end
 
               WRAP4, WRAP8, WRAP16: begin
@@ -772,7 +773,8 @@ class predictor extends uvm_subscriber #(sequence_item);
                     wrap_counter = wrap_counter + 1;
                   end
                   else begin
-                    `uvm_warning("PREDICTOR", "THE WRAP COUNTER BYPASSED ADDR_DEPTH")
+                    `uvm_warning("PREDICTOR", "THE WRAP COUNTER BYPASSED ADDR_DEPTH") 
+                     HRESP_expected = ERROR; HREADY_expected = NOT_READY;
                   end
                   if(wrap_counter == 2 && HBURST == WRAP4) begin
                     wrap_counter = (~wrap_counter) +1;

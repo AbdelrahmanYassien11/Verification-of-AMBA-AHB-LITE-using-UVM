@@ -62,6 +62,7 @@ bit OUTPUTS_PHASE_FLAG_2;
 //bit OUTPUTS_PHASE_FLAG_3;
 
 // bit last_test;
+int atlas;
 
 // Monitor handles
 inputs_monitor inputs_monitor_h;    // Handle to input monitor
@@ -96,11 +97,18 @@ event dataPhase_event, samplingPhase_event;
 
     task generic_reciever( sequence_item req);
     	global_req.do_copy(req);  
+    	$display("req: %0s",req.convert2string());
+    	pipeline1.do_copy(req);
+    	//$display("[INTERFACE] PIPELINE1: %s", pipeline1.input2string);
+    	send_inputs(pipeline1);
     	addressPhase(req);
 
-    	pipeline1.do_copy(req);
 
     	lock1();
+
+
+
+
 
     	-> dataPhase_event;
 
@@ -117,12 +125,12 @@ event dataPhase_event, samplingPhase_event;
 		HPROT   <= addressPhase_req.HPROT;
 		HADDR   <= addressPhase_req.HADDR;
 		//HWDATA  <= addressPhase_req.HWDATA;
-
+		//send_inputs(addressPhase_req);
 		@(posedge clk);
 		//DATA_PHASE_FLAG = 1;
 
-		send_inputs(addressPhase_req);
 		while((~HREADY) && (HRESP == OKAY)) begin
+			$display("ANNA1 %0t",$time());
 			@(posedge clk);
 		end
 	endtask : addressPhase
@@ -130,9 +138,9 @@ event dataPhase_event, samplingPhase_event;
 	always begin
 		@(dataPhase_event);
 		dataPhase(pipeline1);
-		unlock1();
 		pipeline2.do_copy(pipeline1);
-
+		//$display("[INTERFACE] PIPELINE2: %s", pipeline2.input2string);
+		unlock1();
 
 		-> samplingPhase_event;
 
@@ -143,6 +151,7 @@ event dataPhase_event, samplingPhase_event;
 			HWDATA <= dataPhase_req.HWDATA;
 		end
 		while ((~HREADY) && (HRESP == OKAY)) begin
+			$display("ANNA2 %0t",$time());
 			@(posedge clk);
 		end
 	endtask : dataPhase
@@ -151,6 +160,7 @@ event dataPhase_event, samplingPhase_event;
 		@(samplingPhase_event);
 		//@(posedge clk);
 		pipeline3.do_copy(pipeline2);
+		//$display("[INTERFACE] PIPELINE3: %s", pipeline3.input2string);
 		if(pipeline3.HRESETn) begin
 			@(negedge clk);
 		end
@@ -487,6 +497,8 @@ event dataPhase_event, samplingPhase_event;
     function void send_inputs( sequence_item input_req);
 
     	previous_seq_item.do_copy(input_req);
+    	atlas = atlas +1;
+		$display("atlas %0d  %0t",atlas, $realtime());
 
         inputs_monitor_h.write_to_monitor(input_req);
     endfunction : send_inputs

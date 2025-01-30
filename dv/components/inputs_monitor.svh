@@ -97,6 +97,7 @@ class inputs_monitor extends uvm_monitor;
 
     // Write the sequence item to the analysis port
     tlm_analysis_port.write(input_req);
+    `uvm_info(get_full_name(),"INPUTS SENT TO THE PREDICTOR",UVM_LOW)
 
   endfunction : write_to_monitor
 

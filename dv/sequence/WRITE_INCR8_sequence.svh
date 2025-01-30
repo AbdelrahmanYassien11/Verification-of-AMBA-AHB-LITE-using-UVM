@@ -50,28 +50,13 @@ class WRITE_INCR8_sequence extends base_sequence;
     if(~reset_flag)
       reset_sequence_h.start(m_sequencer, this);
 
-    start_item(seq_item); // Start the sequence item
-
-      assert(seq_item.randomize() with {RESET_op == WORKING; WRITE_op == WRITE; TRANS_op == NONSEQ; BURST_op == INCR8;}); 
-
-    finish_item(seq_item);
+    do_burst(INCR8, WRITE, NONSEQ);
     
     IDLE_sequence_h.HADDR_reserve = seq_item.HADDR;
     seq_item.SIZE_op.rand_mode(0);
     seq_item.HADDR.rand_mode(0);
-    for (int i = 0; i < 7; i++) begin
 
-      start_item(seq_item); // Start the sequence item
-
-        seq_item.SIZE_op.rand_mode(0);
-        seq_item.HADDR.rand_mode(0);
-        
-        // Set the operation type to WRITE
-        assert(seq_item.randomize() with {RESET_op == WORKING; WRITE_op == WRITE; TRANS_op == SEQ; BURST_op == INCR8;}); 
-
-      finish_item(seq_item);
-
-    end
+    do_burst(INCR8, WRITE, SEQ);
 
     if(~last_test)
       seq_item.last_item = 1'b1;

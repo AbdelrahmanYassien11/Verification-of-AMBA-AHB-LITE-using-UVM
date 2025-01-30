@@ -53,27 +53,14 @@ class WRITE_WRAP4_sequence extends base_sequence;
     if(~reset_flag)
       reset_sequence_h.start(sequencer_h);
 
-
-    start_item(seq_item); // Start the sequence item
-
-      // Set the operation type to WRITE
-      assert(seq_item.randomize() with {seq_item.RESET_op == WORKING; seq_item.WRITE_op == WRITE; seq_item.TRANS_op == NONSEQ; seq_item.BURST_op == WRAP4;}); // Randomize the sequence item
-
-    finish_item(seq_item);
+    // Set the operation type to WRITE
+    do_burst(WRAP4, WRITE, NONSEQ);
 
     IDLE_sequence_h.HADDR_reserve = seq_item.HADDR;
     seq_item.SIZE_op.rand_mode(0);
     seq_item.HADDR.rand_mode(0);
     
-    for (int i = 0; i < 3; i++) begin
-
-      start_item(seq_item); // Start the sequence item
-        
-        // Set the operation type to WRITE
-        assert(seq_item.randomize() with {seq_item.RESET_op == WORKING; seq_item.WRITE_op == WRITE; seq_item.TRANS_op == SEQ; seq_item.BURST_op == WRAP4;}); // Randomize the sequence item
-
-      finish_item(seq_item);
-    end
+    do_burst(WRAP4, WRITE, SEQ);
 
     if(~last_test)
       seq_item.last_item = 1'b1;

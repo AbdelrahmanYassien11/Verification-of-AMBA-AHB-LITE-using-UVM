@@ -177,7 +177,7 @@ bit ERROR_ON_EXECUTE_IDLE;
     // endfunction
 
     function void post_randomize ();
-      $display (" %0t This will be called just after randomization", $time());
+      //$display (" %0t This will be called just after randomization", $time());
       // Wait for the data phase to complete
       if(this.ERROR_ON_EXECUTE_IDLE) begin
         $display("overwritting for error_response");
@@ -187,7 +187,7 @@ bit ERROR_ON_EXECUTE_IDLE;
         this.HBURST  = 0;
         this.HWDATA  = 0;
         this.ERROR_ON_EXECUTE_IDLE = 0;
-        `uvm_info("SEQUENCE_ITEM", {"ERROR_RESPONSE: ", this.input2string()}, UVM_LOW)
+        //`uvm_info("SEQUENCE_ITEM", {"ERROR_RESPONSE: ", this.input2string()}, UVM_LOW)
       end
       //this.ERROR_ON_EXECUTE_IDLE = 0;
     endfunction

@@ -53,27 +53,16 @@ class READ_WRAP16_sequence extends base_sequence;
     if(~reset_flag)
       reset_sequence_h.start(sequencer_h);
 
-    start_item(seq_item); // Start the sequence item
 
-      // Set the operation type to READ
-      // Randomize the sequence item
-      assert(seq_item.randomize() with {RESET_op == WORKING; WRITE_op == READ; TRANS_op == NONSEQ; BURST_op == WRAP16;});
+    // Set the operation type to READ
+    // Randomize the sequence item
+    do_burst(WRAP16, READ, NONSEQ);
 
-    finish_item(seq_item);
-    
     IDLE_sequence_h.HADDR_reserve = seq_item.HADDR;
     seq_item.SIZE_op.rand_mode(0);
     seq_item.HADDR.rand_mode(0);
-    for (int i = 0; i < 15; i++) begin
 
-      start_item(seq_item); // Start the sequence item
-        
-      // Set the operation type to READ
-      // Randomize the sequence item
-      assert(seq_item.randomize() with {RESET_op == WORKING; WRITE_op == READ; TRANS_op == SEQ; BURST_op == WRAP16;});
-
-      finish_item(seq_item);
-    end
+    do_burst(WRAP16, READ, SEQ);
 
     if(~last_test)
       seq_item.last_item = 1'b1;

@@ -55,27 +55,15 @@ class WRITE_READ_INCR8_sequence extends base_sequence;
     //                                 STARTING WRITE_INCR8
     /**************************************************************************************/      
 
-    start_item(seq_item); // Start the sequence item
-
-      // Set the operation type to WRITE
-      // Randomize the sequence item
-      assert(seq_item.randomize() with {RESET_op == WORKING; WRITE_op == WRITE; TRANS_op == NONSEQ; BURST_op == INCR8;});
-
-    finish_item(seq_item);
+    // Set the operation type to WRITE
+    // Randomize the sequence item
+    do_burst(INCR8, WRITE, NONSEQ);
 
     IDLE_sequence_h.HADDR_reserve = seq_item.HADDR;
     seq_item.SIZE_op.rand_mode(0);
     seq_item.HADDR.rand_mode(0);
 
-    for (int i = 0; i < 7; i++) begin
-      start_item(seq_item); // Start the sequence item
-
-      // Set the operation type to WRITE
-      // Randomize the sequence item
-      assert(seq_item.randomize() with {RESET_op == WORKING; WRITE_op == WRITE; TRANS_op == SEQ; BURST_op == INCR8;});
-
-      finish_item(seq_item);
-    end
+    do_burst(INCR8, WRITE, SEQ);
 
     //Starting IDLE sequence
     IDLE_sequence_h.start(m_sequencer, this);
@@ -83,24 +71,9 @@ class WRITE_READ_INCR8_sequence extends base_sequence;
     /***************************************************************************************/
     //                                 STARTING READ_INCR8
     /**************************************************************************************/
-    start_item(seq_item); // Start the sequence item
+    do_burst(INCR8, READ, NONSEQ);
 
-      // Set the operation type to READ
-      // Randomize the sequence item
-      assert(seq_item.randomize() with {RESET_op == WORKING; WRITE_op == READ; TRANS_op == NONSEQ; BURST_op == INCR8;});
-
-    finish_item(seq_item);
-
-    for (int i = 0; i < 7; i++) begin
-
-      start_item(seq_item); // Start the sequence item
-        
-      // Set the operation type to READ
-      // Randomize the sequence item
-      assert(seq_item.randomize() with {RESET_op == WORKING; WRITE_op == READ; TRANS_op == SEQ; BURST_op == INCR8;});
-
-      finish_item(seq_item);
-    end
+    do_burst(INCR8, READ, SEQ);
 
     if(~last_test)
       seq_item.last_item = 1'b1;

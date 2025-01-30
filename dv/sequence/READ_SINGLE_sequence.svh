@@ -50,15 +50,7 @@ class READ_SINGLE_sequence extends base_sequence;
     if(~last_test)
       seq_item.last_item = 1'b1;
 
-    // Start the sequence item
-    start_item(seq_item);
-
-    // Configure the sequence item for the write operation
-    // Randomize the sequence item
-    assert(seq_item.randomize() with {RESET_op == WORKING; WRITE_op == READ; TRANS_op == NONSEQ; BURST_op == SINGLE;});
-
-    // Finish the sequence item
-    finish_item(seq_item);
+    do_burst(SINGLE, READ, NONSEQ);
 
   endtask : body
 

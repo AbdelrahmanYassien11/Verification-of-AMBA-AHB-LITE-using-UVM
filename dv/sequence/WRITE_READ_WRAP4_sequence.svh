@@ -54,26 +54,15 @@ class WRITE_READ_WRAP4_sequence extends base_sequence;
     /***************************************************************************************/
     //                                 STARTING WRITE_WRAP4
     /**************************************************************************************/   
-    start_item(seq_item); // Start the sequence item
 
-      // Set the operation type to WRITE
-      assert(seq_item.randomize() with {RESET_op == WORKING; WRITE_op == WRITE; TRANS_op == NONSEQ; BURST_op == WRAP4;}); // Randomize the sequence item
-
-
-    finish_item(seq_item);
+    // Set the operation type to WRITE
+    do_burst(WRAP4, WRITE, NONSEQ);
 
     IDLE_sequence_h.HADDR_reserve = seq_item.HADDR;
     seq_item.SIZE_op.rand_mode(0);
     seq_item.HADDR.rand_mode(0);
 
-    for (int i = 0; i < 3; i++) begin
-      start_item(seq_item); // Start the sequence item
-        
-      // Set the operation type to WRITE
-      assert(seq_item.randomize() with {RESET_op == WORKING; WRITE_op == WRITE; TRANS_op == SEQ; BURST_op == WRAP4;}); // Randomize the sequence item
-
-      finish_item(seq_item);
-    end
+    do_burst(WRAP4, WRITE, SEQ);
 
     IDLE_sequence_h.start(m_sequencer, this);
 
@@ -82,23 +71,10 @@ class WRITE_READ_WRAP4_sequence extends base_sequence;
     //                                 STARTING READ_WRAP4
     /**************************************************************************************/       
 
-    start_item(seq_item); // Start the sequence item
-
-      // Set the operation type to READ
-      assert(seq_item.randomize() with {RESET_op == WORKING; WRITE_op == READ; TRANS_op == NONSEQ; BURST_op == WRAP4;}); // Randomize the sequence item
+    do_burst(WRAP4, READ, NONSEQ);
 
 
-    finish_item(seq_item);
-
-    for (int i = 0; i < 3; i++) begin
-
-      start_item(seq_item); // Start the sequence item
-
-      // Set the operation type to READ
-      assert(seq_item.randomize() with {RESET_op == WORKING; WRITE_op == READ; TRANS_op == SEQ; BURST_op == WRAP4;}); // Randomize the sequence item
-
-      finish_item(seq_item);
-    end
+    do_burst(WRAP4, READ, SEQ);
 
     if(~last_test)
       seq_item.last_item = 1'b1;

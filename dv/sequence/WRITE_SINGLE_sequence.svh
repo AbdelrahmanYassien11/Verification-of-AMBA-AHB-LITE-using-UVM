@@ -54,13 +54,7 @@ class WRITE_SINGLE_sequence extends base_sequence;
       seq_item.last_item = 1'b1;
     
     // Start the sequence item
-    start_item(seq_item);
-
-    assert(seq_item.randomize() with {RESET_op == WORKING; WRITE_op == WRITE; TRANS_op == NONSEQ; BURST_op == SINGLE;}); // Randomize the sequence item
-    // Set the control signals for writing
-
-    // Finish the sequence item
-    finish_item(seq_item);
+    do_burst(SINGLE, WRITE, NONSEQ);
     
 
   endtask : body

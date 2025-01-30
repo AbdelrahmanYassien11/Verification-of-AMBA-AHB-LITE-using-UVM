@@ -50,29 +50,16 @@ class READ_INCR_sequence extends base_sequence;
     if(~reset_flag)
       reset_sequence_h.start(sequencer_h);
 
-    start_item(seq_item); // Start the sequence item
-
-      // Set the operation type to READ
-      // Randomize the sequence item
-      assert(seq_item.randomize() with {RESET_op == WORKING; WRITE_op == READ; TRANS_op == NONSEQ; BURST_op == INCR;});
-
-    finish_item(seq_item);
+    // Set the operation type to READ
+    // Randomize the sequence item
+    do_burst(INCR, READ, NONSEQ);
 
     seq_item.INCR_CONTROL.rand_mode(0);
     IDLE_sequence_h.HADDR_reserve = seq_item.HADDR;
     seq_item.SIZE_op.rand_mode(0);
     seq_item.HADDR.rand_mode(0);
 
-    for (int i = 0; i < seq_item.INCR_CONTROL; i++) begin
-
-      start_item(seq_item); // Start the sequence item
-
-        // Set the operation type to READ
-        // Randomize the sequence item
-        assert(seq_item.randomize() with {RESET_op == WORKING; WRITE_op == READ; TRANS_op == SEQ; BURST_op == INCR;});
-
-      finish_item(seq_item);
-    end
+    do_burst(INCR, READ, SEQ);
 
     if(~last_test)
       seq_item.last_item = 1'b1;

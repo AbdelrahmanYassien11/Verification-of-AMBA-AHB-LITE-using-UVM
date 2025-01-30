@@ -68,18 +68,8 @@ class ADDRESS_ERROR_INJECTION_sequence extends base_sequence;
     IDLE_sequence_h.HADDR_reserve = seq_item.HADDR;
     seq_item.SIZE_op.rand_mode(0);
     seq_item.HADDR.rand_mode(0);
-    // for (int i = 0; i < 7; i++) begin
 
-    //   start_item(seq_item); // Start the sequence item
-
-    //     // Set the operation type to WRITE
-    //     assert(seq_item.randomize() with {RESET_op == WORKING; WRITE_op == WRITE; TRANS_op == SEQ; BURST_op == INCR8;}); // Randomize the sequence item
-
-    //   finish_item(seq_item);
-
-    // end
-
-    do_burst(INCR8, WRITE);
+    do_burst(INCR8, WRITE, SEQ);
 
     IDLE_sequence_h.start(m_sequencer, this);
 
@@ -94,26 +84,8 @@ class ADDRESS_ERROR_INJECTION_sequence extends base_sequence;
       assert(seq_item.randomize() with { RESET_op == WORKING; WRITE_op == READ; TRANS_op == NONSEQ; BURST_op == INCR8;}); // Randomize the sequence item
     finish_item(seq_item);
 
-    // for (int i = 0; i < 7; i++) begin
-    //   // if(execute_idle) begin
-    //   //   $display("EXECUTE IDLE");
 
-    //   //   IDLE_sequence_h.start(m_sequencer, this);
-
-    //   //   execute_idle = 0;
-    //   //   break;
-    //   // end
-    //   //seq_item.HREAD_rand_c.constraint_mode(0);
-
-    //   start_item(seq_item); // Start the sequence item
-
-    // // Set the operation type to READ
-    // assert(seq_item.randomize() with { RESET_op == WORKING; WRITE_op == READ; TRANS_op == SEQ; BURST_op == INCR8;}); // Randomize the sequence item
-
-    //   finish_item(seq_item);
-    // end
-
-  do_burst(INCR8, READ);
+  do_burst(INCR8, READ, SEQ);
 
     if(~last_test)
       seq_item.last_item = 1'b1;
