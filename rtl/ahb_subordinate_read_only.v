@@ -224,7 +224,7 @@ module ahb_subordinate
         wrap_counter_reg <= 0;
       end 
       else begin
-        if(HPROT[3:2] == 2'b00) begin
+        if(HWRITE == 1 || HWRITE == 0) begin
           case (HTRANS)
             2'b10: begin
               if(HSEL && HREADYin) begin
@@ -306,7 +306,7 @@ module ahb_subordinate
         burst_counter_reg <= 0;
       end 
       else begin
-        if(HPROT[3:2] == 2'b00) begin
+        if(HWRITE == 1 || HWRITE == 0) begin
           case (HTRANS)
             2'b10: begin
               if(HSEL && HREADYin) begin
@@ -648,7 +648,7 @@ module ahb_subordinate
       case(state)
 
         IDLE, BUSY: begin
-          if (HSEL_reg_c && HREADYin && HPROT[3:2] == 2'b00) begin
+          if (HSEL_reg_c && HREADYin) begin
 
             case (HTRANS_reg_c) 
               2'b00: begin 
@@ -659,14 +659,14 @@ module ahb_subordinate
               end
 
               2'b10: begin 
-                if (HWRITE_reg_c) begin 
-                 next_state = WRITE; 
+                if (HWRITE_reg_c && HPROT[3:1] == 4'b001) begin 
+                  next_state = WRITE; 
                 end 
-                else if(~HWRITE_reg_c) begin 
-                 next_state = READ; 
+                else if(~HWRITE_reg_c && HPROT[3:2] == 00) begin 
+                  next_state = READ; 
                 end
                 else begin 
-                 next_state = ERROR;
+                  next_state = ERROR;
                 end 
               end
 
@@ -680,7 +680,7 @@ module ahb_subordinate
             endcase //HTRANS_reg_c
 
           end
-          else if(HSEL_reg_c && (!HREADYin || HPROT[3:2] != 2'b00))begin
+          else if(HSEL_reg_c && !HREADYin)begin
             if(next_state == ERROR) begin
               case (HTRANS_reg_c)
                 2'b00: next_state = IDLE;
@@ -693,12 +693,12 @@ module ahb_subordinate
           end
 
           else begin
-            next_state = state;
+            next_state = IDLE;
           end
         end
 
         WRITE, READ : begin
-          if (HSEL_reg_c && HREADYin && HREADYin && HPROT[3:2] == 2'b00) begin
+          if (HSEL_reg_c && HREADYin) begin
 
             case (HTRANS_reg_c) 
               2'b00: begin 
@@ -710,10 +710,10 @@ module ahb_subordinate
 
               2'b11, 2'b10: begin 
                 if((HADDR_reg_c + burst_counter < ADDR_DEPTH) & ($signed(HADDR_reg_c + wrap_counter) < ADDR_DEPTH) /*& ((HADDR_reg_c + wrap_counter) > 0)*/) begin 
-                  if (HWRITE_reg_c) begin 
+                  if (HWRITE_reg_c && HPROT[3:1] == 4'b001) begin 
                     next_state = WRITE; 
                   end 
-                  else if(~HWRITE_reg_c) begin 
+                  else if(~HWRITE_reg_c && HPROT[3:2] == 00) begin 
                     next_state = READ; 
                   end
                   else begin 
@@ -732,7 +732,7 @@ module ahb_subordinate
 
           end
 
-          else if(HSEL_reg_c && !HREADYin && (!HREADYin || HPROT[3:2] != 2'b00))begin
+          else if(HSEL_reg_c && !HREADYin)begin
             case (HTRANS_reg_c)
               2'b00: begin
                   next_state = IDLE;
@@ -742,7 +742,7 @@ module ahb_subordinate
           end
 
           else begin
-            next_state = state;
+            next_state = IDLE;
           end
         end
 
@@ -751,7 +751,7 @@ module ahb_subordinate
             next_state = IDLE;
           end
           else begin
-            next_state = state;
+            next_state = next_state;
           end
         end
       endcase

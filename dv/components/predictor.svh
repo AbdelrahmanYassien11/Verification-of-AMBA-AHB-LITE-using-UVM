@@ -382,7 +382,7 @@ class predictor extends uvm_subscriber #(sequence_item);
       endcase // HTRANS
     end
     else begin
-      HRESP_expected  = ERROR;
+      HRESP_expected  = ERROR; HREADY_expected = 1;
     end
 
   endtask : write_AHB
@@ -809,7 +809,7 @@ class predictor extends uvm_subscriber #(sequence_item);
       endcase // HTRANS
     end
     else begin
-      HRESP_expected   = OKAY;
+      HRESP_expected   = ERROR;
       HREADY_expected  = READY;
       HRDATA_expected3 = 0;
     end

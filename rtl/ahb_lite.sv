@@ -83,6 +83,7 @@ module ahb_lite #(parameter BITS_FOR_SUBORDINATES = 5, ADDR_WIDTH = 32, DATA_WID
                     .HBURST             (HBURST),
                     .HWDATA             (HWDATA),
                     .HREADYin           (HREADY),
+                    .HPROT              (HPROT),
                    
                     .HRDATA      (HRDATA_bus[3]),
                     .HRESP        (HRESP_bus[3]),
@@ -101,6 +102,7 @@ module ahb_lite #(parameter BITS_FOR_SUBORDINATES = 5, ADDR_WIDTH = 32, DATA_WID
             .HBURST                 (HBURST),
             .HWDATA                 (HWDATA),
             .HREADYin                (HREADY),
+            .HPROT                  (HPROT),
 
             .HRDATA           (HRDATA_bus[0]),
             .HRESP             (HRESP_bus[0]),
@@ -119,6 +121,7 @@ module ahb_lite #(parameter BITS_FOR_SUBORDINATES = 5, ADDR_WIDTH = 32, DATA_WID
             .HBURST                 (HBURST),
             .HWDATA                 (HWDATA),
             .HREADYin               (HREADY),
+            .HPROT                  (HPROT),
 
             .HRDATA          (HRDATA_bus[1]),
             .HRESP            (HRESP_bus[1]),
@@ -138,6 +141,7 @@ module ahb_lite #(parameter BITS_FOR_SUBORDINATES = 5, ADDR_WIDTH = 32, DATA_WID
             .HBURST                 (HBURST),
             .HWDATA                 (HWDATA),
             .HREADYin               (HREADY),
+            .HPROT                  (HPROT),
 
             .HRDATA          (HRDATA_bus[2]),
             .HRESP            (HRESP_bus[2]),

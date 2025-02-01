@@ -76,13 +76,25 @@ class driver extends uvm_driver #(sequence_item);
     $display("my_driver run phase");
   endtask
 
+  // task reset_observer();
+  //   forever begin
+  //     @(posedge my_vif.clk);
+
+  //   end
+  // endtask : reset_observer
+
+
   task wait_for_reset(sequence_item req_reset);
     if(~req_reset.HRESETn) begin
       repeat(15) begin
         @(posedge my_vif.clk);
       end
-      -> my_vif.reset_finished;;
+      -> my_vif.reset_finished;
     end
+    // else begin
+    //   (@negedge my_vif.clk);
+    //   -> my_vif.reset_finished;
+    // end
   endtask : wait_for_reset
 
   // Function to complete the sequence item - driver handshake back to the sequence 

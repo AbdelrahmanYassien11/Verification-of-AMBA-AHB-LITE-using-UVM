@@ -158,15 +158,14 @@ event dataPhase_event, samplingPhase_event;
 
 	always begin
 		@(samplingPhase_event);
-		//@(posedge clk);
+
 		pipeline3.do_copy(pipeline2);
 		//$display("[INTERFACE] PIPELINE3: %s", pipeline3.input2string);
-		if(pipeline3.HRESETn) begin
-			@(negedge clk);
-		end
-		else begin
+		@(negedge clk);
+		if(~(pipeline3.HRESETn && pipeline2.HRESETn && pipeline1.HRESETn)) begin
 			@(reset_finished);
 		end
+		// wait(pipeline1.HRESETn && pipeline2.HRESETn && pipeline3.HRESETn);
 		pipeline3.HRESP  = HRESP;
 		pipeline3.HRDATA = HRDATA;
 		pipeline3.HREADY = HREADY;

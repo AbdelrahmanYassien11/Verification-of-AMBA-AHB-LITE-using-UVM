@@ -23,6 +23,7 @@ module ahb_default_subordinate #(parameter ADDR_WIDTH, DATA_WIDTH)
        input   wire  [ 2:0]           HBURST,
        input   wire  [DATA_WIDTH-1:0] HWDATA,
        input   wire                   HREADYin,
+       input   wire  [3:0]            HPROT,
 
        output  reg   [DATA_WIDTH-1:0]  HRDATA,
        output  reg   [ 1:0]           HRESP,

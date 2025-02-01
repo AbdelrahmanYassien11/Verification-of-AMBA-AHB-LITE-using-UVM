@@ -35,7 +35,7 @@ bit ERROR_ON_EXECUTE_IDLE;
   rand  bit   [TRANS_WIDTH:0] HTRANS; 
   rand  bit   [SIZE_WIDTH:0]  HSIZE;
   rand  bit   [BURST_WIDTH:0] HBURST;
-        bit   [PROT_WIDTH:0]  HPROT; 
+  rand  bit   [PROT_WIDTH:0]  HPROT; 
 
   randc  bit   [ADDR_WIDTH-1:0]  HADDR;     
   randc  bit   [DATA_WIDTH-1:0]  HWDATA; 
@@ -89,6 +89,13 @@ bit ERROR_ON_EXECUTE_IDLE;
 
       constraint WRITE_c {WRITE_op == READ   -> HWRITE == 1'b0;
                           WRITE_op == WRITE  -> HWRITE  == 1'b1; 
+      }
+
+      constraint HRROT_c {  HADDR[ADDR_WIDTH-1:ADDR_WIDTH-BITS_FOR_SUBORDINATES] inside {[1:4]}       -> HPROT dist {4'b0001:/25, 4'b0000:/25, 4'b0010:/25, 4'b0011:/25};
+                           (HADDR[ADDR_WIDTH-1:ADDR_WIDTH-BITS_FOR_SUBORDINATES] == 5 && HWRITE == 1) -> HPROT dist {4'b0011:/50, 4'b0010:/50};
+                           (HADDR[ADDR_WIDTH-1:ADDR_WIDTH-BITS_FOR_SUBORDINATES] == 5 && HWRITE == 0) -> HPROT dist {4'b0001:/25, 4'b0000:/25, 4'b0010:/25, 4'b0011:/25};
+                           (HADDR[ADDR_WIDTH-1:ADDR_WIDTH-BITS_FOR_SUBORDINATES] == 6 && HWRITE == 0) -> HPROT dist {4'b0011:/50, 4'b0010:/50};
+                           (HADDR[ADDR_WIDTH-1:ADDR_WIDTH-BITS_FOR_SUBORDINATES] == 6 && HWRITE == 1) -> HPROT dist {4'b0001:/25, 4'b0000:/25, 4'b0010:/25, 4'b0011:/25};
       }
 
       constraint TRANS_c {TRANS_op == IDLE    -> HTRANS == 2'b00;
