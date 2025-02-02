@@ -163,10 +163,10 @@ Covergroup Coverage:
 Covergroup                                             Metric       Goal       Bins    Status                Persistent Memory   Transient Memory     Peak Transient    PeakTransMemory 
                                                                                                                                                            Memory              Time  
 --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
- TYPE /AHB_pkg/HWDATA_df_cg                            62.50%        100          -    Uncovered                        12.2KB             39.0KB             39.0KB             285 ns 
-    covered/total bins:                                    40         64          -                                  12.2KB             39.0KB             39.0KB             285 ns 
-    missing/total bins:                                    24         64          -                                  12.2KB             39.0KB             39.0KB             285 ns 
-    % Hit:                                             62.50%        100          -                                  12.2KB             39.0KB             39.0KB             285 ns 
+ TYPE /AHB_pkg/HWDATA_df_cg                            62.50%        100          -    Uncovered                        12.2KB             39.0KB             39.0KB             255 ns 
+    covered/total bins:                                    40         64          -                                  12.2KB             39.0KB             39.0KB             255 ns 
+    missing/total bins:                                    24         64          -                                  12.2KB             39.0KB             39.0KB             255 ns 
+    % Hit:                                             62.50%        100          -                                  12.2KB             39.0KB             39.0KB             255 ns 
     type_option.weight=1
     type_option.goal=100
     type_option.comment=
@@ -180,10 +180,10 @@ Covergroup                                             Metric       Goal       B
         type_option.goal=100
         type_option.comment=
  Covergroup instance \/AHB_pkg::coverage::HWDATA_df_cg_bits#1  
-                                                       50.00%        100          -    Uncovered                        12.2KB             39.0KB             39.0KB             285 ns 
-    covered/total bins:                                     1          2          -                                  12.2KB             39.0KB             39.0KB             285 ns 
-    missing/total bins:                                     1          2          -                                  12.2KB             39.0KB             39.0KB             285 ns 
-    % Hit:                                             50.00%        100          -                                  12.2KB             39.0KB             39.0KB             285 ns 
+                                                       50.00%        100          -    Uncovered                        12.2KB             39.0KB             39.0KB             255 ns 
+    covered/total bins:                                     1          2          -                                  12.2KB             39.0KB             39.0KB             255 ns 
+    missing/total bins:                                     1          2          -                                  12.2KB             39.0KB             39.0KB             255 ns 
+    % Hit:                                             50.00%        100          -                                  12.2KB             39.0KB             39.0KB             255 ns 
     option.name=\/AHB_pkg::coverage::HWDATA_df_cg_bits#1 
     option.weight=1
     option.goal=100
@@ -207,10 +207,10 @@ Covergroup                                             Metric       Goal       B
         bin auto[0]                                        35          1          -    Covered                              na                 na                 na                 na 
         bin auto[1]                                         0          1          -    ZERO                                 na                 na                 na                 na 
  Covergroup instance \/AHB_pkg::coverage::HWDATA_df_cg_bits#2  
-                                                       50.00%        100          -    Uncovered                        12.2KB             39.0KB             39.0KB             285 ns 
-    covered/total bins:                                     1          2          -                                  12.2KB             39.0KB             39.0KB             285 ns 
-    missing/total bins:                                     1          2          -                                  12.2KB             39.0KB             39.0KB             285 ns 
-    % Hit:                                             50.00%        100          -                                  12.2KB             39.0KB             39.0KB             285 ns 
+                                                       50.00%        100          -    Uncovered                        12.2KB             39.0KB             39.0KB             255 ns 
+    covered/total bins:                                     1          2          -                                  12.2KB             39.0KB             39.0KB             255 ns 
+    missing/total bins:                                     1          2          -                                  12.2KB             39.0KB             39.0KB             255 ns 
+    % Hit:                                             50.00%        100          -                                  12.2KB             39.0KB             39.0KB             255 ns 
     option.name=\/AHB_pkg::coverage::HWDATA_df_cg_bits#2 
     option.weight=1
     option.goal=100
@@ -234,10 +234,10 @@ Covergroup                                             Metric       Goal       B
         bin auto[0]                                        35          1          -    Covered                              na                 na                 na                 na 
         bin auto[1]                                         0          1          -    ZERO                                 na                 na                 na                 na 
  Covergroup instance \/AHB_pkg::coverage::HWDATA_df_cg_bits#3  
-                                                       50.00%        100          -    Uncovered                        12.2KB             39.0KB             39.0KB             285 ns 
-    covered/total bins:                                     1          2          -                                  12.2KB             39.0KB             39.0KB             285 ns 
-    missing/total bins:                                     1          2          -                                  12.2KB             39.0KB             39.0KB             285 ns 
-    % Hit:                                             50.00%        100          -                                  12.2KB             39.0KB             39.0KB             285 ns 
+                                                       50.00%        100          -    Uncovered                        12.2KB             39.0KB             39.0KB             255 ns 
+    covered/total bins:                                     1          2          -                                  12.2KB             39.0KB             39.0KB             255 ns 
+    missing/total bins:                                     1          2          -                                  12.2KB             39.0KB             39.0KB             255 ns 
+    % Hit:                                             50.00%        100          -                                  12.2KB             39.0KB             39.0KB             255 ns 
     option.name=\/AHB_pkg::coverage::HWDATA_df_cg_bits#3 
     option.weight=1
     option.goal=100
@@ -261,10 +261,10 @@ Covergroup                                             Metric       Goal       B
         bin auto[0]                                        35          1          -    Covered                              na                 na                 na                 na 
         bin auto[1]                                         0          1          -    ZERO                                 na                 na                 na                 na 
  Covergroup instance \/AHB_pkg::coverage::HWDATA_df_cg_bits#4  
-                                                       50.00%        100          -    Uncovered                        12.2KB             39.0KB             39.0KB             285 ns 
-    covered/total bins:                                     1          2          -                                  12.2KB             39.0KB             39.0KB             285 ns 
-    missing/total bins:                                     1          2          -                                  12.2KB             39.0KB             39.0KB             285 ns 
-    % Hit:                                             50.00%        100          -                                  12.2KB             39.0KB             39.0KB             285 ns 
+                                                       50.00%        100          -    Uncovered                        12.2KB             39.0KB             39.0KB             255 ns 
+    covered/total bins:                                     1          2          -                                  12.2KB             39.0KB             39.0KB             255 ns 
+    missing/total bins:                                     1          2          -                                  12.2KB             39.0KB             39.0KB             255 ns 
+    % Hit:                                             50.00%        100          -                                  12.2KB             39.0KB             39.0KB             255 ns 
     option.name=\/AHB_pkg::coverage::HWDATA_df_cg_bits#4 
     option.weight=1
     option.goal=100
@@ -288,10 +288,10 @@ Covergroup                                             Metric       Goal       B
         bin auto[0]                                        35          1          -    Covered                              na                 na                 na                 na 
         bin auto[1]                                         0          1          -    ZERO                                 na                 na                 na                 na 
  Covergroup instance \/AHB_pkg::coverage::HWDATA_df_cg_bits#5  
-                                                       50.00%        100          -    Uncovered                        12.2KB             39.0KB             39.0KB             285 ns 
-    covered/total bins:                                     1          2          -                                  12.2KB             39.0KB             39.0KB             285 ns 
-    missing/total bins:                                     1          2          -                                  12.2KB             39.0KB             39.0KB             285 ns 
-    % Hit:                                             50.00%        100          -                                  12.2KB             39.0KB             39.0KB             285 ns 
+                                                       50.00%        100          -    Uncovered                        12.2KB             39.0KB             39.0KB             255 ns 
+    covered/total bins:                                     1          2          -                                  12.2KB             39.0KB             39.0KB             255 ns 
+    missing/total bins:                                     1          2          -                                  12.2KB             39.0KB             39.0KB             255 ns 
+    % Hit:                                             50.00%        100          -                                  12.2KB             39.0KB             39.0KB             255 ns 
     option.name=\/AHB_pkg::coverage::HWDATA_df_cg_bits#5 
     option.weight=1
     option.goal=100
@@ -315,10 +315,10 @@ Covergroup                                             Metric       Goal       B
         bin auto[0]                                        35          1          -    Covered                              na                 na                 na                 na 
         bin auto[1]                                         0          1          -    ZERO                                 na                 na                 na                 na 
  Covergroup instance \/AHB_pkg::coverage::HWDATA_df_cg_bits#6  
-                                                       50.00%        100          -    Uncovered                        12.2KB             39.0KB             39.0KB             285 ns 
-    covered/total bins:                                     1          2          -                                  12.2KB             39.0KB             39.0KB             285 ns 
-    missing/total bins:                                     1          2          -                                  12.2KB             39.0KB             39.0KB             285 ns 
-    % Hit:                                             50.00%        100          -                                  12.2KB             39.0KB             39.0KB             285 ns 
+                                                       50.00%        100          -    Uncovered                        12.2KB             39.0KB             39.0KB             255 ns 
+    covered/total bins:                                     1          2          -                                  12.2KB             39.0KB             39.0KB             255 ns 
+    missing/total bins:                                     1          2          -                                  12.2KB             39.0KB             39.0KB             255 ns 
+    % Hit:                                             50.00%        100          -                                  12.2KB             39.0KB             39.0KB             255 ns 
     option.name=\/AHB_pkg::coverage::HWDATA_df_cg_bits#6 
     option.weight=1
     option.goal=100
@@ -342,10 +342,10 @@ Covergroup                                             Metric       Goal       B
         bin auto[0]                                        35          1          -    Covered                              na                 na                 na                 na 
         bin auto[1]                                         0          1          -    ZERO                                 na                 na                 na                 na 
  Covergroup instance \/AHB_pkg::coverage::HWDATA_df_cg_bits#7  
-                                                       50.00%        100          -    Uncovered                        12.2KB             39.0KB             39.0KB             285 ns 
-    covered/total bins:                                     1          2          -                                  12.2KB             39.0KB             39.0KB             285 ns 
-    missing/total bins:                                     1          2          -                                  12.2KB             39.0KB             39.0KB             285 ns 
-    % Hit:                                             50.00%        100          -                                  12.2KB             39.0KB             39.0KB             285 ns 
+                                                       50.00%        100          -    Uncovered                        12.2KB             39.0KB             39.0KB             255 ns 
+    covered/total bins:                                     1          2          -                                  12.2KB             39.0KB             39.0KB             255 ns 
+    missing/total bins:                                     1          2          -                                  12.2KB             39.0KB             39.0KB             255 ns 
+    % Hit:                                             50.00%        100          -                                  12.2KB             39.0KB             39.0KB             255 ns 
     option.name=\/AHB_pkg::coverage::HWDATA_df_cg_bits#7 
     option.weight=1
     option.goal=100
@@ -369,10 +369,10 @@ Covergroup                                             Metric       Goal       B
         bin auto[0]                                        35          1          -    Covered                              na                 na                 na                 na 
         bin auto[1]                                         0          1          -    ZERO                                 na                 na                 na                 na 
  Covergroup instance \/AHB_pkg::coverage::HWDATA_df_cg_bits#8  
-                                                       50.00%        100          -    Uncovered                        12.2KB             39.0KB             39.0KB             285 ns 
-    covered/total bins:                                     1          2          -                                  12.2KB             39.0KB             39.0KB             285 ns 
-    missing/total bins:                                     1          2          -                                  12.2KB             39.0KB             39.0KB             285 ns 
-    % Hit:                                             50.00%        100          -                                  12.2KB             39.0KB             39.0KB             285 ns 
+                                                       50.00%        100          -    Uncovered                        12.2KB             39.0KB             39.0KB             255 ns 
+    covered/total bins:                                     1          2          -                                  12.2KB             39.0KB             39.0KB             255 ns 
+    missing/total bins:                                     1          2          -                                  12.2KB             39.0KB             39.0KB             255 ns 
+    % Hit:                                             50.00%        100          -                                  12.2KB             39.0KB             39.0KB             255 ns 
     option.name=\/AHB_pkg::coverage::HWDATA_df_cg_bits#8 
     option.weight=1
     option.goal=100
@@ -396,10 +396,10 @@ Covergroup                                             Metric       Goal       B
         bin auto[0]                                        35          1          -    Covered                              na                 na                 na                 na 
         bin auto[1]                                         0          1          -    ZERO                                 na                 na                 na                 na 
  Covergroup instance \/AHB_pkg::coverage::HWDATA_df_cg_bits#9  
-                                                       50.00%        100          -    Uncovered                        12.2KB             39.0KB             39.0KB             285 ns 
-    covered/total bins:                                     1          2          -                                  12.2KB             39.0KB             39.0KB             285 ns 
-    missing/total bins:                                     1          2          -                                  12.2KB             39.0KB             39.0KB             285 ns 
-    % Hit:                                             50.00%        100          -                                  12.2KB             39.0KB             39.0KB             285 ns 
+                                                       50.00%        100          -    Uncovered                        12.2KB             39.0KB             39.0KB             255 ns 
+    covered/total bins:                                     1          2          -                                  12.2KB             39.0KB             39.0KB             255 ns 
+    missing/total bins:                                     1          2          -                                  12.2KB             39.0KB             39.0KB             255 ns 
+    % Hit:                                             50.00%        100          -                                  12.2KB             39.0KB             39.0KB             255 ns 
     option.name=\/AHB_pkg::coverage::HWDATA_df_cg_bits#9 
     option.weight=1
     option.goal=100
@@ -423,10 +423,10 @@ Covergroup                                             Metric       Goal       B
         bin auto[0]                                        35          1          -    Covered                              na                 na                 na                 na 
         bin auto[1]                                         0          1          -    ZERO                                 na                 na                 na                 na 
  Covergroup instance \/AHB_pkg::coverage::HWDATA_df_cg_bits#10  
-                                                       50.00%        100          -    Uncovered                        12.2KB             39.0KB             39.0KB             285 ns 
-    covered/total bins:                                     1          2          -                                  12.2KB             39.0KB             39.0KB             285 ns 
-    missing/total bins:                                     1          2          -                                  12.2KB             39.0KB             39.0KB             285 ns 
-    % Hit:                                             50.00%        100          -                                  12.2KB             39.0KB             39.0KB             285 ns 
+                                                       50.00%        100          -    Uncovered                        12.2KB             39.0KB             39.0KB             255 ns 
+    covered/total bins:                                     1          2          -                                  12.2KB             39.0KB             39.0KB             255 ns 
+    missing/total bins:                                     1          2          -                                  12.2KB             39.0KB             39.0KB             255 ns 
+    % Hit:                                             50.00%        100          -                                  12.2KB             39.0KB             39.0KB             255 ns 
     option.name=\/AHB_pkg::coverage::HWDATA_df_cg_bits#10 
     option.weight=1
     option.goal=100
@@ -450,10 +450,10 @@ Covergroup                                             Metric       Goal       B
         bin auto[0]                                        35          1          -    Covered                              na                 na                 na                 na 
         bin auto[1]                                         0          1          -    ZERO                                 na                 na                 na                 na 
  Covergroup instance \/AHB_pkg::coverage::HWDATA_df_cg_bits#11  
-                                                       50.00%        100          -    Uncovered                        12.2KB             39.0KB             39.0KB             285 ns 
-    covered/total bins:                                     1          2          -                                  12.2KB             39.0KB             39.0KB             285 ns 
-    missing/total bins:                                     1          2          -                                  12.2KB             39.0KB             39.0KB             285 ns 
-    % Hit:                                             50.00%        100          -                                  12.2KB             39.0KB             39.0KB             285 ns 
+                                                       50.00%        100          -    Uncovered                        12.2KB             39.0KB             39.0KB             255 ns 
+    covered/total bins:                                     1          2          -                                  12.2KB             39.0KB             39.0KB             255 ns 
+    missing/total bins:                                     1          2          -                                  12.2KB             39.0KB             39.0KB             255 ns 
+    % Hit:                                             50.00%        100          -                                  12.2KB             39.0KB             39.0KB             255 ns 
     option.name=\/AHB_pkg::coverage::HWDATA_df_cg_bits#11 
     option.weight=1
     option.goal=100
@@ -477,10 +477,10 @@ Covergroup                                             Metric       Goal       B
         bin auto[0]                                        35          1          -    Covered                              na                 na                 na                 na 
         bin auto[1]                                         0          1          -    ZERO                                 na                 na                 na                 na 
  Covergroup instance \/AHB_pkg::coverage::HWDATA_df_cg_bits#12  
-                                                       50.00%        100          -    Uncovered                        12.2KB             39.0KB             39.0KB             285 ns 
-    covered/total bins:                                     1          2          -                                  12.2KB             39.0KB             39.0KB             285 ns 
-    missing/total bins:                                     1          2          -                                  12.2KB             39.0KB             39.0KB             285 ns 
-    % Hit:                                             50.00%        100          -                                  12.2KB             39.0KB             39.0KB             285 ns 
+                                                       50.00%        100          -    Uncovered                        12.2KB             39.0KB             39.0KB             255 ns 
+    covered/total bins:                                     1          2          -                                  12.2KB             39.0KB             39.0KB             255 ns 
+    missing/total bins:                                     1          2          -                                  12.2KB             39.0KB             39.0KB             255 ns 
+    % Hit:                                             50.00%        100          -                                  12.2KB             39.0KB             39.0KB             255 ns 
     option.name=\/AHB_pkg::coverage::HWDATA_df_cg_bits#12 
     option.weight=1
     option.goal=100
@@ -504,10 +504,10 @@ Covergroup                                             Metric       Goal       B
         bin auto[0]                                        35          1          -    Covered                              na                 na                 na                 na 
         bin auto[1]                                         0          1          -    ZERO                                 na                 na                 na                 na 
  Covergroup instance \/AHB_pkg::coverage::HWDATA_df_cg_bits#13  
-                                                       50.00%        100          -    Uncovered                        12.2KB             39.0KB             39.0KB             285 ns 
-    covered/total bins:                                     1          2          -                                  12.2KB             39.0KB             39.0KB             285 ns 
-    missing/total bins:                                     1          2          -                                  12.2KB             39.0KB             39.0KB             285 ns 
-    % Hit:                                             50.00%        100          -                                  12.2KB             39.0KB             39.0KB             285 ns 
+                                                       50.00%        100          -    Uncovered                        12.2KB             39.0KB             39.0KB             255 ns 
+    covered/total bins:                                     1          2          -                                  12.2KB             39.0KB             39.0KB             255 ns 
+    missing/total bins:                                     1          2          -                                  12.2KB             39.0KB             39.0KB             255 ns 
+    % Hit:                                             50.00%        100          -                                  12.2KB             39.0KB             39.0KB             255 ns 
     option.name=\/AHB_pkg::coverage::HWDATA_df_cg_bits#13 
     option.weight=1
     option.goal=100
@@ -531,10 +531,10 @@ Covergroup                                             Metric       Goal       B
         bin auto[0]                                        35          1          -    Covered                              na                 na                 na                 na 
         bin auto[1]                                         0          1          -    ZERO                                 na                 na                 na                 na 
  Covergroup instance \/AHB_pkg::coverage::HWDATA_df_cg_bits#14  
-                                                       50.00%        100          -    Uncovered                        12.2KB             39.0KB             39.0KB             285 ns 
-    covered/total bins:                                     1          2          -                                  12.2KB             39.0KB             39.0KB             285 ns 
-    missing/total bins:                                     1          2          -                                  12.2KB             39.0KB             39.0KB             285 ns 
-    % Hit:                                             50.00%        100          -                                  12.2KB             39.0KB             39.0KB             285 ns 
+                                                       50.00%        100          -    Uncovered                        12.2KB             39.0KB             39.0KB             255 ns 
+    covered/total bins:                                     1          2          -                                  12.2KB             39.0KB             39.0KB             255 ns 
+    missing/total bins:                                     1          2          -                                  12.2KB             39.0KB             39.0KB             255 ns 
+    % Hit:                                             50.00%        100          -                                  12.2KB             39.0KB             39.0KB             255 ns 
     option.name=\/AHB_pkg::coverage::HWDATA_df_cg_bits#14 
     option.weight=1
     option.goal=100
@@ -558,10 +558,10 @@ Covergroup                                             Metric       Goal       B
         bin auto[0]                                        35          1          -    Covered                              na                 na                 na                 na 
         bin auto[1]                                         0          1          -    ZERO                                 na                 na                 na                 na 
  Covergroup instance \/AHB_pkg::coverage::HWDATA_df_cg_bits#15  
-                                                       50.00%        100          -    Uncovered                        12.2KB             39.0KB             39.0KB             285 ns 
-    covered/total bins:                                     1          2          -                                  12.2KB             39.0KB             39.0KB             285 ns 
-    missing/total bins:                                     1          2          -                                  12.2KB             39.0KB             39.0KB             285 ns 
-    % Hit:                                             50.00%        100          -                                  12.2KB             39.0KB             39.0KB             285 ns 
+                                                       50.00%        100          -    Uncovered                        12.2KB             39.0KB             39.0KB             255 ns 
+    covered/total bins:                                     1          2          -                                  12.2KB             39.0KB             39.0KB             255 ns 
+    missing/total bins:                                     1          2          -                                  12.2KB             39.0KB             39.0KB             255 ns 
+    % Hit:                                             50.00%        100          -                                  12.2KB             39.0KB             39.0KB             255 ns 
     option.name=\/AHB_pkg::coverage::HWDATA_df_cg_bits#15 
     option.weight=1
     option.goal=100
@@ -585,10 +585,10 @@ Covergroup                                             Metric       Goal       B
         bin auto[0]                                        35          1          -    Covered                              na                 na                 na                 na 
         bin auto[1]                                         0          1          -    ZERO                                 na                 na                 na                 na 
  Covergroup instance \/AHB_pkg::coverage::HWDATA_df_cg_bits#16  
-                                                       50.00%        100          -    Uncovered                        12.2KB             39.0KB             39.0KB             285 ns 
-    covered/total bins:                                     1          2          -                                  12.2KB             39.0KB             39.0KB             285 ns 
-    missing/total bins:                                     1          2          -                                  12.2KB             39.0KB             39.0KB             285 ns 
-    % Hit:                                             50.00%        100          -                                  12.2KB             39.0KB             39.0KB             285 ns 
+                                                       50.00%        100          -    Uncovered                        12.2KB             39.0KB             39.0KB             255 ns 
+    covered/total bins:                                     1          2          -                                  12.2KB             39.0KB             39.0KB             255 ns 
+    missing/total bins:                                     1          2          -                                  12.2KB             39.0KB             39.0KB             255 ns 
+    % Hit:                                             50.00%        100          -                                  12.2KB             39.0KB             39.0KB             255 ns 
     option.name=\/AHB_pkg::coverage::HWDATA_df_cg_bits#16 
     option.weight=1
     option.goal=100
@@ -612,10 +612,10 @@ Covergroup                                             Metric       Goal       B
         bin auto[0]                                        35          1          -    Covered                              na                 na                 na                 na 
         bin auto[1]                                         0          1          -    ZERO                                 na                 na                 na                 na 
  Covergroup instance \/AHB_pkg::coverage::HWDATA_df_cg_bits#17  
-                                                       50.00%        100          -    Uncovered                        12.2KB             39.0KB             39.0KB             285 ns 
-    covered/total bins:                                     1          2          -                                  12.2KB             39.0KB             39.0KB             285 ns 
-    missing/total bins:                                     1          2          -                                  12.2KB             39.0KB             39.0KB             285 ns 
-    % Hit:                                             50.00%        100          -                                  12.2KB             39.0KB             39.0KB             285 ns 
+                                                       50.00%        100          -    Uncovered                        12.2KB             39.0KB             39.0KB             255 ns 
+    covered/total bins:                                     1          2          -                                  12.2KB             39.0KB             39.0KB             255 ns 
+    missing/total bins:                                     1          2          -                                  12.2KB             39.0KB             39.0KB             255 ns 
+    % Hit:                                             50.00%        100          -                                  12.2KB             39.0KB             39.0KB             255 ns 
     option.name=\/AHB_pkg::coverage::HWDATA_df_cg_bits#17 
     option.weight=1
     option.goal=100
@@ -639,10 +639,10 @@ Covergroup                                             Metric       Goal       B
         bin auto[0]                                        35          1          -    Covered                              na                 na                 na                 na 
         bin auto[1]                                         0          1          -    ZERO                                 na                 na                 na                 na 
  Covergroup instance \/AHB_pkg::coverage::HWDATA_df_cg_bits#18  
-                                                       50.00%        100          -    Uncovered                        12.2KB             39.0KB             39.0KB             285 ns 
-    covered/total bins:                                     1          2          -                                  12.2KB             39.0KB             39.0KB             285 ns 
-    missing/total bins:                                     1          2          -                                  12.2KB             39.0KB             39.0KB             285 ns 
-    % Hit:                                             50.00%        100          -                                  12.2KB             39.0KB             39.0KB             285 ns 
+                                                       50.00%        100          -    Uncovered                        12.2KB             39.0KB             39.0KB             255 ns 
+    covered/total bins:                                     1          2          -                                  12.2KB             39.0KB             39.0KB             255 ns 
+    missing/total bins:                                     1          2          -                                  12.2KB             39.0KB             39.0KB             255 ns 
+    % Hit:                                             50.00%        100          -                                  12.2KB             39.0KB             39.0KB             255 ns 
     option.name=\/AHB_pkg::coverage::HWDATA_df_cg_bits#18 
     option.weight=1
     option.goal=100
@@ -666,10 +666,10 @@ Covergroup                                             Metric       Goal       B
         bin auto[0]                                        35          1          -    Covered                              na                 na                 na                 na 
         bin auto[1]                                         0          1          -    ZERO                                 na                 na                 na                 na 
  Covergroup instance \/AHB_pkg::coverage::HWDATA_df_cg_bits#19  
-                                                       50.00%        100          -    Uncovered                        12.2KB             39.0KB             39.0KB             285 ns 
-    covered/total bins:                                     1          2          -                                  12.2KB             39.0KB             39.0KB             285 ns 
-    missing/total bins:                                     1          2          -                                  12.2KB             39.0KB             39.0KB             285 ns 
-    % Hit:                                             50.00%        100          -                                  12.2KB             39.0KB             39.0KB             285 ns 
+                                                       50.00%        100          -    Uncovered                        12.2KB             39.0KB             39.0KB             255 ns 
+    covered/total bins:                                     1          2          -                                  12.2KB             39.0KB             39.0KB             255 ns 
+    missing/total bins:                                     1          2          -                                  12.2KB             39.0KB             39.0KB             255 ns 
+    % Hit:                                             50.00%        100          -                                  12.2KB             39.0KB             39.0KB             255 ns 
     option.name=\/AHB_pkg::coverage::HWDATA_df_cg_bits#19 
     option.weight=1
     option.goal=100
@@ -693,10 +693,10 @@ Covergroup                                             Metric       Goal       B
         bin auto[0]                                        35          1          -    Covered                              na                 na                 na                 na 
         bin auto[1]                                         0          1          -    ZERO                                 na                 na                 na                 na 
  Covergroup instance \/AHB_pkg::coverage::HWDATA_df_cg_bits#20  
-                                                       50.00%        100          -    Uncovered                        12.2KB             39.0KB             39.0KB             285 ns 
-    covered/total bins:                                     1          2          -                                  12.2KB             39.0KB             39.0KB             285 ns 
-    missing/total bins:                                     1          2          -                                  12.2KB             39.0KB             39.0KB             285 ns 
-    % Hit:                                             50.00%        100          -                                  12.2KB             39.0KB             39.0KB             285 ns 
+                                                       50.00%        100          -    Uncovered                        12.2KB             39.0KB             39.0KB             255 ns 
+    covered/total bins:                                     1          2          -                                  12.2KB             39.0KB             39.0KB             255 ns 
+    missing/total bins:                                     1          2          -                                  12.2KB             39.0KB             39.0KB             255 ns 
+    % Hit:                                             50.00%        100          -                                  12.2KB             39.0KB             39.0KB             255 ns 
     option.name=\/AHB_pkg::coverage::HWDATA_df_cg_bits#20 
     option.weight=1
     option.goal=100
@@ -720,10 +720,10 @@ Covergroup                                             Metric       Goal       B
         bin auto[0]                                        35          1          -    Covered                              na                 na                 na                 na 
         bin auto[1]                                         0          1          -    ZERO                                 na                 na                 na                 na 
  Covergroup instance \/AHB_pkg::coverage::HWDATA_df_cg_bits#21  
-                                                       50.00%        100          -    Uncovered                        12.2KB             39.0KB             39.0KB             285 ns 
-    covered/total bins:                                     1          2          -                                  12.2KB             39.0KB             39.0KB             285 ns 
-    missing/total bins:                                     1          2          -                                  12.2KB             39.0KB             39.0KB             285 ns 
-    % Hit:                                             50.00%        100          -                                  12.2KB             39.0KB             39.0KB             285 ns 
+                                                       50.00%        100          -    Uncovered                        12.2KB             39.0KB             39.0KB             255 ns 
+    covered/total bins:                                     1          2          -                                  12.2KB             39.0KB             39.0KB             255 ns 
+    missing/total bins:                                     1          2          -                                  12.2KB             39.0KB             39.0KB             255 ns 
+    % Hit:                                             50.00%        100          -                                  12.2KB             39.0KB             39.0KB             255 ns 
     option.name=\/AHB_pkg::coverage::HWDATA_df_cg_bits#21 
     option.weight=1
     option.goal=100
@@ -747,10 +747,10 @@ Covergroup                                             Metric       Goal       B
         bin auto[0]                                        35          1          -    Covered                              na                 na                 na                 na 
         bin auto[1]                                         0          1          -    ZERO                                 na                 na                 na                 na 
  Covergroup instance \/AHB_pkg::coverage::HWDATA_df_cg_bits#22  
-                                                       50.00%        100          -    Uncovered                        12.2KB             39.0KB             39.0KB             285 ns 
-    covered/total bins:                                     1          2          -                                  12.2KB             39.0KB             39.0KB             285 ns 
-    missing/total bins:                                     1          2          -                                  12.2KB             39.0KB             39.0KB             285 ns 
-    % Hit:                                             50.00%        100          -                                  12.2KB             39.0KB             39.0KB             285 ns 
+                                                       50.00%        100          -    Uncovered                        12.2KB             39.0KB             39.0KB             255 ns 
+    covered/total bins:                                     1          2          -                                  12.2KB             39.0KB             39.0KB             255 ns 
+    missing/total bins:                                     1          2          -                                  12.2KB             39.0KB             39.0KB             255 ns 
+    % Hit:                                             50.00%        100          -                                  12.2KB             39.0KB             39.0KB             255 ns 
     option.name=\/AHB_pkg::coverage::HWDATA_df_cg_bits#22 
     option.weight=1
     option.goal=100
@@ -774,10 +774,10 @@ Covergroup                                             Metric       Goal       B
         bin auto[0]                                        35          1          -    Covered                              na                 na                 na                 na 
         bin auto[1]                                         0          1          -    ZERO                                 na                 na                 na                 na 
  Covergroup instance \/AHB_pkg::coverage::HWDATA_df_cg_bits#23  
-                                                       50.00%        100          -    Uncovered                        12.2KB             39.0KB             39.0KB             285 ns 
-    covered/total bins:                                     1          2          -                                  12.2KB             39.0KB             39.0KB             285 ns 
-    missing/total bins:                                     1          2          -                                  12.2KB             39.0KB             39.0KB             285 ns 
-    % Hit:                                             50.00%        100          -                                  12.2KB             39.0KB             39.0KB             285 ns 
+                                                       50.00%        100          -    Uncovered                        12.2KB             39.0KB             39.0KB             255 ns 
+    covered/total bins:                                     1          2          -                                  12.2KB             39.0KB             39.0KB             255 ns 
+    missing/total bins:                                     1          2          -                                  12.2KB             39.0KB             39.0KB             255 ns 
+    % Hit:                                             50.00%        100          -                                  12.2KB             39.0KB             39.0KB             255 ns 
     option.name=\/AHB_pkg::coverage::HWDATA_df_cg_bits#23 
     option.weight=1
     option.goal=100
@@ -801,10 +801,10 @@ Covergroup                                             Metric       Goal       B
         bin auto[0]                                        35          1          -    Covered                              na                 na                 na                 na 
         bin auto[1]                                         0          1          -    ZERO                                 na                 na                 na                 na 
  Covergroup instance \/AHB_pkg::coverage::HWDATA_df_cg_bits#24  
-                                                       50.00%        100          -    Uncovered                        12.2KB             39.0KB             39.0KB             285 ns 
-    covered/total bins:                                     1          2          -                                  12.2KB             39.0KB             39.0KB             285 ns 
-    missing/total bins:                                     1          2          -                                  12.2KB             39.0KB             39.0KB             285 ns 
-    % Hit:                                             50.00%        100          -                                  12.2KB             39.0KB             39.0KB             285 ns 
+                                                       50.00%        100          -    Uncovered                        12.2KB             39.0KB             39.0KB             255 ns 
+    covered/total bins:                                     1          2          -                                  12.2KB             39.0KB             39.0KB             255 ns 
+    missing/total bins:                                     1          2          -                                  12.2KB             39.0KB             39.0KB             255 ns 
+    % Hit:                                             50.00%        100          -                                  12.2KB             39.0KB             39.0KB             255 ns 
     option.name=\/AHB_pkg::coverage::HWDATA_df_cg_bits#24 
     option.weight=1
     option.goal=100
@@ -828,10 +828,10 @@ Covergroup                                             Metric       Goal       B
         bin auto[0]                                        35          1          -    Covered                              na                 na                 na                 na 
         bin auto[1]                                         0          1          -    ZERO                                 na                 na                 na                 na 
  Covergroup instance \/AHB_pkg::coverage::HWDATA_df_cg_bits#25  
-                                                      100.00%        100          -    Covered                          12.2KB             39.0KB             39.0KB             285 ns 
-    covered/total bins:                                     2          2          -                                  12.2KB             39.0KB             39.0KB             285 ns 
-    missing/total bins:                                     0          2          -                                  12.2KB             39.0KB             39.0KB             285 ns 
-    % Hit:                                            100.00%        100          -                                  12.2KB             39.0KB             39.0KB             285 ns 
+                                                      100.00%        100          -    Covered                          12.2KB             39.0KB             39.0KB             255 ns 
+    covered/total bins:                                     2          2          -                                  12.2KB             39.0KB             39.0KB             255 ns 
+    missing/total bins:                                     0          2          -                                  12.2KB             39.0KB             39.0KB             255 ns 
+    % Hit:                                            100.00%        100          -                                  12.2KB             39.0KB             39.0KB             255 ns 
     option.name=\/AHB_pkg::coverage::HWDATA_df_cg_bits#25 
     option.weight=1
     option.goal=100
@@ -855,10 +855,10 @@ Covergroup                                             Metric       Goal       B
         bin auto[0]                                        20          1          -    Covered                              na                 na                 na                 na 
         bin auto[1]                                        15          1          -    Covered                              na                 na                 na                 na 
  Covergroup instance \/AHB_pkg::coverage::HWDATA_df_cg_bits#26  
-                                                      100.00%        100          -    Covered                          12.2KB             39.0KB             39.0KB             285 ns 
-    covered/total bins:                                     2          2          -                                  12.2KB             39.0KB             39.0KB             285 ns 
-    missing/total bins:                                     0          2          -                                  12.2KB             39.0KB             39.0KB             285 ns 
-    % Hit:                                            100.00%        100          -                                  12.2KB             39.0KB             39.0KB             285 ns 
+                                                      100.00%        100          -    Covered                          12.2KB             39.0KB             39.0KB             255 ns 
+    covered/total bins:                                     2          2          -                                  12.2KB             39.0KB             39.0KB             255 ns 
+    missing/total bins:                                     0          2          -                                  12.2KB             39.0KB             39.0KB             255 ns 
+    % Hit:                                            100.00%        100          -                                  12.2KB             39.0KB             39.0KB             255 ns 
     option.name=\/AHB_pkg::coverage::HWDATA_df_cg_bits#26 
     option.weight=1
     option.goal=100
@@ -882,10 +882,10 @@ Covergroup                                             Metric       Goal       B
         bin auto[0]                                        20          1          -    Covered                              na                 na                 na                 na 
         bin auto[1]                                        15          1          -    Covered                              na                 na                 na                 na 
  Covergroup instance \/AHB_pkg::coverage::HWDATA_df_cg_bits#27  
-                                                      100.00%        100          -    Covered                          12.2KB             39.0KB             39.0KB             285 ns 
-    covered/total bins:                                     2          2          -                                  12.2KB             39.0KB             39.0KB             285 ns 
-    missing/total bins:                                     0          2          -                                  12.2KB             39.0KB             39.0KB             285 ns 
-    % Hit:                                            100.00%        100          -                                  12.2KB             39.0KB             39.0KB             285 ns 
+                                                      100.00%        100          -    Covered                          12.2KB             39.0KB             39.0KB             255 ns 
+    covered/total bins:                                     2          2          -                                  12.2KB             39.0KB             39.0KB             255 ns 
+    missing/total bins:                                     0          2          -                                  12.2KB             39.0KB             39.0KB             255 ns 
+    % Hit:                                            100.00%        100          -                                  12.2KB             39.0KB             39.0KB             255 ns 
     option.name=\/AHB_pkg::coverage::HWDATA_df_cg_bits#27 
     option.weight=1
     option.goal=100
@@ -909,10 +909,10 @@ Covergroup                                             Metric       Goal       B
         bin auto[0]                                        19          1          -    Covered                              na                 na                 na                 na 
         bin auto[1]                                        16          1          -    Covered                              na                 na                 na                 na 
  Covergroup instance \/AHB_pkg::coverage::HWDATA_df_cg_bits#28  
-                                                      100.00%        100          -    Covered                          12.2KB             39.0KB             39.0KB             285 ns 
-    covered/total bins:                                     2          2          -                                  12.2KB             39.0KB             39.0KB             285 ns 
-    missing/total bins:                                     0          2          -                                  12.2KB             39.0KB             39.0KB             285 ns 
-    % Hit:                                            100.00%        100          -                                  12.2KB             39.0KB             39.0KB             285 ns 
+                                                      100.00%        100          -    Covered                          12.2KB             39.0KB             39.0KB             255 ns 
+    covered/total bins:                                     2          2          -                                  12.2KB             39.0KB             39.0KB             255 ns 
+    missing/total bins:                                     0          2          -                                  12.2KB             39.0KB             39.0KB             255 ns 
+    % Hit:                                            100.00%        100          -                                  12.2KB             39.0KB             39.0KB             255 ns 
     option.name=\/AHB_pkg::coverage::HWDATA_df_cg_bits#28 
     option.weight=1
     option.goal=100
@@ -936,10 +936,10 @@ Covergroup                                             Metric       Goal       B
         bin auto[0]                                        20          1          -    Covered                              na                 na                 na                 na 
         bin auto[1]                                        15          1          -    Covered                              na                 na                 na                 na 
  Covergroup instance \/AHB_pkg::coverage::HWDATA_df_cg_bits#29  
-                                                      100.00%        100          -    Covered                          12.2KB             39.0KB             39.0KB             285 ns 
-    covered/total bins:                                     2          2          -                                  12.2KB             39.0KB             39.0KB             285 ns 
-    missing/total bins:                                     0          2          -                                  12.2KB             39.0KB             39.0KB             285 ns 
-    % Hit:                                            100.00%        100          -                                  12.2KB             39.0KB             39.0KB             285 ns 
+                                                      100.00%        100          -    Covered                          12.2KB             39.0KB             39.0KB             255 ns 
+    covered/total bins:                                     2          2          -                                  12.2KB             39.0KB             39.0KB             255 ns 
+    missing/total bins:                                     0          2          -                                  12.2KB             39.0KB             39.0KB             255 ns 
+    % Hit:                                            100.00%        100          -                                  12.2KB             39.0KB             39.0KB             255 ns 
     option.name=\/AHB_pkg::coverage::HWDATA_df_cg_bits#29 
     option.weight=1
     option.goal=100
@@ -963,10 +963,10 @@ Covergroup                                             Metric       Goal       B
         bin auto[0]                                        16          1          -    Covered                              na                 na                 na                 na 
         bin auto[1]                                        19          1          -    Covered                              na                 na                 na                 na 
  Covergroup instance \/AHB_pkg::coverage::HWDATA_df_cg_bits#30  
-                                                      100.00%        100          -    Covered                          12.2KB             39.0KB             39.0KB             285 ns 
-    covered/total bins:                                     2          2          -                                  12.2KB             39.0KB             39.0KB             285 ns 
-    missing/total bins:                                     0          2          -                                  12.2KB             39.0KB             39.0KB             285 ns 
-    % Hit:                                            100.00%        100          -                                  12.2KB             39.0KB             39.0KB             285 ns 
+                                                      100.00%        100          -    Covered                          12.2KB             39.0KB             39.0KB             255 ns 
+    covered/total bins:                                     2          2          -                                  12.2KB             39.0KB             39.0KB             255 ns 
+    missing/total bins:                                     0          2          -                                  12.2KB             39.0KB             39.0KB             255 ns 
+    % Hit:                                            100.00%        100          -                                  12.2KB             39.0KB             39.0KB             255 ns 
     option.name=\/AHB_pkg::coverage::HWDATA_df_cg_bits#30 
     option.weight=1
     option.goal=100
@@ -990,10 +990,10 @@ Covergroup                                             Metric       Goal       B
         bin auto[0]                                        22          1          -    Covered                              na                 na                 na                 na 
         bin auto[1]                                        13          1          -    Covered                              na                 na                 na                 na 
  Covergroup instance \/AHB_pkg::coverage::HWDATA_df_cg_bits#31  
-                                                      100.00%        100          -    Covered                          12.2KB             39.0KB             39.0KB             285 ns 
-    covered/total bins:                                     2          2          -                                  12.2KB             39.0KB             39.0KB             285 ns 
-    missing/total bins:                                     0          2          -                                  12.2KB             39.0KB             39.0KB             285 ns 
-    % Hit:                                            100.00%        100          -                                  12.2KB             39.0KB             39.0KB             285 ns 
+                                                      100.00%        100          -    Covered                          12.2KB             39.0KB             39.0KB             255 ns 
+    covered/total bins:                                     2          2          -                                  12.2KB             39.0KB             39.0KB             255 ns 
+    missing/total bins:                                     0          2          -                                  12.2KB             39.0KB             39.0KB             255 ns 
+    % Hit:                                            100.00%        100          -                                  12.2KB             39.0KB             39.0KB             255 ns 
     option.name=\/AHB_pkg::coverage::HWDATA_df_cg_bits#31 
     option.weight=1
     option.goal=100
@@ -1017,10 +1017,10 @@ Covergroup                                             Metric       Goal       B
         bin auto[0]                                        19          1          -    Covered                              na                 na                 na                 na 
         bin auto[1]                                        16          1          -    Covered                              na                 na                 na                 na 
  Covergroup instance \/AHB_pkg::coverage::HWDATA_df_cg_bits#32  
-                                                      100.00%        100          -    Covered                          12.2KB             39.0KB             39.0KB             285 ns 
-    covered/total bins:                                     2          2          -                                  12.2KB             39.0KB             39.0KB             285 ns 
-    missing/total bins:                                     0          2          -                                  12.2KB             39.0KB             39.0KB             285 ns 
-    % Hit:                                            100.00%        100          -                                  12.2KB             39.0KB             39.0KB             285 ns 
+                                                      100.00%        100          -    Covered                          12.2KB             39.0KB             39.0KB             255 ns 
+    covered/total bins:                                     2          2          -                                  12.2KB             39.0KB             39.0KB             255 ns 
+    missing/total bins:                                     0          2          -                                  12.2KB             39.0KB             39.0KB             255 ns 
+    % Hit:                                            100.00%        100          -                                  12.2KB             39.0KB             39.0KB             255 ns 
     option.name=\/AHB_pkg::coverage::HWDATA_df_cg_bits#32 
     option.weight=1
     option.goal=100
@@ -3460,10 +3460,10 @@ Covergroup                                             Metric       Goal       B
         option.auto_bin_max=64
         option.detect_overlap=0
         bin tr[0=>1=>0]                                     0          1          -    ZERO                                 na                 na                 na                 na 
- TYPE /AHB_pkg/HSEL_df_cg                              83.33%        100          -    Uncovered                         1.6KB              3.7KB              3.7KB             165 ns 
-    covered/total bins:                                     5          6          -                                   1.6KB              3.7KB              3.7KB             165 ns 
-    missing/total bins:                                     1          6          -                                   1.6KB              3.7KB              3.7KB             165 ns 
-    % Hit:                                             83.33%        100          -                                   1.6KB              3.7KB              3.7KB             165 ns 
+ TYPE /AHB_pkg/HSEL_df_cg                              83.33%        100          -    Uncovered                         1.6KB              3.6KB              3.6KB             165 ns 
+    covered/total bins:                                     5          6          -                                   1.6KB              3.6KB              3.6KB             165 ns 
+    missing/total bins:                                     1          6          -                                   1.6KB              3.6KB              3.6KB             165 ns 
+    % Hit:                                             83.33%        100          -                                   1.6KB              3.6KB              3.6KB             165 ns 
     type_option.weight=1
     type_option.goal=100
     type_option.comment=
@@ -3477,10 +3477,10 @@ Covergroup                                             Metric       Goal       B
         type_option.goal=100
         type_option.comment=
  Covergroup instance \/AHB_pkg::coverage::HSEL_df_cg_bits#1  
-                                                       50.00%        100          -    Uncovered                         1.6KB              3.7KB              3.7KB             165 ns 
-    covered/total bins:                                     1          2          -                                   1.6KB              3.7KB              3.7KB             165 ns 
-    missing/total bins:                                     1          2          -                                   1.6KB              3.7KB              3.7KB             165 ns 
-    % Hit:                                             50.00%        100          -                                   1.6KB              3.7KB              3.7KB             165 ns 
+                                                       50.00%        100          -    Uncovered                         1.6KB              3.6KB              3.6KB             165 ns 
+    covered/total bins:                                     1          2          -                                   1.6KB              3.6KB              3.6KB             165 ns 
+    missing/total bins:                                     1          2          -                                   1.6KB              3.6KB              3.6KB             165 ns 
+    % Hit:                                             50.00%        100          -                                   1.6KB              3.6KB              3.6KB             165 ns 
     option.name=\/AHB_pkg::coverage::HSEL_df_cg_bits#1 
     option.weight=1
     option.goal=100
@@ -3504,10 +3504,10 @@ Covergroup                                             Metric       Goal       B
         bin auto[0]                                        35          1          -    Covered                              na                 na                 na                 na 
         bin auto[1]                                         0          1          -    ZERO                                 na                 na                 na                 na 
  Covergroup instance \/AHB_pkg::coverage::HSEL_df_cg_bits#2  
-                                                      100.00%        100          -    Covered                           1.6KB              3.7KB              3.7KB             165 ns 
-    covered/total bins:                                     2          2          -                                   1.6KB              3.7KB              3.7KB             165 ns 
-    missing/total bins:                                     0          2          -                                   1.6KB              3.7KB              3.7KB             165 ns 
-    % Hit:                                            100.00%        100          -                                   1.6KB              3.7KB              3.7KB             165 ns 
+                                                      100.00%        100          -    Covered                           1.6KB              3.6KB              3.6KB             165 ns 
+    covered/total bins:                                     2          2          -                                   1.6KB              3.6KB              3.6KB             165 ns 
+    missing/total bins:                                     0          2          -                                   1.6KB              3.6KB              3.6KB             165 ns 
+    % Hit:                                            100.00%        100          -                                   1.6KB              3.6KB              3.6KB             165 ns 
     option.name=\/AHB_pkg::coverage::HSEL_df_cg_bits#2 
     option.weight=1
     option.goal=100
@@ -3531,10 +3531,10 @@ Covergroup                                             Metric       Goal       B
         bin auto[0]                                         1          1          -    Covered                              na                 na                 na                 na 
         bin auto[1]                                        34          1          -    Covered                              na                 na                 na                 na 
  Covergroup instance \/AHB_pkg::coverage::HSEL_df_cg_bits#3  
-                                                      100.00%        100          -    Covered                           1.6KB              3.7KB              3.7KB             165 ns 
-    covered/total bins:                                     2          2          -                                   1.6KB              3.7KB              3.7KB             165 ns 
-    missing/total bins:                                     0          2          -                                   1.6KB              3.7KB              3.7KB             165 ns 
-    % Hit:                                            100.00%        100          -                                   1.6KB              3.7KB              3.7KB             165 ns 
+                                                      100.00%        100          -    Covered                           1.6KB              3.6KB              3.6KB             165 ns 
+    covered/total bins:                                     2          2          -                                   1.6KB              3.6KB              3.6KB             165 ns 
+    missing/total bins:                                     0          2          -                                   1.6KB              3.6KB              3.6KB             165 ns 
+    % Hit:                                            100.00%        100          -                                   1.6KB              3.6KB              3.6KB             165 ns 
     option.name=\/AHB_pkg::coverage::HSEL_df_cg_bits#3 
     option.weight=1
     option.goal=100
@@ -4177,10 +4177,10 @@ Covergroup                                             Metric       Goal       B
         option.detect_overlap=0
         bin RESETING_WORKING_Transition                     1          1          -    Covered                              na                 na                 na                 na 
         bin WORKING_RESETING_Transition                     0          1          -    ZERO                                 na                 na                 na                 na 
- TYPE /AHB_pkg/coverage/WRITE_covgrp                   75.00%        100          -    Uncovered                         1.7KB              1.3KB              1.9KB               0 ns 
-    covered/total bins:                                     3          4          -                                   1.7KB              1.3KB              1.9KB               0 ns 
-    missing/total bins:                                     1          4          -                                   1.7KB              1.3KB              1.9KB               0 ns 
-    % Hit:                                             75.00%        100          -                                   1.7KB              1.3KB              1.9KB               0 ns 
+ TYPE /AHB_pkg/coverage/WRITE_covgrp                   75.00%        100          -    Uncovered                         1.7KB              1.4KB              1.9KB               0 ns 
+    covered/total bins:                                     3          4          -                                   1.7KB              1.4KB              1.9KB               0 ns 
+    missing/total bins:                                     1          4          -                                   1.7KB              1.4KB              1.9KB               0 ns 
+    % Hit:                                             75.00%        100          -                                   1.7KB              1.4KB              1.9KB               0 ns 
     type_option.weight=1
     type_option.goal=100
     type_option.comment=
@@ -4201,10 +4201,10 @@ Covergroup                                             Metric       Goal       B
         type_option.goal=100
         type_option.comment=
  Covergroup instance \/AHB_pkg::coverage::WRITE_covgrp  
-                                                       75.00%        100          -    Uncovered                         1.7KB              1.3KB              1.9KB               0 ns 
-    covered/total bins:                                     3          4          -                                   1.7KB              1.3KB              1.9KB               0 ns 
-    missing/total bins:                                     1          4          -                                   1.7KB              1.3KB              1.9KB               0 ns 
-    % Hit:                                             75.00%        100          -                                   1.7KB              1.3KB              1.9KB               0 ns 
+                                                       75.00%        100          -    Uncovered                         1.7KB              1.4KB              1.9KB               0 ns 
+    covered/total bins:                                     3          4          -                                   1.7KB              1.4KB              1.9KB               0 ns 
+    missing/total bins:                                     1          4          -                                   1.7KB              1.4KB              1.9KB               0 ns 
+    % Hit:                                             75.00%        100          -                                   1.7KB              1.4KB              1.9KB               0 ns 
     option.name=\/AHB_pkg::coverage::WRITE_covgrp 
     option.weight=1
     option.goal=100
@@ -4476,10 +4476,10 @@ Covergroup                                             Metric       Goal       B
         bin WORD_WORD8_Transition                           0          1          -    ZERO                                 na                 na                 na                 na 
         bin WORD_WORD16_Transition                          0          1          -    ZERO                                 na                 na                 na                 na 
         bin WORD_WORD32_Transition                          0          1          -    ZERO                                 na                 na                 na                 na 
- TYPE /AHB_pkg/coverage/SUBORDINATE_SELECT_covgrp      15.62%        100          -    Uncovered                         5.4KB              1.4KB              6.1KB               0 ns 
-    covered/total bins:                                     2         20          -                                   5.4KB              1.4KB              6.1KB               0 ns 
-    missing/total bins:                                    18         20          -                                   5.4KB              1.4KB              6.1KB               0 ns 
-    % Hit:                                             10.00%        100          -                                   5.4KB              1.4KB              6.1KB               0 ns 
+ TYPE /AHB_pkg/coverage/SUBORDINATE_SELECT_covgrp      15.62%        100          -    Uncovered                         5.4KB              1.5KB              6.1KB               0 ns 
+    covered/total bins:                                     2         20          -                                   5.4KB              1.5KB              6.1KB               0 ns 
+    missing/total bins:                                    18         20          -                                   5.4KB              1.5KB              6.1KB               0 ns 
+    % Hit:                                             10.00%        100          -                                   5.4KB              1.5KB              6.1KB               0 ns 
     type_option.weight=1
     type_option.goal=100
     type_option.comment=
@@ -4500,10 +4500,10 @@ Covergroup                                             Metric       Goal       B
         type_option.goal=100
         type_option.comment=
  Covergroup instance \/AHB_pkg::coverage::SUBORDINATE_SELECT_covgrp  
-                                                       15.62%        100          -    Uncovered                         5.4KB              1.4KB              6.1KB               0 ns 
-    covered/total bins:                                     2         20          -                                   5.4KB              1.4KB              6.1KB               0 ns 
-    missing/total bins:                                    18         20          -                                   5.4KB              1.4KB              6.1KB               0 ns 
-    % Hit:                                             10.00%        100          -                                   5.4KB              1.4KB              6.1KB               0 ns 
+                                                       15.62%        100          -    Uncovered                         5.4KB              1.5KB              6.1KB               0 ns 
+    covered/total bins:                                     2         20          -                                   5.4KB              1.5KB              6.1KB               0 ns 
+    missing/total bins:                                    18         20          -                                   5.4KB              1.5KB              6.1KB               0 ns 
+    % Hit:                                             10.00%        100          -                                   5.4KB              1.5KB              6.1KB               0 ns 
     option.name=\/AHB_pkg::coverage::SUBORDINATE_SELECT_covgrp 
     option.weight=1
     option.goal=100
@@ -4554,10 +4554,10 @@ Covergroup                                             Metric       Goal       B
         bin DEFAULT_SUBORDINATE2_Transition                 0          1          -    ZERO                                 na                 na                 na                 na 
         bin DEFAULT_SUBORDINATE3_Transition                 0          1          -    ZERO                                 na                 na                 na                 na 
         bin DEFAULT_DEFAULT_Transition                      0          1          -    ZERO                                 na                 na                 na                 na 
- TYPE /AHB_pkg/coverage/ADDR_covgrp                    33.33%        100          -    Uncovered                         1.1KB               912B              1.3KB             501 ns 
-    covered/total bins:                                     1          3          -                                   1.1KB               912B              1.3KB             501 ns 
-    missing/total bins:                                     2          3          -                                   1.1KB               912B              1.3KB             501 ns 
-    % Hit:                                             33.33%        100          -                                   1.1KB               912B              1.3KB             501 ns 
+ TYPE /AHB_pkg/coverage/ADDR_covgrp                    33.33%        100          -    Uncovered                         1.1KB               928B              1.3KB             501 ns 
+    covered/total bins:                                     1          3          -                                   1.1KB               928B              1.3KB             501 ns 
+    missing/total bins:                                     2          3          -                                   1.1KB               928B              1.3KB             501 ns 
+    % Hit:                                             33.33%        100          -                                   1.1KB               928B              1.3KB             501 ns 
     type_option.weight=1
     type_option.goal=100
     type_option.comment=
@@ -4618,10 +4618,10 @@ COVERGROUP COVERAGE:
 Covergroup                                             Metric       Goal       Bins    Status                Persistent Memory   Transient Memory     Peak Transient    PeakTransMemory 
                                                                                                                                                            Memory              Time  
 --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
- TYPE /AHB_pkg/HWDATA_df_cg                            62.50%        100          -    Uncovered                        12.2KB             39.0KB             39.0KB             285 ns 
-    covered/total bins:                                    40         64          -                                  12.2KB             39.0KB             39.0KB             285 ns 
-    missing/total bins:                                    24         64          -                                  12.2KB             39.0KB             39.0KB             285 ns 
-    % Hit:                                             62.50%        100          -                                  12.2KB             39.0KB             39.0KB             285 ns 
+ TYPE /AHB_pkg/HWDATA_df_cg                            62.50%        100          -    Uncovered                        12.2KB             39.0KB             39.0KB             255 ns 
+    covered/total bins:                                    40         64          -                                  12.2KB             39.0KB             39.0KB             255 ns 
+    missing/total bins:                                    24         64          -                                  12.2KB             39.0KB             39.0KB             255 ns 
+    % Hit:                                             62.50%        100          -                                  12.2KB             39.0KB             39.0KB             255 ns 
     type_option.weight=1
     type_option.goal=100
     type_option.comment=
@@ -4635,10 +4635,10 @@ Covergroup                                             Metric       Goal       B
         type_option.goal=100
         type_option.comment=
  Covergroup instance \/AHB_pkg::coverage::HWDATA_df_cg_bits#1  
-                                                       50.00%        100          -    Uncovered                        12.2KB             39.0KB             39.0KB             285 ns 
-    covered/total bins:                                     1          2          -                                  12.2KB             39.0KB             39.0KB             285 ns 
-    missing/total bins:                                     1          2          -                                  12.2KB             39.0KB             39.0KB             285 ns 
-    % Hit:                                             50.00%        100          -                                  12.2KB             39.0KB             39.0KB             285 ns 
+                                                       50.00%        100          -    Uncovered                        12.2KB             39.0KB             39.0KB             255 ns 
+    covered/total bins:                                     1          2          -                                  12.2KB             39.0KB             39.0KB             255 ns 
+    missing/total bins:                                     1          2          -                                  12.2KB             39.0KB             39.0KB             255 ns 
+    % Hit:                                             50.00%        100          -                                  12.2KB             39.0KB             39.0KB             255 ns 
     option.name=\/AHB_pkg::coverage::HWDATA_df_cg_bits#1 
     option.weight=1
     option.goal=100
@@ -4662,10 +4662,10 @@ Covergroup                                             Metric       Goal       B
         bin auto[0]                                        35          1          -    Covered                              na                 na                 na                 na 
         bin auto[1]                                         0          1          -    ZERO                                 na                 na                 na                 na 
  Covergroup instance \/AHB_pkg::coverage::HWDATA_df_cg_bits#2  
-                                                       50.00%        100          -    Uncovered                        12.2KB             39.0KB             39.0KB             285 ns 
-    covered/total bins:                                     1          2          -                                  12.2KB             39.0KB             39.0KB             285 ns 
-    missing/total bins:                                     1          2          -                                  12.2KB             39.0KB             39.0KB             285 ns 
-    % Hit:                                             50.00%        100          -                                  12.2KB             39.0KB             39.0KB             285 ns 
+                                                       50.00%        100          -    Uncovered                        12.2KB             39.0KB             39.0KB             255 ns 
+    covered/total bins:                                     1          2          -                                  12.2KB             39.0KB             39.0KB             255 ns 
+    missing/total bins:                                     1          2          -                                  12.2KB             39.0KB             39.0KB             255 ns 
+    % Hit:                                             50.00%        100          -                                  12.2KB             39.0KB             39.0KB             255 ns 
     option.name=\/AHB_pkg::coverage::HWDATA_df_cg_bits#2 
     option.weight=1
     option.goal=100
@@ -4689,10 +4689,10 @@ Covergroup                                             Metric       Goal       B
         bin auto[0]                                        35          1          -    Covered                              na                 na                 na                 na 
         bin auto[1]                                         0          1          -    ZERO                                 na                 na                 na                 na 
  Covergroup instance \/AHB_pkg::coverage::HWDATA_df_cg_bits#3  
-                                                       50.00%        100          -    Uncovered                        12.2KB             39.0KB             39.0KB             285 ns 
-    covered/total bins:                                     1          2          -                                  12.2KB             39.0KB             39.0KB             285 ns 
-    missing/total bins:                                     1          2          -                                  12.2KB             39.0KB             39.0KB             285 ns 
-    % Hit:                                             50.00%        100          -                                  12.2KB             39.0KB             39.0KB             285 ns 
+                                                       50.00%        100          -    Uncovered                        12.2KB             39.0KB             39.0KB             255 ns 
+    covered/total bins:                                     1          2          -                                  12.2KB             39.0KB             39.0KB             255 ns 
+    missing/total bins:                                     1          2          -                                  12.2KB             39.0KB             39.0KB             255 ns 
+    % Hit:                                             50.00%        100          -                                  12.2KB             39.0KB             39.0KB             255 ns 
     option.name=\/AHB_pkg::coverage::HWDATA_df_cg_bits#3 
     option.weight=1
     option.goal=100
@@ -4716,10 +4716,10 @@ Covergroup                                             Metric       Goal       B
         bin auto[0]                                        35          1          -    Covered                              na                 na                 na                 na 
         bin auto[1]                                         0          1          -    ZERO                                 na                 na                 na                 na 
  Covergroup instance \/AHB_pkg::coverage::HWDATA_df_cg_bits#4  
-                                                       50.00%        100          -    Uncovered                        12.2KB             39.0KB             39.0KB             285 ns 
-    covered/total bins:                                     1          2          -                                  12.2KB             39.0KB             39.0KB             285 ns 
-    missing/total bins:                                     1          2          -                                  12.2KB             39.0KB             39.0KB             285 ns 
-    % Hit:                                             50.00%        100          -                                  12.2KB             39.0KB             39.0KB             285 ns 
+                                                       50.00%        100          -    Uncovered                        12.2KB             39.0KB             39.0KB             255 ns 
+    covered/total bins:                                     1          2          -                                  12.2KB             39.0KB             39.0KB             255 ns 
+    missing/total bins:                                     1          2          -                                  12.2KB             39.0KB             39.0KB             255 ns 
+    % Hit:                                             50.00%        100          -                                  12.2KB             39.0KB             39.0KB             255 ns 
     option.name=\/AHB_pkg::coverage::HWDATA_df_cg_bits#4 
     option.weight=1
     option.goal=100
@@ -4743,10 +4743,10 @@ Covergroup                                             Metric       Goal       B
         bin auto[0]                                        35          1          -    Covered                              na                 na                 na                 na 
         bin auto[1]                                         0          1          -    ZERO                                 na                 na                 na                 na 
  Covergroup instance \/AHB_pkg::coverage::HWDATA_df_cg_bits#5  
-                                                       50.00%        100          -    Uncovered                        12.2KB             39.0KB             39.0KB             285 ns 
-    covered/total bins:                                     1          2          -                                  12.2KB             39.0KB             39.0KB             285 ns 
-    missing/total bins:                                     1          2          -                                  12.2KB             39.0KB             39.0KB             285 ns 
-    % Hit:                                             50.00%        100          -                                  12.2KB             39.0KB             39.0KB             285 ns 
+                                                       50.00%        100          -    Uncovered                        12.2KB             39.0KB             39.0KB             255 ns 
+    covered/total bins:                                     1          2          -                                  12.2KB             39.0KB             39.0KB             255 ns 
+    missing/total bins:                                     1          2          -                                  12.2KB             39.0KB             39.0KB             255 ns 
+    % Hit:                                             50.00%        100          -                                  12.2KB             39.0KB             39.0KB             255 ns 
     option.name=\/AHB_pkg::coverage::HWDATA_df_cg_bits#5 
     option.weight=1
     option.goal=100
@@ -4770,10 +4770,10 @@ Covergroup                                             Metric       Goal       B
         bin auto[0]                                        35          1          -    Covered                              na                 na                 na                 na 
         bin auto[1]                                         0          1          -    ZERO                                 na                 na                 na                 na 
  Covergroup instance \/AHB_pkg::coverage::HWDATA_df_cg_bits#6  
-                                                       50.00%        100          -    Uncovered                        12.2KB             39.0KB             39.0KB             285 ns 
-    covered/total bins:                                     1          2          -                                  12.2KB             39.0KB             39.0KB             285 ns 
-    missing/total bins:                                     1          2          -                                  12.2KB             39.0KB             39.0KB             285 ns 
-    % Hit:                                             50.00%        100          -                                  12.2KB             39.0KB             39.0KB             285 ns 
+                                                       50.00%        100          -    Uncovered                        12.2KB             39.0KB             39.0KB             255 ns 
+    covered/total bins:                                     1          2          -                                  12.2KB             39.0KB             39.0KB             255 ns 
+    missing/total bins:                                     1          2          -                                  12.2KB             39.0KB             39.0KB             255 ns 
+    % Hit:                                             50.00%        100          -                                  12.2KB             39.0KB             39.0KB             255 ns 
     option.name=\/AHB_pkg::coverage::HWDATA_df_cg_bits#6 
     option.weight=1
     option.goal=100
@@ -4797,10 +4797,10 @@ Covergroup                                             Metric       Goal       B
         bin auto[0]                                        35          1          -    Covered                              na                 na                 na                 na 
         bin auto[1]                                         0          1          -    ZERO                                 na                 na                 na                 na 
  Covergroup instance \/AHB_pkg::coverage::HWDATA_df_cg_bits#7  
-                                                       50.00%        100          -    Uncovered                        12.2KB             39.0KB             39.0KB             285 ns 
-    covered/total bins:                                     1          2          -                                  12.2KB             39.0KB             39.0KB             285 ns 
-    missing/total bins:                                     1          2          -                                  12.2KB             39.0KB             39.0KB             285 ns 
-    % Hit:                                             50.00%        100          -                                  12.2KB             39.0KB             39.0KB             285 ns 
+                                                       50.00%        100          -    Uncovered                        12.2KB             39.0KB             39.0KB             255 ns 
+    covered/total bins:                                     1          2          -                                  12.2KB             39.0KB             39.0KB             255 ns 
+    missing/total bins:                                     1          2          -                                  12.2KB             39.0KB             39.0KB             255 ns 
+    % Hit:                                             50.00%        100          -                                  12.2KB             39.0KB             39.0KB             255 ns 
     option.name=\/AHB_pkg::coverage::HWDATA_df_cg_bits#7 
     option.weight=1
     option.goal=100
@@ -4824,10 +4824,10 @@ Covergroup                                             Metric       Goal       B
         bin auto[0]                                        35          1          -    Covered                              na                 na                 na                 na 
         bin auto[1]                                         0          1          -    ZERO                                 na                 na                 na                 na 
  Covergroup instance \/AHB_pkg::coverage::HWDATA_df_cg_bits#8  
-                                                       50.00%        100          -    Uncovered                        12.2KB             39.0KB             39.0KB             285 ns 
-    covered/total bins:                                     1          2          -                                  12.2KB             39.0KB             39.0KB             285 ns 
-    missing/total bins:                                     1          2          -                                  12.2KB             39.0KB             39.0KB             285 ns 
-    % Hit:                                             50.00%        100          -                                  12.2KB             39.0KB             39.0KB             285 ns 
+                                                       50.00%        100          -    Uncovered                        12.2KB             39.0KB             39.0KB             255 ns 
+    covered/total bins:                                     1          2          -                                  12.2KB             39.0KB             39.0KB             255 ns 
+    missing/total bins:                                     1          2          -                                  12.2KB             39.0KB             39.0KB             255 ns 
+    % Hit:                                             50.00%        100          -                                  12.2KB             39.0KB             39.0KB             255 ns 
     option.name=\/AHB_pkg::coverage::HWDATA_df_cg_bits#8 
     option.weight=1
     option.goal=100
@@ -4851,10 +4851,10 @@ Covergroup                                             Metric       Goal       B
         bin auto[0]                                        35          1          -    Covered                              na                 na                 na                 na 
         bin auto[1]                                         0          1          -    ZERO                                 na                 na                 na                 na 
  Covergroup instance \/AHB_pkg::coverage::HWDATA_df_cg_bits#9  
-                                                       50.00%        100          -    Uncovered                        12.2KB             39.0KB             39.0KB             285 ns 
-    covered/total bins:                                     1          2          -                                  12.2KB             39.0KB             39.0KB             285 ns 
-    missing/total bins:                                     1          2          -                                  12.2KB             39.0KB             39.0KB             285 ns 
-    % Hit:                                             50.00%        100          -                                  12.2KB             39.0KB             39.0KB             285 ns 
+                                                       50.00%        100          -    Uncovered                        12.2KB             39.0KB             39.0KB             255 ns 
+    covered/total bins:                                     1          2          -                                  12.2KB             39.0KB             39.0KB             255 ns 
+    missing/total bins:                                     1          2          -                                  12.2KB             39.0KB             39.0KB             255 ns 
+    % Hit:                                             50.00%        100          -                                  12.2KB             39.0KB             39.0KB             255 ns 
     option.name=\/AHB_pkg::coverage::HWDATA_df_cg_bits#9 
     option.weight=1
     option.goal=100
@@ -4878,10 +4878,10 @@ Covergroup                                             Metric       Goal       B
         bin auto[0]                                        35          1          -    Covered                              na                 na                 na                 na 
         bin auto[1]                                         0          1          -    ZERO                                 na                 na                 na                 na 
  Covergroup instance \/AHB_pkg::coverage::HWDATA_df_cg_bits#10  
-                                                       50.00%        100          -    Uncovered                        12.2KB             39.0KB             39.0KB             285 ns 
-    covered/total bins:                                     1          2          -                                  12.2KB             39.0KB             39.0KB             285 ns 
-    missing/total bins:                                     1          2          -                                  12.2KB             39.0KB             39.0KB             285 ns 
-    % Hit:                                             50.00%        100          -                                  12.2KB             39.0KB             39.0KB             285 ns 
+                                                       50.00%        100          -    Uncovered                        12.2KB             39.0KB             39.0KB             255 ns 
+    covered/total bins:                                     1          2          -                                  12.2KB             39.0KB             39.0KB             255 ns 
+    missing/total bins:                                     1          2          -                                  12.2KB             39.0KB             39.0KB             255 ns 
+    % Hit:                                             50.00%        100          -                                  12.2KB             39.0KB             39.0KB             255 ns 
     option.name=\/AHB_pkg::coverage::HWDATA_df_cg_bits#10 
     option.weight=1
     option.goal=100
@@ -4905,10 +4905,10 @@ Covergroup                                             Metric       Goal       B
         bin auto[0]                                        35          1          -    Covered                              na                 na                 na                 na 
         bin auto[1]                                         0          1          -    ZERO                                 na                 na                 na                 na 
  Covergroup instance \/AHB_pkg::coverage::HWDATA_df_cg_bits#11  
-                                                       50.00%        100          -    Uncovered                        12.2KB             39.0KB             39.0KB             285 ns 
-    covered/total bins:                                     1          2          -                                  12.2KB             39.0KB             39.0KB             285 ns 
-    missing/total bins:                                     1          2          -                                  12.2KB             39.0KB             39.0KB             285 ns 
-    % Hit:                                             50.00%        100          -                                  12.2KB             39.0KB             39.0KB             285 ns 
+                                                       50.00%        100          -    Uncovered                        12.2KB             39.0KB             39.0KB             255 ns 
+    covered/total bins:                                     1          2          -                                  12.2KB             39.0KB             39.0KB             255 ns 
+    missing/total bins:                                     1          2          -                                  12.2KB             39.0KB             39.0KB             255 ns 
+    % Hit:                                             50.00%        100          -                                  12.2KB             39.0KB             39.0KB             255 ns 
     option.name=\/AHB_pkg::coverage::HWDATA_df_cg_bits#11 
     option.weight=1
     option.goal=100
@@ -4932,10 +4932,10 @@ Covergroup                                             Metric       Goal       B
         bin auto[0]                                        35          1          -    Covered                              na                 na                 na                 na 
         bin auto[1]                                         0          1          -    ZERO                                 na                 na                 na                 na 
  Covergroup instance \/AHB_pkg::coverage::HWDATA_df_cg_bits#12  
-                                                       50.00%        100          -    Uncovered                        12.2KB             39.0KB             39.0KB             285 ns 
-    covered/total bins:                                     1          2          -                                  12.2KB             39.0KB             39.0KB             285 ns 
-    missing/total bins:                                     1          2          -                                  12.2KB             39.0KB             39.0KB             285 ns 
-    % Hit:                                             50.00%        100          -                                  12.2KB             39.0KB             39.0KB             285 ns 
+                                                       50.00%        100          -    Uncovered                        12.2KB             39.0KB             39.0KB             255 ns 
+    covered/total bins:                                     1          2          -                                  12.2KB             39.0KB             39.0KB             255 ns 
+    missing/total bins:                                     1          2          -                                  12.2KB             39.0KB             39.0KB             255 ns 
+    % Hit:                                             50.00%        100          -                                  12.2KB             39.0KB             39.0KB             255 ns 
     option.name=\/AHB_pkg::coverage::HWDATA_df_cg_bits#12 
     option.weight=1
     option.goal=100
@@ -4959,10 +4959,10 @@ Covergroup                                             Metric       Goal       B
         bin auto[0]                                        35          1          -    Covered                              na                 na                 na                 na 
         bin auto[1]                                         0          1          -    ZERO                                 na                 na                 na                 na 
  Covergroup instance \/AHB_pkg::coverage::HWDATA_df_cg_bits#13  
-                                                       50.00%        100          -    Uncovered                        12.2KB             39.0KB             39.0KB             285 ns 
-    covered/total bins:                                     1          2          -                                  12.2KB             39.0KB             39.0KB             285 ns 
-    missing/total bins:                                     1          2          -                                  12.2KB             39.0KB             39.0KB             285 ns 
-    % Hit:                                             50.00%        100          -                                  12.2KB             39.0KB             39.0KB             285 ns 
+                                                       50.00%        100          -    Uncovered                        12.2KB             39.0KB             39.0KB             255 ns 
+    covered/total bins:                                     1          2          -                                  12.2KB             39.0KB             39.0KB             255 ns 
+    missing/total bins:                                     1          2          -                                  12.2KB             39.0KB             39.0KB             255 ns 
+    % Hit:                                             50.00%        100          -                                  12.2KB             39.0KB             39.0KB             255 ns 
     option.name=\/AHB_pkg::coverage::HWDATA_df_cg_bits#13 
     option.weight=1
     option.goal=100
@@ -4986,10 +4986,10 @@ Covergroup                                             Metric       Goal       B
         bin auto[0]                                        35          1          -    Covered                              na                 na                 na                 na 
         bin auto[1]                                         0          1          -    ZERO                                 na                 na                 na                 na 
  Covergroup instance \/AHB_pkg::coverage::HWDATA_df_cg_bits#14  
-                                                       50.00%        100          -    Uncovered                        12.2KB             39.0KB             39.0KB             285 ns 
-    covered/total bins:                                     1          2          -                                  12.2KB             39.0KB             39.0KB             285 ns 
-    missing/total bins:                                     1          2          -                                  12.2KB             39.0KB             39.0KB             285 ns 
-    % Hit:                                             50.00%        100          -                                  12.2KB             39.0KB             39.0KB             285 ns 
+                                                       50.00%        100          -    Uncovered                        12.2KB             39.0KB             39.0KB             255 ns 
+    covered/total bins:                                     1          2          -                                  12.2KB             39.0KB             39.0KB             255 ns 
+    missing/total bins:                                     1          2          -                                  12.2KB             39.0KB             39.0KB             255 ns 
+    % Hit:                                             50.00%        100          -                                  12.2KB             39.0KB             39.0KB             255 ns 
     option.name=\/AHB_pkg::coverage::HWDATA_df_cg_bits#14 
     option.weight=1
     option.goal=100
@@ -5013,10 +5013,10 @@ Covergroup                                             Metric       Goal       B
         bin auto[0]                                        35          1          -    Covered                              na                 na                 na                 na 
         bin auto[1]                                         0          1          -    ZERO                                 na                 na                 na                 na 
  Covergroup instance \/AHB_pkg::coverage::HWDATA_df_cg_bits#15  
-                                                       50.00%        100          -    Uncovered                        12.2KB             39.0KB             39.0KB             285 ns 
-    covered/total bins:                                     1          2          -                                  12.2KB             39.0KB             39.0KB             285 ns 
-    missing/total bins:                                     1          2          -                                  12.2KB             39.0KB             39.0KB             285 ns 
-    % Hit:                                             50.00%        100          -                                  12.2KB             39.0KB             39.0KB             285 ns 
+                                                       50.00%        100          -    Uncovered                        12.2KB             39.0KB             39.0KB             255 ns 
+    covered/total bins:                                     1          2          -                                  12.2KB             39.0KB             39.0KB             255 ns 
+    missing/total bins:                                     1          2          -                                  12.2KB             39.0KB             39.0KB             255 ns 
+    % Hit:                                             50.00%        100          -                                  12.2KB             39.0KB             39.0KB             255 ns 
     option.name=\/AHB_pkg::coverage::HWDATA_df_cg_bits#15 
     option.weight=1
     option.goal=100
@@ -5040,10 +5040,10 @@ Covergroup                                             Metric       Goal       B
         bin auto[0]                                        35          1          -    Covered                              na                 na                 na                 na 
         bin auto[1]                                         0          1          -    ZERO                                 na                 na                 na                 na 
  Covergroup instance \/AHB_pkg::coverage::HWDATA_df_cg_bits#16  
-                                                       50.00%        100          -    Uncovered                        12.2KB             39.0KB             39.0KB             285 ns 
-    covered/total bins:                                     1          2          -                                  12.2KB             39.0KB             39.0KB             285 ns 
-    missing/total bins:                                     1          2          -                                  12.2KB             39.0KB             39.0KB             285 ns 
-    % Hit:                                             50.00%        100          -                                  12.2KB             39.0KB             39.0KB             285 ns 
+                                                       50.00%        100          -    Uncovered                        12.2KB             39.0KB             39.0KB             255 ns 
+    covered/total bins:                                     1          2          -                                  12.2KB             39.0KB             39.0KB             255 ns 
+    missing/total bins:                                     1          2          -                                  12.2KB             39.0KB             39.0KB             255 ns 
+    % Hit:                                             50.00%        100          -                                  12.2KB             39.0KB             39.0KB             255 ns 
     option.name=\/AHB_pkg::coverage::HWDATA_df_cg_bits#16 
     option.weight=1
     option.goal=100
@@ -5067,10 +5067,10 @@ Covergroup                                             Metric       Goal       B
         bin auto[0]                                        35          1          -    Covered                              na                 na                 na                 na 
         bin auto[1]                                         0          1          -    ZERO                                 na                 na                 na                 na 
  Covergroup instance \/AHB_pkg::coverage::HWDATA_df_cg_bits#17  
-                                                       50.00%        100          -    Uncovered                        12.2KB             39.0KB             39.0KB             285 ns 
-    covered/total bins:                                     1          2          -                                  12.2KB             39.0KB             39.0KB             285 ns 
-    missing/total bins:                                     1          2          -                                  12.2KB             39.0KB             39.0KB             285 ns 
-    % Hit:                                             50.00%        100          -                                  12.2KB             39.0KB             39.0KB             285 ns 
+                                                       50.00%        100          -    Uncovered                        12.2KB             39.0KB             39.0KB             255 ns 
+    covered/total bins:                                     1          2          -                                  12.2KB             39.0KB             39.0KB             255 ns 
+    missing/total bins:                                     1          2          -                                  12.2KB             39.0KB             39.0KB             255 ns 
+    % Hit:                                             50.00%        100          -                                  12.2KB             39.0KB             39.0KB             255 ns 
     option.name=\/AHB_pkg::coverage::HWDATA_df_cg_bits#17 
     option.weight=1
     option.goal=100
@@ -5094,10 +5094,10 @@ Covergroup                                             Metric       Goal       B
         bin auto[0]                                        35          1          -    Covered                              na                 na                 na                 na 
         bin auto[1]                                         0          1          -    ZERO                                 na                 na                 na                 na 
  Covergroup instance \/AHB_pkg::coverage::HWDATA_df_cg_bits#18  
-                                                       50.00%        100          -    Uncovered                        12.2KB             39.0KB             39.0KB             285 ns 
-    covered/total bins:                                     1          2          -                                  12.2KB             39.0KB             39.0KB             285 ns 
-    missing/total bins:                                     1          2          -                                  12.2KB             39.0KB             39.0KB             285 ns 
-    % Hit:                                             50.00%        100          -                                  12.2KB             39.0KB             39.0KB             285 ns 
+                                                       50.00%        100          -    Uncovered                        12.2KB             39.0KB             39.0KB             255 ns 
+    covered/total bins:                                     1          2          -                                  12.2KB             39.0KB             39.0KB             255 ns 
+    missing/total bins:                                     1          2          -                                  12.2KB             39.0KB             39.0KB             255 ns 
+    % Hit:                                             50.00%        100          -                                  12.2KB             39.0KB             39.0KB             255 ns 
     option.name=\/AHB_pkg::coverage::HWDATA_df_cg_bits#18 
     option.weight=1
     option.goal=100
@@ -5121,10 +5121,10 @@ Covergroup                                             Metric       Goal       B
         bin auto[0]                                        35          1          -    Covered                              na                 na                 na                 na 
         bin auto[1]                                         0          1          -    ZERO                                 na                 na                 na                 na 
  Covergroup instance \/AHB_pkg::coverage::HWDATA_df_cg_bits#19  
-                                                       50.00%        100          -    Uncovered                        12.2KB             39.0KB             39.0KB             285 ns 
-    covered/total bins:                                     1          2          -                                  12.2KB             39.0KB             39.0KB             285 ns 
-    missing/total bins:                                     1          2          -                                  12.2KB             39.0KB             39.0KB             285 ns 
-    % Hit:                                             50.00%        100          -                                  12.2KB             39.0KB             39.0KB             285 ns 
+                                                       50.00%        100          -    Uncovered                        12.2KB             39.0KB             39.0KB             255 ns 
+    covered/total bins:                                     1          2          -                                  12.2KB             39.0KB             39.0KB             255 ns 
+    missing/total bins:                                     1          2          -                                  12.2KB             39.0KB             39.0KB             255 ns 
+    % Hit:                                             50.00%        100          -                                  12.2KB             39.0KB             39.0KB             255 ns 
     option.name=\/AHB_pkg::coverage::HWDATA_df_cg_bits#19 
     option.weight=1
     option.goal=100
@@ -5148,10 +5148,10 @@ Covergroup                                             Metric       Goal       B
         bin auto[0]                                        35          1          -    Covered                              na                 na                 na                 na 
         bin auto[1]                                         0          1          -    ZERO                                 na                 na                 na                 na 
  Covergroup instance \/AHB_pkg::coverage::HWDATA_df_cg_bits#20  
-                                                       50.00%        100          -    Uncovered                        12.2KB             39.0KB             39.0KB             285 ns 
-    covered/total bins:                                     1          2          -                                  12.2KB             39.0KB             39.0KB             285 ns 
-    missing/total bins:                                     1          2          -                                  12.2KB             39.0KB             39.0KB             285 ns 
-    % Hit:                                             50.00%        100          -                                  12.2KB             39.0KB             39.0KB             285 ns 
+                                                       50.00%        100          -    Uncovered                        12.2KB             39.0KB             39.0KB             255 ns 
+    covered/total bins:                                     1          2          -                                  12.2KB             39.0KB             39.0KB             255 ns 
+    missing/total bins:                                     1          2          -                                  12.2KB             39.0KB             39.0KB             255 ns 
+    % Hit:                                             50.00%        100          -                                  12.2KB             39.0KB             39.0KB             255 ns 
     option.name=\/AHB_pkg::coverage::HWDATA_df_cg_bits#20 
     option.weight=1
     option.goal=100
@@ -5175,10 +5175,10 @@ Covergroup                                             Metric       Goal       B
         bin auto[0]                                        35          1          -    Covered                              na                 na                 na                 na 
         bin auto[1]                                         0          1          -    ZERO                                 na                 na                 na                 na 
  Covergroup instance \/AHB_pkg::coverage::HWDATA_df_cg_bits#21  
-                                                       50.00%        100          -    Uncovered                        12.2KB             39.0KB             39.0KB             285 ns 
-    covered/total bins:                                     1          2          -                                  12.2KB             39.0KB             39.0KB             285 ns 
-    missing/total bins:                                     1          2          -                                  12.2KB             39.0KB             39.0KB             285 ns 
-    % Hit:                                             50.00%        100          -                                  12.2KB             39.0KB             39.0KB             285 ns 
+                                                       50.00%        100          -    Uncovered                        12.2KB             39.0KB             39.0KB             255 ns 
+    covered/total bins:                                     1          2          -                                  12.2KB             39.0KB             39.0KB             255 ns 
+    missing/total bins:                                     1          2          -                                  12.2KB             39.0KB             39.0KB             255 ns 
+    % Hit:                                             50.00%        100          -                                  12.2KB             39.0KB             39.0KB             255 ns 
     option.name=\/AHB_pkg::coverage::HWDATA_df_cg_bits#21 
     option.weight=1
     option.goal=100
@@ -5202,10 +5202,10 @@ Covergroup                                             Metric       Goal       B
         bin auto[0]                                        35          1          -    Covered                              na                 na                 na                 na 
         bin auto[1]                                         0          1          -    ZERO                                 na                 na                 na                 na 
  Covergroup instance \/AHB_pkg::coverage::HWDATA_df_cg_bits#22  
-                                                       50.00%        100          -    Uncovered                        12.2KB             39.0KB             39.0KB             285 ns 
-    covered/total bins:                                     1          2          -                                  12.2KB             39.0KB             39.0KB             285 ns 
-    missing/total bins:                                     1          2          -                                  12.2KB             39.0KB             39.0KB             285 ns 
-    % Hit:                                             50.00%        100          -                                  12.2KB             39.0KB             39.0KB             285 ns 
+                                                       50.00%        100          -    Uncovered                        12.2KB             39.0KB             39.0KB             255 ns 
+    covered/total bins:                                     1          2          -                                  12.2KB             39.0KB             39.0KB             255 ns 
+    missing/total bins:                                     1          2          -                                  12.2KB             39.0KB             39.0KB             255 ns 
+    % Hit:                                             50.00%        100          -                                  12.2KB             39.0KB             39.0KB             255 ns 
     option.name=\/AHB_pkg::coverage::HWDATA_df_cg_bits#22 
     option.weight=1
     option.goal=100
@@ -5229,10 +5229,10 @@ Covergroup                                             Metric       Goal       B
         bin auto[0]                                        35          1          -    Covered                              na                 na                 na                 na 
         bin auto[1]                                         0          1          -    ZERO                                 na                 na                 na                 na 
  Covergroup instance \/AHB_pkg::coverage::HWDATA_df_cg_bits#23  
-                                                       50.00%        100          -    Uncovered                        12.2KB             39.0KB             39.0KB             285 ns 
-    covered/total bins:                                     1          2          -                                  12.2KB             39.0KB             39.0KB             285 ns 
-    missing/total bins:                                     1          2          -                                  12.2KB             39.0KB             39.0KB             285 ns 
-    % Hit:                                             50.00%        100          -                                  12.2KB             39.0KB             39.0KB             285 ns 
+                                                       50.00%        100          -    Uncovered                        12.2KB             39.0KB             39.0KB             255 ns 
+    covered/total bins:                                     1          2          -                                  12.2KB             39.0KB             39.0KB             255 ns 
+    missing/total bins:                                     1          2          -                                  12.2KB             39.0KB             39.0KB             255 ns 
+    % Hit:                                             50.00%        100          -                                  12.2KB             39.0KB             39.0KB             255 ns 
     option.name=\/AHB_pkg::coverage::HWDATA_df_cg_bits#23 
     option.weight=1
     option.goal=100
@@ -5256,10 +5256,10 @@ Covergroup                                             Metric       Goal       B
         bin auto[0]                                        35          1          -    Covered                              na                 na                 na                 na 
         bin auto[1]                                         0          1          -    ZERO                                 na                 na                 na                 na 
  Covergroup instance \/AHB_pkg::coverage::HWDATA_df_cg_bits#24  
-                                                       50.00%        100          -    Uncovered                        12.2KB             39.0KB             39.0KB             285 ns 
-    covered/total bins:                                     1          2          -                                  12.2KB             39.0KB             39.0KB             285 ns 
-    missing/total bins:                                     1          2          -                                  12.2KB             39.0KB             39.0KB             285 ns 
-    % Hit:                                             50.00%        100          -                                  12.2KB             39.0KB             39.0KB             285 ns 
+                                                       50.00%        100          -    Uncovered                        12.2KB             39.0KB             39.0KB             255 ns 
+    covered/total bins:                                     1          2          -                                  12.2KB             39.0KB             39.0KB             255 ns 
+    missing/total bins:                                     1          2          -                                  12.2KB             39.0KB             39.0KB             255 ns 
+    % Hit:                                             50.00%        100          -                                  12.2KB             39.0KB             39.0KB             255 ns 
     option.name=\/AHB_pkg::coverage::HWDATA_df_cg_bits#24 
     option.weight=1
     option.goal=100
@@ -5283,10 +5283,10 @@ Covergroup                                             Metric       Goal       B
         bin auto[0]                                        35          1          -    Covered                              na                 na                 na                 na 
         bin auto[1]                                         0          1          -    ZERO                                 na                 na                 na                 na 
  Covergroup instance \/AHB_pkg::coverage::HWDATA_df_cg_bits#25  
-                                                      100.00%        100          -    Covered                          12.2KB             39.0KB             39.0KB             285 ns 
-    covered/total bins:                                     2          2          -                                  12.2KB             39.0KB             39.0KB             285 ns 
-    missing/total bins:                                     0          2          -                                  12.2KB             39.0KB             39.0KB             285 ns 
-    % Hit:                                            100.00%        100          -                                  12.2KB             39.0KB             39.0KB             285 ns 
+                                                      100.00%        100          -    Covered                          12.2KB             39.0KB             39.0KB             255 ns 
+    covered/total bins:                                     2          2          -                                  12.2KB             39.0KB             39.0KB             255 ns 
+    missing/total bins:                                     0          2          -                                  12.2KB             39.0KB             39.0KB             255 ns 
+    % Hit:                                            100.00%        100          -                                  12.2KB             39.0KB             39.0KB             255 ns 
     option.name=\/AHB_pkg::coverage::HWDATA_df_cg_bits#25 
     option.weight=1
     option.goal=100
@@ -5310,10 +5310,10 @@ Covergroup                                             Metric       Goal       B
         bin auto[0]                                        20          1          -    Covered                              na                 na                 na                 na 
         bin auto[1]                                        15          1          -    Covered                              na                 na                 na                 na 
  Covergroup instance \/AHB_pkg::coverage::HWDATA_df_cg_bits#26  
-                                                      100.00%        100          -    Covered                          12.2KB             39.0KB             39.0KB             285 ns 
-    covered/total bins:                                     2          2          -                                  12.2KB             39.0KB             39.0KB             285 ns 
-    missing/total bins:                                     0          2          -                                  12.2KB             39.0KB             39.0KB             285 ns 
-    % Hit:                                            100.00%        100          -                                  12.2KB             39.0KB             39.0KB             285 ns 
+                                                      100.00%        100          -    Covered                          12.2KB             39.0KB             39.0KB             255 ns 
+    covered/total bins:                                     2          2          -                                  12.2KB             39.0KB             39.0KB             255 ns 
+    missing/total bins:                                     0          2          -                                  12.2KB             39.0KB             39.0KB             255 ns 
+    % Hit:                                            100.00%        100          -                                  12.2KB             39.0KB             39.0KB             255 ns 
     option.name=\/AHB_pkg::coverage::HWDATA_df_cg_bits#26 
     option.weight=1
     option.goal=100
@@ -5337,10 +5337,10 @@ Covergroup                                             Metric       Goal       B
         bin auto[0]                                        20          1          -    Covered                              na                 na                 na                 na 
         bin auto[1]                                        15          1          -    Covered                              na                 na                 na                 na 
  Covergroup instance \/AHB_pkg::coverage::HWDATA_df_cg_bits#27  
-                                                      100.00%        100          -    Covered                          12.2KB             39.0KB             39.0KB             285 ns 
-    covered/total bins:                                     2          2          -                                  12.2KB             39.0KB             39.0KB             285 ns 
-    missing/total bins:                                     0          2          -                                  12.2KB             39.0KB             39.0KB             285 ns 
-    % Hit:                                            100.00%        100          -                                  12.2KB             39.0KB             39.0KB             285 ns 
+                                                      100.00%        100          -    Covered                          12.2KB             39.0KB             39.0KB             255 ns 
+    covered/total bins:                                     2          2          -                                  12.2KB             39.0KB             39.0KB             255 ns 
+    missing/total bins:                                     0          2          -                                  12.2KB             39.0KB             39.0KB             255 ns 
+    % Hit:                                            100.00%        100          -                                  12.2KB             39.0KB             39.0KB             255 ns 
     option.name=\/AHB_pkg::coverage::HWDATA_df_cg_bits#27 
     option.weight=1
     option.goal=100
@@ -5364,10 +5364,10 @@ Covergroup                                             Metric       Goal       B
         bin auto[0]                                        19          1          -    Covered                              na                 na                 na                 na 
         bin auto[1]                                        16          1          -    Covered                              na                 na                 na                 na 
  Covergroup instance \/AHB_pkg::coverage::HWDATA_df_cg_bits#28  
-                                                      100.00%        100          -    Covered                          12.2KB             39.0KB             39.0KB             285 ns 
-    covered/total bins:                                     2          2          -                                  12.2KB             39.0KB             39.0KB             285 ns 
-    missing/total bins:                                     0          2          -                                  12.2KB             39.0KB             39.0KB             285 ns 
-    % Hit:                                            100.00%        100          -                                  12.2KB             39.0KB             39.0KB             285 ns 
+                                                      100.00%        100          -    Covered                          12.2KB             39.0KB             39.0KB             255 ns 
+    covered/total bins:                                     2          2          -                                  12.2KB             39.0KB             39.0KB             255 ns 
+    missing/total bins:                                     0          2          -                                  12.2KB             39.0KB             39.0KB             255 ns 
+    % Hit:                                            100.00%        100          -                                  12.2KB             39.0KB             39.0KB             255 ns 
     option.name=\/AHB_pkg::coverage::HWDATA_df_cg_bits#28 
     option.weight=1
     option.goal=100
@@ -5391,10 +5391,10 @@ Covergroup                                             Metric       Goal       B
         bin auto[0]                                        20          1          -    Covered                              na                 na                 na                 na 
         bin auto[1]                                        15          1          -    Covered                              na                 na                 na                 na 
  Covergroup instance \/AHB_pkg::coverage::HWDATA_df_cg_bits#29  
-                                                      100.00%        100          -    Covered                          12.2KB             39.0KB             39.0KB             285 ns 
-    covered/total bins:                                     2          2          -                                  12.2KB             39.0KB             39.0KB             285 ns 
-    missing/total bins:                                     0          2          -                                  12.2KB             39.0KB             39.0KB             285 ns 
-    % Hit:                                            100.00%        100          -                                  12.2KB             39.0KB             39.0KB             285 ns 
+                                                      100.00%        100          -    Covered                          12.2KB             39.0KB             39.0KB             255 ns 
+    covered/total bins:                                     2          2          -                                  12.2KB             39.0KB             39.0KB             255 ns 
+    missing/total bins:                                     0          2          -                                  12.2KB             39.0KB             39.0KB             255 ns 
+    % Hit:                                            100.00%        100          -                                  12.2KB             39.0KB             39.0KB             255 ns 
     option.name=\/AHB_pkg::coverage::HWDATA_df_cg_bits#29 
     option.weight=1
     option.goal=100
@@ -5418,10 +5418,10 @@ Covergroup                                             Metric       Goal       B
         bin auto[0]                                        16          1          -    Covered                              na                 na                 na                 na 
         bin auto[1]                                        19          1          -    Covered                              na                 na                 na                 na 
  Covergroup instance \/AHB_pkg::coverage::HWDATA_df_cg_bits#30  
-                                                      100.00%        100          -    Covered                          12.2KB             39.0KB             39.0KB             285 ns 
-    covered/total bins:                                     2          2          -                                  12.2KB             39.0KB             39.0KB             285 ns 
-    missing/total bins:                                     0          2          -                                  12.2KB             39.0KB             39.0KB             285 ns 
-    % Hit:                                            100.00%        100          -                                  12.2KB             39.0KB             39.0KB             285 ns 
+                                                      100.00%        100          -    Covered                          12.2KB             39.0KB             39.0KB             255 ns 
+    covered/total bins:                                     2          2          -                                  12.2KB             39.0KB             39.0KB             255 ns 
+    missing/total bins:                                     0          2          -                                  12.2KB             39.0KB             39.0KB             255 ns 
+    % Hit:                                            100.00%        100          -                                  12.2KB             39.0KB             39.0KB             255 ns 
     option.name=\/AHB_pkg::coverage::HWDATA_df_cg_bits#30 
     option.weight=1
     option.goal=100
@@ -5445,10 +5445,10 @@ Covergroup                                             Metric       Goal       B
         bin auto[0]                                        22          1          -    Covered                              na                 na                 na                 na 
         bin auto[1]                                        13          1          -    Covered                              na                 na                 na                 na 
  Covergroup instance \/AHB_pkg::coverage::HWDATA_df_cg_bits#31  
-                                                      100.00%        100          -    Covered                          12.2KB             39.0KB             39.0KB             285 ns 
-    covered/total bins:                                     2          2          -                                  12.2KB             39.0KB             39.0KB             285 ns 
-    missing/total bins:                                     0          2          -                                  12.2KB             39.0KB             39.0KB             285 ns 
-    % Hit:                                            100.00%        100          -                                  12.2KB             39.0KB             39.0KB             285 ns 
+                                                      100.00%        100          -    Covered                          12.2KB             39.0KB             39.0KB             255 ns 
+    covered/total bins:                                     2          2          -                                  12.2KB             39.0KB             39.0KB             255 ns 
+    missing/total bins:                                     0          2          -                                  12.2KB             39.0KB             39.0KB             255 ns 
+    % Hit:                                            100.00%        100          -                                  12.2KB             39.0KB             39.0KB             255 ns 
     option.name=\/AHB_pkg::coverage::HWDATA_df_cg_bits#31 
     option.weight=1
     option.goal=100
@@ -5472,10 +5472,10 @@ Covergroup                                             Metric       Goal       B
         bin auto[0]                                        19          1          -    Covered                              na                 na                 na                 na 
         bin auto[1]                                        16          1          -    Covered                              na                 na                 na                 na 
  Covergroup instance \/AHB_pkg::coverage::HWDATA_df_cg_bits#32  
-                                                      100.00%        100          -    Covered                          12.2KB             39.0KB             39.0KB             285 ns 
-    covered/total bins:                                     2          2          -                                  12.2KB             39.0KB             39.0KB             285 ns 
-    missing/total bins:                                     0          2          -                                  12.2KB             39.0KB             39.0KB             285 ns 
-    % Hit:                                            100.00%        100          -                                  12.2KB             39.0KB             39.0KB             285 ns 
+                                                      100.00%        100          -    Covered                          12.2KB             39.0KB             39.0KB             255 ns 
+    covered/total bins:                                     2          2          -                                  12.2KB             39.0KB             39.0KB             255 ns 
+    missing/total bins:                                     0          2          -                                  12.2KB             39.0KB             39.0KB             255 ns 
+    % Hit:                                            100.00%        100          -                                  12.2KB             39.0KB             39.0KB             255 ns 
     option.name=\/AHB_pkg::coverage::HWDATA_df_cg_bits#32 
     option.weight=1
     option.goal=100
@@ -7915,10 +7915,10 @@ Covergroup                                             Metric       Goal       B
         option.auto_bin_max=64
         option.detect_overlap=0
         bin tr[0=>1=>0]                                     0          1          -    ZERO                                 na                 na                 na                 na 
- TYPE /AHB_pkg/HSEL_df_cg                              83.33%        100          -    Uncovered                         1.6KB              3.7KB              3.7KB             165 ns 
-    covered/total bins:                                     5          6          -                                   1.6KB              3.7KB              3.7KB             165 ns 
-    missing/total bins:                                     1          6          -                                   1.6KB              3.7KB              3.7KB             165 ns 
-    % Hit:                                             83.33%        100          -                                   1.6KB              3.7KB              3.7KB             165 ns 
+ TYPE /AHB_pkg/HSEL_df_cg                              83.33%        100          -    Uncovered                         1.6KB              3.6KB              3.6KB             165 ns 
+    covered/total bins:                                     5          6          -                                   1.6KB              3.6KB              3.6KB             165 ns 
+    missing/total bins:                                     1          6          -                                   1.6KB              3.6KB              3.6KB             165 ns 
+    % Hit:                                             83.33%        100          -                                   1.6KB              3.6KB              3.6KB             165 ns 
     type_option.weight=1
     type_option.goal=100
     type_option.comment=
@@ -7932,10 +7932,10 @@ Covergroup                                             Metric       Goal       B
         type_option.goal=100
         type_option.comment=
  Covergroup instance \/AHB_pkg::coverage::HSEL_df_cg_bits#1  
-                                                       50.00%        100          -    Uncovered                         1.6KB              3.7KB              3.7KB             165 ns 
-    covered/total bins:                                     1          2          -                                   1.6KB              3.7KB              3.7KB             165 ns 
-    missing/total bins:                                     1          2          -                                   1.6KB              3.7KB              3.7KB             165 ns 
-    % Hit:                                             50.00%        100          -                                   1.6KB              3.7KB              3.7KB             165 ns 
+                                                       50.00%        100          -    Uncovered                         1.6KB              3.6KB              3.6KB             165 ns 
+    covered/total bins:                                     1          2          -                                   1.6KB              3.6KB              3.6KB             165 ns 
+    missing/total bins:                                     1          2          -                                   1.6KB              3.6KB              3.6KB             165 ns 
+    % Hit:                                             50.00%        100          -                                   1.6KB              3.6KB              3.6KB             165 ns 
     option.name=\/AHB_pkg::coverage::HSEL_df_cg_bits#1 
     option.weight=1
     option.goal=100
@@ -7959,10 +7959,10 @@ Covergroup                                             Metric       Goal       B
         bin auto[0]                                        35          1          -    Covered                              na                 na                 na                 na 
         bin auto[1]                                         0          1          -    ZERO                                 na                 na                 na                 na 
  Covergroup instance \/AHB_pkg::coverage::HSEL_df_cg_bits#2  
-                                                      100.00%        100          -    Covered                           1.6KB              3.7KB              3.7KB             165 ns 
-    covered/total bins:                                     2          2          -                                   1.6KB              3.7KB              3.7KB             165 ns 
-    missing/total bins:                                     0          2          -                                   1.6KB              3.7KB              3.7KB             165 ns 
-    % Hit:                                            100.00%        100          -                                   1.6KB              3.7KB              3.7KB             165 ns 
+                                                      100.00%        100          -    Covered                           1.6KB              3.6KB              3.6KB             165 ns 
+    covered/total bins:                                     2          2          -                                   1.6KB              3.6KB              3.6KB             165 ns 
+    missing/total bins:                                     0          2          -                                   1.6KB              3.6KB              3.6KB             165 ns 
+    % Hit:                                            100.00%        100          -                                   1.6KB              3.6KB              3.6KB             165 ns 
     option.name=\/AHB_pkg::coverage::HSEL_df_cg_bits#2 
     option.weight=1
     option.goal=100
@@ -7986,10 +7986,10 @@ Covergroup                                             Metric       Goal       B
         bin auto[0]                                         1          1          -    Covered                              na                 na                 na                 na 
         bin auto[1]                                        34          1          -    Covered                              na                 na                 na                 na 
  Covergroup instance \/AHB_pkg::coverage::HSEL_df_cg_bits#3  
-                                                      100.00%        100          -    Covered                           1.6KB              3.7KB              3.7KB             165 ns 
-    covered/total bins:                                     2          2          -                                   1.6KB              3.7KB              3.7KB             165 ns 
-    missing/total bins:                                     0          2          -                                   1.6KB              3.7KB              3.7KB             165 ns 
-    % Hit:                                            100.00%        100          -                                   1.6KB              3.7KB              3.7KB             165 ns 
+                                                      100.00%        100          -    Covered                           1.6KB              3.6KB              3.6KB             165 ns 
+    covered/total bins:                                     2          2          -                                   1.6KB              3.6KB              3.6KB             165 ns 
+    missing/total bins:                                     0          2          -                                   1.6KB              3.6KB              3.6KB             165 ns 
+    % Hit:                                            100.00%        100          -                                   1.6KB              3.6KB              3.6KB             165 ns 
     option.name=\/AHB_pkg::coverage::HSEL_df_cg_bits#3 
     option.weight=1
     option.goal=100
@@ -8632,10 +8632,10 @@ Covergroup                                             Metric       Goal       B
         option.detect_overlap=0
         bin RESETING_WORKING_Transition                     1          1          -    Covered                              na                 na                 na                 na 
         bin WORKING_RESETING_Transition                     0          1          -    ZERO                                 na                 na                 na                 na 
- TYPE /AHB_pkg/coverage/WRITE_covgrp                   75.00%        100          -    Uncovered                         1.7KB              1.3KB              1.9KB               0 ns 
-    covered/total bins:                                     3          4          -                                   1.7KB              1.3KB              1.9KB               0 ns 
-    missing/total bins:                                     1          4          -                                   1.7KB              1.3KB              1.9KB               0 ns 
-    % Hit:                                             75.00%        100          -                                   1.7KB              1.3KB              1.9KB               0 ns 
+ TYPE /AHB_pkg/coverage/WRITE_covgrp                   75.00%        100          -    Uncovered                         1.7KB              1.4KB              1.9KB               0 ns 
+    covered/total bins:                                     3          4          -                                   1.7KB              1.4KB              1.9KB               0 ns 
+    missing/total bins:                                     1          4          -                                   1.7KB              1.4KB              1.9KB               0 ns 
+    % Hit:                                             75.00%        100          -                                   1.7KB              1.4KB              1.9KB               0 ns 
     type_option.weight=1
     type_option.goal=100
     type_option.comment=
@@ -8656,10 +8656,10 @@ Covergroup                                             Metric       Goal       B
         type_option.goal=100
         type_option.comment=
  Covergroup instance \/AHB_pkg::coverage::WRITE_covgrp  
-                                                       75.00%        100          -    Uncovered                         1.7KB              1.3KB              1.9KB               0 ns 
-    covered/total bins:                                     3          4          -                                   1.7KB              1.3KB              1.9KB               0 ns 
-    missing/total bins:                                     1          4          -                                   1.7KB              1.3KB              1.9KB               0 ns 
-    % Hit:                                             75.00%        100          -                                   1.7KB              1.3KB              1.9KB               0 ns 
+                                                       75.00%        100          -    Uncovered                         1.7KB              1.4KB              1.9KB               0 ns 
+    covered/total bins:                                     3          4          -                                   1.7KB              1.4KB              1.9KB               0 ns 
+    missing/total bins:                                     1          4          -                                   1.7KB              1.4KB              1.9KB               0 ns 
+    % Hit:                                             75.00%        100          -                                   1.7KB              1.4KB              1.9KB               0 ns 
     option.name=\/AHB_pkg::coverage::WRITE_covgrp 
     option.weight=1
     option.goal=100
@@ -8931,10 +8931,10 @@ Covergroup                                             Metric       Goal       B
         bin WORD_WORD8_Transition                           0          1          -    ZERO                                 na                 na                 na                 na 
         bin WORD_WORD16_Transition                          0          1          -    ZERO                                 na                 na                 na                 na 
         bin WORD_WORD32_Transition                          0          1          -    ZERO                                 na                 na                 na                 na 
- TYPE /AHB_pkg/coverage/SUBORDINATE_SELECT_covgrp      15.62%        100          -    Uncovered                         5.4KB              1.4KB              6.1KB               0 ns 
-    covered/total bins:                                     2         20          -                                   5.4KB              1.4KB              6.1KB               0 ns 
-    missing/total bins:                                    18         20          -                                   5.4KB              1.4KB              6.1KB               0 ns 
-    % Hit:                                             10.00%        100          -                                   5.4KB              1.4KB              6.1KB               0 ns 
+ TYPE /AHB_pkg/coverage/SUBORDINATE_SELECT_covgrp      15.62%        100          -    Uncovered                         5.4KB              1.5KB              6.1KB               0 ns 
+    covered/total bins:                                     2         20          -                                   5.4KB              1.5KB              6.1KB               0 ns 
+    missing/total bins:                                    18         20          -                                   5.4KB              1.5KB              6.1KB               0 ns 
+    % Hit:                                             10.00%        100          -                                   5.4KB              1.5KB              6.1KB               0 ns 
     type_option.weight=1
     type_option.goal=100
     type_option.comment=
@@ -8955,10 +8955,10 @@ Covergroup                                             Metric       Goal       B
         type_option.goal=100
         type_option.comment=
  Covergroup instance \/AHB_pkg::coverage::SUBORDINATE_SELECT_covgrp  
-                                                       15.62%        100          -    Uncovered                         5.4KB              1.4KB              6.1KB               0 ns 
-    covered/total bins:                                     2         20          -                                   5.4KB              1.4KB              6.1KB               0 ns 
-    missing/total bins:                                    18         20          -                                   5.4KB              1.4KB              6.1KB               0 ns 
-    % Hit:                                             10.00%        100          -                                   5.4KB              1.4KB              6.1KB               0 ns 
+                                                       15.62%        100          -    Uncovered                         5.4KB              1.5KB              6.1KB               0 ns 
+    covered/total bins:                                     2         20          -                                   5.4KB              1.5KB              6.1KB               0 ns 
+    missing/total bins:                                    18         20          -                                   5.4KB              1.5KB              6.1KB               0 ns 
+    % Hit:                                             10.00%        100          -                                   5.4KB              1.5KB              6.1KB               0 ns 
     option.name=\/AHB_pkg::coverage::SUBORDINATE_SELECT_covgrp 
     option.weight=1
     option.goal=100
@@ -9009,10 +9009,10 @@ Covergroup                                             Metric       Goal       B
         bin DEFAULT_SUBORDINATE2_Transition                 0          1          -    ZERO                                 na                 na                 na                 na 
         bin DEFAULT_SUBORDINATE3_Transition                 0          1          -    ZERO                                 na                 na                 na                 na 
         bin DEFAULT_DEFAULT_Transition                      0          1          -    ZERO                                 na                 na                 na                 na 
- TYPE /AHB_pkg/coverage/ADDR_covgrp                    33.33%        100          -    Uncovered                         1.1KB               912B              1.3KB             501 ns 
-    covered/total bins:                                     1          3          -                                   1.1KB               912B              1.3KB             501 ns 
-    missing/total bins:                                     2          3          -                                   1.1KB               912B              1.3KB             501 ns 
-    % Hit:                                             33.33%        100          -                                   1.1KB               912B              1.3KB             501 ns 
+ TYPE /AHB_pkg/coverage/ADDR_covgrp                    33.33%        100          -    Uncovered                         1.1KB               928B              1.3KB             501 ns 
+    covered/total bins:                                     1          3          -                                   1.1KB               928B              1.3KB             501 ns 
+    missing/total bins:                                     2          3          -                                   1.1KB               928B              1.3KB             501 ns 
+    % Hit:                                             33.33%        100          -                                   1.1KB               928B              1.3KB             501 ns 
     type_option.weight=1
     type_option.goal=100
     type_option.comment=

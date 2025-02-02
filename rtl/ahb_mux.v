@@ -9,6 +9,8 @@ module ahb_mux #(parameter ADDR_WIDTH, NO_OF_SUBORDINATES, BITS_FOR_SUBORDINATES
   input   wire        HSEL2,
   input   wire        HSEL3,
   input   wire        HSELd,
+  input   wire        HSEL_p_r,
+  input   wire        HSEL_p_wr,
 
   input   wire [DATA_WIDTH-1:0] HRDATA1,
   input   wire [1:0]            HRESP1,
@@ -26,19 +28,29 @@ module ahb_mux #(parameter ADDR_WIDTH, NO_OF_SUBORDINATES, BITS_FOR_SUBORDINATES
   input   wire [1:0]            HRESPd,
   input   wire                  HREADYd,
 
+  input   wire [DATA_WIDTH-1:0] HRDATA_p_r,
+  input   wire [1:0]            HRESP_p_r,
+  input   wire                  HREADY_p_r,
+
+  input   wire [DATA_WIDTH-1:0] HRDATA_p_wr,
+  input   wire [1:0]            HRESP_p_wr,
+  input   wire                  HREADY_p_wr,
+
   output  reg  [DATA_WIDTH-1:0] HRDATA,
   output  reg  [1:0]            HRESP,
   output  reg                   HREADY
 );
  /********************************************************/
-  localparam P_HSEL_bus1      = 4'b0001; //sel0 //1
-  localparam P_HSEL_bus2      = 4'b0010; //sel1 //2
-  localparam P_HSEL_bus3      = 4'b0100; //sel2 //4
-  localparam P_HSEL_busd      = 4'b1000;
-  localparam P_HSEL_bus_reset = 4'b0000;
+  localparam P_HSEL_bus1      = 6'b000001; //sel0 //1
+  localparam P_HSEL_bus2      = 6'b000010; //sel1 //2
+  localparam P_HSEL_bus3      = 6'b000100; //sel2 //4
+  localparam P_HSEL_busd      = 6'b001000;
+  localparam P_HSEL_bus_p_r   = 6'b010000;
+  localparam P_HSEL_bus_p_wr  = 6'b100000;
+  localparam P_HSEL_bus_reset = 6'b000000;
 
-  wire [3:0] HSEL_bus      = {HSELd,HSEL3,HSEL2,HSEL1};
-  reg  [3:0] HSEL_bus_reg_c, HSEL_bus_reg_d, HSEL_bus_reg_s;
+  wire [5:0] HSEL_bus      = {HSEL_p_wr,HSEL_p_r,HSELd,HSEL3,HSEL2,HSEL1};
+  reg  [5:0] HSEL_bus_reg_c, HSEL_bus_reg_d, HSEL_bus_reg_s;
 
 
   always @(*) begin //DATA_PHASE_SYNC
@@ -70,10 +82,12 @@ module ahb_mux #(parameter ADDR_WIDTH, NO_OF_SUBORDINATES, BITS_FOR_SUBORDINATES
 
   always @(*) begin
     case(HSEL_bus_reg_s) 
-      P_HSEL_bus1: HREADY = HREADY1; 
-      P_HSEL_bus2: HREADY = HREADY2;
-      P_HSEL_bus3: HREADY = HREADY3;
-      P_HSEL_busd: HREADY = HREADYd;
+      P_HSEL_bus1     : HREADY = HREADY1; 
+      P_HSEL_bus2     : HREADY = HREADY2;
+      P_HSEL_bus3     : HREADY = HREADY3;
+      P_HSEL_busd     : HREADY = HREADYd;
+      P_HSEL_bus_p_r  : HREADY = HREADY_p_r;
+      P_HSEL_bus_p_wr : HREADY = HREADY_p_wr;
       P_HSEL_bus_reset: HREADY = 1'b1;
       default: HREADY = 1'b1;
     endcase
@@ -81,10 +95,12 @@ module ahb_mux #(parameter ADDR_WIDTH, NO_OF_SUBORDINATES, BITS_FOR_SUBORDINATES
 
   always @(*) begin
     case(HSEL_bus_reg_s) 
-      P_HSEL_bus1: HRDATA = HRDATA1;
-      P_HSEL_bus2: HRDATA = HRDATA2;
-      P_HSEL_bus3: HRDATA = HRDATA3;
-      P_HSEL_busd: HRDATA = HRDATAd;
+      P_HSEL_bus1     : HRDATA = HRDATA1;
+      P_HSEL_bus2     : HRDATA = HRDATA2;
+      P_HSEL_bus3     : HRDATA = HRDATA3;
+      P_HSEL_busd     : HRDATA = HRDATAd;
+      P_HSEL_bus_p_r  : HRDATA = HRDATA_p_r;
+      P_HSEL_bus_p_wr : HRDATA = HRDATA_p_wr;
       P_HSEL_bus_reset: HRDATA = 0;
       default: HRDATA = 'h0;
     endcase
@@ -92,10 +108,12 @@ module ahb_mux #(parameter ADDR_WIDTH, NO_OF_SUBORDINATES, BITS_FOR_SUBORDINATES
 
   always @(*) begin
     case(HSEL_bus_reg_s) 
-      P_HSEL_bus1: HRESP = HRESP1;
-      P_HSEL_bus2: HRESP = HRESP2;
-      P_HSEL_bus3: HRESP = HRESP3;
-      P_HSEL_busd: HRESP = HRESPd;
+      P_HSEL_bus1     : HRESP = HRESP1;
+      P_HSEL_bus2     : HRESP = HRESP2;
+      P_HSEL_bus3     : HRESP = HRESP3;
+      P_HSEL_busd     : HRESP = HRESPd;
+      P_HSEL_bus_p_r  : HRESP = HRESP_p_r;
+      P_HSEL_bus_p_wr : HRESP = HRESP_p_wr;
       P_HSEL_bus_reset: HRESP = 2'b00;
       default: HRESP = 2'b01; 
     endcase

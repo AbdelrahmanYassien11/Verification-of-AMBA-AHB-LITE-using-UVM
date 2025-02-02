@@ -9,18 +9,14 @@ set test_names {WRITE_READ_WRAP16_test}
 
 foreach test_name $test_names {
 	vsim top_optimized -cover -voptargs=+acc -solvefaildebug=2 -debugDB +UVM_TESTNAME=$test_name
-	#add wave -position insertpoint sim:/top_test_uvm/DUT/*
-	#add wave -position insertpoint  \
-	#sim:/top_test_uvm/f_if/counter
-	#add wave -position insertpoint  \
-	#sim:/top_test_uvm/f_if/RECIEVING_PHASE_FLAG
-	add wave -position insertpoint sim:/top_test_uvm/DUT/subordinate2/*
-	add wave -position insertpoint sim:/top_test_uvm/DUT/subordinate1/*
-	add wave -position insertpoint sim:/top_test_uvm/DUT/subordinate3/*
-	add wave -position insertpoint sim:/top_test_uvm/DUT/mux1/*
-	add wave -position insertpoint sim:/top_test_uvm/DUT/mux1/HRESP
-	add wave -position insertpoint sim:/top_test_uvm/DUT/mux1/HSEL_bus_reg_s
 
+	add wave -position insertpoint sim:/top_test_uvm/DUT/subordinate1/*
+	add wave -position insertpoint sim:/top_test_uvm/DUT/subordinate2/*
+	add wave -position insertpoint sim:/top_test_uvm/DUT/subordinate3/*
+	add wave -position insertpoint sim:/top_test_uvm/DUT/subordinate_p_r/*
+	add wave -position insertpoint sim:/top_test_uvm/DUT/subordinate_p_wr/*
+
+	add wave -position insertpoint sim:/top_test_uvm/DUT/mux1/*
 
 	add wave /top_test_uvm/DUT/subordinate1/sva/idle_inputs_assert
 	add wave /top_test_uvm/DUT/subordinate1/sva/idle_ready_assert

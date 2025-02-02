@@ -253,7 +253,7 @@ class predictor extends uvm_subscriber #(sequence_item);
     if(undo_on) `uvm_info("PREDICTOR", "RE_WRITE_TASK ON", UVM_HIGH)
     // HRESP_expected = OKAY;
     // HREADY_expected = READY;
-    if(HSEL != 4) begin
+    if( HPROT[3:2] != 2'b00 || HSEL != 4 || (HSEL == 5 && HWRITE == 0 && HPROT[3:1] != 3'b001) || (HSEL == 6 && HPROT[3:1] != 3'b001)) begin
       case(HTRANS)
         IDLE, BUSY: begin
           //if(undo_on) $display("HTRANS : %0d", HTRANS);

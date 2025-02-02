@@ -20,10 +20,10 @@ module ahb_lite #(parameter BITS_FOR_SUBORDINATES = 5, ADDR_WIDTH = 32, DATA_WID
 );
    /*********************************************************/
    /*********************************************************/
-   wire [3:0]            HSEL_bus;
-   wire [DATA_WIDTH-1:0] HRDATA_bus [3:0]; 
-   wire [1:0]            HRESP_bus  [3:0]; 
-   wire                  HREADY_bus [3:0]; 
+   wire [5:0]            HSEL_bus;
+   wire [DATA_WIDTH-1:0] HRDATA_bus [5:0]; 
+   wire [1:0]            HRESP_bus  [5:0]; 
+   wire                  HREADY_bus [5:0]; 
    
    wire                  HREADYin;
 
@@ -36,7 +36,9 @@ module ahb_lite #(parameter BITS_FOR_SUBORDINATES = 5, ADDR_WIDTH = 32, DATA_WID
               .HSEL1(HSEL_bus[0]),
               .HSEL2(HSEL_bus[1]),
               .HSEL3(HSEL_bus[2]),
-              .HSELd(HSEL_bus[3])
+              .HSELd(HSEL_bus[3]),
+              .HSEL_p_r(HSEL_bus[4]),
+              .HSEL_p_wr(HSEL_bus[5])
               );
    /*********************************************************/ //MUX
    ahb_mux #(.NO_OF_SUBORDINATES(NO_OF_SUBORDINATES), .BITS_FOR_SUBORDINATES(BITS_FOR_SUBORDINATES), .ADDR_WIDTH(ADDR_WIDTH), .DATA_WIDTH(DATA_WIDTH)) mux1 
@@ -48,6 +50,8 @@ module ahb_lite #(parameter BITS_FOR_SUBORDINATES = 5, ADDR_WIDTH = 32, DATA_WID
           .HSEL2  (HSEL_bus[1]),
           .HSEL3  (HSEL_bus[2]),
           .HSELd  (HSEL_bus[3]),
+          .HSEL_p_r (HSEL_bus[4]),
+          .HSEL_p_wr(HSEL_bus[5]),
 
           .HRDATA (HRDATA),
           .HRESP  (HRESP),
@@ -67,7 +71,15 @@ module ahb_lite #(parameter BITS_FOR_SUBORDINATES = 5, ADDR_WIDTH = 32, DATA_WID
 
           .HRDATAd(HRDATA_bus[3]),
           .HRESPd ( HRESP_bus[3]),
-          .HREADYd(HREADY_bus[3])
+          .HREADYd(HREADY_bus[3]),
+
+          .HRDATA_p_r(HRDATA_bus[4]),
+          .HRESP_p_r ( HRESP_bus[4]),
+          .HREADY_p_r(HREADY_bus[4]),
+
+          .HRDATA_p_wr(HRDATA_bus[5]),
+          .HRESP_p_wr ( HRESP_bus[5]),
+          .HREADY_p_wr(HREADY_bus[5])
           );
 
    /*********************************************************/
@@ -146,6 +158,46 @@ module ahb_lite #(parameter BITS_FOR_SUBORDINATES = 5, ADDR_WIDTH = 32, DATA_WID
             .HRDATA          (HRDATA_bus[2]),
             .HRESP            (HRESP_bus[2]),
             .HREADYout       (HREADY_bus[2])
+            );
+
+   /*********************************************************/
+   ahb_subordinate_priveleged_r #(.ADDR_WIDTH(ADDR_WIDTH), .DATA_WIDTH(DATA_WIDTH), .ADDR_DEPTH(ADDR_DEPTH), .NO_OF_SUBORDINATES(NO_OF_SUBORDINATES), .BITS_FOR_SUBORDINATES(BITS_FOR_SUBORDINATES)) subordinate_p_r 
+            (
+            .HRESETn               (HRESETn),
+            .HCLK                     (HCLK),
+            .HSEL              (HSEL_bus[4]),
+            .HADDR                   (HADDR),
+            .HTRANS                 (HTRANS),
+            .HWRITE                 (HWRITE),
+            .HSIZE                   (HSIZE),
+            .HBURST                 (HBURST),
+            .HWDATA                 (HWDATA),
+            .HREADYin               (HREADY),
+            .HPROT                  (HPROT),
+
+            .HRDATA          (HRDATA_bus[4]),
+            .HRESP            (HRESP_bus[4]),
+            .HREADYout       (HREADY_bus[4])
+            );
+
+   /*********************************************************/
+   ahb_subordinate_priveleged_wr #(.ADDR_WIDTH(ADDR_WIDTH), .DATA_WIDTH(DATA_WIDTH), .ADDR_DEPTH(ADDR_DEPTH), .NO_OF_SUBORDINATES(NO_OF_SUBORDINATES), .BITS_FOR_SUBORDINATES(BITS_FOR_SUBORDINATES)) subordinate_p_wr 
+            (
+            .HRESETn               (HRESETn),
+            .HCLK                     (HCLK),
+            .HSEL              (HSEL_bus[5]),
+            .HADDR                   (HADDR),
+            .HTRANS                 (HTRANS),
+            .HWRITE                 (HWRITE),
+            .HSIZE                   (HSIZE),
+            .HBURST                 (HBURST),
+            .HWDATA                 (HWDATA),
+            .HREADYin               (HREADY),
+            .HPROT                  (HPROT),
+
+            .HRDATA          (HRDATA_bus[5]),
+            .HRESP            (HRESP_bus[5]),
+            .HREADYout       (HREADY_bus[5])
             );
 
 endmodule
