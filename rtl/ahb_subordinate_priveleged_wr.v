@@ -224,7 +224,7 @@ module ahb_subordinate_priveleged_wr
         wrap_counter_reg <= 0;
       end 
       else begin
-        if((HPROT[3:2] == 2'b00 && HWRITE) || (HPROT[3:1] == 3'b001 && ~HWRITE)) begin
+        if(HPROT[3:1] == 3'b001 && HWRITE) begin
           case (HTRANS)
             2'b10: begin
               if(HSEL && HREADYin) begin
@@ -306,7 +306,7 @@ module ahb_subordinate_priveleged_wr
         burst_counter_reg <= 0;
       end 
       else begin
-        if((HPROT[3:2] == 2'b00 && HWRITE) || (HPROT[3:1] == 3'b001 && ~HWRITE)) begin
+        if(HPROT[3:1] == 3'b001 && HWRITE) begin
           case (HTRANS)
             2'b10: begin
               if(HSEL && HREADYin) begin
@@ -648,7 +648,7 @@ module ahb_subordinate_priveleged_wr
       case(state)
 
         IDLE, BUSY: begin
-          if (HSEL_reg_c && HREADYin && HPROT[3:2] == 2'b00) begin
+          if (HSEL_reg_c && HREADYin && HPROT[3:1] == 3'b001) begin
 
             case (HTRANS_reg_c) 
               2'b00: begin 
@@ -659,10 +659,10 @@ module ahb_subordinate_priveleged_wr
               end
 
               2'b10: begin 
-                if (HWRITE_reg_c && HPROT[3:1] == 4'b001) begin 
+                if (HWRITE_reg_c) begin 
                   next_state = WRITE; 
                 end 
-                else if(~HWRITE_reg_c && HPROT[3:2] == 00) begin 
+                else if(~HWRITE_reg_c) begin 
                   next_state = READ; 
                 end
                 else begin 
@@ -680,7 +680,7 @@ module ahb_subordinate_priveleged_wr
             endcase //HTRANS_reg_c
 
           end
-          else if(HSEL_reg_c && (~HREADYin || HPROT[3:2] != 2'b00))begin
+          else if(HSEL_reg_c && (~HREADYin || HPROT[3:1] != 3'b001))begin
             if(next_state == ERROR) begin
               case (HTRANS_reg_c)
                 2'b00: next_state = IDLE;
@@ -698,7 +698,7 @@ module ahb_subordinate_priveleged_wr
         end
 
         WRITE, READ : begin
-          if (HSEL_reg_c && HREADYin && HPROT[3:2] == 2'b00) begin
+          if (HSEL_reg_c && HREADYin && HPROT[3:1] == 3'b001) begin
 
             case (HTRANS_reg_c) 
               2'b00: begin 
@@ -713,7 +713,7 @@ module ahb_subordinate_priveleged_wr
                   if (HWRITE_reg_c) begin 
                     next_state = WRITE; 
                   end 
-                  else if(~HWRITE_reg_c && HPROT[1] == 1'b1) begin 
+                  else if(~HWRITE_reg_c) begin 
                     next_state = READ; 
                   end
                   else begin 
@@ -732,7 +732,7 @@ module ahb_subordinate_priveleged_wr
 
           end
 
-          else if(HSEL_reg_c && (~HREADYin || HPROT[3:2] != 2'b00))begin
+          else if(HSEL_reg_c && (~HREADYin || HPROT[3:1] != 3'b001))begin
             case (HTRANS_reg_c)
               2'b00: begin
                   next_state = IDLE;
