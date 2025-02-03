@@ -60,10 +60,12 @@ bit ERROR_ON_EXECUTE_IDLE;
                           RESET_op == WORKING  -> HRESETn == 1;
       }
 
-      constraint HADDR_SEL_c { /*HRESETn == 1  ->*/ HADDR[ADDR_WIDTH-1:ADDR_WIDTH-BITS_FOR_SUBORDINATES] dist {1:/20, 2:/20, 3:/20, 4:/10, 5:/15, 6:/15};
+      // constraint HADDR_SEL_c { /*HRESETn == 1  ->*/ HADDR[ADDR_WIDTH-1:ADDR_WIDTH-BITS_FOR_SUBORDINATES] dist {1:/20, 2:/20, 3:/20, 4:/10, 5:/15, 6:/15};
+      //                          // HRESETn == 0  -> HADDR[ADDR_WIDTH-1:ADDR_WIDTH-BITS_FOR_SUBORDINATES] == 3'b0;
+      // }
+      constraint HADDR_SEL_c { /*HRESETn == 1  ->*/ HADDR[ADDR_WIDTH-1:ADDR_WIDTH-BITS_FOR_SUBORDINATES] dist {1:/30, 2:/30, 3:/30, 4:/10};
                                // HRESETn == 0  -> HADDR[ADDR_WIDTH-1:ADDR_WIDTH-BITS_FOR_SUBORDINATES] == 3'b0;
       }
-
       constraint HADDR_c { /*HRESETn == 1  ->*/ HADDR[ADDR_WIDTH-BITS_FOR_SUBORDINATES-1:0] dist {0:=1, (ADDR_DEPTH-1):=1, ['h00000001 : (ADDR_DEPTH-2)]:=1};
                            // HRESETn == 0  -> HADDR[ADDR_WIDTH-BITS_FOR_SUBORDINATES-1:0] == 29'b0;
       }
