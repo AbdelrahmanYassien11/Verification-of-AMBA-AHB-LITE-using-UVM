@@ -83,7 +83,7 @@ module ahb_default_subordinate #(parameter ADDR_WIDTH, DATA_WIDTH)
   end
 
   // always block to manage DATA_phase signals
-  always@( HSEL_reg_d or negedge HRESETn) begin //output logic
+  always@( HSEL_reg_d ) begin //output logic
     case(state)
 
       IDLE: begin

@@ -61,6 +61,10 @@ class WRITE_READ_WRAP16_sequence extends base_sequence;
     IDLE_sequence_h.HADDR_reserve = seq_item.HADDR;
     seq_item.SIZE_op.rand_mode(0);
     seq_item.HADDR.rand_mode(0);
+    seq_item.HPROT.rand_mode(0);
+
+    // add_burst_constraints(IDLE_sequence_h);
+
 
     do_burst(WRAP16, WRITE, SEQ);
 

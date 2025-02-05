@@ -1,5 +1,5 @@
 /******************************************************************
- * File: base_sequence.sv
+ * File: base_sequence.svh
  * Author: Abdelrahman Mohamad Yassien
  * Email: Abdelrahman.Yassien11@gmail.com
  * Date: 25/08/2024
@@ -63,6 +63,14 @@ class base_sequence extends uvm_sequence #(sequence_item);
       end
     end
   endtask : ccheck_response
+
+
+  // task add_burst_constraints(input IDLE_sequence X);
+  //   X.HADDR_reserve = seq_item.HADDR;
+  //   seq_item.SIZE_op.rand_mode(0);
+  //   seq_item.HADDR.rand_mode(0);
+  //   seq_item.HPROT.rand_mode(0);
+  // endtask : add_burst_constraints
 
   task do_burst(input HBURST_e burst_type, input HWRITE_e write_type, input HTRANS_e trans_type);
     repeat(determine_burst_counter(burst_type, trans_type)) begin

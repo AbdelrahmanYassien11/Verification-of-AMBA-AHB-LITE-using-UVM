@@ -144,6 +144,7 @@ package AHB_pkg;
 	`include "runall_sequence.svh"
 	`include "test_sequence.svh"
 	`include "ADDRESS_ERROR_INJECTION_sequence.svh"
+	`include "PRIVELEGE_ERROR_INJECTION_sequence.svh"
 
 
 	`include "driver.svh"
@@ -204,6 +205,7 @@ package AHB_pkg;
 	`include "runall_test.svh"
 	`include "test_test.svh"
 	`include "ADDRESS_ERROR_INJECTION_test.svh"
+	`include "PRIVELEGE_ERROR_INJECTION_test.svh"
 	`include "runall_test_arb.svh"
 
 endpackage : AHB_pkg

@@ -60,6 +60,7 @@ class READ_WRAP4_sequence extends base_sequence;
     IDLE_sequence_h.HADDR_reserve = seq_item.HADDR;
     seq_item.SIZE_op.rand_mode(0);
     seq_item.HADDR.rand_mode(0);
+    seq_item.HPROT.rand_mode(0);
 
     do_burst(WRAP4, READ, SEQ);
 

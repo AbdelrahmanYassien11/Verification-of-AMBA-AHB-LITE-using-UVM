@@ -377,7 +377,7 @@ module ahb_subordinate_priveleged_wr
 
 
   //output logic sequential always block
-  always @(burst_counter_reg or wrap_counter_reg or HWRITE_reg_d or HADDR_reg_d or HWDATA or HSIZE_reg_d or HTRANS_reg_d or HBURST_reg_d or HSEL_reg_d or negedge HRESETn) begin 
+  always @(posedge HCLK/*burst_counter_reg or wrap_counter_reg or HWRITE_reg_d or HADDR_reg_d or HWDATA or HSIZE_reg_d or HTRANS_reg_d or HBURST_reg_d or HSEL_reg_d */or negedge HRESETn) begin 
     if(~HRESETn) begin
         HRDATA      <= 0;
         HRESP       <= 0;
@@ -548,8 +548,8 @@ module ahb_subordinate_priveleged_wr
     always@(posedge HCLK or negedge HRESETn) begin
       if (~HRESETn) begin
         //state             <= IDLE;
-        burst_counter_reg <= 0;
-        wrap_counter_reg  <= 0;
+        // burst_counter_reg <= 0;
+        // wrap_counter_reg  <= 0;
 
         // HADDR_reg_c       <= 0;
         // HBURST_reg_c      <= 0;
@@ -587,12 +587,6 @@ module ahb_subordinate_priveleged_wr
       state <= next_state;
     end
   end
-
-
-  // always@(*) begin
-  //   burst_counter = burst_counter_reg;
-  //   wrap_counter  = wrap_counter_reg;
-  // end
 
     assign HBURST_reg_c      = HBURST;
     assign HTRANS_reg_c      = HTRANS;
@@ -637,7 +631,7 @@ module ahb_subordinate_priveleged_wr
 
         HREADYin_reg_d   <= HREADYin_reg_c;
       end 
-   end
+  end
 
   //next_state logic combinational always block
   always@(*) begin
@@ -751,7 +745,7 @@ module ahb_subordinate_priveleged_wr
             next_state = IDLE;
           end
           else begin
-            next_state = next_state;
+            next_state = state;
           end
         end
       endcase

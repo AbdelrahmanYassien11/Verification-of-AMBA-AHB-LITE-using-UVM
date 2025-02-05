@@ -59,11 +59,12 @@ class WRITE_READ_INCR_sequence extends base_sequence;
     // Randomize the sequence item
     do_burst(INCR, WRITE, NONSEQ);
 
-    IDLE_sequence_h.HADDR_reserve = seq_item.HADDR;
     seq_item.INCR_CONTROL.rand_mode(0);
+    IDLE_sequence_h.HADDR_reserve = seq_item.HADDR;
     seq_item.SIZE_op.rand_mode(0);
     seq_item.HADDR.rand_mode(0);
-    
+    seq_item.HPROT.rand_mode(0);
+
     do_burst(INCR, WRITE, SEQ);
 
     IDLE_sequence_h.start(m_sequencer, this);

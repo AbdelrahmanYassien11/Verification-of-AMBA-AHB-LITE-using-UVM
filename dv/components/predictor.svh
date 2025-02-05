@@ -269,7 +269,7 @@ class predictor extends uvm_subscriber #(sequence_item);
     // HRESP_expected = OKAY;
     // HREADY_expected = READY;
     // if( HPROT[3:2] == 2'b00 &&    ((HSEL == 5 && HWRITE == 0 && HPROT[3:1] == 3'b001) || (HSEL == 6 && HPROT[3:1] == 3'b001))) begin
-    if(HPROT[3:2] == 2'b00 && ((HSEL == 1 || HSEL == 2 || HSEL == 3) || (HSEL == 5 && ((HWRITE == 0 && HPROT[1] == 1) || HWRITE)) || (HSEL == 6 && HPROT[1] == 1))) begin
+    if(HPROT[3:2] == 2'b00 && ((HSEL == 1 || HSEL == 2 || HSEL == 3) || (HSEL == 5 && ((HWRITE && HPROT[1] == 1) || ~HWRITE)) || (HSEL == 6 && HPROT[1] == 1))) begin
       case(HTRANS)
         IDLE, BUSY: begin
           //if(undo_on) $display("HTRANS : %0d", HTRANS);
@@ -858,7 +858,7 @@ class predictor extends uvm_subscriber #(sequence_item);
   task read_AHB();
     // HRESP_expected = OKAY;
     // HREADY_expected = READY;
-    if(HSEL != 4) begin
+    if(HPROT[3:2] == 2'b00 && ((HSEL == 1 || HSEL == 2 || HSEL == 3) || (HSEL == 5 && ((HWRITE && HPROT[1] == 1) || ~HWRITE)) || (HSEL == 6 && HPROT[1] == 1))) begin
       case(HTRANS)
 
         IDLE, BUSY: begin
@@ -995,10 +995,12 @@ class predictor extends uvm_subscriber #(sequence_item);
         end
       endcase // HTRANS
     end
+    else if(HSEL == 4) begin
+        HRESP_expected = ERROR; HREADY_expected = READY; HRDATA_expectedd = 0;
+    end
     else begin
       HRESP_expected   = ERROR;
-      HREADY_expected  = READY;
-      HRDATA_expectedd = 0;
+      HREADY_expected  = NOT_READY;
     end
   endtask : read_AHB
 

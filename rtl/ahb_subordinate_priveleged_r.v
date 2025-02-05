@@ -224,7 +224,7 @@ module ahb_subordinate_priveleged_r
         wrap_counter_reg <= 0;
       end 
       else begin
-        if((HPROT[3:2] == 2'b00 && HWRITE) || (HPROT[3:1] == 3'b001 && ~HWRITE)) begin
+        if((HPROT[3:1] == 3'b001 && HWRITE) || (HPROT[3:2] == 2'b00 && ~HWRITE)) begin
           case (HTRANS)
             2'b10: begin
               if(HSEL && HREADYin) begin
@@ -306,7 +306,7 @@ module ahb_subordinate_priveleged_r
         burst_counter_reg <= 0;
       end 
       else begin
-        if((HPROT[3:2] == 2'b00 && HWRITE) || (HPROT[3:1] == 3'b001 && ~HWRITE)) begin
+        if((HPROT[3:1] == 3'b001 && HWRITE) || (HPROT[3:2] == 2'b00 && ~HWRITE)) begin
           case (HTRANS)
             2'b10: begin
               if(HSEL && HREADYin) begin
@@ -377,7 +377,7 @@ module ahb_subordinate_priveleged_r
 
 
   //output logic sequential always block
-  always @(burst_counter_reg or wrap_counter_reg or HWRITE_reg_d or HADDR_reg_d or HWDATA or HSIZE_reg_d or HTRANS_reg_d or HBURST_reg_d or HSEL_reg_d or negedge HRESETn) begin 
+  always @(posedge HCLK/*burst_counter_reg or wrap_counter_reg or HWRITE_reg_d or HADDR_reg_d or HWDATA or HSIZE_reg_d or HTRANS_reg_d or HBURST_reg_d or HSEL_reg_d */or negedge HRESETn) begin 
     if(~HRESETn) begin
         HRDATA      <= 0;
         HRESP       <= 0;
@@ -548,8 +548,8 @@ module ahb_subordinate_priveleged_r
     always@(posedge HCLK or negedge HRESETn) begin
       if (~HRESETn) begin
         //state             <= IDLE;
-        burst_counter_reg <= 0;
-        wrap_counter_reg  <= 0;
+        // burst_counter_reg <= 0;
+        // wrap_counter_reg  <= 0;
 
         // HADDR_reg_c       <= 0;
         // HBURST_reg_c      <= 0;
@@ -659,10 +659,10 @@ module ahb_subordinate_priveleged_r
               end
 
               2'b10: begin 
-                if (HWRITE_reg_c && HPROT[3:1] == 4'b001) begin 
+                if (HWRITE_reg_c && HPROT[3:1] == 3'b001) begin 
                   next_state = WRITE; 
                 end 
-                else if(~HWRITE_reg_c && HPROT[3:2] == 00) begin 
+                else if(~HWRITE_reg_c && HPROT[3:2] == 2'b00) begin 
                   next_state = READ; 
                 end
                 else begin 
@@ -710,10 +710,10 @@ module ahb_subordinate_priveleged_r
 
               2'b11, 2'b10: begin 
                 if((HADDR_reg_c + burst_counter < ADDR_DEPTH) & ($signed(HADDR_reg_c + wrap_counter) < ADDR_DEPTH) /*& ((HADDR_reg_c + wrap_counter) > 0)*/) begin 
-                  if (HWRITE_reg_c) begin 
+                  if (HWRITE_reg_c && HPROT [1] == 1'b1) begin 
                     next_state = WRITE; 
                   end 
-                  else if(~HWRITE_reg_c && HPROT[1] == 1'b1) begin 
+                  else if(~HWRITE_reg_c) begin 
                     next_state = READ; 
                   end
                   else begin 
@@ -750,7 +750,7 @@ module ahb_subordinate_priveleged_r
             next_state = IDLE;
           end
           else begin
-            next_state = next_state;
+            next_state = state;
           end
         end
       endcase
