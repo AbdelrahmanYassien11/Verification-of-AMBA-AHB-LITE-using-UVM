@@ -161,7 +161,7 @@ event dataPhase_event, samplingPhase_event;
 
 		pipeline3.do_copy(pipeline2);
 		//$display("[INTERFACE] PIPELINE3: %s", pipeline3.input2string);
-		@(negedge clk);
+		@(posedge clk);
 		if(~(pipeline3.HRESETn && pipeline2.HRESETn && pipeline1.HRESETn)) begin
 			@(reset_finished);
 		end

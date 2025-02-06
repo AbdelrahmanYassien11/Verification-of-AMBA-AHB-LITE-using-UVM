@@ -219,7 +219,7 @@ module ahb_subordinate
     `endif
 
     //wrap counter always block
-    always @(posedge HCLK or negedge HRESETn) begin        
+    always @(negedge HCLK or negedge HRESETn) begin        
       if(~HRESETn) begin
         wrap_counter_reg <= 0;
       end 
@@ -301,7 +301,7 @@ module ahb_subordinate
     end
 
     //burst counter always block
-    always @(posedge HCLK or negedge HRESETn) begin        
+    always @(negedge HCLK or negedge HRESETn) begin        
       if(~HRESETn) begin
         burst_counter_reg <= 0;
       end 
@@ -377,7 +377,7 @@ module ahb_subordinate
 
 
   //output logic sequential always block
-  always @(posedge HCLK/*burst_counter_reg or wrap_counter_reg or HWRITE_reg_d or HADDR_reg_d or HWDATA or HSIZE_reg_d or HTRANS_reg_d or HBURST_reg_d or HSEL_reg_d*/ or negedge HRESETn) begin 
+  always @(negedge HCLK/*burst_counter_reg or wrap_counter_reg or HWRITE_reg_d or HADDR_reg_d or HWDATA or HSIZE_reg_d or HTRANS_reg_d or HBURST_reg_d or HSEL_reg_d */or negedge HRESETn) begin 
     if(~HRESETn) begin
         HRDATA      <= 0;
         HRESP       <= 0;
@@ -418,6 +418,7 @@ module ahb_subordinate
                 if((HADDR_reg_d + burst_counter < ADDR_DEPTH) & ($signed(HADDR_reg_d + wrap_counter) < ADDR_DEPTH)) begin
                   case(HBURST_reg_d)
                     INCR, INCR4, INCR8, INCR16: begin
+                      $display("ummmmmm %0t",$time());
                       case(HSIZE_reg_d) 
                         `HSIZE_conditional_WRITE_def(burst_counter)
                         default         : begin HRESP <= 2'b01; HREADYout <= 0; end
@@ -545,7 +546,7 @@ module ahb_subordinate
 
 
     //always block to manage CONTROL_phase signals
-    always@(posedge HCLK or negedge HRESETn) begin
+    always@(negedge HCLK or negedge HRESETn) begin
       if (~HRESETn) begin
         //state             <= IDLE;
         //burst_counter_reg <= 0;
@@ -606,7 +607,7 @@ module ahb_subordinate
 
 
     // always block to manage DATA_phase signals
-    always @ (posedge HCLK or negedge HRESETn) begin
+    always @ (negedge HCLK or negedge HRESETn) begin
       if (~HRESETn) begin
         HADDR_reg_d       <= 0;
         HTRANS_reg_d      <= 0;
@@ -751,7 +752,7 @@ module ahb_subordinate
             next_state = IDLE;
           end
           else begin
-            next_state = state;
+            next_state = ERROR;
           end
         end
       endcase

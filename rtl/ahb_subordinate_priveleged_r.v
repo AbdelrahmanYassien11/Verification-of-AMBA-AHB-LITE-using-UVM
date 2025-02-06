@@ -377,7 +377,7 @@ module ahb_subordinate_priveleged_r
 
 
   //output logic sequential always block
-  always @(posedge HCLK/*burst_counter_reg or wrap_counter_reg or HWRITE_reg_d or HADDR_reg_d or HWDATA or HSIZE_reg_d or HTRANS_reg_d or HBURST_reg_d or HSEL_reg_d */or negedge HRESETn) begin 
+  always @( burst_counter_reg or wrap_counter_reg or HWRITE_reg_d or HADDR_reg_d or HWDATA or HSIZE_reg_d or HTRANS_reg_d or HBURST_reg_d or HSEL_reg_d or negedge HRESETn) begin 
     if(~HRESETn) begin
         HRDATA      <= 0;
         HRESP       <= 0;
@@ -693,7 +693,7 @@ module ahb_subordinate_priveleged_r
           end
 
           else begin
-            next_state = IDLE;
+            next_state = state;
           end
         end
 
@@ -741,7 +741,7 @@ module ahb_subordinate_priveleged_r
           end
 
           else begin
-            next_state = IDLE;
+            next_state = state;
           end
         end
 
@@ -750,7 +750,7 @@ module ahb_subordinate_priveleged_r
             next_state = IDLE;
           end
           else begin
-            next_state = state;
+            next_state = ERROR;
           end
         end
       endcase
