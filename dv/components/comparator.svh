@@ -98,7 +98,7 @@ class comparator extends uvm_component;
       fifo_actual_outputs.get(seq_item_actual);
       fifo_expected_outputs_cleared.try_get(seq_item_expected_reset);
       `uvm_info("COMPARATOR", {"ACTUAL_SEQ_ITEM RECEIVED: ", 
-                seq_item_actual.output2string()}, UVM_HIGH)
+                seq_item_actual.convert2string()}, UVM_HIGH)
       // Compare the actual and expected sequence items
       if (seq_item_actual.do_compare(seq_item_expected, comparer_h)) begin
         `uvm_info("SCOREBOARD", "PASS", UVM_HIGH)

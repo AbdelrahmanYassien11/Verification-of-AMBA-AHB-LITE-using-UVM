@@ -80,11 +80,10 @@ class outputs_monitor extends uvm_monitor;
 
   // Virtual function to write data to the monitor
   virtual function void write_to_monitor (sequence_item outputs_req);
-
     // Write the sequence item to the analysis port
     tlm_analysis_port.write(outputs_req);
     //while(i < 5) begin
-      `uvm_info(get_full_name(),"OUTPUTS SENT TO THE COMPARATOR",UVM_LOW)
+    `uvm_info(get_full_name(),{"OUTPUTS SENT TO THE COMPARATOR", outputs_req.output2string()},UVM_LOW)
     //   i++;
     // end
   endfunction : write_to_monitor

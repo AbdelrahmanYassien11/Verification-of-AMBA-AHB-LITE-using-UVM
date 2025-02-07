@@ -19,6 +19,12 @@ interface inf (input bit clk);
 
 import AHB_pkg::*;                  // Import AHB package for AHB constants
 
+	clocking driving.cb @(posedge clk);
+	  default input #1ps output #2ns;
+	  input  HRESP, HRDATA, HREADY;
+	  output HRESETn, HADDR, HTRANS, HWRITE, HBURST, HSIZE, HPROT, HWDATA;
+	endclocking
+
 // AHB lite Control Signals
 logic   HRESETn;    // reset (active low)
 
@@ -62,7 +68,7 @@ bit OUTPUTS_PHASE_FLAG_2;
 //bit OUTPUTS_PHASE_FLAG_3;
 
 // bit last_test;
-int atlas;
+// int atlas;
 
 // Monitor handles
 inputs_monitor inputs_monitor_h;    // Handle to input monitor
@@ -80,7 +86,7 @@ HSIZE_e      SIZE_op;
 int counter;
 
 sequence_item previous_seq_item, seq_item;
-sequence_item pipeline1, pipeline2, pipeline3;
+sequence_item pipeline1, pipeline2, pipeline3, atlas;
 	
 sequence_item global_req;
 
@@ -160,15 +166,18 @@ event dataPhase_event, samplingPhase_event;
 		@(samplingPhase_event);
 
 		pipeline3.do_copy(pipeline2);
-		//$display("[INTERFACE] PIPELINE3: %s", pipeline3.input2string);
-		@(posedge clk);
+		$display("[INTERFACE] PIPELINE3: %s", pipeline3.input2string);
+		@(negedge clk);
 		if(~(pipeline3.HRESETn && pipeline2.HRESETn && pipeline1.HRESETn)) begin
 			@(reset_finished);
 		end
+		// atlas.do_copy(pipeline3);
+		//@(negedge clk);
 		// wait(pipeline1.HRESETn && pipeline2.HRESETn && pipeline3.HRESETn);
 		pipeline3.HRESP  = HRESP;
 		pipeline3.HRDATA = HRDATA;
 		pipeline3.HREADY = HREADY;
+		//atlas = pipeline3.clone_me();
 		driver_h.end_transfer(pipeline3);
 		send_outputs(pipeline3);
 	end
@@ -496,8 +505,8 @@ event dataPhase_event, samplingPhase_event;
     function void send_inputs( sequence_item input_req);
 
     	previous_seq_item.do_copy(input_req);
-    	atlas = atlas +1;
-		$display("atlas %0d  %0t",atlas, $realtime());
+  //   	atlas = atlas +1;
+		// $display("atlas %0d  %0t",atlas, $realtime());
 
         inputs_monitor_h.write_to_monitor(input_req);
     endfunction : send_inputs
@@ -519,6 +528,7 @@ event dataPhase_event, samplingPhase_event;
         pipeline2 = sequence_item::type_id::create("pipeline2");
         pipeline3 = sequence_item::type_id::create("pipeline3");
         global_req = sequence_item::type_id::create("global_req");
+        atlas = sequence_item::type_id::create("atlas");
     endfunction
 
     initial begin
