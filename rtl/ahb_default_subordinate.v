@@ -73,7 +73,7 @@ module ahb_default_subordinate #(parameter ADDR_WIDTH, DATA_WIDTH)
     end
   end  
 
-  always@(negedge HCLK or negedge HRESETn) begin
+  always@(posedge HCLK or negedge HRESETn) begin
     if(~HRESETn) begin
       state <= IDLE;
     end
@@ -83,7 +83,7 @@ module ahb_default_subordinate #(parameter ADDR_WIDTH, DATA_WIDTH)
   end
 
   // always block to manage DATA_phase signals
-  always@( HSEL_reg_d ) begin //output logic
+  always@(negedge HCLK or negedge HRESETn) begin //output logic
     case(state)
 
       IDLE: begin

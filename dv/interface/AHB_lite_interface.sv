@@ -19,11 +19,11 @@ interface inf (input bit clk);
 
 import AHB_pkg::*;                  // Import AHB package for AHB constants
 
-	clocking driving.cb @(posedge clk);
-	  default input #1ps output #2ns;
-	  input  HRESP, HRDATA, HREADY;
-	  output HRESETn, HADDR, HTRANS, HWRITE, HBURST, HSIZE, HPROT, HWDATA;
-	endclocking
+	// clocking driving.cb @(posedge clk);
+	//   default input #1ps output #2ns;
+	//   input  HRESP, HRDATA, HREADY;
+	//   output HRESETn, HADDR, HTRANS, HWRITE, HBURST, HSIZE, HPROT, HWDATA;
+	// endclocking
 
 // AHB lite Control Signals
 logic   HRESETn;    // reset (active low)
@@ -112,10 +112,6 @@ event dataPhase_event, samplingPhase_event;
 
     	lock1();
 
-
-
-
-
     	-> dataPhase_event;
 
     endtask : generic_reciever
@@ -154,7 +150,7 @@ event dataPhase_event, samplingPhase_event;
 
 	task dataPhase(sequence_item dataPhase_req);
 		if(dataPhase_req.HWRITE)begin
-			HWDATA <= dataPhase_req.HWDATA;
+			HWDATA = dataPhase_req.HWDATA;
 		end
 		while ((~HREADY) && (HRESP == OKAY)) begin
 			$display("ANNA2 %0t",$time());
@@ -168,18 +164,19 @@ event dataPhase_event, samplingPhase_event;
 		pipeline3.do_copy(pipeline2);
 		$display("[INTERFACE] PIPELINE3: %s", pipeline3.input2string);
 		@(negedge clk);
+		#1ns;
 		if(~(pipeline3.HRESETn && pipeline2.HRESETn && pipeline1.HRESETn)) begin
 			@(reset_finished);
 		end
-		// atlas.do_copy(pipeline3);
+		atlas.do_copy(pipeline3);
 		//@(negedge clk);
 		// wait(pipeline1.HRESETn && pipeline2.HRESETn && pipeline3.HRESETn);
-		pipeline3.HRESP  = HRESP;
-		pipeline3.HRDATA = HRDATA;
-		pipeline3.HREADY = HREADY;
+		atlas.HRESP  = HRESP;
+		atlas.HRDATA = HRDATA;
+		atlas.HREADY = HREADY;
 		//atlas = pipeline3.clone_me();
-		driver_h.end_transfer(pipeline3);
-		send_outputs(pipeline3);
+		driver_h.end_transfer(atlas);
+		send_outputs(atlas);
 	end
 
 	function void lock1();

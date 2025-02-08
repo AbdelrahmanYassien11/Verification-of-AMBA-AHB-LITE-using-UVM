@@ -62,6 +62,15 @@ module ahb_mux #(parameter ADDR_WIDTH, NO_OF_SUBORDINATES, BITS_FOR_SUBORDINATES
     end
   end  
 
+  // always @(negedge HRESETn or negedge HCLK) begin //DATA_PHASE_SYNC
+  //   if(~HRESETn) begin
+  //      HSEL_bus_reg_d <= 0;
+  //   end
+  //   else begin
+  //     HSEL_bus_reg_d <= HSEL_bus_reg_c;
+  //   end
+  // end  
+
   always @(*) begin //DATA_PHASE_SYNC
     if(~HRESETn) begin
        HSEL_bus_reg_d = 0;

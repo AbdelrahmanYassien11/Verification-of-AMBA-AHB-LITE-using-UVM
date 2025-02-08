@@ -377,11 +377,11 @@ module ahb_subordinate
 
 
   //output logic sequential always block
-  always @(posedge HCLK/*burst_counter_reg or wrap_counter_reg or HWRITE_reg_d or HADDR_reg_d or HWDATA or HSIZE_reg_d or HTRANS_reg_d or HBURST_reg_d or HSEL_reg_d */or negedge HRESETn) begin 
+  always @(negedge HCLK/*burst_counter_reg or wrap_counter_reg or HWRITE_reg_d or HADDR_reg_d or HWDATA or HSIZE_reg_d or HTRANS_reg_d or HBURST_reg_d or HSEL_reg_d*/ or negedge HRESETn) begin 
     if(~HRESETn) begin
-        HRDATA      <= 0;
-        HRESP       <= 0;
-        HREADYout   <= 1;
+      HRDATA      <= 0;
+      HRESP       <= 0;
+      HREADYout   <= 1;
     end
     else begin
       case(state)
@@ -580,7 +580,7 @@ module ahb_subordinate
       end
     end
 
-  always@(negedge HCLK or negedge HRESETn) begin
+  always@(posedge HCLK or negedge HRESETn) begin
     if(~HRESETn) begin
       state <= IDLE;
     end
