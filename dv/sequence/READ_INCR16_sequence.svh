@@ -12,7 +12,7 @@
  * Copyright (c) 2024 Abdelrahman Mohamad Yassien. All Rights Reserved.
  ******************************************************************/
 
-class READ_INCR16_sequence extends base_sequence;
+class READ_INCR16_sequence extends reset_sequence;
   `uvm_object_utils(READ_INCR16_sequence);
 
   // Static flag to determine if reset is needed
@@ -47,8 +47,8 @@ class READ_INCR16_sequence extends base_sequence;
 
     `uvm_info("READ_INCR16_sequence: ", "STARTING" , UVM_HIGH)
 
-    if(~reset_flag)
-      reset_sequence_h.start(sequencer_h);
+    //if(~reset_flag)
+      //reset_sequence_h.start(sequencer_h);
 
     // Set the operation type to READ
     // Randomize the sequence item

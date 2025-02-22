@@ -1,5 +1,5 @@
 /******************************************************************
- * File: reset_sequence.sv
+ * File: reset_sequence.svh
  * Author: Abdelrahman Mohamad Yassien
  * Email: Abdelrahman.Yassien11@gmail.com
  * Date: 25/08/2024
@@ -23,6 +23,7 @@ class reset_sequence extends base_sequence;
 
   // Main task body to perform the reset sequence
   task body();
+    super.body();
     seq_item.HADDR_c.constraint_mode(0);
     seq_item.HADDR_SEL_c.constraint_mode(0);
     // Log information about the reset operation
