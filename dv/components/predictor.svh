@@ -170,17 +170,7 @@ class predictor extends uvm_subscriber #(sequence_item);
                            HRESETn, HWRITE, HTRANS, HSIZE, HBURST, HPROT, HADDR, HWDATA);
     $display("INPUTS WRITTEN %0s",t.input2string);
   //Checking if this is the last cycle of a waited error response by any subordinate other than the default subordinate
-  // if(HSEL != 4 && HRESP_expected == ERROR && t.HTRANS == IDLE && t.HBURST == SINGLE) begin
-  //   //assigning appropriate outputs to the last cycle of the error response exclaimed by the subordinate
-  //   last_cycle_error_response();
-  //   send_results();
-  // end
-  // else if (HSEL != 4 && HRESP_expected == ERROR && HTRANS != IDLE) begin
-  //   waited_cycle_error_response();
-  // end
-  // else begin
   -> inputs_written;
-  // end
   endfunction
 
   // Task for processing AHB operations based on inputs
@@ -205,6 +195,7 @@ class predictor extends uvm_subscriber #(sequence_item);
     seq_item_expected.HADDR       = HADDR;
     seq_item_expected.HWDATA      = HWDATA;
 
+    seq_item_expected.HSEL        = HSEL;
     seq_item_expected.HRESP       = HRESP_expected;
     seq_item_expected.HREADY      = HREADY_expected;
     case (HSEL)
@@ -250,17 +241,6 @@ class predictor extends uvm_subscriber #(sequence_item);
       HTRANS           = IDLE;
       wrap_counter     = 0;
       burst_counter    = 0;
-
-      // foreach(subordinate1[i]) begin
-      //   subordinate1[i] = 0;
-      //   subordinate2[i] = 0;
-      //   subordinate3[i] = 0;
-      // end
-      // $display("AAAAsubordinate1 MEM AFTER RESET: %p", subordinate1);
-      // $display("AAAAsubordinate2 MEM AFTER RESET: %p", subordinate2);
-      // $display("AAAAsubordinate3 MEM AFTER RESET: %p", subordinate3);
-      // $display("TAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAKH");
-
     endtask : reset_AHB
 
     // Task: Write data into the AHB and handle pointer updates
@@ -305,6 +285,7 @@ class predictor extends uvm_subscriber #(sequence_item);
                   burst_counter = burst_counter +1;
                 end
                 else begin
+                  $display("Crowdless crowdx1");
                   HRESP_expected = ERROR; HREADY_expected = NOT_READY;
                 end
               end
@@ -391,6 +372,7 @@ class predictor extends uvm_subscriber #(sequence_item);
             endcase // HBURST
           end
           else begin
+            $display("Crowdless crowdx2");
             HRESP_expected  = ERROR;
             HREADY_expected = NOT_READY;
           end
@@ -401,6 +383,7 @@ class predictor extends uvm_subscriber #(sequence_item);
       HRESP_expected = ERROR; HREADY_expected = READY;
     end
     else begin
+      $display("Crowdless crowd");
       HRESP_expected  = ERROR; HREADY_expected = NOT_READY;
     end
 
@@ -596,6 +579,20 @@ class predictor extends uvm_subscriber #(sequence_item);
                 subordinate3[HADDR_VALID + counter] [WORD_WIDTH-1:0] = HWDATA[WORD_WIDTH-1:0]; HRESP_expected = OKAY; HREADY_expected = READY;
                 `uvm_info("PREDICTOR", {"WRITE_subordinate3:", $sformatf("%0h, %0h", subordinate3[HADDR_VALID+counter], HWDATA[WORD_WIDTH-1:0])}, UVM_LOW)
               end
+              5: begin
+                if(~undo_on) begin 
+                  undo_counter_old <= counter; undo_HWDATA_old[WORD_WIDTH-1:0] <= subordinate5[HADDR_VALID + counter];
+                end
+                subordinate5[HADDR_VALID + counter] [WORD_WIDTH-1:0] = HWDATA[WORD_WIDTH-1:0]; HRESP_expected = OKAY; HREADY_expected = READY;
+                `uvm_info("PREDICTOR", {"WRITE_subordinate5:", $sformatf("%0h, %0h", subordinate5[HADDR_VALID+counter], HWDATA[WORD_WIDTH-1:0])}, UVM_LOW)
+              end
+              6: begin
+                if(~undo_on) begin 
+                  undo_counter_old <= counter; undo_HWDATA_old[WORD_WIDTH-1:0] <= subordinate6[HADDR_VALID + counter];
+                end
+                subordinate6[HADDR_VALID + counter] [WORD_WIDTH-1:0] = HWDATA[WORD_WIDTH-1:0]; HRESP_expected = OKAY; HREADY_expected = READY;
+                `uvm_info("PREDICTOR", {"WRITE_subordinate6:", $sformatf("%0h, %0h", subordinate6[HADDR_VALID+counter], HWDATA[WORD_WIDTH-1:0])}, UVM_LOW)
+              end                              
               default: begin
                 HRESP_expected  = ERROR;
                 HREADY_expected = NOT_READY;
@@ -1386,24 +1383,22 @@ class predictor extends uvm_subscriber #(sequence_item);
       
     endfunction : undo_last_operation
 
-    function void display_subordinates();
-      // $display("subordinate1 MEM AFTER fail:");
-      // foreach(subordinate1[i]) begin
-      //   $display("%0h", subordinate1[i]);
-      // end
-      // $display("subordinate2 MEM AFTER fail:");
-      // foreach(subordinate2[i]) begin
-      //   $display("%0h", subordinate2[i]);
-      // end
-      // $display("subordinate3 MEM AFTER fail:");
-      // foreach(subordinate3[i]) begin
-      //   $display("%0h", subordinate3[i]);
-      // end
+    function void display_subordinates(bit [ADDR_WIDTH-1:0] HADDRx, bit [ADDR_WIDTH-1:ADDR_WIDTH-BITS_FOR_SUBORDINATES] HSEL );
+      case (HSEL)
+        1: $display("subordinate1 MEM AFTER FAIL: %0h",subordinate1[HADDRx]);
+        2: $display("subordinate2 MEM AFTER FAIL: %0h",subordinate2[HADDRx]);
+        3: $display("subordinate3 MEM AFTER FAIL: %0h",subordinate3[HADDRx]);
+        //4: $display("subordinate4 MEM AFTER FAIL: %0h",subordinate4[HADDRx]);
+        5: $display("subordinate5 MEM AFTER FAIL: %0h",subordinate5[HADDRx]);
+        6: $display("subordinate6 MEM AFTER FAIL: %0h",subordinate6[HADDRx]);
+      endcase
       $display("subordinate1 MEM AFTER FAIL: %p", subordinate1);
       $display("subordinate2 MEM AFTER FAIL: %p", subordinate2);
       $display("subordinate3 MEM AFTER FAIL: %p", subordinate3);
-      // $display("subordinate2 MEM AFTER fail: %p", subordinate2);
-      // $display("subordinate3 MEM AFTER fail: %p", subordinate3);
+      $display("subordinate5 MEM AFTER FAIL: %p", subordinate5);
+      $display("subordinate6 MEM AFTER FAIL: %p", subordinate6);
+      $display("subordinate2 MEM AFTER fail: %p", subordinate2);
+      $display("subordinate3 MEM AFTER fail: %p", subordinate3);
     endfunction 
 
 

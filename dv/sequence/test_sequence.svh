@@ -40,9 +40,9 @@ class test_sequence extends base_sequence;
   // Main task body for executing the READ operation
   virtual task body();
 
-    reset_sequence::last_test = 1'b1;
-    READ_INCR8_sequence::last_test = 1'b1;
-    READ_INCR8_sequence::reset_flag = 1'b1;
+    // reset_sequence::last_test = 1'b1;
+    // READ_INCR8_sequence::last_test = 1'b1;
+    // READ_INCR8_sequence::reset_flag = 1'b1;
 
 
     `uvm_info("test_sequence: ", "STARTING" , UVM_HIGH)

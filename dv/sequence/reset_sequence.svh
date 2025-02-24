@@ -29,9 +29,6 @@ class reset_sequence extends base_sequence;
     // Log information about the reset operation
     `uvm_info("RESET_SEQUENCE: ", "STARTING", UVM_HIGH);
 
-    if(~last_test)
-      seq_item.last_item = 1'b1;
-
     // Start the sequence item for the reset operation
     start_item(seq_item);
 

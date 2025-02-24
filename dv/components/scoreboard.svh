@@ -60,6 +60,23 @@ class scoreboard extends uvm_scoreboard;
     `uvm_info("SCOREBOARD", "Connect phase completed", UVM_MEDIUM)
   endfunction
 
+  function void phase_ready_to_end(uvm_phase phase);
+   if (phase.get_name() != "run") return;
+   if (sequence_item::COMPARATOR_transaction_counter != sequence_item::PREDICTOR_transaction_counter) begin
+    phase.raise_objection(.obj(this)); 
+    fork 
+      begin 
+       delay_phase(phase);
+      end
+    join_none
+   end
+  endfunction
+
+  task delay_phase(uvm_phase phase);
+   wait(sequence_item::COMPARATOR_transaction_counter == sequence_item::PREDICTOR_transaction_counter);
+   phase.drop_objection(.obj(this));
+  endtask
+
   function void final_phase(uvm_phase phase);
     super.final_phase(phase);
     `uvm_info("SCOREBOARD", "Scoreboard is stopping.", UVM_MEDIUM)

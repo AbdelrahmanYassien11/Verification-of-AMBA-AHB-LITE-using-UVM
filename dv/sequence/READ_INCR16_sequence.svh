@@ -12,12 +12,11 @@
  * Copyright (c) 2024 Abdelrahman Mohamad Yassien. All Rights Reserved.
  ******************************************************************/
 
-class READ_INCR16_sequence extends reset_sequence;
+class READ_INCR16_sequence extends base_sequence;
   `uvm_object_utils(READ_INCR16_sequence);
 
   // Static flag to determine if reset is needed
   static bit reset_flag;
-  static bit last_test;
 
   // Handle to the reset sequence
   reset_sequence reset_sequence_h;
@@ -39,16 +38,13 @@ class READ_INCR16_sequence extends reset_sequence;
   // Main task body for executing the READ operation
   virtual task body();
     super.body();
-    reset_sequence::last_test = 1'b1;
-
     IDLE_sequence::reset_flag = 1'b1;
-    IDLE_sequence::last_test = 1'b1;
 
 
     `uvm_info("READ_INCR16_sequence: ", "STARTING" , UVM_HIGH)
 
-    //if(~reset_flag)
-      //reset_sequence_h.start(sequencer_h);
+    if(~reset_flag)
+      reset_sequence_h.start(sequencer_h);
 
     // Set the operation type to READ
     // Randomize the sequence item
@@ -60,9 +56,6 @@ class READ_INCR16_sequence extends reset_sequence;
     seq_item.HPROT.rand_mode(0);
     
     do_burst(INCR16, READ, SEQ);
-
-    if(~last_test)
-      seq_item.last_item = 1'b1;
 
     IDLE_sequence_h.start(m_sequencer, this);
 

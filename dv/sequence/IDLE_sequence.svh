@@ -15,9 +15,9 @@
 class IDLE_sequence extends base_sequence;
   `uvm_object_utils(IDLE_sequence);
 
+  static bit last_test;
   // Static flag to determine if reset is needed
   static bit reset_flag;
-  static bit last_test;
   bit [ADDR_WIDTH-1:0] HADDR_reserve;
 
 
@@ -41,16 +41,12 @@ class IDLE_sequence extends base_sequence;
   virtual task body();
     //super.body();
     $display("HADDR_reserve = %0h",HADDR_reserve);
-    reset_sequence::last_test = 1'b1;
 
 
     `uvm_info("IDLE_sequence: ", "STARTING" , UVM_HIGH)
 
     if(~reset_flag)
       reset_sequence_h.start(sequencer_h);
-
-     if(~last_test)
-      seq_item.last_item = 1'b1;
 
     seq_item.SIZE_op.rand_mode(0);
     

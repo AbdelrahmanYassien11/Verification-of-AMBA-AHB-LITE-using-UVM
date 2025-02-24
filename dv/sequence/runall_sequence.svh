@@ -108,28 +108,28 @@ class runall_sequence extends base_sequence;
   virtual task body();
 
 
-    reset_sequence::last_test = 1'b1;
-    IDLE_sequence::last_test = 1'b1;
+    // reset_sequence::last_test = 1'b1;
+    // IDLE_sequence::last_test = 1'b1;
 
-    WRITE_SINGLE_sequence::last_test = 1'b1;
+    // WRITE_SINGLE_sequence::last_test = 1'b1;
 
-    WRITE_INCR_sequence::last_test = 1'b1;
+    // WRITE_INCR_sequence::last_test = 1'b1;
 
-    WRITE_WRAP4_sequence::last_test = 1'b1;
-    WRITE_WRAP8_sequence::last_test = 1'b1;
-    WRITE_WRAP16_sequence::last_test = 1'b1;
-    WRITE_INCR4_sequence::last_test = 1'b1;
-    WRITE_INCR8_sequence::last_test = 1'b1;
-    WRITE_INCR16_sequence::last_test = 1'b1;
+    // WRITE_WRAP4_sequence::last_test = 1'b1;
+    // WRITE_WRAP8_sequence::last_test = 1'b1;
+    // WRITE_WRAP16_sequence::last_test = 1'b1;
+    // WRITE_INCR4_sequence::last_test = 1'b1;
+    // WRITE_INCR8_sequence::last_test = 1'b1;
+    // WRITE_INCR16_sequence::last_test = 1'b1;
 
-    READ_SINGLE_sequence::last_test = 1'b1;
-    READ_INCR_sequence::last_test = 1'b1;
-    READ_WRAP4_sequence::last_test = 1'b1;
-    READ_WRAP8_sequence::last_test = 1'b1;
-    READ_WRAP16_sequence::last_test = 1'b1;
-    READ_INCR4_sequence::last_test = 1'b1;
-    READ_INCR8_sequence::last_test = 1'b1;
-    READ_INCR16_sequence::last_test = 1'b1;
+    // READ_SINGLE_sequence::last_test = 1'b1;
+    // READ_INCR_sequence::last_test = 1'b1;
+    // READ_WRAP4_sequence::last_test = 1'b1;
+    // READ_WRAP8_sequence::last_test = 1'b1;
+    // READ_WRAP16_sequence::last_test = 1'b1;
+    // READ_INCR4_sequence::last_test = 1'b1;
+    // READ_INCR8_sequence::last_test = 1'b1;
+    // READ_INCR16_sequence::last_test = 1'b1;
 
 
     IDLE_sequence::reset_flag = 1'b1;

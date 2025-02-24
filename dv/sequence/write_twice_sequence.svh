@@ -45,9 +45,9 @@ class write_twice_sequence extends base_sequence;
     WRITE_SINGLE_sequence::reset_flag = 1'b1;
     READ_SINGLE_sequence::reset_flag = 1'b1;
 
-    reset_sequence::last_test = 1'b1;
-    READ_SINGLE_sequence::last_test = 1'b1;
-    WRITE_SINGLE_sequence::last_test = 1'b1;
+    // reset_sequence::last_test = 1'b1;
+    // READ_SINGLE_sequence::last_test = 1'b1;
+    // WRITE_SINGLE_sequence::last_test = 1'b1;
 
 
     reset_sequence_h.start(sequencer_h);

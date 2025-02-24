@@ -28,6 +28,9 @@ bit ERROR_ON_EXECUTE_IDLE;
 
 
   // AHB lite Control Signals
+
+  bit         [ADDR_WIDTH-1:ADDR_WIDTH-BITS_FOR_SUBORDINATES] HSEL;
+
   rand  bit   HRESETn;    // reset (active low)
 
   rand  bit   HWRITE;
@@ -44,10 +47,6 @@ bit ERROR_ON_EXECUTE_IDLE;
         logic   [DATA_WIDTH-1:0]  HRDATA;
         logic   [RESP_WIDTH-1:0]  HRESP; 
         logic   [DATA_WIDTH-1:0]  HREADY;   
-
-      // the values that will be randomized
-      //rand bit [FIFO_WIDTH-1:0] data_to_write;
-      // active low synchronous reset
 
 
       // constraint randomized_seq { randomized_sequences inside {[0:17]};

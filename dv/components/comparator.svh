@@ -105,7 +105,7 @@ class comparator extends uvm_component;
       end
       else begin
         `uvm_error("SCOREBOARD", "FAIL")
-        predictor_h.display_subordinates;
+        predictor_h.display_subordinates(seq_item_expected.HADDR, seq_item_expected.HSEL);
       end
 
       sequence_item::COMPARATOR_transaction_counter = sequence_item::COMPARATOR_transaction_counter + 1;

@@ -9,62 +9,57 @@
  * 
  * Copyright (c) 2024 Abdelrahman Mohamad Yassien. All Rights Reserved.
  ******************************************************************/
- covergroup HWDATA_df_cg(input bit [DATA_WIDTH-1:0] position, ref bit [DATA_WIDTH-1:0] vector);
+ covergroup HWDATA_df_tog_cg(input bit [DATA_WIDTH-1:0] position, ref bit [DATA_WIDTH-1:0] vector);
     df: coverpoint (vector & position) != 0;
     option.per_instance = 1;
- endgroup : HWDATA_df_cg
+ endgroup : HWDATA_df_tog_cg
 
- covergroup HWDATA_dt_cg(input bit [DATA_WIDTH-1:0] position, ref bit [DATA_WIDTH-1:0] vector);
+ covergroup HWDATA_dt_tog_cg(input bit [DATA_WIDTH-1:0] position, ref bit [DATA_WIDTH-1:0] vector);
     dt: coverpoint (vector & position) != 0 {
           bins tr[] = (0 => 1, 1 => 0);
       }
     option.per_instance = 1;
- endgroup : HWDATA_dt_cg
+ endgroup : HWDATA_dt_tog_cg
 
- covergroup HADDR_df_cg(input bit [ADDR_WIDTH-BITS_FOR_SUBORDINATES-1:0] position, ref bit [ADDR_WIDTH-BITS_FOR_SUBORDINATES-1:0] vector);
+ covergroup HADDR_df_tog_cg(input bit [ADDR_WIDTH-BITS_FOR_SUBORDINATES-1:0] position, ref bit [ADDR_WIDTH-BITS_FOR_SUBORDINATES-1:0] vector);
     df: coverpoint (vector & position) != 0;
     option.per_instance = 1;
- endgroup : HADDR_df_cg
+ endgroup : HADDR_df_tog_cg
 
- covergroup HADDR_dt_cg(input bit [ADDR_WIDTH-BITS_FOR_SUBORDINATES-1:0] position, ref bit [ADDR_WIDTH-BITS_FOR_SUBORDINATES-1:0] vector);
+ covergroup HADDR_dt_tog_cg(input bit [ADDR_WIDTH-BITS_FOR_SUBORDINATES-1:0] position, ref bit [ADDR_WIDTH-BITS_FOR_SUBORDINATES-1:0] vector);
     dt: coverpoint (vector & position) != 0 {
           bins tr[] = (0 => 1, 1 => 0);
       }
     option.per_instance = 1;
- endgroup : HADDR_dt_cg
+ endgroup : HADDR_dt_tog_cg
 
- covergroup HSEL_df_cg(input bit [BITS_FOR_SUBORDINATES-1:0] position, ref bit [BITS_FOR_SUBORDINATES-1:0] vector);
+ covergroup HSEL_df_tog_cg(input bit [BITS_FOR_SUBORDINATES-1:0] position, ref bit [BITS_FOR_SUBORDINATES-1:0] vector);
     df: coverpoint (vector & position) != 0;
     option.per_instance = 1;
- endgroup : HSEL_df_cg
+ endgroup : HSEL_df_tog_cg
 
-  covergroup HSEL_dt_cg(input bit [BITS_FOR_SUBORDINATES-1:0] position, ref bit [BITS_FOR_SUBORDINATES-1:0] vector);
+  covergroup HSEL_dt_tog_cg(input bit [BITS_FOR_SUBORDINATES-1:0] position, ref bit [BITS_FOR_SUBORDINATES-1:0] vector);
     dt: coverpoint (vector & position) != 0 {
           bins tr[] = (0 => 1, 1 => 0);
       }
     option.per_instance = 1;
-  endgroup : HSEL_dt_cg
+  endgroup : HSEL_dt_tog_cg
 
-  covergroup HSIZE_dt_val_cg(input bit [SIZE_WIDTH:0] position, ref bit [SIZE_WIDTH:0] vector);
-    dt:coverpoint vector {
-      bins tr[] = (vector => position);
+
+
+  covergroup HSIZE_dt_cg(input int i, input int j, sequence_item c);
+    dt:coverpoint vector iff (c.HRESETn) {
+      bins tr[] = (i => j);
     }
     option.per_instance = 1;
-  endgroup : HSIZE_dt_val_cg
+  endgroup : HSIZE_dt_cg
 
-  covergroup HSIZE_dt_val_cg2 (input bit [SIZE_WIDTH:0] position, input bit [SIZE_WIDTH:0] atlas, ref bit [SIZE_WIDTH:0] vector);
-    dt:coverpoint vector {
-      bins tr[] = ((vector == atlas) => position); //0-0, 0-1, 0-2......1-0, 1-1, 1-2...........2-0, 2-1, 2-2
+  covergroup HBURST_dt_cg(input int i, input int j, input sequence_item c);
+    dt:coverpoint vector iff (c.HRESETn) {
+      bins tr[] = (i => j);
     }
     option.per_instance = 1;
-  endgroup : HSIZE_dt_val_cg2
-
-  covergroup HBURST_dt_val_cg(input bit [BURST_WIDTH:0] position, ref bit [BURST_WIDTH:0] vector);
-    dt:coverpoint vector {
-      bins tr[] = (vector => position);
-    }
-    option.per_instance = 1;
-  endgroup : HBURST_dt_val_cg   
+  endgroup : HBURST_dt_cg   
 
 class coverage extends uvm_subscriber #(sequence_item);
   `uvm_component_utils(coverage);
@@ -103,19 +98,24 @@ class coverage extends uvm_subscriber #(sequence_item);
   HBURST_e     BURST_op_cov;
   HSIZE_e      SIZE_op_cov;
 
-  HWDATA_df_cg HWDATA_df_cg_bits  [DATA_WIDTH-1:0];
-  HWDATA_dt_cg HWDATA_dt_cg_bits  [DATA_WIDTH-1:0];
+  HWDATA_df_tog_cg HWDATA_df_tog_cg_bits  [DATA_WIDTH-1:0];
+  HWDATA_dt_tog_cg HWDATA_dt_tog_cg_bits  [DATA_WIDTH-1:0];
 
-  HADDR_df_cg  HADDR_df_cg_bits   [ADDR_WIDTH-1-BITS_FOR_SUBORDINATES:0];
-  HADDR_dt_cg  HADDR_dt_cg_bits   [ADDR_WIDTH-1-BITS_FOR_SUBORDINATES:0];
+  HADDR_df_tog_cg  HADDR_df_tog_cg_bits   [ADDR_WIDTH-1-BITS_FOR_SUBORDINATES:0];
+  HADDR_dt_tog_cg  HADDR_dt_tog_cg_bits   [ADDR_WIDTH-1-BITS_FOR_SUBORDINATES:0];
 
-  HSEL_df_cg  HSEL_df_cg_bits   [BITS_FOR_SUBORDINATES-1:0];
-  HSEL_dt_cg  HSEL_dt_cg_bits   [BITS_FOR_SUBORDINATES-1:0];
+  HSEL_df_tog_cg  HSEL_df_tog_cg_bits   [BITS_FOR_SUBORDINATES-1:0];
+  HSEL_dt_tog_cg  HSEL_dt_tog_cg_bits   [BITS_FOR_SUBORDINATES-1:0];
 
-  HSIZE_dt_val_cg  HSIZE_dt_val_cg_bits [AVAILABLE_SIZES-1:0];
-  HBURST_dt_val_cg HBURST_dt_val_cg_bits    [(2**BURST_WIDTH)-1:0];
+  HTRANS_df_cg HTRANS_df_cg_vals [(2**TRANS_WIDTH)-1:0];
+  HTRANS_dt_cg HTRANS_dt_cg_vals [(2**TRANS_WIDTH)-1:0][(2**TRANS_WIDTH)-1:0];
 
-  HSIZE_dt_val_cg2 HSIZE_dt_val_cg_bits2 [AVAILABLE_SIZES-1:0];
+  HSIZE_df_cg  HSIZE_df_cg_vals   [AVAILABLE_SIZES-1:0];
+  HSIZE_dt_cg  HSIZE_dt_cg_vals   [AVAILABLE_SIZES-1:0][AVAILABLE_SIZES-1:0];
+
+  HBURST_df_cg HBURST_df_cg_vals  [(2**BURST_WIDTH)-1:0];
+  HBURST_dt_cg HBURST_dt_cg_vals  [(2**BURST_WIDTH)-1:0][(2**BURST_WIDTH)-1:0];
+
 
 
   // Covergroup for RESET-related coverage
@@ -498,6 +498,8 @@ class coverage extends uvm_subscriber #(sequence_item);
     BURST_op_cov = t.BURST_op;
     SIZE_op_cov  = t.SIZE_op;
 
+    input_cov_copied.do_copy(t);
+
     RESET_covgrp.sample();
     WRITE_covgrp.sample();
     TRANS_covgrp.sample();
@@ -507,20 +509,18 @@ class coverage extends uvm_subscriber #(sequence_item);
     ADDR_covgrp.sample();
     HWDATA_covgrp.sample();
 
-    foreach(HSIZE_dt_val_cg_bits[i])  HSIZE_dt_val_cg_bits[i].sample();
-    foreach(HBURST_dt_val_cg_bits[i]) HBURST_dt_val_cg_bits[i].sample();
+    foreach(HWDATA_df_tog_cg_bits[i]) HWDATA_df_tog_cg_bits[i].sample();
 
-    foreach(HWDATA_df_cg_bits[i]) HWDATA_df_cg_bits[i].sample();
+    foreach(HWDATA_dt_tog_cg_bits[i]) HWDATA_dt_tog_cg_bits[i].sample();
 
-    foreach(HWDATA_dt_cg_bits[i]) HWDATA_dt_cg_bits[i].sample();
+    foreach(HADDR_df_tog_cg_bits[i]) HADDR_df_tog_cg_bits[i].sample();
+    foreach(HADDR_dt_tog_cg_bits[i]) HADDR_dt_tog_cg_bits[i].sample();
 
-    foreach(HADDR_df_cg_bits[i]) HADDR_df_cg_bits[i].sample();
-    foreach(HADDR_dt_cg_bits[i]) HADDR_dt_cg_bits[i].sample();
+    foreach(HSEL_df_tog_cg_bits[i]) HSEL_df_tog_cg_bits[i].sample();
+    foreach(HSEL_dt_tog_cg_bits[i]) HSEL_dt_tog_cg_bits[i].sample();
 
-    foreach(HSEL_df_cg_bits[i]) HSEL_df_cg_bits[i].sample();
-    foreach(HSEL_dt_cg_bits[i]) HSEL_dt_cg_bits[i].sample();
-
-    foreach(HSIZE_dt_val_cg_bits2[i]) HSIZE_dt_val_cg_bits2[i].sample();
+    foreach(HSIZE_dt_cg_vals[i])  HSIZE_dt_cg_vals[i].sample();
+    foreach(HBURST_dt_cg_vals[i]) HBURST_dt_cg_vals[i].sample();
 
 
     `uvm_info("COVERAGE", {"SAMPLE: ", t.convert2string}, UVM_HIGH)
@@ -540,22 +540,19 @@ class coverage extends uvm_subscriber #(sequence_item);
     ADDR_covgrp         = new;
     HWDATA_covgrp       = new;
 
-    foreach(HWDATA_df_cg_bits[i]) HWDATA_df_cg_bits[i] = new(1'b1<<i,HWDATA_cov);
-    foreach(HWDATA_dt_cg_bits[i]) HWDATA_dt_cg_bits[i] = new(1'b1<<i,HWDATA_cov);
+    foreach(HWDATA_df_tog_cg_bits[i]) HWDATA_df_tog_cg_bits[i] = new(1'b1<<i,HWDATA_cov);
+    foreach(HWDATA_dt_tog_cg_bits[i]) HWDATA_dt_tog_cg_bits[i] = new(1'b1<<i,HWDATA_cov);
 
-    foreach(HADDR_df_cg_bits[i]) HADDR_df_cg_bits[i] = new(1'b1<<i,HADDR_VALID_cov);
-    foreach(HADDR_dt_cg_bits[i]) HADDR_dt_cg_bits[i] = new(1'b1<<i,HADDR_VALID_cov);
+    foreach(HADDR_df_tog_cg_bits[i]) HADDR_df_tog_cg_bits[i] = new(1'b1<<i,HADDR_VALID_cov);
+    foreach(HADDR_dt_tog_cg_bits[i]) HADDR_dt_tog_cg_bits[i] = new(1'b1<<i,HADDR_VALID_cov);
 
-    foreach(HSEL_df_cg_bits[i]) HSEL_df_cg_bits[i] = new(1'b1<<i,HSEL_cov);
-    foreach(HSEL_dt_cg_bits[i]) HSEL_dt_cg_bits[i] = new(1'b1<<i,HSEL_cov);
+    foreach(HSEL_df_tog_cg_bits[i]) HSEL_df_tog_cg_bits[i] = new(1'b1<<i,HSEL_cov);
+    foreach(HSEL_dt_tog_cg_bits[i]) HSEL_dt_tog_cg_bits[i] = new(1'b1<<i,HSEL_cov);
 
 
-    foreach(HSIZE_dt_val_cg_bits[i]) HSIZE_dt_val_cg_bits[i] = new(i, HSIZE_cov);
-    foreach(HBURST_dt_val_cg_bits[i]) HBURST_dt_val_cg_bits[i] = new(i, HBURST_cov);
+    foreach(HSIZE_dt_val_cg_bits[i,j]) HSIZE_dt_cg_vals[i][j]   = new(i, j, input_cov_copied);
+    foreach(HBURST_dt_val_cg_bits[i,j]) HBURST_dt_cg_vals[i][j] = new(i, j, input_cov_copied);
 
-    foreach(HSIZE_dt_val_cg_bits2[j]) begin
-      foreach(HSIZE_dt_val_cg_bits2[i]) HSIZE_dt_val_cg_bits2[i] = new(i, j, HSIZE_cov);      
-    end
 
 
 

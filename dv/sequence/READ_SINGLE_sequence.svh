@@ -16,7 +16,6 @@ class READ_SINGLE_sequence extends base_sequence;
 
   // Static flag to determine if a reset is required
   static bit reset_flag;
-  static bit last_test;
 
   // Handle for the reset sequence
   reset_sequence reset_sequence_h;
@@ -41,14 +40,9 @@ class READ_SINGLE_sequence extends base_sequence;
     // Log information about the read operation
     `uvm_info("READ_SINGLE_SEQUENCE: ", "STARTING", UVM_HIGH);
 
-    reset_sequence::last_test = 1'b1;
-
     // If reset_flag is not set, start the reset sequence
     if (~reset_flag)
       reset_sequence_h.start(sequencer_h);
-
-    if(~last_test)
-      seq_item.last_item = 1'b1;
 
     do_burst(SINGLE, READ, NONSEQ);
 

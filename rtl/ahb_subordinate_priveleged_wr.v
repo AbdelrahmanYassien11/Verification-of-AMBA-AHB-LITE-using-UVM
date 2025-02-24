@@ -224,7 +224,7 @@ module ahb_subordinate_priveleged_wr
         wrap_counter_reg <= 0;
       end 
       else begin
-        if(HPROT[3:1] == 3'b001 && HWRITE) begin
+        if(HPROT[3:1] == 3'b001) begin
           case (HTRANS)
             2'b10: begin
               if(HSEL && HREADYin) begin
@@ -306,7 +306,7 @@ module ahb_subordinate_priveleged_wr
         burst_counter_reg <= 0;
       end 
       else begin
-        if(HPROT[3:1] == 3'b001 && HWRITE) begin
+        if(HPROT[3:1] == 3'b001) begin
           case (HTRANS)
             2'b10: begin
               if(HSEL && HREADYin) begin

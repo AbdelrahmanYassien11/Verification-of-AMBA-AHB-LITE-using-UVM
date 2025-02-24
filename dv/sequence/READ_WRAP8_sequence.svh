@@ -17,7 +17,6 @@ class READ_WRAP8_sequence extends base_sequence;
 
   // Static flag to determine if reset is needed
   static bit reset_flag;
-  static bit last_test;
 
   // Handle to the reset sequence
   reset_sequence reset_sequence_h;
@@ -42,11 +41,8 @@ class READ_WRAP8_sequence extends base_sequence;
   // Main task body for executing the READ operation
   virtual task body();
     super.body();
-    reset_sequence::last_test = 1'b1;
 
     IDLE_sequence::reset_flag = 1'b1;
-    IDLE_sequence::last_test = 1'b1;
-
 
     `uvm_info("READ_WRAP8_sequence: ", "STARTING" , UVM_HIGH)
 
@@ -63,9 +59,6 @@ class READ_WRAP8_sequence extends base_sequence;
     seq_item.HPROT.rand_mode(0);
     
     do_burst(WRAP8, READ, SEQ);
-
-     if(~last_test)
-      seq_item.last_item = 1'b1;
 
     IDLE_sequence_h.start(m_sequencer, this);
 
