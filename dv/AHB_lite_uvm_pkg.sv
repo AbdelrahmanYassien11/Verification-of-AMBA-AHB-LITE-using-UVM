@@ -71,14 +71,14 @@ package AHB_pkg;
 
 
 	//control phase signal parameters
-   	parameter TRANS_WIDTH = 1;
-   	parameter SIZE_WIDTH = 2;
-   	parameter BURST_WIDTH = 2;
-   	parameter PROT_WIDTH = 3;
+   	parameter TRANS_WIDTH = 2;
+   	parameter SIZE_WIDTH = 3;
+   	parameter BURST_WIDTH = 3;
+   	parameter PROT_WIDTH = 4;
 
    	//data phase signal parameters
-   	parameter RESP_WIDTH = 1;
-   	parameter READY_WIDTH = 0;
+   	parameter RESP_WIDTH = 2;
+   	parameter READY_WIDTH = 1;
 
   	int incorrect_counter;
    	int correct_counter;

@@ -30,42 +30,41 @@ logic   HRESETn;    // reset (active low)
 
 bit   HWRITE;
 
-bit   [TRANS_WIDTH:0]  HTRANS; 
-bit   [SIZE_WIDTH:0]  HSIZE;
-bit   [BURST_WIDTH:0]  HBURST;
-bit   [PROT_WIDTH:0]  HPROT; 
+bit   [TRANS_WIDTH-1:0]  HTRANS; 
+bit   [SIZE_WIDTH-1:0]  HSIZE;
+bit   [BURST_WIDTH-1:0]  HBURST;
+bit   [PROT_WIDTH-1:0]  HPROT; 
 
 bit   [ADDR_WIDTH-1:0]  HADDR;     
 bit   [DATA_WIDTH-1:0]  HWDATA; 
 
 // AHB lite output Signals
 logic   [DATA_WIDTH-1:0]  HRDATA;
-logic   [RESP_WIDTH:0]  HRESP; 
-logic   [READY_WIDTH:0]  HREADY;  
+logic   [RESP_WIDTH-1:0]  HRESP; 
+logic   [READY_WIDTH-1:0]  HREADY;  
 
 logic   HRESETn_reg;    // reset (active low)
 
 bit   HWRITE_reg;
 
-bit   [TRANS_WIDTH:0]  HTRANS_reg; 
-bit   [SIZE_WIDTH:0]  HSIZE_reg;
-bit   [BURST_WIDTH:0]  HBURST_reg;
-bit   [PROT_WIDTH:0]  HPROT_reg; 
+bit   [TRANS_WIDTH-1:0]  HTRANS_reg; 
+bit   [SIZE_WIDTH-1:0]  HSIZE_reg;
+bit   [BURST_WIDTH-1:0]  HBURST_reg;
+bit   [PROT_WIDTH-1:0]  HPROT_reg; 
 
 bit   [ADDR_WIDTH-1:0]  HADDR_reg;     
 bit   [DATA_WIDTH-1:0]  HWDATA_reg; 
 
 // AHB lite output Signals
 logic   [DATA_WIDTH-1:0]  HRDATA_reg;
-logic   [RESP_WIDTH:0]  HRESP_reg; 
-logic   [READY_WIDTH:0]  HREADY_reg; 
+logic   [RESP_WIDTH-1:0]  HRESP_reg; 
+logic   [READY_WIDTH-1:0]  HREADY_reg; 
 
 bit RECEIVING_PHASE_FLAG;
 bit CONTROL_PHASE_FLAG;
 bit DATA_PHASE_FLAG;
 bit OUTPUTS_PHASE_FLAG_1;
 bit OUTPUTS_PHASE_FLAG_2;
-//bit OUTPUTS_PHASE_FLAG_3;
 
 // bit last_test;
 // int atlas;

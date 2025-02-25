@@ -18,18 +18,18 @@ module AHB_subordinate_sva #(parameter TRANS_WIDTH = 1, SIZE_WIDTH = 2, BURST_WI
 
 	bit   HWRITE;
 
-	bit   [TRANS_WIDTH:0]  HTRANS; 
-	bit   [SIZE_WIDTH:0]  HSIZE;
-	bit   [BURST_WIDTH:0]  HBURST;
-	bit   [PROT_WIDTH:0]  HPROT; 
+	bit   [TRANS_WIDTH-1:0]  HTRANS; 
+	bit   [SIZE_WIDTH-1:0]  HSIZE;
+	bit   [BURST_WIDTH-1:0]  HBURST;
+	bit   [PROT_WIDTH-1:0]  HPROT; 
 
 	bit   [ADDR_WIDTH-1:0]  HADDR;     
 	bit   [DATA_WIDTH-1:0]  HWDATA; 
 
 	// AHB lite output Signals
 	logic   [DATA_WIDTH-1:0]  HRDATA;
-	logic   [RESP_WIDTH:0]  HRESP; 
-	logic   [READY_WIDTH:0]  HREADY;  
+	logic   [RESP_WIDTH-1:0]  HRESP; 
+	logic   [READY_WIDTH-1:0]  HREADY;  
 
 	assign clk = f_if.clk;
 

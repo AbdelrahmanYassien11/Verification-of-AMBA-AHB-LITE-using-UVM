@@ -46,20 +46,36 @@
   endgroup : HSEL_dt_tog_cg
 
 
+  covergroup HTRANS_df_cg(input int i, input sequence_item c);
+    option.per_instance = 1;    
+    option.name = $sformatf(" df = %0d", i); 
+    df:coverpoint c.HTRANS iff (c.HRESETn) {
+      bins tr[] = {i};
+    }
+  endgroup : HTRANS_df_cg
 
-  covergroup HSIZE_dt_cg(input int i, input int j, sequence_item c);
-    dt:coverpoint vector iff (c.HRESETn) {
+  covergroup HTRANS_dt_cg(input int i, input int j, input sequence_item c);
+    option.per_instance = 1;
+    option.name = $sformatf(" dt: %0d => %0d", i, j);    
+    dt:coverpoint c.HTRANS iff (c.HRESETn) {
       bins tr[] = (i => j);
     }
-    option.per_instance = 1;
-  endgroup : HSIZE_dt_cg
+  endgroup : HTRANS_dt_cg
 
-  covergroup HBURST_dt_cg(input int i, input int j, input sequence_item c);
-    dt:coverpoint vector iff (c.HRESETn) {
-      bins tr[] = (i => j);
-    }
-    option.per_instance = 1;
-  endgroup : HBURST_dt_cg   
+
+  // covergroup HSIZE_dt_cg(input int i, input int j, sequence_item c);
+  //   dt:coverpoint vector iff (c.HRESETn) {
+  //     bins tr[] = (i => j);
+  //   }
+  //   option.per_instance = 1;
+  // endgroup : HSIZE_dt_cg
+
+  // covergroup HBURST_dt_cg(input int i, input int j, input sequence_item c);
+  //   dt:coverpoint vector iff (c.HRESETn) {
+  //     bins tr[] = (i => j);
+  //   }
+  //   option.per_instance = 1;
+  // endgroup : HBURST_dt_cg   
 
 class coverage extends uvm_subscriber #(sequence_item);
   `uvm_component_utils(coverage);
@@ -75,10 +91,10 @@ class coverage extends uvm_subscriber #(sequence_item);
 
         bit   HWRITE_cov;
 
-        bit   [TRANS_WIDTH:0]  HTRANS_cov; 
-        bit   [SIZE_WIDTH:0]  HSIZE_cov;
-        bit   [BURST_WIDTH:0] HBURST_cov;
-        bit   [PROT_WIDTH:0]  HPROT_cov; 
+        bit   [TRANS_WIDTH-1:0]  HTRANS_cov; 
+        bit   [SIZE_WIDTH-1:0]  HSIZE_cov;
+        bit   [BURST_WIDTH-1:0] HBURST_cov;
+        bit   [PROT_WIDTH-1:0]  HPROT_cov; 
 
         bit   [ADDR_WIDTH-1:0]  HADDR_cov;     
         bit   [DATA_WIDTH-1:0]  HWDATA_cov;
@@ -98,6 +114,8 @@ class coverage extends uvm_subscriber #(sequence_item);
   HBURST_e     BURST_op_cov;
   HSIZE_e      SIZE_op_cov;
 
+  sequence_item input_cov_copied;
+
   HWDATA_df_tog_cg HWDATA_df_tog_cg_bits  [DATA_WIDTH-1:0];
   HWDATA_dt_tog_cg HWDATA_dt_tog_cg_bits  [DATA_WIDTH-1:0];
 
@@ -110,11 +128,11 @@ class coverage extends uvm_subscriber #(sequence_item);
   HTRANS_df_cg HTRANS_df_cg_vals [(2**TRANS_WIDTH)-1:0];
   HTRANS_dt_cg HTRANS_dt_cg_vals [(2**TRANS_WIDTH)-1:0][(2**TRANS_WIDTH)-1:0];
 
-  HSIZE_df_cg  HSIZE_df_cg_vals   [AVAILABLE_SIZES-1:0];
-  HSIZE_dt_cg  HSIZE_dt_cg_vals   [AVAILABLE_SIZES-1:0][AVAILABLE_SIZES-1:0];
+  // HSIZE_df_cg  HSIZE_df_cg_vals   [AVAILABLE_SIZES-1:0];
+  // HSIZE_dt_cg  HSIZE_dt_cg_vals   [AVAILABLE_SIZES-1:0][AVAILABLE_SIZES-1:0];
 
-  HBURST_df_cg HBURST_df_cg_vals  [(2**BURST_WIDTH)-1:0];
-  HBURST_dt_cg HBURST_dt_cg_vals  [(2**BURST_WIDTH)-1:0][(2**BURST_WIDTH)-1:0];
+  // HBURST_df_cg HBURST_df_cg_vals  [2**BURST_WIDTH:0];
+  // HBURST_dt_cg HBURST_dt_cg_vals  [2**BURST_WIDTH:0][2**BURST_WIDTH:0];
 
 
 
@@ -476,6 +494,8 @@ class coverage extends uvm_subscriber #(sequence_item);
 
   // Function to update coverage based on sequence item
   function void write (sequence_item t);
+    //input_cov_copied = new();
+
     HRESETn_cov    = t.HRESETn;
     HWRITE_cov     = t.HWRITE;
     HTRANS_cov     = t.HTRANS;
@@ -519,8 +539,11 @@ class coverage extends uvm_subscriber #(sequence_item);
     foreach(HSEL_df_tog_cg_bits[i]) HSEL_df_tog_cg_bits[i].sample();
     foreach(HSEL_dt_tog_cg_bits[i]) HSEL_dt_tog_cg_bits[i].sample();
 
-    foreach(HSIZE_dt_cg_vals[i])  HSIZE_dt_cg_vals[i].sample();
-    foreach(HBURST_dt_cg_vals[i]) HBURST_dt_cg_vals[i].sample();
+    // foreach(HSIZE_dt_cg_vals[i])  HSIZE_dt_cg_vals[i].sample();
+    // foreach(HBURST_dt_cg_vals[i]) HBURST_dt_cg_vals[i].sample();
+
+    foreach(HTRANS_dt_cg_vals[i,j]) HTRANS_dt_cg_vals[i][j].sample();
+    foreach(HTRANS_df_cg_vals[i])   HTRANS_df_cg_vals[i].sample();
 
 
     `uvm_info("COVERAGE", {"SAMPLE: ", t.convert2string}, UVM_HIGH)
@@ -531,6 +554,7 @@ class coverage extends uvm_subscriber #(sequence_item);
 
     super.new(name, parent);
 
+    input_cov_copied = new();
     RESET_covgrp        = new;
     WRITE_covgrp        = new;
     TRANS_covgrp        = new;
@@ -549,13 +573,11 @@ class coverage extends uvm_subscriber #(sequence_item);
     foreach(HSEL_df_tog_cg_bits[i]) HSEL_df_tog_cg_bits[i] = new(1'b1<<i,HSEL_cov);
     foreach(HSEL_dt_tog_cg_bits[i]) HSEL_dt_tog_cg_bits[i] = new(1'b1<<i,HSEL_cov);
 
+    // foreach(HSIZE_dt_val_cg_bits[i,j]) HSIZE_dt_cg_vals[i][j]   = new(i, j, input_cov_copied);
+    // foreach(HBURST_dt_val_cg_bits[i,j]) HBURST_dt_cg_vals[i][j] = new(i, j, input_cov_copied);
 
-    foreach(HSIZE_dt_val_cg_bits[i,j]) HSIZE_dt_cg_vals[i][j]   = new(i, j, input_cov_copied);
-    foreach(HBURST_dt_val_cg_bits[i,j]) HBURST_dt_cg_vals[i][j] = new(i, j, input_cov_copied);
-
-
-
-
+    foreach(HTRANS_dt_cg_vals[i,j]) HTRANS_dt_cg_vals[i][j] = new(i, j, input_cov_copied);
+    foreach(HTRANS_df_cg_vals[i])   HTRANS_df_cg_vals[i]    = new(i, input_cov_copied);
   endfunction
 
   // Build phase for component setup

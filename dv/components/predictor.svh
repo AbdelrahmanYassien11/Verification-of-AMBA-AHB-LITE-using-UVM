@@ -48,10 +48,10 @@ class predictor extends uvm_subscriber #(sequence_item);
   bit     HRESETn;    // reset (active low)
   logic   HWRITE;
 
-  bit   [TRANS_WIDTH:0]  HTRANS; 
-  bit   [SIZE_WIDTH:0]  HSIZE;
-  bit   [BURST_WIDTH:0]  HBURST;
-  bit   [PROT_WIDTH:0]  HPROT; 
+  bit   [TRANS_WIDTH-1:0]  HTRANS; 
+  bit   [SIZE_WIDTH-1:0]  HSIZE;
+  bit   [BURST_WIDTH-1:0]  HBURST;
+  bit   [PROT_WIDTH-1:0]  HPROT; 
 
   bit   [ADDR_WIDTH-1:0]  HADDR; 
   bit   [ADDR_WIDTH-BITS_FOR_SUBORDINATES-1:0] HADDR_VALID;
