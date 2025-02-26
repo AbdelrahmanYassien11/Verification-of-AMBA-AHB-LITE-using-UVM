@@ -39,7 +39,7 @@ class IDLE_sequence extends base_sequence;
 
   // Main task body for executing the READ operation
   virtual task body();
-    //super.body();
+    super.body();
     $display("HADDR_reserve = %0h",HADDR_reserve);
 
 

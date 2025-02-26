@@ -23,6 +23,7 @@ class AHB_SUBORDINATE_config;
     parameter AVAILABLE_SIZES = 3;
   `else 
     parameter DATA_WIDTH = 32;
+    parameter AVAILABLE_SIZES = 3;
   `endif
 
   `ifdef ADDR_WIDTH10

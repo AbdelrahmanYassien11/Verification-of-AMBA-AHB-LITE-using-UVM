@@ -20,7 +20,7 @@ static bit last_item;
 static int PREDICTOR_transaction_counter;
 static int COMPARATOR_transaction_counter;
 
-//rand int unsigned randomized_sequences;
+rand int unsigned sequence_randomizer;
 
 rand int unsigned INCR_CONTROL;
 
@@ -49,8 +49,8 @@ bit ERROR_ON_EXECUTE_IDLE;
         logic   [DATA_WIDTH-1:0]  HREADY;   
 
 
-      // constraint randomized_seq { randomized_sequences inside {[0:17]};
-      // }
+      constraint randomized_seq_c { sequence_randomizer dist {[0:20]:=1};
+      }
 
       constraint RESET_cmd {RESET_op dist {0:/1, 1:/99}; 
       }

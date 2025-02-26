@@ -20,7 +20,7 @@ class runall_sequence extends base_sequence;
   static bit last_test;
   `uvm_declare_p_sequencer(sequencer)
 
-  static base_sequence base_sequence_r [17:0];
+  static base_sequence base_sequence_r [21];
 
   // Handle to the reset sequence
   reset_sequence reset_sequence_h;
@@ -49,6 +49,10 @@ class runall_sequence extends base_sequence;
   READ_WRAP8_sequence  READ_WRAP8_sequence_h;
   READ_WRAP16_sequence READ_WRAP16_sequence_h;
 
+  twice_IDLE_sequence twice_IDLE_sequence_h;
+  twice_reset_sequence twice_reset_sequence_h;
+  SINGLE_IDLE_sequence SINGLE_IDLE_sequence_h;
+
   // Constructor
   function new(string name = "runall_sequence");
     super.new(name);
@@ -61,8 +65,6 @@ class runall_sequence extends base_sequence;
     // Create an instance of the reset sequence
     reset_sequence_h = reset_sequence::type_id::create("reset_sequence_h");
     IDLE_sequence_h = IDLE_sequence::type_id::create("IDLE_sequence_h");
-    IDLE_sequence_h = IDLE_sequence::type_id::create("IDLE_sequence_h");
-
 
     WRITE_SINGLE_sequence_h   = WRITE_SINGLE_sequence::type_id::create("WRITE_SINGLE_sequence_h");
 
@@ -87,6 +89,10 @@ class runall_sequence extends base_sequence;
     READ_WRAP8_sequence_h   = READ_WRAP8_sequence::type_id::create("READ_WRAP8_sequence_h");
     READ_WRAP16_sequence_h  = READ_WRAP16_sequence::type_id::create("READ_WRAP16_sequence_h");
 
+    twice_IDLE_sequence_h   = twice_IDLE_sequence::type_id::create("twice_IDLE_sequence_h");
+    twice_reset_sequence_h  = twice_reset_sequence::type_id::create("twice_reset_sequence_h");
+    SINGLE_IDLE_sequence_h  = SINGLE_IDLE_sequence::type_id::create("SINGLE_IDLE_sequence_h");
+
     // genvar i;
     // generate
     //   for(i = 0; i<18; i++)begin
@@ -94,43 +100,19 @@ class runall_sequence extends base_sequence;
     //   end
     // endgenerate
 
-    for(int i = 0; i <18; i++) begin
+    for(int i = 0; i <21; i++) begin
       base_sequence_r[i] = new();
     end
 
     base_sequence_r = '{reset_sequence_h, IDLE_sequence_h, WRITE_SINGLE_sequence_h, WRITE_INCR_sequence_h, WRITE_INCR4_sequence_h, WRITE_INCR8_sequence_h,
                         WRITE_INCR16_sequence_h, WRITE_WRAP4_sequence_h, WRITE_WRAP8_sequence_h, WRITE_WRAP16_sequence_h, READ_SINGLE_sequence_h, READ_INCR_sequence_h,
-                        READ_INCR4_sequence_h, READ_INCR8_sequence_h, READ_INCR16_sequence_h, READ_WRAP4_sequence_h, READ_WRAP8_sequence_h, READ_WRAP16_sequence_h};
+                        READ_INCR4_sequence_h, READ_INCR8_sequence_h, READ_INCR16_sequence_h, READ_WRAP4_sequence_h, READ_WRAP8_sequence_h, READ_WRAP16_sequence_h, twice_IDLE_sequence_h,
+                        twice_reset_sequence_h, SINGLE_IDLE_sequence_h};
 
   endtask : pre_body
 
   // Main task body for executing the READ operation
   virtual task body();
-
-
-    // reset_sequence::last_test = 1'b1;
-    // IDLE_sequence::last_test = 1'b1;
-
-    // WRITE_SINGLE_sequence::last_test = 1'b1;
-
-    // WRITE_INCR_sequence::last_test = 1'b1;
-
-    // WRITE_WRAP4_sequence::last_test = 1'b1;
-    // WRITE_WRAP8_sequence::last_test = 1'b1;
-    // WRITE_WRAP16_sequence::last_test = 1'b1;
-    // WRITE_INCR4_sequence::last_test = 1'b1;
-    // WRITE_INCR8_sequence::last_test = 1'b1;
-    // WRITE_INCR16_sequence::last_test = 1'b1;
-
-    // READ_SINGLE_sequence::last_test = 1'b1;
-    // READ_INCR_sequence::last_test = 1'b1;
-    // READ_WRAP4_sequence::last_test = 1'b1;
-    // READ_WRAP8_sequence::last_test = 1'b1;
-    // READ_WRAP16_sequence::last_test = 1'b1;
-    // READ_INCR4_sequence::last_test = 1'b1;
-    // READ_INCR8_sequence::last_test = 1'b1;
-    // READ_INCR16_sequence::last_test = 1'b1;
-
 
     IDLE_sequence::reset_flag = 1'b1;
 
@@ -158,150 +140,156 @@ class runall_sequence extends base_sequence;
     if(~reset_flag)
       reset_sequence_h.start(sequencer_h);
 
-    assert(seq_item.randomize());
-    for(int i = 0; i < seq_item.randomized_number_of_tests ; i++) begin
+    base_sequence_r[2].start(sequencer_h);
 
-      seq_item.randomized_number_of_tests.rand_mode(0);
+     assert(seq_item.randomize());
+     for(int i = 0; i < 2/*seq_item.randomized_number_of_tests*/ ; i++) begin
+
+       seq_item.randomized_number_of_tests.rand_mode(0);
+ 
       assert(seq_item.randomize());
 
-      //`uvm_info("runall_sequence", {seq_item.convert2string()}, UVM_LOW)
+      `uvm_info("runall_sequence", {seq_item.convert2string()}, UVM_LOW)
 
-      if(seq_item.RESET_op == WORKING) begin
-        if(seq_item.TRANS_op !== IDLE)begin
-          if(seq_item.WRITE_op == WRITE) begin
-            case (seq_item.BURST_op)
-              SINGLE: begin 
-                `uvm_info("runall_sequence1","WRITE_SINGLE", UVM_LOW); 
-                //`uvm_info("TEST_INFO", $sformatf("Sequencer is busy: %0d", sequencer_h.is_busy()), UVM_MEDIUM);
+      base_sequence_r[seq_item.sequence_randomizer].start(sequencer_h);
+      IDLE_sequence_h.HADDR_reserve = base_sequence_r[seq_item.sequence_randomizer].seq_item.HADDR;
+
+      // if(seq_item.RESET_op == WORKING) begin
+      //   if(seq_item.TRANS_op !== IDLE)begin
+      //     if(seq_item.WRITE_op == WRITE) begin
+      //       case (seq_item.BURST_op)
+      //         SINGLE: begin 
+      //           `uvm_info("runall_sequence1","WRITE_SINGLE", UVM_LOW); 
+      //           //`uvm_info("TEST_INFO", $sformatf("Sequencer is busy: %0d", sequencer_h.is_busy()), UVM_MEDIUM);
                
-                WRITE_SINGLE_sequence_h.start(sequencer_h);
-                //`uvm_do_on(WRITE_SINGLE_sequence_h, sequencer_h)
-              end
-              INCR: begin
-                `uvm_info("runall_sequence1","WRITE_INCR", UVM_LOW);  
-                //`uvm_info("TEST_INFO", $sformatf("Sequencer is busy: %0d", sequencer_h.is_busy()), UVM_MEDIUM);
+      //           WRITE_SINGLE_sequence_h.start(sequencer_h);
+      //           //`uvm_do_on(WRITE_SINGLE_sequence_h, sequencer_h)
+      //         end
+      //         INCR: begin
+      //           `uvm_info("runall_sequence1","WRITE_INCR", UVM_LOW);  
+      //           //`uvm_info("TEST_INFO", $sformatf("Sequencer is busy: %0d", sequencer_h.is_busy()), UVM_MEDIUM);
               
-                WRITE_INCR_sequence_h.start(sequencer_h);
-                //`uvm_do_on(WRITE_INCR_sequence_h, sequencer_h)
-              end
-              INCR4: begin
-                `uvm_info("runall_sequence1","WRITE_INCR4", UVM_LOW);  
-                //`uvm_info("TEST_INFO", $sformatf("Sequencer is busy: %0d", sequencer_h.is_busy()), UVM_MEDIUM);
+      //           WRITE_INCR_sequence_h.start(sequencer_h);
+      //           //`uvm_do_on(WRITE_INCR_sequence_h, sequencer_h)
+      //         end
+      //         INCR4: begin
+      //           `uvm_info("runall_sequence1","WRITE_INCR4", UVM_LOW);  
+      //           //`uvm_info("TEST_INFO", $sformatf("Sequencer is busy: %0d", sequencer_h.is_busy()), UVM_MEDIUM);
              
-                WRITE_INCR4_sequence_h.start(sequencer_h);
-                //`uvm_do_on(WRITE_INCR4_sequence_h, sequencer_h)
-              end
-              INCR8: begin
-                `uvm_info("runall_sequence1","WRITE_INCR8", UVM_LOW);   
-                //`uvm_info("TEST_INFO", $sformatf("Sequencer is busy: %0d", sequencer_h.is_busy()), UVM_MEDIUM);
+      //           WRITE_INCR4_sequence_h.start(sequencer_h);
+      //           //`uvm_do_on(WRITE_INCR4_sequence_h, sequencer_h)
+      //         end
+      //         INCR8: begin
+      //           `uvm_info("runall_sequence1","WRITE_INCR8", UVM_LOW);   
+      //           //`uvm_info("TEST_INFO", $sformatf("Sequencer is busy: %0d", sequencer_h.is_busy()), UVM_MEDIUM);
             
-                WRITE_INCR8_sequence_h.start(sequencer_h);
-                //`uvm_do_on(WRITE_INCR8_sequence_h, sequencer_h)
-              end
-              INCR16: begin 
-                `uvm_info("runall_sequence1","WRITE_INCR16", UVM_LOW);    
-                //`uvm_info("TEST_INFO", $sformatf("Sequencer is busy: %0d", sequencer_h.is_busy()), UVM_MEDIUM);
+      //           WRITE_INCR8_sequence_h.start(sequencer_h);
+      //           //`uvm_do_on(WRITE_INCR8_sequence_h, sequencer_h)
+      //         end
+      //         INCR16: begin 
+      //           `uvm_info("runall_sequence1","WRITE_INCR16", UVM_LOW);    
+      //           //`uvm_info("TEST_INFO", $sformatf("Sequencer is busy: %0d", sequencer_h.is_busy()), UVM_MEDIUM);
             
-                WRITE_INCR16_sequence_h.start(sequencer_h);
-                //`uvm_do_on(WRITE_INCR16_sequence_h, sequencer_h)
-              end
-              WRAP4: begin 
-                `uvm_info("runall_sequence1","WRITE_WRAP4", UVM_LOW);       
-                //`uvm_info("TEST_INFO", $sformatf("Sequencer is busy: %0d", sequencer_h.is_busy()), UVM_MEDIUM);
+      //           WRITE_INCR16_sequence_h.start(sequencer_h);
+      //           //`uvm_do_on(WRITE_INCR16_sequence_h, sequencer_h)
+      //         end
+      //         WRAP4: begin 
+      //           `uvm_info("runall_sequence1","WRITE_WRAP4", UVM_LOW);       
+      //           //`uvm_info("TEST_INFO", $sformatf("Sequencer is busy: %0d", sequencer_h.is_busy()), UVM_MEDIUM);
          
-                WRITE_WRAP4_sequence_h.start(sequencer_h);
-                //`uvm_do_on(WRITE_WRAP4_sequence_h, sequencer_h)
-              end
-              WRAP8: begin 
-                `uvm_info("runall_sequence1","WRITE_WRAP8", UVM_LOW);      
-                //`uvm_info("TEST_INFO", $sformatf("Sequencer is busy: %0d", sequencer_h.is_busy()), UVM_MEDIUM);
+      //           WRITE_WRAP4_sequence_h.start(sequencer_h);
+      //           //`uvm_do_on(WRITE_WRAP4_sequence_h, sequencer_h)
+      //         end
+      //         WRAP8: begin 
+      //           `uvm_info("runall_sequence1","WRITE_WRAP8", UVM_LOW);      
+      //           //`uvm_info("TEST_INFO", $sformatf("Sequencer is busy: %0d", sequencer_h.is_busy()), UVM_MEDIUM);
           
-                WRITE_WRAP8_sequence_h.start(sequencer_h);
-                //`uvm_do_on(WRITE_WRAP8_sequence_h, sequencer_h)
-              end
-              WRAP16: begin 
-                `uvm_info("runall_sequence1","WRITE_WRAP16", UVM_LOW);      
-                //`uvm_info("TEST_INFO", $sformatf("Sequencer is busy: %0d", sequencer_h.is_busy()), UVM_MEDIUM);
+      //           WRITE_WRAP8_sequence_h.start(sequencer_h);
+      //           //`uvm_do_on(WRITE_WRAP8_sequence_h, sequencer_h)
+      //         end
+      //         WRAP16: begin 
+      //           `uvm_info("runall_sequence1","WRITE_WRAP16", UVM_LOW);      
+      //           //`uvm_info("TEST_INFO", $sformatf("Sequencer is busy: %0d", sequencer_h.is_busy()), UVM_MEDIUM);
           
-                WRITE_WRAP16_sequence_h.start(sequencer_h);
-                //`uvm_do_on(WRITE_WRAP16_sequence_h, sequencer_h)
-              end                                                                                                           
-            endcase // seq_item.HBURST
-          end
-          else if(seq_item.WRITE_op == READ) begin
-            case(seq_item.BURST_op)
-              SINGLE: begin 
-                `uvm_info("runall_sequence1","READ_SINGLE", UVM_LOW);  
-                //`uvm_info("TEST_INFO", $sformatf("Sequencer is busy: %0d", sequencer_h.is_busy()), UVM_MEDIUM);
+      //           WRITE_WRAP16_sequence_h.start(sequencer_h);
+      //           //`uvm_do_on(WRITE_WRAP16_sequence_h, sequencer_h)
+      //         end                                                                                                           
+      //       endcase // seq_item.HBURST
+      //     end
+      //     else if(seq_item.WRITE_op == READ) begin
+      //       case(seq_item.BURST_op)
+      //         SINGLE: begin 
+      //           `uvm_info("runall_sequence1","READ_SINGLE", UVM_LOW);  
+      //           //`uvm_info("TEST_INFO", $sformatf("Sequencer is busy: %0d", sequencer_h.is_busy()), UVM_MEDIUM);
               
-                READ_SINGLE_sequence_h.start(sequencer_h);
-                //`uvm_do_on(READ_SINGLE_sequence_h, sequencer_h)
-              end
-              INCR: begin
-                `uvm_info("runall_sequence1","READ_INCR", UVM_LOW); 
-                //`uvm_info("TEST_INFO", $sformatf("Sequencer is busy: %0d", sequencer_h.is_busy()), UVM_MEDIUM);
+      //           READ_SINGLE_sequence_h.start(sequencer_h);
+      //           //`uvm_do_on(READ_SINGLE_sequence_h, sequencer_h)
+      //         end
+      //         INCR: begin
+      //           `uvm_info("runall_sequence1","READ_INCR", UVM_LOW); 
+      //           //`uvm_info("TEST_INFO", $sformatf("Sequencer is busy: %0d", sequencer_h.is_busy()), UVM_MEDIUM);
                
-                READ_INCR_sequence_h.start(sequencer_h);
-                //`uvm_do_on(READ_INCR_sequence_h, sequencer_h)
-              end
-              INCR4: begin
-                `uvm_info("runall_sequence1","READ_INCR4", UVM_LOW); 
-                //`uvm_info("TEST_INFO", $sformatf("Sequencer is busy: %0d", sequencer_h.is_busy()), UVM_MEDIUM);
+      //           READ_INCR_sequence_h.start(sequencer_h);
+      //           //`uvm_do_on(READ_INCR_sequence_h, sequencer_h)
+      //         end
+      //         INCR4: begin
+      //           `uvm_info("runall_sequence1","READ_INCR4", UVM_LOW); 
+      //           //`uvm_info("TEST_INFO", $sformatf("Sequencer is busy: %0d", sequencer_h.is_busy()), UVM_MEDIUM);
 
-                READ_INCR4_sequence_h.start(sequencer_h);
-                //`uvm_do_on(READ_INCR4_sequence_h, sequencer_h)
-              end
-              INCR8: begin 
-                `uvm_info("runall_sequence1","READ_INCR8", UVM_LOW);
-                //`uvm_info("TEST_INFO", $sformatf("Sequencer is busy: %0d", sequencer_h.is_busy()), UVM_MEDIUM);
+      //           READ_INCR4_sequence_h.start(sequencer_h);
+      //           //`uvm_do_on(READ_INCR4_sequence_h, sequencer_h)
+      //         end
+      //         INCR8: begin 
+      //           `uvm_info("runall_sequence1","READ_INCR8", UVM_LOW);
+      //           //`uvm_info("TEST_INFO", $sformatf("Sequencer is busy: %0d", sequencer_h.is_busy()), UVM_MEDIUM);
 
-                READ_INCR8_sequence_h.start(sequencer_h);
-                //`uvm_do_on(READ_INCR8_sequence_h, sequencer_h)
-              end
-              INCR16: begin 
-                `uvm_info("runall_sequence1","READ_INCR16", UVM_LOW);
-                //`uvm_info("TEST_INFO", $sformatf("Sequencer is busy: %0d", sequencer_h.is_busy()), UVM_MEDIUM);
+      //           READ_INCR8_sequence_h.start(sequencer_h);
+      //           //`uvm_do_on(READ_INCR8_sequence_h, sequencer_h)
+      //         end
+      //         INCR16: begin 
+      //           `uvm_info("runall_sequence1","READ_INCR16", UVM_LOW);
+      //           //`uvm_info("TEST_INFO", $sformatf("Sequencer is busy: %0d", sequencer_h.is_busy()), UVM_MEDIUM);
 
-                READ_INCR16_sequence_h.start(sequencer_h);
-                //`uvm_do_on(READ_INCR16_sequence_h, sequencer_h)
-              end
-              WRAP4: begin
-               `uvm_info("runall_sequence1","READ_WRAP4", UVM_LOW); 
-               //`uvm_info("TEST_INFO", $sformatf("Sequencer is busy: %0d", sequencer_h.is_busy()), UVM_MEDIUM);
+      //           READ_INCR16_sequence_h.start(sequencer_h);
+      //           //`uvm_do_on(READ_INCR16_sequence_h, sequencer_h)
+      //         end
+      //         WRAP4: begin
+      //          `uvm_info("runall_sequence1","READ_WRAP4", UVM_LOW); 
+      //          //`uvm_info("TEST_INFO", $sformatf("Sequencer is busy: %0d", sequencer_h.is_busy()), UVM_MEDIUM);
 
-                READ_WRAP4_sequence_h.start(sequencer_h);
-                //`uvm_do_on(READ_WRAP4_sequence_h, sequencer_h)
-              end
-              WRAP8: begin 
-                `uvm_info("runall_sequence1","READ_WRAP8", UVM_LOW);
-                //`uvm_info("TEST_INFO", $sformatf("Sequencer is busy: %0d", sequencer_h.is_busy()), UVM_MEDIUM);
+      //           READ_WRAP4_sequence_h.start(sequencer_h);
+      //           //`uvm_do_on(READ_WRAP4_sequence_h, sequencer_h)
+      //         end
+      //         WRAP8: begin 
+      //           `uvm_info("runall_sequence1","READ_WRAP8", UVM_LOW);
+      //           //`uvm_info("TEST_INFO", $sformatf("Sequencer is busy: %0d", sequencer_h.is_busy()), UVM_MEDIUM);
 
-                READ_WRAP8_sequence_h.start(sequencer_h);
-                //`uvm_do_on(READ_WRAP8_sequence_h, sequencer_h)
-              end
-              WRAP16: begin 
-                `uvm_info("runall_sequence1","READ_WRAP16", UVM_LOW);
-                //`uvm_info("TEST_INFO", $sformatf("Sequencer is busy: %0d", sequencer_h.is_busy()), UVM_MEDIUM);
+      //           READ_WRAP8_sequence_h.start(sequencer_h);
+      //           //`uvm_do_on(READ_WRAP8_sequence_h, sequencer_h)
+      //         end
+      //         WRAP16: begin 
+      //           `uvm_info("runall_sequence1","READ_WRAP16", UVM_LOW);
+      //           //`uvm_info("TEST_INFO", $sformatf("Sequencer is busy: %0d", sequencer_h.is_busy()), UVM_MEDIUM);
 
-                READ_WRAP16_sequence_h.start(sequencer_h);
-                //`uvm_do_on(READ_WRAP16_sequence_h, sequencer_h)
-              end  
-            endcase // seq_item.HBURST
-          end
-        end
-        else begin
-          `uvm_info("runall_sequence1","IDLE", UVM_LOW);
-          //`uvm_info("TEST_INFO", $sformatf("Sequencer is busy: %0d", sequencer_h.is_busy()), UVM_MEDIUM);     
-          IDLE_sequence_h.start(sequencer_h);
-          //`uvm_do_on(IDLE_sequence_h, sequencer_h)
-        end
-      end
-      else begin
-        `uvm_info("runall_sequence1","RESET", UVM_LOW);        
-        //`uvm_info("TEST_INFO", $sformatf("Sequencer is busy: %0d", sequencer_h.is_busy()), UVM_MEDIUM);
-        reset_sequence_h.start(sequencer_h);
-        //`uvm_do_on(reset_sequence_h, sequencer_h)
-      end
+      //           READ_WRAP16_sequence_h.start(sequencer_h);
+      //           //`uvm_do_on(READ_WRAP16_sequence_h, sequencer_h)
+      //         end  
+      //       endcase // seq_item.HBURST
+      //     end
+      //   end
+      //   else begin
+      //     `uvm_info("runall_sequence1","IDLE", UVM_LOW);
+      //     //`uvm_info("TEST_INFO", $sformatf("Sequencer is busy: %0d", sequencer_h.is_busy()), UVM_MEDIUM);     
+      //     IDLE_sequence_h.start(sequencer_h);
+      //     //`uvm_do_on(IDLE_sequence_h, sequencer_h)
+      //   end
+      // end
+      // else begin
+      //   `uvm_info("runall_sequence1","RESET", UVM_LOW);        
+      //   //`uvm_info("TEST_INFO", $sformatf("Sequencer is busy: %0d", sequencer_h.is_busy()), UVM_MEDIUM);
+      //   reset_sequence_h.start(sequencer_h);
+      //   //`uvm_do_on(reset_sequence_h, sequencer_h)
+      // end
 
 
       //   if(seq_item.HBURST == SINGLE) begin
@@ -326,9 +314,7 @@ class runall_sequence extends base_sequence;
 
     end
 
-    if(~last_test)
-      seq_item.last_item = 1'b1;
-
+    IDLE_sequence_h.HADDR_reserve = base_sequence_r[2].seq_item.HADDR;
     IDLE_sequence_h.start(sequencer_h);
 
   endtask : body

@@ -92,7 +92,7 @@ class base_sequence extends uvm_sequence #(sequence_item);
     end
     else begin
       case (burst_type)
-        //SINGLE:         return 1;
+        //SINGLE:         return 0;
         INCR:           return seq_item.INCR_CONTROL;
         WRAP4, INCR4:   return  3;
         WRAP8, INCR8:   return  7;

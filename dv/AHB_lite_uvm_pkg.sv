@@ -71,6 +71,8 @@ package AHB_pkg;
 
 
 	//control phase signal parameters
+	parameter RESET_WIDTH = 1;
+	parameter WRITE_WIDTH = 1;
    	parameter TRANS_WIDTH = 2;
    	parameter SIZE_WIDTH = 3;
    	parameter BURST_WIDTH = 3;
@@ -141,11 +143,15 @@ package AHB_pkg;
 	`include "WRITE_READ_INCR16_sequence.svh"
 	`include "WRITE_READ_WRAP16_sequence.svh"
 
-	`include "runall_sequence.svh"
 	`include "test_sequence.svh"
 	`include "ADDRESS_ERROR_INJECTION_sequence.svh"
 	`include "PRIVELEGE_ERROR_INJECTION_sequence.svh"
 
+	`include "twice_IDLE_sequence.svh"
+	`include "twice_reset_sequence.svh"
+	`include "SINGLE_IDLE_sequence.svh"
+
+	`include "runall_sequence.svh"
 
 	`include "driver.svh"
 	`include "reactive_driver.svh"
@@ -206,6 +212,11 @@ package AHB_pkg;
 	`include "test_test.svh"
 	`include "ADDRESS_ERROR_INJECTION_test.svh"
 	`include "PRIVELEGE_ERROR_INJECTION_test.svh"
+
+	`include "twice_IDLE_test.svh"
+	`include "twice_reset_test.svh"
+	`include "SINGLE_IDLE_test.svh"
+
 	`include "runall_test_arb.svh"
 
 endpackage : AHB_pkg

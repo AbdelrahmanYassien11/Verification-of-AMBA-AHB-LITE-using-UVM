@@ -80,6 +80,7 @@ class scoreboard extends uvm_scoreboard;
   function void final_phase(uvm_phase phase);
     super.final_phase(phase);
     `uvm_info("SCOREBOARD", "Scoreboard is stopping.", UVM_MEDIUM)
+    $display("AVAILABLE_SIZES: %0d",AVAILABLE_SIZES);
   endfunction
 
 endclass

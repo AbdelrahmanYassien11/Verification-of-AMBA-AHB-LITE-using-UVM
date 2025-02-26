@@ -48,34 +48,115 @@
 
   covergroup HTRANS_df_cg(input int i, input sequence_item c);
     option.per_instance = 1;    
-    option.name = $sformatf(" df = %0d", i); 
+    option.name = $sformatf(" df = %0d", i);
+    option.weight = ((i == 1)?0:1);
     df:coverpoint c.HTRANS iff (c.HRESETn) {
       bins tr[] = {i};
+      ignore_bins unreachable = {1};
     }
   endgroup : HTRANS_df_cg
 
   covergroup HTRANS_dt_cg(input int i, input int j, input sequence_item c);
     option.per_instance = 1;
-    option.name = $sformatf(" dt: %0d => %0d", i, j);    
+    option.name = $sformatf(" dt: %0d => %0d", i, j);
+    option.weight = ((i == 1 || j == 1)? 0:1);    
     dt:coverpoint c.HTRANS iff (c.HRESETn) {
       bins tr[] = (i => j);
+      ignore_bins unreachable1 = (i => 1);
+      ignore_bins unreachable2 = (1 => j);
+      ignore_bins unreachable3 = (0 => 3);
+      ignore_bins unreachable4 = (3 => 2);
+
     }
   endgroup : HTRANS_dt_cg
 
+  covergroup HSIZE_df_cg(input int i, sequence_item c);
+    option.per_instance = 1;
+    option.name = $sformatf(" df = %0d",i);    
+    dt:coverpoint c.HSIZE iff (c.HRESETn) {
+      bins tr[] = {i};
+    }
+  endgroup : HSIZE_df_cg
 
-  // covergroup HSIZE_dt_cg(input int i, input int j, sequence_item c);
-  //   dt:coverpoint vector iff (c.HRESETn) {
-  //     bins tr[] = (i => j);
-  //   }
-  //   option.per_instance = 1;
-  // endgroup : HSIZE_dt_cg
+  covergroup HSIZE_dt_cg(input int i, input int j, sequence_item c);
+    option.per_instance = 1;
+    option.name = $sformatf(" dt: %0d => %0d", i, j);    
+    dt:coverpoint c.HSIZE iff (c.HRESETn) {
+      bins tr[] = (i => j);
+    }
+  endgroup : HSIZE_dt_cg
 
-  // covergroup HBURST_dt_cg(input int i, input int j, input sequence_item c);
-  //   dt:coverpoint vector iff (c.HRESETn) {
-  //     bins tr[] = (i => j);
-  //   }
-  //   option.per_instance = 1;
-  // endgroup : HBURST_dt_cg   
+  covergroup HBURST_df_cg(input int i, sequence_item c);
+    option.per_instance = 1;
+    option.name = $sformatf(" df = %0d", i);    
+    dt:coverpoint c.HBURST iff (c.HRESETn) {
+      bins tr[] = {i};
+    }
+  endgroup : HBURST_df_cg
+
+  covergroup HBURST_dt_cg(input int i, input int j, input sequence_item c);
+    option.per_instance = 1;
+    option.name = $sformatf(" dt: %0d => %0d", i, j); 
+    dt:coverpoint c.HBURST iff (c.HRESETn) {
+      bins tr1[] = (0 => j);
+      bins tr2[] = (i => 0);
+      //ignore_bins unreachable1 = ();
+    }
+  endgroup : HBURST_dt_cg   
+
+  covergroup HWRITE_df_cg(input int i, sequence_item c);
+    option.per_instance = 1;
+    option.name = $sformatf(" df = %0d", i);    
+    dt:coverpoint c.HWRITE iff (c.HRESETn) {
+      bins tr[] = {i};
+    }
+  endgroup : HWRITE_df_cg
+
+  covergroup HWRITE_dt_cg(input int i, input int j, input sequence_item c);
+    option.per_instance = 1;
+    option.name = $sformatf(" dt: %0d => %0d", i, j); 
+    dt:coverpoint c.HWRITE iff (c.HRESETn) {
+      bins tr[] = (i => j);
+    }
+  endgroup :HWRITE_dt_cg   
+
+  covergroup HRESETn_df_cg(input int i, sequence_item c);
+    option.per_instance = 1;
+    option.name = $sformatf(" df = %0d", i);    
+    dt:coverpoint c.HRESETn {
+      bins tr[] = {i};
+    }
+  endgroup : HRESETn_df_cg
+
+  covergroup HRESETn_dt_cg(input int i, input int j, input sequence_item c);
+    option.per_instance = 1;
+    option.name = $sformatf(" dt: %0d => %0d", i, j); 
+    dt:coverpoint c.HRESETn {
+      bins tr[] = (i => j);
+    }
+  endgroup : HRESETn_dt_cg   
+
+  covergroup HPROT_df_cg(input int i, sequence_item c);
+    option.per_instance = 1;
+    option.name = $sformatf(" df = %0d", i);    
+    option.weight = ((i inside {[15:4]})?0:1); 
+    dt:coverpoint c.HPROT iff (c.HRESETn) {
+      bins tr[] = {i};
+      ignore_bins unreachable[] = {[15:4]};
+    }
+  endgroup : HPROT_df_cg
+
+  covergroup HPROT_dt_cg(input int i, input int j, input sequence_item c);
+    option.per_instance = 1;
+    option.name = $sformatf(" dt: %0d => %0d", i, j);
+    option.weight = ((i inside {[15:4]} || j inside {[15:4]})?0:1); 
+    dt:coverpoint c.HPROT iff (c.HRESETn) {
+      bins tr[] = (i => j);
+      ignore_bins unreachable1[] = (i => [15:4]);
+
+      ignore_bins unreachable2[] = ([15:4] => j);
+    }
+  endgroup : HPROT_dt_cg   
 
 class coverage extends uvm_subscriber #(sequence_item);
   `uvm_component_utils(coverage);
@@ -125,15 +206,23 @@ class coverage extends uvm_subscriber #(sequence_item);
   HSEL_df_tog_cg  HSEL_df_tog_cg_bits   [BITS_FOR_SUBORDINATES-1:0];
   HSEL_dt_tog_cg  HSEL_dt_tog_cg_bits   [BITS_FOR_SUBORDINATES-1:0];
 
-  HTRANS_df_cg HTRANS_df_cg_vals [(2**TRANS_WIDTH)-1:0];
-  HTRANS_dt_cg HTRANS_dt_cg_vals [(2**TRANS_WIDTH)-1:0][(2**TRANS_WIDTH)-1:0];
+  HTRANS_df_cg HTRANS_df_cg_vals [2**TRANS_WIDTH];
+  HTRANS_dt_cg HTRANS_dt_cg_vals [2**TRANS_WIDTH][2**TRANS_WIDTH];
 
-  // HSIZE_df_cg  HSIZE_df_cg_vals   [AVAILABLE_SIZES-1:0];
-  // HSIZE_dt_cg  HSIZE_dt_cg_vals   [AVAILABLE_SIZES-1:0][AVAILABLE_SIZES-1:0];
+  HSIZE_df_cg  HSIZE_df_cg_vals   [AVAILABLE_SIZES];
+  HSIZE_dt_cg  HSIZE_dt_cg_vals   [AVAILABLE_SIZES][AVAILABLE_SIZES];
 
-  // HBURST_df_cg HBURST_df_cg_vals  [2**BURST_WIDTH:0];
-  // HBURST_dt_cg HBURST_dt_cg_vals  [2**BURST_WIDTH:0][2**BURST_WIDTH:0];
+  HBURST_df_cg HBURST_df_cg_vals  [2**BURST_WIDTH];
+  HBURST_dt_cg HBURST_dt_cg_vals  [2**BURST_WIDTH][2**BURST_WIDTH];
 
+  HWRITE_df_cg HWRITE_df_cg_vals  [2**WRITE_WIDTH];
+  HWRITE_dt_cg HWRITE_dt_cg_vals  [2**WRITE_WIDTH][2**WRITE_WIDTH];
+
+  HRESETn_df_cg HRESETn_df_cg_vals  [2**RESET_WIDTH];
+  HRESETn_dt_cg HRESETn_dt_cg_vals  [2**RESET_WIDTH][2**RESET_WIDTH];
+
+  HPROT_df_cg  HPROT_df_cg_vals   [2**PROT_WIDTH];
+  HPROT_dt_cg  HPROT_dt_cg_vals   [2**PROT_WIDTH][2**PROT_WIDTH]; 
 
 
   // Covergroup for RESET-related coverage
@@ -545,6 +634,20 @@ class coverage extends uvm_subscriber #(sequence_item);
     foreach(HTRANS_dt_cg_vals[i,j]) HTRANS_dt_cg_vals[i][j].sample();
     foreach(HTRANS_df_cg_vals[i])   HTRANS_df_cg_vals[i].sample();
 
+    foreach(HSIZE_dt_cg_vals[i,j]) HSIZE_dt_cg_vals[i][j].sample();
+    foreach(HSIZE_df_cg_vals[i])   HSIZE_df_cg_vals[i].sample();
+
+    foreach(HBURST_dt_cg_vals[i,j]) HBURST_dt_cg_vals[i][j].sample();
+    foreach(HBURST_df_cg_vals[i])   HBURST_df_cg_vals[i].sample();
+
+    foreach(HWRITE_dt_cg_vals[i,j]) HWRITE_dt_cg_vals[i][j].sample();
+    foreach(HWRITE_df_cg_vals[i])   HWRITE_df_cg_vals[i].sample();
+
+    foreach(HRESETn_dt_cg_vals[i,j]) HRESETn_dt_cg_vals[i][j].sample();
+    foreach(HRESETn_df_cg_vals[i])   HRESETn_df_cg_vals[i].sample();
+
+    foreach(HPROT_dt_cg_vals[i,j]) HPROT_dt_cg_vals[i][j].sample();
+    foreach(HPROT_df_cg_vals[i])   HPROT_df_cg_vals[i].sample();
 
     `uvm_info("COVERAGE", {"SAMPLE: ", t.convert2string}, UVM_HIGH)
   endfunction
@@ -578,6 +681,21 @@ class coverage extends uvm_subscriber #(sequence_item);
 
     foreach(HTRANS_dt_cg_vals[i,j]) HTRANS_dt_cg_vals[i][j] = new(i, j, input_cov_copied);
     foreach(HTRANS_df_cg_vals[i])   HTRANS_df_cg_vals[i]    = new(i, input_cov_copied);
+
+    foreach(HSIZE_dt_cg_vals[i,j]) HSIZE_dt_cg_vals[i][j] = new(i, j, input_cov_copied);
+    foreach(HSIZE_df_cg_vals[i])   HSIZE_df_cg_vals[i]    = new(i, input_cov_copied);
+
+    foreach(HBURST_dt_cg_vals[i,j]) HBURST_dt_cg_vals[i][j] = new(i, j, input_cov_copied);
+    foreach(HBURST_df_cg_vals[i])   HBURST_df_cg_vals[i]    = new(i, input_cov_copied);
+
+    foreach(HWRITE_dt_cg_vals[i,j]) HWRITE_dt_cg_vals[i][j] = new(i, j, input_cov_copied);
+    foreach(HWRITE_df_cg_vals[i])   HWRITE_df_cg_vals[i]    = new(i, input_cov_copied);
+
+    foreach(HPROT_dt_cg_vals[i,j]) HPROT_dt_cg_vals[i][j] = new(i, j, input_cov_copied);
+    foreach(HPROT_df_cg_vals[i])   HPROT_df_cg_vals[i]    = new(i, input_cov_copied);
+
+    foreach(HRESETn_dt_cg_vals[i,j]) HRESETn_dt_cg_vals[i][j] = new(i, j, input_cov_copied);
+    foreach(HRESETn_df_cg_vals[i])   HRESETn_df_cg_vals[i]    = new(i, input_cov_copied);
   endfunction
 
   // Build phase for component setup
