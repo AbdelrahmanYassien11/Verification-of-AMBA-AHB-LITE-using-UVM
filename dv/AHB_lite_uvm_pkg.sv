@@ -143,13 +143,13 @@ package AHB_pkg;
 	`include "WRITE_READ_INCR16_sequence.svh"
 	`include "WRITE_READ_WRAP16_sequence.svh"
 
-	`include "test_sequence.svh"
-	`include "ADDRESS_ERROR_INJECTION_sequence.svh"
-	`include "PRIVELEGE_ERROR_INJECTION_sequence.svh"
-
 	`include "twice_IDLE_sequence.svh"
 	`include "twice_reset_sequence.svh"
 	`include "SINGLE_IDLE_sequence.svh"
+
+	`include "test_sequence.svh"
+	`include "ADDRESS_ERROR_INJECTION_sequence.svh"
+	`include "PRIVELEGE_ERROR_INJECTION_sequence.svh"
 
 	`include "runall_sequence.svh"
 

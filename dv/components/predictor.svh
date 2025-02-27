@@ -253,7 +253,7 @@ class predictor extends uvm_subscriber #(sequence_item);
       case(HTRANS)
         IDLE, BUSY: begin
           //if(undo_on) $display("HTRANS : %0d", HTRANS);
-          if (HBURST == SINGLE && HRESP_expected == ERROR) begin
+          if (HBURST == SINGLE && HRESP_expected == ERROR && seq_item_old.HADDR[ADDR_WIDTH-1:ADDR_WIDTH-BITS_FOR_SUBORDINATES] != 4) begin
               HRESP_expected = ERROR; HREADY_expected = READY;
           end
           // if(~( (int'(HADDR_VALID + wrap_counter +1) >= 0) & ((HADDR_VALID + burst_counter -1) < ADDR_DEPTH) & (int'(HADDR_VALID + wrap_counter -1) < ADDR_DEPTH))) begin
@@ -859,7 +859,8 @@ class predictor extends uvm_subscriber #(sequence_item);
       case(HTRANS)
 
         IDLE, BUSY: begin
-          if(HRESP_expected == ERROR && HBURST == SINGLE) begin
+          if(HRESP_expected == ERROR && HBURST == SINGLE && seq_item_old.HADDR[ADDR_WIDTH-1:ADDR_WIDTH-BITS_FOR_SUBORDINATES] != 4) begin
+              $display("weleeeeeeeeeeeeh");
               HRESP_expected = ERROR; HREADY_expected = READY;
           end          
           // if(~( (int'(HADDR_VALID + wrap_counter +1 ) >= 0 ) & ((HADDR_VALID + burst_counter - 1) < ADDR_DEPTH) & (int'(wrap_counter+(HADDR_VALID - 1)) < ADDR_DEPTH))) begin
@@ -993,7 +994,8 @@ class predictor extends uvm_subscriber #(sequence_item);
       endcase // HTRANS
     end
     else if(HSEL == 4) begin
-        HRESP_expected = ERROR; HREADY_expected = READY; HRDATA_expectedd = 0;
+      $display("atlasicoooo");
+      HRESP_expected = ERROR; HREADY_expected = READY; HRDATA_expectedd = 0;
     end
     else begin
       HRESP_expected   = ERROR;

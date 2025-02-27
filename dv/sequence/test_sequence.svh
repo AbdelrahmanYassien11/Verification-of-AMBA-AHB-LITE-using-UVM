@@ -21,7 +21,8 @@ class test_sequence extends base_sequence;
 
   // Handle to the reset sequence
   reset_sequence reset_sequence_h;
-  READ_INCR8_sequence READ_INCR8_sequence_h;
+  WRITE_READ_INCR8_sequence WRITE_READ_INCR8_sequence_h;
+  twice_reset_sequence twice_reset_sequence_h;
 
   // Constructor
   function new(string name = "test_sequence");
@@ -33,16 +34,15 @@ class test_sequence extends base_sequence;
     $display("start of pre_body task");
     super.pre_body(); // Call the base class pre_body
     // Create an instance of the reset sequence
-    READ_INCR8_sequence_h = READ_INCR8_sequence::type_id::create("READ_INCR8_sequence_h");
-    reset_sequence_h = reset_sequence::type_id::create("reset_sequence_h");
+        reset_sequence_h = reset_sequence::type_id::create("reset_sequence_h");
+    twice_reset_sequence_h = twice_reset_sequence::type_id::create("twice_reset_sequence_h");
   endtask : pre_body
 
   // Main task body for executing the READ operation
   virtual task body();
 
-    // reset_sequence::last_test = 1'b1;
-    // READ_INCR8_sequence::last_test = 1'b1;
-    // READ_INCR8_sequence::reset_flag = 1'b1;
+    WRITE_READ_INCR8_sequence::reset_flag = 1'b1;
+    twice_reset_sequence::reset_flag = 1'b1;
 
 
     `uvm_info("test_sequence: ", "STARTING" , UVM_HIGH)
@@ -56,27 +56,14 @@ class test_sequence extends base_sequence;
 
     //READ_INCR8_sequence_h.start(sequencer_h);
     // Start the sequence item
-    start_item(seq_item);
-    
-    // Configure the sequence item for the write operation
-    seq_item.RESET_op.rand_mode(0);
-    seq_item.WRITE_op.rand_mode(0);
-    seq_item.TRANS_op.rand_mode(0);
-    seq_item.BURST_op.rand_mode(0);
-    seq_item.SIZE_op.rand_mode(0);
 
-    // Set the operation type to WRITE
-    seq_item.RESET_op = WORKING;
-    seq_item.WRITE_op = WRITE;
-    seq_item.TRANS_op = NONSEQ;
-    seq_item.BURST_op = SINGLE;
-    seq_item.SIZE_op  = HALFWORD;
+    WRITE_READ_INCR8_sequence_h.start(sequencer_h);
 
-    assert(seq_item.randomize()); // Randomize the sequence item
-    // Set the control signals for writing
+    twice_reset_sequence_h.start(sequencer_h);
 
-    // Finish the sequence item
-    finish_item(seq_item);
+    WRITE_READ_INCR8_sequence_h.start(sequencer_h);
+
+
 
   endtask : body
 
