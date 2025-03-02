@@ -107,12 +107,12 @@ class comparator extends uvm_component;
         `uvm_error("SCOREBOARD", "FAIL")
         predictor_h.display_subordinates(seq_item_expected.HADDR, seq_item_expected.HSEL);
       end
-
       sequence_item::COMPARATOR_transaction_counter = sequence_item::COMPARATOR_transaction_counter + 1;
     end
   endtask
 
   task clearing_fifo();
+    bit more_than_one_reset;
     if(first_resset_shield >= 1) begin
       do begin
         //$display("DEAR1 : %0t",$time());
@@ -124,7 +124,8 @@ class comparator extends uvm_component;
             //$display("DEAR3 : %0t",$time());
             if(fifo_expected_outputs_cleared.try_get(seq_item_expected_reset)) begin
               //$display("DEAR4 : %0t",$time());
-              if(~seq_item_expected_reset.HRESETn) begin
+              if(~seq_item_expected_reset.HRESETn && ~more_than_one_reset) begin
+                more_than_one_reset = 1;
                 $display("TIME : %0t fifo_expected_outputs.used(): %0d & to_be_decremented %0d", $time(), fifo_expected_outputs.used(), to_be_decremented);
                 fifo_expected_outputs.flush();
                 fifo_expected_outputs_cleared.flush();
@@ -143,6 +144,7 @@ class comparator extends uvm_component;
     else begin
       first_resset_shield = first_resset_shield + 1;
     end
+    if(more_than_one_reset) more_than_one_reset = 0;
   endtask : clearing_fifo
 
 endclass : comparator

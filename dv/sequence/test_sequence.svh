@@ -34,7 +34,8 @@ class test_sequence extends base_sequence;
     $display("start of pre_body task");
     super.pre_body(); // Call the base class pre_body
     // Create an instance of the reset sequence
-        reset_sequence_h = reset_sequence::type_id::create("reset_sequence_h");
+    reset_sequence_h = reset_sequence::type_id::create("reset_sequence_h");
+    WRITE_READ_INCR8_sequence_h = WRITE_READ_INCR8_sequence::type_id::create("WRITE_READ_INCR8_sequence_h");
     twice_reset_sequence_h = twice_reset_sequence::type_id::create("twice_reset_sequence_h");
   endtask : pre_body
 
@@ -58,6 +59,8 @@ class test_sequence extends base_sequence;
     // Start the sequence item
 
     WRITE_READ_INCR8_sequence_h.start(sequencer_h);
+
+    reset_sequence_h.start(sequencer_h);
 
     twice_reset_sequence_h.start(sequencer_h);
 

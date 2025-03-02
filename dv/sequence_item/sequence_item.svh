@@ -49,7 +49,7 @@ bit ERROR_ON_EXECUTE_IDLE;
         logic   [DATA_WIDTH-1:0]  HREADY;   
 
 
-      constraint randomized_seq_c { sequence_randomizer dist {[0:19]:=1};
+      constraint randomized_seq_c { sequence_randomizer dist {[0:20]:=1};
       }
 
       constraint RESET_cmd {RESET_op dist {0:/1, 1:/99}; 

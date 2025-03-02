@@ -20,7 +20,7 @@ class runall_sequence extends base_sequence;
   static bit last_test;
   `uvm_declare_p_sequencer(sequencer)
 
-  static base_sequence base_sequence_r [20];
+  static base_sequence base_sequence_r [21];
 
   // Handle to the reset sequence
   reset_sequence reset_sequence_h;
@@ -107,7 +107,7 @@ class runall_sequence extends base_sequence;
     base_sequence_r = '{reset_sequence_h, IDLE_sequence_h, WRITE_SINGLE_sequence_h, WRITE_INCR_sequence_h, WRITE_INCR4_sequence_h, WRITE_INCR8_sequence_h,
                         WRITE_INCR16_sequence_h, WRITE_WRAP4_sequence_h, WRITE_WRAP8_sequence_h, WRITE_WRAP16_sequence_h, READ_SINGLE_sequence_h, READ_INCR_sequence_h,
                         READ_INCR4_sequence_h, READ_INCR8_sequence_h, READ_INCR16_sequence_h, READ_WRAP4_sequence_h, READ_WRAP8_sequence_h, READ_WRAP16_sequence_h, twice_IDLE_sequence_h,
-                        /*twice_reset_sequence_h,*/ SINGLE_IDLE_sequence_h};
+                        twice_reset_sequence_h, SINGLE_IDLE_sequence_h};
 
   endtask : pre_body
 
