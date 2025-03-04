@@ -9,40 +9,40 @@
  * 
  * Copyright (c) 2024 Abdelrahman Mohamad Yassien. All Rights Reserved.
  ******************************************************************/
- covergroup HWDATA_df_tog_cg(input bit [DATA_WIDTH-1:0] position, ref bit [DATA_WIDTH-1:0] vector);
-    df: coverpoint (vector & position) != 0;
+ covergroup HWDATA_df_tog_cg(input bit [DATA_WIDTH-1:0] position, input sequence_item cov);
     option.per_instance = 1;
+    df: coverpoint (cov.HWDATA & position) != 0 iff(cov.HRESETn && cov.HTRANS != IDLE && cov.HTRANS != BUSY);
  endgroup : HWDATA_df_tog_cg
 
- covergroup HWDATA_dt_tog_cg(input bit [DATA_WIDTH-1:0] position, ref bit [DATA_WIDTH-1:0] vector);
-    dt: coverpoint (vector & position) != 0 {
+ covergroup HWDATA_dt_tog_cg(input bit [DATA_WIDTH-1:0] position, input sequence_item cov);
+    option.per_instance = 1;    
+    dt: coverpoint (cov.HWDATA & position) != 0  iff(cov.HRESETn && cov.HTRANS != IDLE && cov.HTRANS != BUSY){
           bins tr[] = (0 => 1, 1 => 0);
       }
-    option.per_instance = 1;
  endgroup : HWDATA_dt_tog_cg
 
- covergroup HADDR_df_tog_cg(input bit [ADDR_WIDTH-BITS_FOR_SUBORDINATES-1:0] position, ref bit [ADDR_WIDTH-BITS_FOR_SUBORDINATES-1:0] vector);
-    df: coverpoint (vector & position) != 0;
-    option.per_instance = 1;
+ covergroup HADDR_df_tog_cg(input bit [ADDR_WIDTH-BITS_FOR_SUBORDINATES-1:0] position, input sequence_item cov);
+    option.per_instance = 1;    
+    df: coverpoint (cov.HADDR[ADDR_WIDTH-BITS_FOR_SUBORDINATES-1:0] & position) != 0 iff(cov.HRESETn && cov.HTRANS != IDLE && cov.HTRANS != BUSY);
  endgroup : HADDR_df_tog_cg
 
- covergroup HADDR_dt_tog_cg(input bit [ADDR_WIDTH-BITS_FOR_SUBORDINATES-1:0] position, ref bit [ADDR_WIDTH-BITS_FOR_SUBORDINATES-1:0] vector);
-    dt: coverpoint (vector & position) != 0 {
-          bins tr[] = (0 => 1, 1 => 0);
+ covergroup HADDR_dt_tog_cg(input bit [ADDR_WIDTH-BITS_FOR_SUBORDINATES-1:0] position, input sequence_item cov);
+    option.per_instance = 1;    
+    dt: coverpoint (cov.HADDR[ADDR_WIDTH-BITS_FOR_SUBORDINATES-1:0] & position) != 0  iff(cov.HRESETn && cov.HTRANS != IDLE && cov.HTRANS != BUSY){
+        bins tr[] = (0 => 1, 1 => 0);
       }
-    option.per_instance = 1;
  endgroup : HADDR_dt_tog_cg
 
- covergroup HSEL_df_tog_cg(input bit [BITS_FOR_SUBORDINATES-1:0] position, ref bit [BITS_FOR_SUBORDINATES-1:0] vector);
-    df: coverpoint (vector & position) != 0;
+ covergroup HSEL_df_tog_cg(input bit [BITS_FOR_SUBORDINATES-1:0] position, input sequence_item cov);
     option.per_instance = 1;
+    df: coverpoint (cov.HADDR[ADDR_WIDTH-1:ADDR_WIDTH-BITS_FOR_SUBORDINATES] & position) != 0 iff(cov.HRESETn && cov.HTRANS != IDLE && cov.HTRANS != BUSY);
  endgroup : HSEL_df_tog_cg
 
-  covergroup HSEL_dt_tog_cg(input bit [BITS_FOR_SUBORDINATES-1:0] position, ref bit [BITS_FOR_SUBORDINATES-1:0] vector);
-    dt: coverpoint (vector & position) != 0 {
-          bins tr[] = (0 => 1, 1 => 0);
-      }
+  covergroup HSEL_dt_tog_cg(input bit [BITS_FOR_SUBORDINATES-1:0] position, input sequence_item cov);
     option.per_instance = 1;
+    dt: coverpoint (cov.HADDR[ADDR_WIDTH-1:ADDR_WIDTH-BITS_FOR_SUBORDINATES] & position) != 0 iff(cov.HRESETn && cov.HTRANS != IDLE && cov.HTRANS != BUSY){
+        bins tr[] = (0 => 1, 1 => 0);
+      }
   endgroup : HSEL_dt_tog_cg
 
 
@@ -628,9 +628,6 @@ class coverage extends uvm_subscriber #(sequence_item);
     foreach(HSEL_df_tog_cg_bits[i]) HSEL_df_tog_cg_bits[i].sample();
     foreach(HSEL_dt_tog_cg_bits[i]) HSEL_dt_tog_cg_bits[i].sample();
 
-    // foreach(HSIZE_dt_cg_vals[i])  HSIZE_dt_cg_vals[i].sample();
-    // foreach(HBURST_dt_cg_vals[i]) HBURST_dt_cg_vals[i].sample();
-
     foreach(HTRANS_dt_cg_vals[i,j]) HTRANS_dt_cg_vals[i][j].sample();
     foreach(HTRANS_df_cg_vals[i])   HTRANS_df_cg_vals[i].sample();
 
@@ -667,17 +664,14 @@ class coverage extends uvm_subscriber #(sequence_item);
     ADDR_covgrp         = new;
     HWDATA_covgrp       = new;
 
-    foreach(HWDATA_df_tog_cg_bits[i]) HWDATA_df_tog_cg_bits[i] = new(1'b1<<i,HWDATA_cov);
-    foreach(HWDATA_dt_tog_cg_bits[i]) HWDATA_dt_tog_cg_bits[i] = new(1'b1<<i,HWDATA_cov);
+    foreach(HWDATA_df_tog_cg_bits[i]) HWDATA_df_tog_cg_bits[i] = new(1'b1<<i, input_cov_copied);
+    foreach(HWDATA_dt_tog_cg_bits[i]) HWDATA_dt_tog_cg_bits[i] = new(1'b1<<i, input_cov_copied);
 
-    foreach(HADDR_df_tog_cg_bits[i]) HADDR_df_tog_cg_bits[i] = new(1'b1<<i,HADDR_VALID_cov);
-    foreach(HADDR_dt_tog_cg_bits[i]) HADDR_dt_tog_cg_bits[i] = new(1'b1<<i,HADDR_VALID_cov);
-
-    foreach(HSEL_df_tog_cg_bits[i]) HSEL_df_tog_cg_bits[i] = new(1'b1<<i,HSEL_cov);
-    foreach(HSEL_dt_tog_cg_bits[i]) HSEL_dt_tog_cg_bits[i] = new(1'b1<<i,HSEL_cov);
-
-    // foreach(HSIZE_dt_val_cg_bits[i,j]) HSIZE_dt_cg_vals[i][j]   = new(i, j, input_cov_copied);
-    // foreach(HBURST_dt_val_cg_bits[i,j]) HBURST_dt_cg_vals[i][j] = new(i, j, input_cov_copied);
+    foreach(HADDR_df_tog_cg_bits[i]) HADDR_df_tog_cg_bits[i] = new(1'b1<<i, input_cov_copied);
+    foreach(HADDR_dt_tog_cg_bits[i]) HADDR_dt_tog_cg_bits[i] = new(1'b1<<i, input_cov_copied);
+ 
+    foreach(HSEL_df_tog_cg_bits[i]) HSEL_df_tog_cg_bits[i] = new(1'b1<<i, input_cov_copied);
+    foreach(HSEL_dt_tog_cg_bits[i]) HSEL_dt_tog_cg_bits[i] = new(1'b1<<i, input_cov_copied);
 
     foreach(HTRANS_dt_cg_vals[i,j]) HTRANS_dt_cg_vals[i][j] = new(i, j, input_cov_copied);
     foreach(HTRANS_df_cg_vals[i])   HTRANS_df_cg_vals[i]    = new(i, input_cov_copied);

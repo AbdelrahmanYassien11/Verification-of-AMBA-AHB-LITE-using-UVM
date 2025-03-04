@@ -38,6 +38,8 @@ class comparator extends uvm_component;
 
   int first_resset_shield;
 
+  bit more_than_one_reset;
+
   // Constructor for the comparator component
   function new (string name = "comparator", uvm_component parent);
     super.new(name, parent);
@@ -91,7 +93,6 @@ class comparator extends uvm_component;
       fifo_expected_outputs.get(seq_item_expected);
       `uvm_info("COMPARATOR", {"EXPECTED_SEQ_ITEM RECEIVED: ", 
                       seq_item_expected.convert2string()}, UVM_HIGH)
-      //seq_item_expected_unchanged = seq_item_expected.clone_me();
 
       clearing_fifo();
 
@@ -112,14 +113,13 @@ class comparator extends uvm_component;
   endtask
 
   task clearing_fifo();
-    bit more_than_one_reset;
     if(first_resset_shield >= 1) begin
       do begin
         //$display("DEAR1 : %0t",$time());
         #1;
         if(fifo_expected_outputs_cleared.used() > 0) begin
                  // $display("DEAR2 : %0t",$time());
-          for(int i = 0; i < fifo_expected_outputs.used(); i++)begin
+          // for(int i = 0; i < fifo_expected_outputs.used(); i++)begin
             int to_be_decremented = fifo_expected_outputs.used();
             //$display("DEAR3 : %0t",$time());
             if(fifo_expected_outputs_cleared.try_get(seq_item_expected_reset)) begin
@@ -136,15 +136,17 @@ class comparator extends uvm_component;
                 $display("TIME : %0t fifo_expected_outputs.used(): %0d & to_be_decremented %0d", $time(), fifo_expected_outputs.used(), to_be_decremented);
                 $display("TIME : %0t FIXING EXPECTED_SEQ_ITEM", $time());
               end
+              else if (seq_item_expected_reset.HRESETn && more_than_one_reset) begin
+                  more_than_one_reset = 0;
+              end
             end
-          end
+          //end
         end
       end while((fifo_actual_outputs.used() == 0) && (sequence_item::COMPARATOR_transaction_counter != sequence_item::PREDICTOR_transaction_counter));
     end
     else begin
       first_resset_shield = first_resset_shield + 1;
     end
-    if(more_than_one_reset) more_than_one_reset = 0;
   endtask : clearing_fifo
 
 endclass : comparator
