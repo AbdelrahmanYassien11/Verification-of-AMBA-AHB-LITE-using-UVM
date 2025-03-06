@@ -12,6 +12,9 @@ rand HWRITE_e     WRITE_op;
 rand HTRANS_e     TRANS_op;
 rand HBURST_e     BURST_op;
 randc HSIZE_e      SIZE_op;
+rand HSEL_e       SEL_op;
+
+
      HRESP_e      RESP_op;
 
 //operation_e operation_o;
@@ -59,9 +62,19 @@ bit ERROR_ON_EXECUTE_IDLE;
                           RESET_op == WORKING  -> HRESETn == 1;
       }
 
-      constraint HADDR_SEL_c { /*HRESETn == 1  ->*/ HADDR[ADDR_WIDTH-1:ADDR_WIDTH-BITS_FOR_SUBORDINATES] dist {1:/20, 2:/20, 3:/20, 4:/10, 5:/15, 6:/15};
+      constraint HADDR_SEL_c { /*HRESETn == 1  ->*/ SEL_op dist {1:/20, 2:/20, 3:/20, 4:/10, 5:/15, 6:/15};
                                // HRESETn == 0  -> HADDR[ADDR_WIDTH-1:ADDR_WIDTH-BITS_FOR_SUBORDINATES] == 3'b0;
       }
+
+      constraint HADDR_SEL_op_c { SEL_op == 1 -> HADDR[ADDR_WIDTH-1:ADDR_WIDTH-BITS_FOR_SUBORDINATES] == 1;
+                                  SEL_op == 2 -> HADDR[ADDR_WIDTH-1:ADDR_WIDTH-BITS_FOR_SUBORDINATES] == 2;
+                                  SEL_op == 3 -> HADDR[ADDR_WIDTH-1:ADDR_WIDTH-BITS_FOR_SUBORDINATES] == 3;
+                                  SEL_op == 4 -> HADDR[ADDR_WIDTH-1:ADDR_WIDTH-BITS_FOR_SUBORDINATES] == 4;
+                                  SEL_op == 5 -> HADDR[ADDR_WIDTH-1:ADDR_WIDTH-BITS_FOR_SUBORDINATES] == 5;
+                                  SEL_op == 6 -> HADDR[ADDR_WIDTH-1:ADDR_WIDTH-BITS_FOR_SUBORDINATES] == 6;
+                                    
+      };
+
       // constraint HADDR_SEL_c { /*HRESETn == 1  ->*/ HADDR[ADDR_WIDTH-1:ADDR_WIDTH-BITS_FOR_SUBORDINATES] dist {1:/30, 2:/30, 3:/30, 4:/10};
       //                          // HRESETn == 0  -> HADDR[ADDR_WIDTH-1:ADDR_WIDTH-BITS_FOR_SUBORDINATES] == 3'b0;
       // }

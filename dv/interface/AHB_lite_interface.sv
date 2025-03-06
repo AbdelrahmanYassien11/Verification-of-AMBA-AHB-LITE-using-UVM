@@ -77,10 +77,14 @@ logic HRESETn_global;
 
 HRESET_e     RESET_op;
 HWRITE_e     WRITE_op;
-HRESP_e      RESP_op;
 HTRANS_e     TRANS_op;
 HBURST_e     BURST_op;
 HSIZE_e      SIZE_op;
+//HPROT_e      PROT_op;
+HSEL_e       SEL_op;
+
+HRESP_e      RESP_op;
+HREADY_e     READY_op;
 
 int counter;
 
@@ -125,6 +129,13 @@ event dataPhase_event, samplingPhase_event;
 		HBURST  <= addressPhase_req.HBURST;
 		HPROT   <= addressPhase_req.HPROT;
 		HADDR   <= addressPhase_req.HADDR;
+
+        RESET_op <= addressPhase_req.RESET_op;
+        WRITE_op <= addressPhase_req.WRITE_op;
+        TRANS_op <= addressPhase_req.TRANS_op;
+        BURST_op <= addressPhase_req.BURST_op;
+        SEL_op   <= addressPhase_req.SEL_op;
+
 		//HWDATA  <= addressPhase_req.HWDATA;
 		//send_inputs(addressPhase_req);
 		@(posedge clk);
@@ -173,6 +184,8 @@ event dataPhase_event, samplingPhase_event;
 		atlas.HRESP  = HRESP;
 		atlas.HRDATA = HRDATA;
 		atlas.HREADY = HREADY;
+        // RESP_op  = HRESP;
+        // READY_op = HREADY;
 		//atlas = pipeline3.clone_me();
 		driver_h.end_transfer(atlas);
 		send_outputs(atlas);

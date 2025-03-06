@@ -42,6 +42,9 @@ package AHB_pkg;
 
 	typedef enum {NOT_READY, READY} HREADY_e;
 
+	typedef enum {NSEL, SUB1, SUB2, SUB3, SUB4, SUB5, SUB6} HSEL_e;
+
+
 
 
 	//HSIZE PARAMETERS
