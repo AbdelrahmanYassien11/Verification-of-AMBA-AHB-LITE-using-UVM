@@ -20,6 +20,10 @@ class base_sequence extends uvm_sequence #(sequence_item);
   sequencer burst_sequencer_h;
   sequencer runall_sequencer_h;
 
+  base_sequence reset_sequence_h;
+
+  // reset_sequence reset_sequence_h;
+
   bit break_burst;
 
   // Constructor
@@ -33,6 +37,7 @@ class base_sequence extends uvm_sequence #(sequence_item);
     $display("start of pre_body task");
     // Create a new instance of the sequence item
     seq_item = sequence_item::type_id::create("seq_item");
+    // reset_sequence_h = reset_sequence::type_id::create("reset_sequence_h");
   endtask : pre_body
 
 
@@ -80,8 +85,40 @@ class base_sequence extends uvm_sequence #(sequence_item);
       end
       start_item(seq_item);
         assert(seq_item.randomize() with {RESET_op == WORKING; WRITE_op == write_type; TRANS_op == trans_type; BURST_op == burst_type;});
-        $display("atlas %0t", $time()); //175
+        //$display("atlas %0t", $time()); //175
       finish_item(seq_item);
+      if(seq_item.reset_flag) begin
+        //set_inst_override_by_name(base_sequence::get_full_name(), reset_sequence, uvm_test_top.env_h.active_agent_h.sequencer_h.base_seqeunce_h.reset_sequence_h);
+        factory.set_type_override_by_name("base_sequence", "reset_sequence");
+        
+        //factory.set_inst_override_by_name("base_sequence", "reset_sequence", "uvm_test_top.env_h.active_agent_h.sequencer_h.base_seqeunce_h");
+        //factory.set_inst_override_by_name("base_agent", "child_agent", {get_full_name(), ".m_env.*"}); 
+        reset_sequence_h = base_sequence::type_id::create("reset_sequence_h");
+        `uvm_info("base_sequence", {"checking the reset_sequence instance",$sformatf("%s",reset_sequence_h.get_full_name())}, UVM_LOW)
+
+        $display("breaking_burst_with_reset");
+        reset_sequence_h.start(m_sequencer, this);
+        $display("reset_mid_burst");
+        // seq_item = new();
+        //     seq_item.HADDR_c.constraint_mode(0);
+        //     seq_item.HADDR_SEL_c.constraint_mode(0);
+        //     // Log information about the reset operation
+        //     `uvm_info("RESET_SEQUENCE: ", "STARTING", UVM_HIGH);
+
+        //     // Start the sequence item for the reset operation
+        //     start_item(seq_item);
+
+        //     // Set the reset signals
+        //     assert(seq_item.randomize() with {RESET_op == RESETING; WRITE_op == READ; TRANS_op == IDLE; BURST_op == SINGLE; HWDATA == 0; HADDR[ADDR_WIDTH-1:ADDR_WIDTH-BITS_FOR_SUBORDINATES] == 0; HADDR[ADDR_WIDTH-BITS_FOR_SUBORDINATES-1:0] == 0;});
+
+
+        //     // Finish the sequence item after setting the reset signals
+        //     finish_item(seq_item);
+
+        //     seq_item.HADDR_c.constraint_mode(1);
+        //     seq_item.HADDR_SEL_c.constraint_mode(1);
+        break;
+      end
     end
     break_burst = 0;
   endtask : do_burst

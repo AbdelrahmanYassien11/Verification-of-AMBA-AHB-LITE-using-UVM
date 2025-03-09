@@ -16,6 +16,7 @@ rand HSEL_e       SEL_op;
 
 
      HRESP_e      RESP_op;
+     HREADY_e     READY_op;
 
 //operation_e operation_o;
 
@@ -26,6 +27,8 @@ static int COMPARATOR_transaction_counter;
 rand int unsigned sequence_randomizer;
 
 rand int unsigned INCR_CONTROL;
+
+rand bit reset_flag;
 
 bit ERROR_ON_EXECUTE_IDLE;
 
@@ -56,6 +59,9 @@ bit ERROR_ON_EXECUTE_IDLE;
       }
 
       constraint RESET_cmd {RESET_op dist {0:/1, 1:/99}; 
+      }
+
+      constraint RESET_midburst_c {reset_flag dist {1:/5, 0:/95}; 
       }
 
       constraint RESET_c {RESET_op == RESETING -> HRESETn == 0;
@@ -286,7 +292,6 @@ bit ERROR_ON_EXECUTE_IDLE;
       $cast(clone, tmp);
       return clone;
     endfunction : clone_me
-
 
     function string convert2string();
       string s;

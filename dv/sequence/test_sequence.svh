@@ -22,6 +22,13 @@ class test_sequence extends base_sequence;
   // Handle to the reset sequence
   reset_sequence reset_sequence_h;
   WRITE_READ_INCR8_sequence WRITE_READ_INCR8_sequence_h;
+  WRITE_READ_INCR4_sequence WRITE_READ_INCR4_sequence_h;
+  WRITE_READ_INCR16_sequence WRITE_READ_INCR16_sequence_h;
+
+  WRITE_READ_WRAP4_sequence WRITE_READ_WRAP4_sequence_h;
+  WRITE_READ_WRAP8_sequence WRITE_READ_WRAP8_sequence_h;
+  WRITE_READ_WRAP16_sequence WRITE_READ_WRAP16_sequence_h;
+
   twice_reset_sequence twice_reset_sequence_h;
 
   // Constructor
@@ -35,7 +42,16 @@ class test_sequence extends base_sequence;
     super.pre_body(); // Call the base class pre_body
     // Create an instance of the reset sequence
     reset_sequence_h = reset_sequence::type_id::create("reset_sequence_h");
+
     WRITE_READ_INCR8_sequence_h = WRITE_READ_INCR8_sequence::type_id::create("WRITE_READ_INCR8_sequence_h");
+    WRITE_READ_INCR4_sequence_h = WRITE_READ_INCR4_sequence::type_id::create("WRITE_READ_INCR4_sequence_h");
+    WRITE_READ_INCR16_sequence_h = WRITE_READ_INCR16_sequence::type_id::create("WRITE_READ_INCR16_sequence_h");
+
+    WRITE_READ_WRAP8_sequence_h = WRITE_READ_WRAP8_sequence::type_id::create("WRITE_READ_WRAP8_sequence_h");
+    WRITE_READ_WRAP16_sequence_h = WRITE_READ_WRAP16_sequence::type_id::create("WRITE_READ_WRAP16_sequence_h");
+    WRITE_READ_WRAP4_sequence_h = WRITE_READ_WRAP4_sequence::type_id::create("WRITE_READ_WRAP4_sequence_h");
+
+
     twice_reset_sequence_h = twice_reset_sequence::type_id::create("twice_reset_sequence_h");
   endtask : pre_body
 
@@ -43,6 +59,11 @@ class test_sequence extends base_sequence;
   virtual task body();
 
     WRITE_READ_INCR8_sequence::reset_flag = 1'b1;
+    WRITE_READ_INCR4_sequence::reset_flag = 1'b1;
+    WRITE_READ_INCR16_sequence::reset_flag = 1'b1;
+    WRITE_READ_WRAP8_sequence::reset_flag = 1'b1;
+    WRITE_READ_WRAP4_sequence::reset_flag = 1'b1;
+    WRITE_READ_WRAP16_sequence::reset_flag = 1'b1;
     twice_reset_sequence::reset_flag = 1'b1;
 
 
@@ -59,10 +80,18 @@ class test_sequence extends base_sequence;
     // Start the sequence item
 
     WRITE_READ_INCR8_sequence_h.start(sequencer_h);
+    WRITE_READ_INCR8_sequence_h.start(sequencer_h);
+    WRITE_READ_INCR4_sequence_h.start(sequencer_h);
+    WRITE_READ_INCR16_sequence_h.start(sequencer_h);
 
-    reset_sequence_h.start(sequencer_h);
+    WRITE_READ_WRAP8_sequence_h.start(sequencer_h);
 
-    twice_reset_sequence_h.start(sequencer_h);
+    WRITE_READ_WRAP16_sequence_h.start(sequencer_h);
+
+    WRITE_READ_WRAP4_sequence_h.start(sequencer_h);
+    // reset_sequence_h.start(sequencer_h);
+
+    // twice_reset_sequence_h.start(sequencer_h);
 
     WRITE_READ_INCR8_sequence_h.start(sequencer_h);
 
