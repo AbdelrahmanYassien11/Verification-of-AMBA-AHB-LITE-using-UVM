@@ -54,6 +54,7 @@ class scoreboard extends uvm_scoreboard;
 
     analysis_export_inputs.connect(predictor_h.analysis_export);
     analysis_export_outputs.connect(comparator_h.analysis_actual_outputs);
+
     predictor_h.analysis_port_expected_outputs.connect(comparator_h.analysis_expected_outputs);
     predictor_h.analysis_port_expected_outputs.connect(comparator_h.analysis_expected_outputs_cleared);
 
@@ -80,7 +81,6 @@ class scoreboard extends uvm_scoreboard;
   function void final_phase(uvm_phase phase);
     super.final_phase(phase);
     `uvm_info("SCOREBOARD", "Scoreboard is stopping.", UVM_MEDIUM)
-    $display("AVAILABLE_SIZES: %0d",AVAILABLE_SIZES);
   endfunction
 
 endclass

@@ -61,7 +61,7 @@ bit ERROR_ON_EXECUTE_IDLE;
       constraint RESET_cmd {RESET_op dist {0:/1, 1:/99}; 
       }
 
-      constraint RESET_midburst_c {reset_flag dist {1:/5, 0:/95}; 
+      constraint RESET_midburst_c {reset_flag dist {1:/1, 0:/99}; 
       }
 
       constraint RESET_c {RESET_op == RESETING -> HRESETn == 0;
