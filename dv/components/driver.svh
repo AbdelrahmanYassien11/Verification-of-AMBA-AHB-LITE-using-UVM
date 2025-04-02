@@ -6,8 +6,9 @@
  * Description: This class defines a UVM driver component for 
  *              sending sequence items to the Design Under Test (DUT).
  * 
- * Copyright (c) 2024 Abdelrahman Mohamad Yassien. All Rights Reserved.
- ******************************************************************/
+ * Copyright (c) [2024] [Abdelrahman Mohamed Yassien]. All Rights Reserved.
+ * This file is part of the Verification & Design of reconfigurable AMBA AHB LITE.
+ *****************************************************************/
 
 class driver extends uvm_driver #(sequence_item);
   `uvm_component_utils(driver);

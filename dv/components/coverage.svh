@@ -7,8 +7,9 @@
  *              to collect coverage data on various signals and
  *              operations related to the generated stimulus.
  * 
- * Copyright (c) 2024 Abdelrahman Mohamad Yassien. All Rights Reserved.
- ******************************************************************/
+ * Copyright (c) [2024] [Abdelrahman Mohamed Yassien]. All Rights Reserved.
+ * This file is part of the Verification & Design of reconfigurable AMBA AHB LITE.
+ *****************************************************************/
  covergroup HWDATA_df_tog_cg(input bit [DATA_WIDTH-1:0] position, input sequence_item cov);
     option.per_instance = 1;
     df: coverpoint (cov.HWDATA & position) != 0 iff(cov.HRESETn && cov.HTRANS != IDLE && cov.HTRANS != BUSY);

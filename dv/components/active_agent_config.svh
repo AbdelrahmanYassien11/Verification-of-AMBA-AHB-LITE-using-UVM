@@ -6,9 +6,7 @@
  * Description: This class is used to provide configuration to active agents
  
  * Copyright (c) [2024] [Abdelrahman Mohamed Yassien]. All Rights Reserved.
- * This file is part of the Asynchronous FiFO project.
- * 
-
+ * This file is part of the Verification & Design of reconfigurable AMBA AHB LITE.
  ******************************************************************/
 
 

@@ -6,16 +6,15 @@
  * Description: This class defines a UVM comparator component used
  *              to compare sequence items and report results.
  * 
- * Copyright (c) [Year] [Your Company/Organization]. All Rights Reserved.
- * This file is part of the Asynchronous FiFO project.
- * 
-
+ * Copyright (c) [2024] [Abdelrahman Mohamed Yassien]. All Rights Reserved.
+ * This file is part of the Verification & Design of reconfigurable AMBA AHB LITE.
  ******************************************************************/
 
 class comparator extends uvm_component;
   `uvm_component_utils(comparator);
 
-  predictor predictor_h;
+ // A predictor instance to debug predictor ROMs when a fail occurs or during resets.
+ predictor predictor_h;
 
   // Sequence items to be compared
   sequence_item seq_item_actual;
@@ -36,24 +35,24 @@ class comparator extends uvm_component;
   uvm_tlm_analysis_fifo #(sequence_item) fifo_expected_outputs;
   uvm_tlm_analysis_fifo #(sequence_item) fifo_expected_outputs_cleared;
 
+  //flag and counter used in controlling clearing the fifo
   int first_resset_shield;
-
   bit more_than_one_reset;
 
+  //------------------------------------------
   // Constructor for the comparator component
+  //------------------------------------------
   function new (string name = "comparator", uvm_component parent);
     super.new(name, parent);
   endfunction
 
+  //-------------------------------------------------------
   // Build phase for component creation and initialization
+  //------------------------------------------------------
   function void build_phase (uvm_phase phase);
     super.build_phase(phase);
 
-    // seq_item_actual = sequence_item::type_id::create("seq_item_actual");
-    // seq_item_expected = sequence_item::type_id::create("seq_item_expected");
     seq_item_expected_unchanged = sequence_item::type_id::create("seq_item_expected_unchanged");
-    //seq_item_expected_unchanged = sequence_item::type_id::create("seq_item_expected_unchanged");
-
 
     // Create FIFOs for actual and expected sequence items
     fifo_expected_outputs = new("fifo_expected_outputs", this);
@@ -68,7 +67,7 @@ class comparator extends uvm_component;
     analysis_expected_outputs_cleared = new("analysis_expected_outputs_cleared", this);
 
     // Display a message indicating the build phase is complete
-    $display("my_comparator build phase");
+    `uvm_info("COMPARATOR", "comparator build phase", UVM_LOW)
   endfunction
 
   // Connect phase for connecting analysis exports to FIFOs
@@ -81,25 +80,31 @@ class comparator extends uvm_component;
     analysis_expected_outputs_cleared.connect(fifo_expected_outputs_cleared.analysis_export);
 
     // Display a message indicating the connect phase is complete
-    $display("my_comparator connect phase");
+    `uvm_info("COMPARATOR", "comparator connect phase", UVM_LOW)
   endfunction
 
   // Run phase for performing comparisons
   task run_phase(uvm_phase phase);
+    `uvm_info("COMPARATOR", "comparator run phase", UVM_LOW)  
     forever begin
-      `uvm_info("COMPARATOR", "RUN PHASE", UVM_HIGH)
+
+    //creating the seq item expected at each loop so 
     seq_item_expected = sequence_item::type_id::create("seq_item_expected");
-      // Get sequence items from FIFOs
+
+      // Get the expected sequence item from expected sequence item fifo
       fifo_expected_outputs.get(seq_item_expected);
       `uvm_info("COMPARATOR", {"EXPECTED_SEQ_ITEM RECEIVED: ", 
                       seq_item_expected.convert2string()}, UVM_HIGH)
 
+      // looping on the expected seq item fifo to clear it if a reset occurs
       clearing_fifo();
 
+      // Get the actual sequence item from actual sequence item fifo
       fifo_actual_outputs.get(seq_item_actual);
       fifo_expected_outputs_cleared.try_get(seq_item_expected_reset);
       `uvm_info("COMPARATOR", {"ACTUAL_SEQ_ITEM RECEIVED: ", 
                 seq_item_actual.convert2string()}, UVM_HIGH)
+
       // Compare the actual and expected sequence items
       if (seq_item_actual.do_compare(seq_item_expected, comparer_h)) begin
         `uvm_info("SCOREBOARD", "PASS", UVM_HIGH)
@@ -115,15 +120,10 @@ class comparator extends uvm_component;
   task clearing_fifo();
     if(first_resset_shield >= 1) begin
       do begin
-        //$display("DEAR1 : %0t",$time());
         #1;
         if(fifo_expected_outputs_cleared.used() > 0) begin
-                 // $display("DEAR2 : %0t",$time());
-          // for(int i = 0; i < fifo_expected_outputs.used(); i++)begin
             int to_be_decremented = fifo_expected_outputs.used();
-            //$display("DEAR3 : %0t",$time());
             if(fifo_expected_outputs_cleared.try_get(seq_item_expected_reset)) begin
-              //$display("DEAR4 : %0t",$time());
               if(~seq_item_expected_reset.HRESETn && ~more_than_one_reset) begin
                 more_than_one_reset = 1;
                 $display("TIME : %0t fifo_expected_outputs.used(): %0d & to_be_decremented %0d", $time(), fifo_expected_outputs.used(), to_be_decremented);

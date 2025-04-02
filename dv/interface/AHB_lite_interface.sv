@@ -536,11 +536,9 @@ event dataPhase_event, samplingPhase_event;
 
     initial begin
         create_sequence_item();
-        //driver_h  = driver::type_id::create("driver_h", uvm_component);
         HRESETn <= 1'b1;
     end
 
-    //assign HRESETn_global = (seq_item.HRESETn)? 1:0;
 
 endinterface : inf
 
