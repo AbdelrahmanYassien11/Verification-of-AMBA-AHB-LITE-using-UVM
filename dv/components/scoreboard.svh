@@ -10,8 +10,9 @@
  *              and connecting the scoreboard with the predictor and 
  *              comparator components.
  * 
- * Copyright (c) 2024 Abdelrahman Mohamad Yassien. All Rights Reserved.
- ******************************************************************/
+ * Copyright (c) [2024] [Abdelrahman Mohamed Yassien]. All Rights Reserved.
+ * This file is part of the Verification & Design of reconfigurable AMBA AHB LITE.
+ **********************************************************************************/
 
 class scoreboard extends uvm_scoreboard;
   `uvm_component_utils(scoreboard);
@@ -46,7 +47,7 @@ class scoreboard extends uvm_scoreboard;
     uvm_config_db#(virtual inf)::set(this, "predictor_h", "my_vif", my_vif);
 
     comparator_h.predictor_h = predictor_h;
-    `uvm_info("SCOREBOARD", "Build phase completed", UVM_MEDIUM)
+    `uvm_info("SCOREBOARD", "Build phase completed", UVM_LOW)
   endfunction
 
   function void connect_phase(uvm_phase phase);
@@ -58,7 +59,7 @@ class scoreboard extends uvm_scoreboard;
     predictor_h.analysis_port_expected_outputs.connect(comparator_h.analysis_expected_outputs);
     predictor_h.analysis_port_expected_outputs.connect(comparator_h.analysis_expected_outputs_cleared);
 
-    `uvm_info("SCOREBOARD", "Connect phase completed", UVM_MEDIUM)
+    `uvm_info("SCOREBOARD", "Connect phase completed", UVM_LOW)
   endfunction
 
   function void phase_ready_to_end(uvm_phase phase);

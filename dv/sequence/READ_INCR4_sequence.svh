@@ -28,7 +28,7 @@ class READ_INCR4_sequence extends base_sequence;
 
   // Pre-body phase task for setup operations
   task pre_body();
-    $display("start of pre_body task");
+    `uvm_info(get_type_name, "start of pre_body task", UVM_HIGH)
     super.pre_body(); // Call the base class pre_body
     // Create an instance of the reset sequence
     reset_sequence_h = reset_sequence::type_id::create("reset_sequence_h");
@@ -38,10 +38,7 @@ class READ_INCR4_sequence extends base_sequence;
   // Main task body for executing the READ operation
   virtual task body();
     super.body();
-
     IDLE_sequence::reset_flag = 1'b1;
-
-
     `uvm_info("READ_INCR4_sequence: ", "STARTING" , UVM_HIGH)
 
     if(~reset_flag)

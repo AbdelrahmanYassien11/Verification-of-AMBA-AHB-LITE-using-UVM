@@ -14,8 +14,6 @@
 
 class IDLE_sequence extends base_sequence;
   `uvm_object_utils(IDLE_sequence);
-
-  static bit last_test;
   // Static flag to determine if reset is needed
   static bit reset_flag;
   bit [ADDR_WIDTH-1:0] HADDR_reserve;
@@ -31,7 +29,7 @@ class IDLE_sequence extends base_sequence;
 
   // Pre-body phase task for setup operations
   task pre_body();
-    $display("start of pre_body task");
+    `uvm_info(get_type_name, "start of pre_body task", UVM_HIGH)
     super.pre_body(); // Call the base class pre_body
     // Create an instance of the reset sequence
     reset_sequence_h = reset_sequence::type_id::create("reset_sequence_h");

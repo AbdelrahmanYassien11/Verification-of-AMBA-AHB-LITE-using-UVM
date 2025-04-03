@@ -14,8 +14,6 @@
 class reset_sequence extends base_sequence;
   `uvm_object_utils(reset_sequence);
 
-  static bit last_test;
-
   // Constructor
   function new(string name = "reset_sequence");
     super.new(name);

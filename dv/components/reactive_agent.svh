@@ -7,10 +7,8 @@
  *              to drive & read from DUT and report results.
  * 
  * Copyright (c) [2024] [Abdelrahman Mohamed Yassien]. All Rights Reserved.
- * This file is part of the Asynchronous FiFO project.
- * 
-
- ******************************************************************/
+ * This file is part of the Verification & Design of reconfigurable AMBA AHB LITE.
+ **********************************************************************************/
 
 class reactive_agent extends uvm_agent;
   `uvm_component_utils(reactive_agent);

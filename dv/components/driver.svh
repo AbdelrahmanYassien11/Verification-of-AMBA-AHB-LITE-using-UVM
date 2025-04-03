@@ -8,7 +8,7 @@
  * 
  * Copyright (c) [2024] [Abdelrahman Mohamed Yassien]. All Rights Reserved.
  * This file is part of the Verification & Design of reconfigurable AMBA AHB LITE.
- *****************************************************************/
+ **********************************************************************************/
 
 class driver extends uvm_driver #(sequence_item);
   `uvm_component_utils(driver);
@@ -21,6 +21,7 @@ class driver extends uvm_driver #(sequence_item);
   // Virtual interface to the DUT
   virtual inf my_vif;
 
+  // req seq_item queue to store input stimulus and assign it to the RSP item that is sent to the sequence
   local sequence_item req_seq_items [$];
 
 
@@ -41,21 +42,21 @@ class driver extends uvm_driver #(sequence_item);
     // Create an instance of sequence_item
     seq_item = sequence_item::type_id::create("seq_item");
 
-    $display("my_driver build phase");
+    `uvm_info("DRIVER", "Build phase completed", UVM_LOW)
   endfunction
 
   // Connect phase for setting up connections between components
   function void connect_phase(uvm_phase phase);
     super.connect_phase(phase);
     my_vif.driver_h = this;
-    $display("my_driver connect phase");
+    `uvm_info("DRIVER", "Connect phase completed", UVM_LOW)
   endfunction
 
   // Run phase where the driver executes and interacts with the DUT
   task run_phase(uvm_phase phase);
     //super.run_phase(phase);
+    `uvm_info("DRIVER", "Run phase Started", UVM_LOW)
     sequence_item req;
-    //req = sequence_item::type_id::create("req");
     forever begin
       seq_item_port.get_next_item(req);
       `uvm_info(get_full_name(), { "DRIVEN_ITEM:", req.input2string} , UVM_LOW)
@@ -74,16 +75,7 @@ class driver extends uvm_driver #(sequence_item);
       seq_item_port.item_done();
     end
 
-    $display("my_driver run phase");
   endtask
-
-  // task reset_observer();
-  //   forever begin
-  //     @(posedge my_vif.clk);
-
-  //   end
-  // endtask : reset_observer
-
 
   task wait_for_reset(sequence_item req_reset);
     if(~req_reset.HRESETn) begin

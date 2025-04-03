@@ -9,8 +9,8 @@
  *              their configuration, connection, and lifecycle phases.
  * 
  * Copyright (c) [2024] [Abdelrahman Mohamed Yassien]. All Rights Reserved.
- * This file is part of the Verification & Design of reconfigurable AMBA AHB LITE. 
- ******************************************************************/
+ * This file is part of the Verification & Design of reconfigurable AMBA AHB LITE.
+ **********************************************************************************/
 
 class env extends uvm_env;
 
@@ -36,7 +36,7 @@ class env extends uvm_env;
   virtual inf my_vif;
 
   // Constructor for the environment component
-  function new(string name = "environment", uvm_component parent);
+  function new(string name = "env", uvm_component parent);
     super.new(name, parent);
   endfunction
 
@@ -74,12 +74,10 @@ class env extends uvm_env;
     scoreboard_h = scoreboard::type_id::create("scoreboard_h", this);
     coverage_h = coverage::type_id::create("coverage_h", this);
 
-
-
     uvm_config_db#(active_agent_config)::set(this, "reactive_agent_h", "reactive_config", active_agent_config_h);   
     reactive_agent_h = reactive_agent::type_id::create("reactive_agent_h", this);    
 
-    $display("env build phase");
+    `uvm_info("ENV", "Build phase completed", UVM_LOW)
   endfunction
 
   // Connect phase for setting up connections between components
@@ -94,7 +92,7 @@ class env extends uvm_env;
     // reactive_agent_h.tlm_analysis_port_inputs.connect(coverage.analysis_export_inputs);
     // reactive_agent_h.tlm_analysis_port_inputs.connect(scoreboard_h.analysis_export_inputs);
 
-    $display("env connect phase");
+    `uvm_info("ENV", "Connect phase completed", UVM_LOW)
   endfunction
 
   // End of elaboration phase for reporting connection details
@@ -111,7 +109,7 @@ class env extends uvm_env;
     `uvm_info(get_name(), $sformatf("%p", list), UVM_LOW);
     scoreboard_h.analysis_export_outputs.get_provided_to(list);
     `uvm_info(get_name(), $sformatf("%p", list), UVM_LOW);
-    $display("FINISHED GET_PROVIDED_TO");
+    `uvm_info("ENV", "FINISHED GET_PROVIDED_TO", UVM_LOW)
 
     coverage_h.analysis_export.get_connected_to(list);
     `uvm_info(get_name(), $sformatf("%p", list), UVM_LOW);
@@ -119,13 +117,15 @@ class env extends uvm_env;
     `uvm_info(get_name(), $sformatf("%p", list), UVM_LOW);
     scoreboard_h.analysis_export_outputs.get_connected_to(list);
     `uvm_info(get_name(), $sformatf("%p", list), UVM_LOW);
-    $display("my_monitor end_of_elaboration_phase");
+    `uvm_info("ENV", "FINISHED GET_CONNECTED_TO", UVM_LOW)
+
+    `uvm_info("ENV", "End of Elaboration phase completed", UVM_LOW)
   endfunction
 
   // Run phase where the environment executes
   task run_phase(uvm_phase phase);
     super.run_phase(phase);
-    $display("env run phase");
+    $display("Run phase completed");
   endtask
 
 endclass

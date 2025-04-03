@@ -195,43 +195,19 @@ bit ERROR_ON_EXECUTE_IDLE;
       return same;
     endfunction : do_compare
 
-    // function void pre_randomize ();
-    //   $display (" %0t This will be called just before randomization", $time());
-    //   // Wait for the data phase to complete
-    //   -> response_check;
-    //   @(finished_response_checking);
-    // endfunction
-
     function void post_randomize ();
-      //$display (" %0t This will be called just after randomization", $time());
       // Wait for the data phase to complete
       if(this.ERROR_ON_EXECUTE_IDLE) begin
-        $display("overwritting for error_response");
+        `uvm_info("SEQUENCE_ITEM", "OVERWRITING FOR ERROR RESPONSE", UVM_MEDIUM)
         this.HRESETn = 1;
         this.HWRITE  = 0;
         this.HTRANS  = 0;
         this.HBURST  = 0;
         this.HWDATA  = 0;
         this.ERROR_ON_EXECUTE_IDLE = 0;
-        //`uvm_info("SEQUENCE_ITEM", {"ERROR_RESPONSE: ", this.input2string()}, UVM_LOW)
+        `uvm_info("SEQUENCE_ITEM", {"ERROR_RESPONSE: ", this.input2string()}, UVM_MEDIUM)
       end
-      //this.ERROR_ON_EXECUTE_IDLE = 0;
     endfunction
-
-    // task check_response1();
-    //   forever begin
-    //     sequence_item req;
-    //     @(sequence_item::response_check);
-    //     // Wait for the data phase to complete
-    //     get_response(req);
-    //     ///`uvm_info("SEQUENCE", $sformatf("RESPONSE_RETRIEVED: ", req.output2string()), UVM_LOW)
-    //     if (req.HREADY == NOT_READY) begin
-    //       IDLE_sequence_h.start(m_sequencer, this);
-    //     end
-    //     -> finished_response_checking;
-    //   end
-    // endtask: check_response1
-
 
     function void do_copy(uvm_object rhs);
       sequence_item to_be_copied;

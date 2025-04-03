@@ -9,8 +9,9 @@
  *              building, connecting, and running the sequencer, with 
  *              placeholders for additional configuration and logic.
  * 
- * Copyright (c) 2024 Abdelrahman Mohamad Yassien. All Rights Reserved.
- ******************************************************************/
+ * Copyright (c) [2024] [Abdelrahman Mohamed Yassien]. All Rights Reserved.
+ * This file is part of the Verification & Design of reconfigurable AMBA AHB LITE.
+ **********************************************************************************/
 
 class sequencer extends uvm_sequencer#(sequence_item);
   `uvm_component_utils(sequencer);
@@ -21,19 +22,19 @@ class sequencer extends uvm_sequencer#(sequence_item);
 
   function void build_phase(uvm_phase phase);
     super.build_phase(phase);
-    `uvm_info("SEQUENCER", "Build phase executed", UVM_MEDIUM)
+    `uvm_info("SEQUENCER", "Build phase completed", UVM_LOW)
     // Additional build phase configuration can be added here
   endfunction
 
   function void connect_phase(uvm_phase phase);
     super.connect_phase(phase);
-    `uvm_info("SEQUENCER", "Connect phase executed", UVM_MEDIUM)
+    `uvm_info("SEQUENCER", "Connect phase completed", UVM_LOW)
     // Connect ports and exports here
   endfunction
 
   task run_phase(uvm_phase phase);
     super.run_phase(phase);
-    `uvm_info("SEQUENCER", "Run phase started", UVM_MEDIUM)
+    `uvm_info("SEQUENCER", "Run phase started", UVM_LOW)
   endtask
 
 endclass

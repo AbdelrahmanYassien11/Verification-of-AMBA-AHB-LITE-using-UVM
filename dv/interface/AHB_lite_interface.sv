@@ -130,11 +130,8 @@ event dataPhase_event, samplingPhase_event;
         BURST_op <= addressPhase_req.BURST_op;
         SEL_op   <= addressPhase_req.SEL_op;
 
-		//HWDATA  <= addressPhase_req.HWDATA;
-		//send_inputs(addressPhase_req);
 		@(posedge clk);
-		//DATA_PHASE_FLAG = 1;
-
+        
 		while((~HREADY) && (HRESP == OKAY)) begin
 			$display("ANNA1 %0t",$time());
 			@(posedge clk);
@@ -178,8 +175,8 @@ event dataPhase_event, samplingPhase_event;
 		atlas.HRESP  = HRESP;
 		atlas.HRDATA = HRDATA;
 		atlas.HREADY = HREADY;
-        // RESP_op  = HRESP;
-        // READY_op = HREADY;
+        // RESP_op  = HRESP_e'(HRESP);
+        // READY_op = HREADY_e'(HREADY);
 		//atlas = pipeline3.clone_me();
 		driver_h.end_transfer(atlas);
 		send_outputs(atlas);

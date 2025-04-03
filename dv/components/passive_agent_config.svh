@@ -8,8 +8,9 @@
  *              for interacting with the DUT and a flag to determine 
  *              whether the agent is passive or active.
  * 
- * Copyright (c) 2024 Abdelrahman Mohamad Yassien. All Rights Reserved.
- ******************************************************************/
+ * Copyright (c) [2024] [Abdelrahman Mohamed Yassien]. All Rights Reserved.
+ * This file is part of the Verification & Design of reconfigurable AMBA AHB LITE.
+ **********************************************************************************/
 
 class passive_agent_config;
 

@@ -15,7 +15,7 @@ class outputs_monitor extends uvm_monitor;
 
   // Virtual interface for DUT interaction
   virtual inf my_vif;
-  //int i;
+  
   // Analysis port to provide data to other components
   uvm_analysis_port #(sequence_item) tlm_analysis_port;
 
@@ -36,7 +36,7 @@ class outputs_monitor extends uvm_monitor;
     // Create and initialize the analysis port
     tlm_analysis_port = new("tlm_analysis_port", this);
 
-    $display("Outputs monitor build phase complete.");
+    `uvm_info("OUTPUTS MONITOR", "Build phase completed", UVM_LOW)
   endfunction
 
   // Connect phase: Establish connections between components
@@ -46,7 +46,7 @@ class outputs_monitor extends uvm_monitor;
     // Link the monitor with the virtual interface
     my_vif.outputs_monitor_h = this;
 
-    $display("Outputs monitor connect phase complete.");
+    `uvm_info("OUTPUTS MONITOR", "Connect phase completed", UVM_LOW)
   endfunction
 
   // End of elaboration phase: Finalize and check connections
@@ -57,35 +57,17 @@ class outputs_monitor extends uvm_monitor;
     // tlm_analysis_port.get_connected_to(list);
     // tlm_analysis_port.get_provided_to(list);
 
-    $display("Outputs monitor end of elaboration phase complete.");
+    `uvm_info("OUTPUTS MONITOR", "End of Elaboration phase completed", UVM_LOW)
   endfunction
-
-  // // Virtual function to write data to the monitor
-  // virtual function void write_to_monitor ( input logic [DATA_WIDTH-1:0] iHRDATA, input logic [RESP_WIDTH:0] iHRESP, input logic iHREADY );
-
-  //   // Create a new sequence item and populate it with data
-  //   sequence_item seq_item;
-  //   seq_item = new("seq_item");
-
-  //   seq_item.HRDATA = iHRDATA;
-  //   seq_item.HRESP  = iHRESP;
-  //   seq_item.HREADY = iHREADY;
-  //   // Write the sequence item to the analysis port
-  //   tlm_analysis_port.write(seq_item);
-  //   //while(i < 5) begin
-  //     `uvm_info(get_full_name(),"OUTPUTS SENT TO THE COMPARATOR",UVM_LOW)
-  //   //   i++;
-  //   // end
-  // endfunction : write_to_monitor
 
   // Virtual function to write data to the monitor
   virtual function void write_to_monitor (sequence_item outputs_req);
+  
     // Write the sequence item to the analysis port
     tlm_analysis_port.write(outputs_req);
-    //while(i < 5) begin
-    `uvm_info(get_full_name(),{"OUTPUTS SENT TO THE COMPARATOR", outputs_req.output2string()},UVM_LOW)
-    //   i++;
-    // end
+
+    `uvm_info(get_full_name(),{"OUTPUTS SENT TO THE COMPARATOR", outputs_req.output2string()},UVM_HIGH)
+
   endfunction : write_to_monitor
 
 

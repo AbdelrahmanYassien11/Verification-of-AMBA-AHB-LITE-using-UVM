@@ -17,7 +17,6 @@ class WRITE_READ_INCR4_sequence extends base_sequence;
 
   // Static flag to determine if reset is needed
   static bit reset_flag;
-  static bit last_test;
 
   // Handle to the reset sequence
   reset_sequence reset_sequence_h;
@@ -32,7 +31,7 @@ class WRITE_READ_INCR4_sequence extends base_sequence;
 
   // Pre-body phase task for setup operations
   task pre_body();
-    $display("start of pre_body task");
+    `uvm_info(get_type_name, "start of pre_body task", UVM_HIGH)
     super.pre_body(); // Call the base class pre_body
     // Create an instance of the reset sequence
     reset_sequence_h = reset_sequence::type_id::create("reset_sequence_h");
@@ -44,8 +43,6 @@ class WRITE_READ_INCR4_sequence extends base_sequence;
   // Main task body for executing the write operation
   virtual task body();
     super.body();
-    reset_sequence::last_test = 1'b1;
-    IDLE_sequence::last_test = 1'b1;
     IDLE_sequence::reset_flag = 1'b1;
     // WRITE_INCR4_sequence::last_test = 1'b1;
     // WRITE_INCR4_sequence::reset_flag = 1'b1;

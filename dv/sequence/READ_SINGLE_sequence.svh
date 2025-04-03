@@ -28,7 +28,7 @@ class READ_SINGLE_sequence extends base_sequence;
   // Preparation task before the main sequence body is executed
   task pre_body();
     // Display a message indicating the start of the pre_body task
-    $display("start of pre_body task");
+    `uvm_info(get_type_name, "start of pre_body task", UVM_HIGH)
     super.pre_body();
     // Create a new reset_sequence object for handling resets
     reset_sequence_h = reset_sequence::type_id::create("reset_sequence_h");

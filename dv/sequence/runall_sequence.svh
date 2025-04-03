@@ -17,7 +17,6 @@ class runall_sequence extends base_sequence;
 
   // Static flag to determine if reset is needed
   static bit reset_flag;
-  static bit last_test;
   `uvm_declare_p_sequencer(sequencer)
 
   static base_sequence base_sequence_r [21];
@@ -60,7 +59,7 @@ class runall_sequence extends base_sequence;
 
   // Pre-body phase task for setup operations
   task pre_body();
-    $display("start of pre_body task");
+    `uvm_info(get_type_name, "start of pre_body task", UVM_HIGH)
     super.pre_body(); // Call the base class pre_body
     // Create an instance of the reset sequence
     reset_sequence_h = reset_sequence::type_id::create("reset_sequence_h");

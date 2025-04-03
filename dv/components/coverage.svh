@@ -9,7 +9,8 @@
  * 
  * Copyright (c) [2024] [Abdelrahman Mohamed Yassien]. All Rights Reserved.
  * This file is part of the Verification & Design of reconfigurable AMBA AHB LITE.
- *****************************************************************/
+ **********************************************************************************/
+
  covergroup HWDATA_df_tog_cg(input bit [DATA_WIDTH-1:0] position, input sequence_item cov);
     option.per_instance = 1;
     df: coverpoint (cov.HWDATA & position) != 0 iff(cov.HRESETn && cov.HTRANS != IDLE && cov.HTRANS != BUSY);
@@ -696,7 +697,7 @@ class coverage extends uvm_subscriber #(sequence_item);
   // Build phase for component setup
   function void build_phase(uvm_phase phase);
     super.build_phase(phase);
-    $display("coverage build_phase");
+    `uvm_info("COVERAGE", "Build phase completed", UVM_LOW)
     if (!uvm_config_db#(virtual inf)::get(this, "", "my_vif", my_vif)) begin
       `uvm_fatal(get_full_name(), "Error retrieving virtual interface");
     end
@@ -705,7 +706,7 @@ class coverage extends uvm_subscriber #(sequence_item);
   // Run phase for execution
   task run_phase(uvm_phase phase);
     super.run_phase(phase);
-    $display("coverage run_phase");
+    `uvm_info("Coverage","Run phase", UVM_LOW)
   endtask
 
 endclass : coverage

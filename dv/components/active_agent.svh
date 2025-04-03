@@ -8,7 +8,7 @@
  * 
  * Copyright (c) [2024] [Abdelrahman Mohamed Yassien]. All Rights Reserved.
  * This file is part of the Verification & Design of reconfigurable AMBA AHB LITE.
- *****************************************************************/
+ **********************************************************************************/
 
 class active_agent extends uvm_agent;
   `uvm_component_utils(active_agent);
@@ -18,9 +18,7 @@ class active_agent extends uvm_agent;
 
   // Handles for sequencer, driver, and inputs_monitor components
   sequencer sequencer_h;
-  sequencer burst_sequencer_h;
-  sequencer runall_sequencer_h;
-  driver driver_h;
+  driver    driver_h;
   inputs_monitor inputs_monitor_h;
 
   // Analysis port for sequence items
@@ -52,8 +50,6 @@ class active_agent extends uvm_agent;
     // Create sequencer and driver if the agent is active
     if (get_is_active() == UVM_ACTIVE) begin
       sequencer_h = sequencer::type_id::create("sequencer_h", this);
-      burst_sequencer_h = sequencer::type_id::create("burst_sequencer_h", this);
-      runall_sequencer_h = sequencer::type_id::create("runall_sequencer_h", this);
 
       driver_h = driver::type_id::create("driver_h", this);  
     end    
@@ -69,7 +65,7 @@ class active_agent extends uvm_agent;
     tlm_analysis_port_inputs = new("tlm_analysis_port_inputs", this);
 
     // Display message indicating the build phase is complete
-    $display("my_active_agent build phase");
+    `uvm_info("ACTIVE AGENT", "Build phase", UVM_LOW)
   endfunction
 
   // Connect phase for connecting ports and analysis channels
@@ -86,21 +82,21 @@ class active_agent extends uvm_agent;
     end
 
     // Display message indicating the connect phase is complete
-    $display("my_active_agent connect phase");
+    `uvm_info("ACTIVE AGENT", "Connect phase Completed", UVM_LOW)
   endfunction
 
   // End of elaboration phase for final setup and checks
   function void end_of_elaboration_phase(uvm_phase phase);
     super.end_of_elaboration_phase(phase);
     // Display message indicating the end_of_elaboration phase is complete
-    $display("my_monitor end_of_elaboration_phase");
+    `uvm_info("ACTIVE AGENT", "End of Elaboration phase Completed", UVM_LOW)
   endfunction
 
   // Run phase for executing the agent's functionality
   task run_phase(uvm_phase phase);
     super.run_phase(phase);
     // Display message indicating the run phase is active
-    $display("my_active_agent run phase");
+    `uvm_info("ACTIVE AGENT", "Run phase Completed", UVM_LOW)
   endtask
 
 endclass

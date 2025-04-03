@@ -9,8 +9,9 @@
  *              The class includes methods for writing to and reading from the  
  *              AMBA AHB lite.
  *
- * Copyright (c) 2024 Abdelrahman Mohamad Yassien. All Rights Reserved.
- ******************************************************************/
+ * Copyright (c) [2024] [Abdelrahman Mohamed Yassien]. All Rights Reserved.
+ * This file is part of the Verification & Design of reconfigurable AMBA AHB LITE.
+ **********************************************************************************/
 
 class predictor extends uvm_subscriber #(sequence_item);
   `uvm_component_utils(predictor);
@@ -92,7 +93,6 @@ class predictor extends uvm_subscriber #(sequence_item);
   int wrap_counter;  
 
   HRESP_e      RESP_op;
-  string data_str;
 
   // Constructor
   function new(string name = "predictor", uvm_component parent);
@@ -166,9 +166,8 @@ class predictor extends uvm_subscriber #(sequence_item);
     TRANS_op    = t.TRANS_op;
     BURST_op    = t.BURST_op;          
     SIZE_op     = t.SIZE_op;
-    data_str    = $sformatf("HRESETn:%0d, HWRITE:%0d, HTRANS:%0d, HSIZE:%0d, HBURST:%0d, HPROT:%0d, HADDR:%0d, HWDATA:%0d",
-                           HRESETn, HWRITE, HTRANS, HSIZE, HBURST, HPROT, HADDR, HWDATA);
-    $display("INPUTS WRITTEN %0s",t.input2string);
+
+    `uvm_info("PREDICTOR", $sformatf("INPUTS WRITTEN: %s", t.input2string), UVM_MEDIUM)
   //Checking if this is the last cycle of a waited error response by any subordinate other than the default subordinate
   -> inputs_written;
   endfunction
@@ -181,7 +180,7 @@ class predictor extends uvm_subscriber #(sequence_item);
     wait(expected_outputs_written.triggered);
     sequence_item::PREDICTOR_transaction_counter = sequence_item::PREDICTOR_transaction_counter + 1;
     analysis_port_expected_outputs.write(seq_item_expected);
-    `uvm_info("PREDICTOR", {"EXPECTED_DATA: ", seq_item_expected.input2string()}, UVM_HIGH)
+    `uvm_info("PREDICTOR", {"EXPECTED_DATA: ", seq_item_expected.input2string()}, UVM_MEDIUM)
   endtask : generic_predictor
 
   // Send expected results to the analysis port

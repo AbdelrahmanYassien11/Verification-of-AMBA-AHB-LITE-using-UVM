@@ -8,7 +8,7 @@
  * 
  * Copyright (c) [2024] [Abdelrahman Mohamed Yassien]. All Rights Reserved.
  * This file is part of the Verification & Design of reconfigurable AMBA AHB LITE.
- ******************************************************************/
+ **********************************************************************************/
 
 class comparator extends uvm_component;
   `uvm_component_utils(comparator);
@@ -67,7 +67,7 @@ class comparator extends uvm_component;
     analysis_expected_outputs_cleared = new("analysis_expected_outputs_cleared", this);
 
     // Display a message indicating the build phase is complete
-    `uvm_info("COMPARATOR", "comparator build phase", UVM_LOW)
+    `uvm_info("COMPARATOR", "Build phase", UVM_LOW)
   endfunction
 
   // Connect phase for connecting analysis exports to FIFOs
@@ -80,12 +80,12 @@ class comparator extends uvm_component;
     analysis_expected_outputs_cleared.connect(fifo_expected_outputs_cleared.analysis_export);
 
     // Display a message indicating the connect phase is complete
-    `uvm_info("COMPARATOR", "comparator connect phase", UVM_LOW)
+    `uvm_info("COMPARATOR", "Connect phase completed", UVM_LOW)
   endfunction
 
   // Run phase for performing comparisons
   task run_phase(uvm_phase phase);
-    `uvm_info("COMPARATOR", "comparator run phase", UVM_LOW)  
+    `uvm_info("COMPARATOR", "Run phase completed", UVM_LOW)  
     forever begin
 
     //creating the seq item expected at each loop so 
