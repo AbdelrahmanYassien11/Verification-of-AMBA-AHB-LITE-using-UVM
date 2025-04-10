@@ -5,7 +5,7 @@ vlog -f tb.f +cover -covercells
 vopt top_test_uvm -o top_optimized +acc +cover=bcefsx+ahb_lite(rtl)
 
 #set test_names {"WRITE_READ_INCR_test" "WRITE_READ_INCR4_test" "WRITE_READ_INCR8_test" "WRITE_READ_INCR16_test" "WRITE_READ_WRAP4_test" "WRITE_READ_WRAP8_test" "WRITE_READ_WRAP16_test" "runall_test"}
-set test_names {runall_test}
+set test_names {reset_test}
 
 foreach test_name $test_names {
 	vsim top_optimized -cover -voptargs=+acc -solvefaildebug=2 -debugDB +UVM_TESTNAME=$test_name

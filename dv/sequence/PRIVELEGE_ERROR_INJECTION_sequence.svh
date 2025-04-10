@@ -85,9 +85,6 @@ class PRIVELEGE_ERROR_INJECTION_sequence extends base_sequence;
 
   do_burst(INCR8, READ, SEQ);
 
-    if(~last_test)
-      seq_item.last_item = 1'b1;
-
     IDLE_sequence_h.start(m_sequencer, this);
 
   endtask : body

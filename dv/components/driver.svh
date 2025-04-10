@@ -55,8 +55,8 @@ class driver extends uvm_driver #(sequence_item);
   // Run phase where the driver executes and interacts with the DUT
   task run_phase(uvm_phase phase);
     //super.run_phase(phase);
-    `uvm_info("DRIVER", "Run phase Started", UVM_LOW)
     sequence_item req;
+    `uvm_info("DRIVER", "Run phase Started", UVM_LOW)
     forever begin
       seq_item_port.get_next_item(req);
       `uvm_info(get_full_name(), { "DRIVEN_ITEM:", req.input2string} , UVM_LOW)

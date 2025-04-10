@@ -26,7 +26,7 @@ module top_test_uvm();
 				.HREADY(f_if.HREADY)
 		);
 
-	bind AHB_subordinate AHB_subordinate_sva#(/*.TRANS_WIDTH(TRANS_WIDTH), .SIZE_WIDTH(SIZE_WIDTH), .BURST_WIDTH(BURST_WIDTH), .PROT_WIDTH(PROT_WIDTH),*/ .ADDR_WIDTH(ADDR_WIDTH), .DATA_WIDTH(DATA_WIDTH)/*,/* .RESP_WIDTH(RESP_WIDTH), .READY_WIDTH(READY_WIDTH)*/) sva(f_if.SVA); // bind / dut / module to be instentiated / instance name()
+	bind ahb_lite AHB_subordinate_sva#(/*.TRANS_WIDTH(TRANS_WIDTH), .SIZE_WIDTH(SIZE_WIDTH), .BURST_WIDTH(BURST_WIDTH), .PROT_WIDTH(PROT_WIDTH),*/ .ADDR_WIDTH(ADDR_WIDTH), .DATA_WIDTH(DATA_WIDTH)/*,/* .RESP_WIDTH(RESP_WIDTH), .READY_WIDTH(READY_WIDTH)*/) sva(f_if.SVA); // bind / dut / module to be instentiated / instance name()
 
 	initial begin
 		uvm_config_db#(virtual inf)::set(null,"uvm_test_top", "my_vif", f_if);

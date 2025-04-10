@@ -46,9 +46,6 @@ class WRITE_SINGLE_sequence extends base_sequence;
     // If reset_flag is not set, start the reset sequence
     if (~reset_flag)
       reset_sequence_h.start(sequencer_h);
-
-    if(~last_test)
-      seq_item.last_item = 1'b1;
     
     // Start the sequence item
     do_burst(SINGLE, WRITE, NONSEQ);

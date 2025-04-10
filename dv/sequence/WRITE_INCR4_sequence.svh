@@ -57,9 +57,6 @@ class WRITE_INCR4_sequence extends base_sequence;
 
     do_burst(INCR4, WRITE, SEQ);
 
-    if(~last_test)
-      seq_item.last_item = 1'b1;
-
     IDLE_sequence_h.start(m_sequencer, this);
 
 

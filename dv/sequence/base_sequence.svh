@@ -17,8 +17,6 @@ class base_sequence extends uvm_sequence #(sequence_item);
   // Handle for the sequence item used in this sequence
   sequence_item seq_item;
   sequencer sequencer_h;
-  sequencer burst_sequencer_h;
-  sequencer runall_sequencer_h;
 
   base_sequence reset_sequence_h;
 
@@ -46,12 +44,12 @@ class base_sequence extends uvm_sequence #(sequence_item);
     // Report an error if the base_sequence is used directly
     // $fatal(1, "You cannot use base directly. You must override it");
     fork
-      ccheck_response();
+      response_check();
     join_none
 
   endtask : body
 
-  task ccheck_response();
+  task response_check();
     forever begin
       sequence_item rsp;
       // Wait for the data phase to complete
@@ -64,7 +62,7 @@ class base_sequence extends uvm_sequence #(sequence_item);
         break_burst = 1;
       end
     end
-  endtask : ccheck_response
+  endtask : response_check
 
 
   task do_burst(input HBURST_e burst_type, input HWRITE_e write_type, input HTRANS_e trans_type);

@@ -58,9 +58,6 @@ class WRITE_READ_SINGLE_sequence extends base_sequence;
     //                                 STARTING READ_SINGLE
     /**************************************************************************************/
 
-    if(~last_test)
-      seq_item.last_item = 1'b1;
-
     // Set the operation type to READ
     // Randomize the sequence item
     do_burst(SINGLE, READ, NONSEQ);

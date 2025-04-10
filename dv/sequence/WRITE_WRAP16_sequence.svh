@@ -57,9 +57,6 @@ class WRITE_WRAP16_sequence extends base_sequence;
 
     do_burst(WRAP16, WRITE, SEQ);
 
-    if(~last_test)
-      seq_item.last_item = 1'b1;
-
     IDLE_sequence_h.start(m_sequencer, this);
 
   endtask : body

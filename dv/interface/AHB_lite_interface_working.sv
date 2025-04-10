@@ -55,13 +55,13 @@ HRESP_e      RESP_op;
 HREADY_e     READY_op;
 
 //Previous Seq_item used in case of needing to resend the past transaction (not tested).
-sequence_item_trial previous_seq_item;
+sequence_item previous_seq_item;
 
 //Pipelined seq_items, each handing its properties to the rest over the course of the Address & Data Phase
-sequence_item_trial pipeline1, pipeline2, pipeline3, pipeline4;
+sequence_item pipeline1, pipeline2, pipeline3, pipeline4;
 	
 //To monitor the current req status globally, does not seem to be of any use, but elt's kep it for now
-sequence_item_trial global_req;
+sequence_item global_req;
 
 // A handle from the driver to be able to call end_transfer function to send back responses
 driver driver_h;
@@ -79,7 +79,7 @@ event dataPhase_event, samplingPhase_event;
 
 
 
-    task generic_reciever( sequence_item_trial req);
+    task generic_reciever( sequence_item req);
     	global_req.do_copy(req);  
     	$display("req: %0s",req.convert2string());
     	pipeline1.do_copy(req);
@@ -94,16 +94,15 @@ event dataPhase_event, samplingPhase_event;
     endtask : generic_reciever
 
 
-	task addressPhase(sequence_item_trial addressPhase_req);
+	task addressPhase(sequence_item addressPhase_req);
 
-		HRESETn <= addressPhase_req.RESET_op;
-		HWRITE  <= addressPhase_req.WRITE_op;
-		HTRANS  <= addressPhase_req.TRANS_op;
-		HSIZE   <= addressPhase_req.SIZE_op;
-		HBURST  <= addressPhase_req.BURST_op;
-
+		HRESETn <= addressPhase_req.HRESETn;
+		HWRITE  <= addressPhase_req.HWRITE;
+		HTRANS  <= addressPhase_req.HTRANS;
+		HSIZE   <= addressPhase_req.HSIZE;
+		HBURST  <= addressPhase_req.HBURST;
 		HPROT   <= addressPhase_req.HPROT;
-		HADDR   <= {addressPhase_req.SEL_op, addressPhase_req.HADDRx};
+		HADDR   <= addressPhase_req.HADDR;
 
         RESET_op <= addressPhase_req.RESET_op;
         WRITE_op <= addressPhase_req.WRITE_op;
@@ -130,7 +129,7 @@ event dataPhase_event, samplingPhase_event;
 
 	end
 
-	task dataPhase(sequence_item_trial dataPhase_req);
+	task dataPhase(sequence_item dataPhase_req);
 		if(dataPhase_req.HWRITE)begin
 			HWDATA = dataPhase_req.HWDATA;
 		end
@@ -172,28 +171,28 @@ event dataPhase_event, samplingPhase_event;
 	endtask : unlock1
 
     // Function to send inputs to the input monitor
-    function void send_inputs( sequence_item_trial input_req);
+    function void send_inputs( sequence_item input_req);
 
     	previous_seq_item.do_copy(input_req);
         inputs_monitor_h.write_to_monitor(input_req);
     endfunction : send_inputs
 
     // Function to send outputs to the output monitor
-    function void send_outputs(sequence_item_trial outputs_req);
+    function void send_outputs(sequence_item outputs_req);
         outputs_monitor_h.write_to_monitor(outputs_req);
     endfunction : send_outputs
 
-    function void create_sequence_item_trial();
-        previous_seq_item = sequence_item_trial::type_id::create("previous_seq_item");
-        pipeline1 = sequence_item_trial::type_id::create("pipeline1");
-        pipeline2 = sequence_item_trial::type_id::create("pipeline2");
-        pipeline3 = sequence_item_trial::type_id::create("pipeline3");
-        global_req = sequence_item_trial::type_id::create("global_req");
-        pipeline4 = sequence_item_trial::type_id::create("pipeline4");
+    function void create_sequence_item();
+        previous_seq_item = sequence_item::type_id::create("previous_seq_item");
+        pipeline1 = sequence_item::type_id::create("pipeline1");
+        pipeline2 = sequence_item::type_id::create("pipeline2");
+        pipeline3 = sequence_item::type_id::create("pipeline3");
+        global_req = sequence_item::type_id::create("global_req");
+        pipeline4 = sequence_item::type_id::create("pipeline4");
     endfunction
 
     initial begin
-        create_sequence_item_trial();
+        create_sequence_item();
         HRESETn <= 1'b1;
     end
 

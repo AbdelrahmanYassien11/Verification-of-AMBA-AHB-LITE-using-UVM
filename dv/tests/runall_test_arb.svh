@@ -168,9 +168,6 @@ class runall_test_arb extends base_test;
         //seq_array[18].start(sequencer_h);
       join
 
-      if(~last_test)
-        IDLE_sequence::last_test = 1'b0;
-
       IDLE_sequence_h.start(sequencer_h);
 
       phase.drop_objection(this);

@@ -73,9 +73,6 @@ class WRITE_READ_WRAP8_sequence extends base_sequence;
 
     do_burst(WRAP8, READ, SEQ);
 
-    if(~last_test)
-      seq_item.last_item = 1'b1;
-
     IDLE_sequence_h.start(sequencer_h);
 
   endtask : body

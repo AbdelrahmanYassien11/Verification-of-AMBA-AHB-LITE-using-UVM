@@ -26,6 +26,7 @@ class runall_test extends base_test;
    // Build phase where configuration and setup occur
    function void build_phase(uvm_phase phase);
       // Override the type of sequence used by the base_sequence class
+      sequence_item::type_id::set_type_override(sequence_item_trial::type_id::get());
       base_sequence::type_id::set_type_override(runall_sequence::type_id::get());
       // Call the build_phase method of the base class
       super.build_phase(phase);
