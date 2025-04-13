@@ -5,138 +5,45 @@ class sequence_item_trial extends sequence_item;
  		super.new(name);
  	endfunction
 
-    rand int unsigned randomized_number_of_tests;
+    // rand int unsigned randomized_number_of_tests;
 
-    static int PREDICTOR_transaction_counter;
-    static int COMPARATOR_transaction_counter;
+    // rand int unsigned sequence_randomizer;
 
-    rand int unsigned sequence_randomizer;
+    // rand int unsigned INCR_CONTROL;
 
-    rand int unsigned INCR_CONTROL;
+    // rand bit reset_flag;
 
-    rand bit reset_flag;
+    // bit ERROR_ON_EXECUTE_IDLE;
 
-    bit ERROR_ON_EXECUTE_IDLE;
+    // rand HRESET_e     RESET_op;
+    // rand HWRITE_e     WRITE_op;
+    // rand HTRANS_e     TRANS_op;
+    // rand HBURST_e     BURST_op;
+    // rand HSIZE_e      SIZE_op;
+    // rand HSEL_e       SEL_op;
 
-    rand HRESET_e     RESET_op;
-    rand HWRITE_e     WRITE_op;
-    rand HTRANS_e     TRANS_op;
-    rand HBURST_e     BURST_op;
-    rand HSIZE_e      SIZE_op;
-    rand HSEL_e       SEL_op;
-
-    HRESP_e      RESP_op;
-    HREADY_e     READY_op;
+    // HRESP_e      RESP_op;
+    // HREADY_e     READY_op;
 
     // AHB lite Control Signals
-    bit         [ADDR_WIDTH-BITS_FOR_SUBORDINATES-1:0]          HADDRx;
+    // bit         [ADDR_WIDTH-BITS_FOR_SUBORDINATES-1:0]          HADDRx;
 
-    rand  bit   HRESETn;    // reset (active low)
+    // rand  bit   HRESETn;    // reset (active low)
 
-    rand  bit   HWRITE;
+    // rand  bit   HWRITE;
 
-    rand  bit   [TRANS_WIDTH:0] HTRANS; 
-    rand  bit   [SIZE_WIDTH:0]  HSIZE;
-    rand  bit   [BURST_WIDTH:0] HBURST;
-    rand  bit   [PROT_WIDTH:0]  HPROT; 
+    // rand  bit   [TRANS_WIDTH:0] HTRANS; 
+    // rand  bit   [SIZE_WIDTH:0]  HSIZE;
+    // rand  bit   [BURST_WIDTH:0] HBURST;
+    // rand  bit   [PROT_WIDTH:0]  HPROT; 
 
-    randc  bit   [ADDR_WIDTH-1:0]  HADDR;     
-    randc  bit   [DATA_WIDTH-1:0]  HWDATA; 
+    // randc  bit   [ADDR_WIDTH-1:0]  HADDR;     
+    // randc  bit   [DATA_WIDTH-1:0]  HWDATA; 
 
-    // AHB lite output Signals
-    logic   [DATA_WIDTH-1:0]  HRDATA;
-    logic   [RESP_WIDTH-1:0]  HRESP; 
-    logic   [DATA_WIDTH-1:0]  HREADY;   
-
-
-    constraint randomized_seq_c { sequence_randomizer dist {[0:20]:=1};
-    }
-
-    constraint RESET_c {RESET_op dist {RESETING:/1, WORKING:/99}; 
-    }
-
-    constraint RESET_midburst_c {reset_flag dist {1:/1, 0:/99}; 
-    }
-
-    constraint HADDR_SEL_c {    RESET_op == WORKING  -> SEL_op dist {SUB1:/20, SUB2:/20, SUB3:/20, SUB4:/10, SUB5:/15, SUB6:/15};
-                                RESET_op == RESETING -> SEL_op == NSEL;
-    }
-
-    constraint HADDR_c {  RESET_op == WORKING  -> HADDRx dist {0:=1, (ADDR_DEPTH-1):=1, ['h00000001 : (ADDR_DEPTH-2)]:=1};
-                        RESET_op == RESETING  -> HADDRx == 'b0;
-    }
-
-    constraint HWRITE_rand_c { WRITE_op dist { WRITE:=50, READ:=50 };
-    }
-
-    constraint HADDR_VAL_BURST { BURST_op == WRAP4  -> ((HADDRx > 2) && (HADDRx < (ADDR_DEPTH-1)));
-                                BURST_op == WRAP8  -> ((HADDRx > 4) && (HADDRx < (ADDR_DEPTH-3)));
-                                BURST_op == WRAP16 -> ((HADDRx > 8) && (HADDRx < (ADDR_DEPTH-7)));
-
-                                BURST_op == INCR4   -> (HADDRx < ADDR_DEPTH-3  );
-                                BURST_op == INCR8   -> (HADDRx < ADDR_DEPTH-7  );
-                                BURST_op == INCR16  -> (HADDRx < ADDR_DEPTH-15 );
-
-                                BURST_op == INCR    -> (HADDRx < ADDR_DEPTH-INCR_CONTROL );
-    }
-
-    constraint INCR_CONTROL_c {INCR_CONTROL inside {[1:ADDR_DEPTH-1]}; 
-    }
-
-    constraint HPROT_c {  SEL_op inside {[SUB1:SUB4]}     -> HPROT dist {4'b0001:/25, 4'b0000:/25, 4'b0010:/25, 4'b0011:/25};
-                        (SEL_op == SUB5 && HWRITE == 1)  -> HPROT dist {4'b0011:/50, 4'b0010:/50};
-                        (SEL_op == SUB5 && HWRITE == 0)  -> HPROT dist {4'b0001:/25, 4'b0000:/25, 4'b0010:/25, 4'b0011:/25};
-                        (SEL_op == SUB6               )  -> HPROT dist {4'b0011:/50, 4'b0010:/50};
-    }
-
-    constraint SIZE_c1 {
-                        DATA_WIDTH == BYTE_WIDTH      -> SIZE_op == 0;
-                        DATA_WIDTH == HALFWORD_WIDTH  -> SIZE_op dist {0:=1, 1:=1};
-                        DATA_WIDTH == WORD_WIDTH      -> SIZE_op dist {0:=1, 1:=1, 2:=1};
-                        DATA_WIDTH == WORD2_WIDTH     -> SIZE_op dist {0:=1, 1:=1, 2:=1, 3:=1};
-                        DATA_WIDTH == WORD4_WIDTH     -> SIZE_op dist {0:=1, 1:=1, 2:=1, 3:=1, 4:=1};
-                        DATA_WIDTH == WORD8_WIDTH     -> SIZE_op dist {0:=1, 1:=1, 2:=1, 3:=1, 4:=1, 5:=1};
-                        DATA_WIDTH == WORD16_WIDTH    -> SIZE_op dist {0:=1, 1:=1, 2:=1, 3:=1, 4:=1, 5:=1, 6:=1};
-                        DATA_WIDTH == WORD32_WIDTH    -> SIZE_op dist {0:=1, 1:=1, 2:=1, 3:=1, 4:=1, 5:=1, 6:=1, 7:=1};
-    }
-
-    constraint HWDATA_c {
-        RESET_op == WORKING -> {
-
-            TRANS_op != IDLE -> {
-                (SIZE_op == BYTE) ->
-                    HWDATA dist { 'h0 := 1, BYTE_MAX := 1, ['h01 : BYTE_MAX - 1] := 1 };
-
-                (SIZE_op == HALFWORD) ->
-                    HWDATA dist { 'h0 := 1, HALFWORD_MAX := 1, ['h01 : HALFWORD_MAX - 1] := 1 };
-
-                (SIZE_op == WORD) ->
-                    HWDATA dist { 'h0 := 1, WORD_MAX := 1, ['h01 : WORD_MAX - 1] := 1 };
-
-                (SIZE_op == WORD2) ->
-                    HWDATA dist { 'h0 := 1, WORD2_MAX := 1, ['h01 : WORD2_MAX - 1] := 1 };
-
-                (SIZE_op == WORD4) ->
-                    HWDATA dist { 'h0 := 1, WORD4_MAX := 1, ['h01 : WORD4_MAX - 1] := 1 };
-
-                (SIZE_op == WORD8) ->
-                    HWDATA dist { 'h0 := 1, WORD8_MAX := 1, ['h01 : WORD8_MAX - 1] := 1 };
-
-                (SIZE_op == WORD16) ->
-                    HWDATA dist { 'h0 := 1, WORD16_MAX := 1, ['h01 : WORD16_MAX - 1] := 1 };
-
-                (SIZE_op == WORD32) ->
-                    HWDATA dist { 'h0 := 1, WORD32_MAX := 1, ['h01 : WORD32_MAX - 1] := 1 };
-            }
-            TRANS_op == IDLE -> HWDATA == 0;
-        }
-
-        RESET_op == RESETING -> HWDATA == 0;
-    }
-
-
-    constraint randomized_test_number_c { randomized_number_of_tests inside {[100:150]};    
-    }
+    // // AHB lite output Signals
+    // logic   [DATA_WIDTH-1:0]  HRDATA;
+    // logic   [RESP_WIDTH-1:0]  HRESP; 
+    // logic   [DATA_WIDTH-1:0]  HREADY;   
 
 
     function bit do_compare(uvm_object rhs, uvm_comparer comparer); 
@@ -162,6 +69,13 @@ class sequence_item_trial extends sequence_item;
     endfunction : do_compare
 
     function void post_randomize ();
+      HRESETn   = RESET_op;    // reset (active low)
+      HSEL      = SEL_op;
+      HWRITE    = WRITE_op;
+      HTRANS    = TRANS_op; 
+      HSIZE     = SIZE_op;
+      HBURST    = BURST_op;
+      HADDR     = {int'(SEL_op),HADDRx};         
         // Wait for the data phase to complete
         if(this.ERROR_ON_EXECUTE_IDLE) begin
             `uvm_info("SEQUENCE_ITEM", "OVERWRITING FOR ERROR RESPONSE", UVM_MEDIUM)

@@ -63,9 +63,10 @@ class WRITE_READ_INCR4_sequence extends base_sequence;
     
     // WRITE_INCR4_sequence_h.start(m_sequencer, this);
 
-    IDLE_sequence_h.HADDR_reserve = seq_item.HADDR;
+    IDLE_sequence_h.HADDR_reserve = {seq_item.SEL_op,seq_item.HADDRx};
     seq_item.SIZE_op.rand_mode(0);
-    seq_item.HADDR.rand_mode(0);
+    seq_item.SEL_op.rand_mode(0);
+    seq_item.HADDRx.rand_mode(0);
     seq_item.HPROT.rand_mode(0);
     
     do_burst(INCR4, WRITE, SEQ);

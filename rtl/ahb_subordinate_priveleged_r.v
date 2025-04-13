@@ -720,7 +720,7 @@ module ahb_subordinate_priveleged_r
                     next_state = ERROR;
                   end 
                 end 
-                else begin 
+                else begin
                   next_state = ERROR; 
                 end
               end

@@ -36,6 +36,7 @@ class base_test extends uvm_test;
          `uvm_fatal(get_full_name(),"Error: Virtual Interface not found in the configuration database");
       end
 
+      sequence_item::type_id::set_type_override(sequence_item_trial::type_id::get());
       // Create and configure the environment configuration object
       env_config_h = new(.env_config_my_vif(my_vif));
 

@@ -37,23 +37,25 @@ class READ_INCR_sequence extends base_sequence;
 
   // Main task body for executing the READ operation
   virtual task body();
-    super.body();
 
     IDLE_sequence::reset_flag = 1'b1;
 
     `uvm_info("READ_INCR_sequence: ", "STARTING" , UVM_HIGH)
 
-    if(~reset_flag)
+    if(~reset_flag) begin
+      super.body(); 
       reset_sequence_h.start(sequencer_h);
+    end
 
     // Set the operation type to READ
     // Randomize the sequence item
     do_burst(INCR, READ, NONSEQ);
 
     seq_item.INCR_CONTROL.rand_mode(0);
-    IDLE_sequence_h.HADDR_reserve = seq_item.HADDR;
+    IDLE_sequence_h.HADDR_reserve = {seq_item.SEL_op,seq_item.HADDRx};
     seq_item.SIZE_op.rand_mode(0);
-    seq_item.HADDR.rand_mode(0);
+    seq_item.SEL_op.rand_mode(0);
+    seq_item.HADDRx.rand_mode(0);
     seq_item.HPROT.rand_mode(0);
 
     do_burst(INCR, READ, SEQ);

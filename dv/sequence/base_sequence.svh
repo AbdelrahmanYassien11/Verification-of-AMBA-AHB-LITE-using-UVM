@@ -49,39 +49,52 @@ class base_sequence extends uvm_sequence #(sequence_item);
 
   endtask : body
 
-  task response_check();
-    forever begin
-      sequence_item rsp;
-      // Wait for the data phase to complete
-      get_response(rsp);
-      `uvm_info("SEQUENCE", {"RESPONSE_RETRIEVED: ", rsp.output2string()}, UVM_LOW)
+  virtual task post_body();
+      #20ns;
+  endtask : post_body
 
-      if (rsp.HREADY == NOT_READY && rsp.HRESP == ERROR) begin
-        $display("%0t ERROR DETECTED",$time()); //180
-        seq_item.ERROR_ON_EXECUTE_IDLE = 1;
-        break_burst = 1;
+  task response_check();
+    fork
+      begin
+        forever begin
+          sequence_item rsp;
+          // Wait for the data phase to complete
+          get_response(rsp);
+          `uvm_info(get_type_name(), {"RESPONSE_RETRIEVED: ", rsp.output2string()}, UVM_LOW)
+
+          if (rsp.HREADY == NOT_READY && rsp.HRESP == ERROR) begin
+            $display("%0t ERROR DETECTED",$time()); //180
+            seq_item.ERROR_ON_EXECUTE_IDLE = 1;
+            break_burst = 1;
+          end
+        end
       end
-    end
+      begin
+        #20ns;
+      end
+    join_any;
+    disable fork;
   endtask : response_check
 
 
   task do_burst(input HBURST_e burst_type, input HWRITE_e write_type, input HTRANS_e trans_type);
     repeat(determine_burst_counter(burst_type, trans_type)) begin
       if(break_burst && (~seq_item.ERROR_ON_EXECUTE_IDLE)) begin
-        $display("BURST BROKEN %0t",$time());
+        `uvm_info(get_type_name(),$sformatf("%0t BURST BROKEN DUE TO ERROR", $time()), UVM_MEDIUM)
         break; //185
       end
       start_item(seq_item);
         assert(seq_item.randomize() with {RESET_op == WORKING; WRITE_op == write_type; TRANS_op == trans_type; BURST_op == burst_type;});
       finish_item(seq_item);
-      if(seq_item.reset_flag) begin
+      if(seq_item.reset_flag && trans_type != NONSEQ) begin
         factory.set_type_override_by_name("base_sequence", "reset_sequence");
         reset_sequence_h = base_sequence::type_id::create("reset_sequence_h");
         `uvm_info("base_sequence", {"checking the reset_sequence instance",$sformatf("%s",reset_sequence_h.get_full_name())}, UVM_LOW)
 
-        $display("breaking_burst_with_reset");
+        `uvm_info(get_type_name(),"BREAKING BURST WITH RESET", UVM_MEDIUM);
         reset_sequence_h.start(m_sequencer, this);
         $display("reset_mid_burst");
+        `uvm_info(get_type_name(),"RESET MID BURST FINISHED", UVM_MEDIUM);
         break;
       end
     end

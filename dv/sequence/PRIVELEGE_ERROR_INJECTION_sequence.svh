@@ -62,7 +62,7 @@ class PRIVELEGE_ERROR_INJECTION_sequence extends base_sequence;
 
     finish_item(seq_item);
 
-    IDLE_sequence_h.HADDR_reserve = seq_item.HADDR;
+    IDLE_sequence_h.HADDR_reserve = {seq_item.SEL_op,seq_item.HADDRx};
     seq_item.SIZE_op.rand_mode(0);
     seq_item.HADDR.rand_mode(0);
     seq_item.HPROT.rand_mode(0);

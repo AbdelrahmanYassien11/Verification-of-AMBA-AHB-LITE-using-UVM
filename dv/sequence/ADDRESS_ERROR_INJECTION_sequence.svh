@@ -50,19 +50,18 @@ class ADDRESS_ERROR_INJECTION_sequence extends base_sequence;
     seq_item.HADDR_VAL_BURST.constraint_mode(0);
     seq_item.HADDR_SEL_c.constraint_mode(0);
 
-
-
     /***************************************************************************************/
     //                                 STARTING WRITE_INCR8
     /**************************************************************************************/   
     start_item(seq_item); // Start the sequence item
 
       // Set the operation type to WRITE
-      assert(seq_item.randomize() with { RESET_op == WORKING; WRITE_op == WRITE; TRANS_op == NONSEQ; BURST_op == INCR8; SIZE_op == WORD; HADDR[ADDR_WIDTH-BITS_FOR_SUBORDINATES-1:0] == 255; HADDR[ADDR_WIDTH-1:ADDR_WIDTH-BITS_FOR_SUBORDINATES] == 2;}); // Randomize the sequence item
+      assert(seq_item.randomize() with { RESET_op == WORKING; WRITE_op == WRITE; TRANS_op == NONSEQ; BURST_op == INCR8; SIZE_op == WORD; HADDRx == 255; SEL_op == SUB2;}); // Randomize the sequence item
 
     finish_item(seq_item);
 
-    IDLE_sequence_h.HADDR_reserve = seq_item.HADDR;
+    IDLE_sequence_h.HADDR_reserve = {seq_item.SEL_op,seq_item.HADDRx};
+    // IDLE_sequence_h.SELx_reserve    = seq_item.SEL_op
     seq_item.SIZE_op.rand_mode(0);
     seq_item.HADDR.rand_mode(0);
     seq_item.HPROT.rand_mode(0);

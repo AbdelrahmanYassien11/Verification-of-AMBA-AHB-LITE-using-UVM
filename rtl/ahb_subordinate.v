@@ -589,12 +589,6 @@ module ahb_subordinate
     end
   end
 
-
-  // always@(*) begin
-  //   burst_counter = burst_counter_reg;
-  //   wrap_counter  = wrap_counter_reg;
-  // end
-
     assign HBURST_reg_c      = HBURST;
     assign HTRANS_reg_c      = HTRANS;
     assign HSEL_reg_c        = HSEL;

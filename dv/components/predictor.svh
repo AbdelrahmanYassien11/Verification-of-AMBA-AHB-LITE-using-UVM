@@ -180,7 +180,7 @@ class predictor extends uvm_subscriber #(sequence_item);
     wait(expected_outputs_written.triggered);
     sequence_item::PREDICTOR_transaction_counter = sequence_item::PREDICTOR_transaction_counter + 1;
     analysis_port_expected_outputs.write(seq_item_expected);
-    `uvm_info("PREDICTOR", {"EXPECTED_DATA: ", seq_item_expected.input2string()}, UVM_MEDIUM)
+    `uvm_info("PREDICTOR", {"EXPECTED_DATA: ", seq_item_expected.convert2string()}, UVM_MEDIUM)
   endtask : generic_predictor
 
   // Send expected results to the analysis port
@@ -198,7 +198,7 @@ class predictor extends uvm_subscriber #(sequence_item);
     seq_item_expected.HRESP       = HRESP_expected;
     seq_item_expected.HREADY      = HREADY_expected;
     case (HSEL)
-      //3'b000:  seq_item_expected.HRDATA = 0;
+      3'b000:  seq_item_expected.HRDATA = 0;
       3'b001:  seq_item_expected.HRDATA = HRDATA_expected1;
       3'b010:  seq_item_expected.HRDATA = HRDATA_expected2;
       3'b011:  seq_item_expected.HRDATA = HRDATA_expected3;

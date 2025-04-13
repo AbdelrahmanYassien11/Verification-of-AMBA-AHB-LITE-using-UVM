@@ -17,7 +17,6 @@ class test_sequence extends base_sequence;
 
   // Static flag to determine if reset is needed
   static bit reset_flag;
-  static bit last_test;
 
   // Handle to the reset sequence
   reset_sequence reset_sequence_h;
@@ -71,10 +70,6 @@ class test_sequence extends base_sequence;
 
     if(~reset_flag)
       reset_sequence_h.start(sequencer_h);
-
-    if(~last_test)
-      seq_item.last_item = 1'b1;
-
 
     //READ_INCR8_sequence_h.start(sequencer_h);
     // Start the sequence item

@@ -79,7 +79,7 @@ event dataPhase_event, samplingPhase_event;
 
 
 
-    task generic_reciever( sequence_item_trial req);
+    task generic_reciever( sequence_item req);
     	global_req.do_copy(req);  
     	$display("req: %0s",req.convert2string());
     	pipeline1.do_copy(req);
@@ -94,7 +94,7 @@ event dataPhase_event, samplingPhase_event;
     endtask : generic_reciever
 
 
-	task addressPhase(sequence_item_trial addressPhase_req);
+	task addressPhase(sequence_item addressPhase_req);
 
 		HRESETn <= addressPhase_req.RESET_op;
 		HWRITE  <= addressPhase_req.WRITE_op;
@@ -130,7 +130,7 @@ event dataPhase_event, samplingPhase_event;
 
 	end
 
-	task dataPhase(sequence_item_trial dataPhase_req);
+	task dataPhase(sequence_item dataPhase_req);
 		if(dataPhase_req.HWRITE)begin
 			HWDATA = dataPhase_req.HWDATA;
 		end
@@ -172,14 +172,14 @@ event dataPhase_event, samplingPhase_event;
 	endtask : unlock1
 
     // Function to send inputs to the input monitor
-    function void send_inputs( sequence_item_trial input_req);
+    function void send_inputs( sequence_item input_req);
 
     	previous_seq_item.do_copy(input_req);
         inputs_monitor_h.write_to_monitor(input_req);
     endfunction : send_inputs
 
     // Function to send outputs to the output monitor
-    function void send_outputs(sequence_item_trial outputs_req);
+    function void send_outputs(sequence_item outputs_req);
         outputs_monitor_h.write_to_monitor(outputs_req);
     endfunction : send_outputs
 

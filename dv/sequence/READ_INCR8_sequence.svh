@@ -42,16 +42,19 @@ class READ_INCR8_sequence extends base_sequence;
 
     `uvm_info("READ_INCR8_sequence: ", "STARTING" , UVM_HIGH)
 
-    if(~reset_flag)
+    if(~reset_flag) begin
+      super.body(); 
       reset_sequence_h.start(sequencer_h);
+    end
 
     // Set the operation type to READ
     // Randomize the sequence item
     do_burst(INCR8, READ, NONSEQ);
     
-    IDLE_sequence_h.HADDR_reserve = seq_item.HADDR;
+    IDLE_sequence_h.HADDR_reserve = {seq_item.SEL_op,seq_item.HADDRx};
     seq_item.SIZE_op.rand_mode(0);
-    seq_item.HADDR.rand_mode(0);
+    seq_item.SEL_op.rand_mode(0);
+    seq_item.HADDRx.rand_mode(0);
     seq_item.HPROT.rand_mode(0);
 
     do_burst(INCR8, READ, SEQ);

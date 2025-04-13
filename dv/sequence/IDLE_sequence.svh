@@ -38,7 +38,7 @@ class IDLE_sequence extends base_sequence;
   // Main task body for executing the READ operation
   virtual task body();
     super.body();
-    $display("HADDR_reserve = %0h",HADDR_reserve);
+    `uvm_info(get_type_name(),$sformatf("HADDR_reserve = %0h",HADDR_reserve), UVM_HIGH);
 
 
     `uvm_info("IDLE_sequence: ", "STARTING" , UVM_HIGH)
@@ -46,18 +46,26 @@ class IDLE_sequence extends base_sequence;
     if(~reset_flag)
       reset_sequence_h.start(sequencer_h);
 
+
     seq_item.SIZE_op.rand_mode(0);
     
     start_item(seq_item); // Start the sequence item
 
-    $display("seq_item.HADDR = %0d",seq_item.HADDR);
+    `uvm_info(get_type_name(),$sformatf("seq_item.HADDR = %0d",seq_item.HADDR), UVM_HIGH);
 
+    if(HADDR_reserve[ADDR_WIDTH-1:ADDR_WIDTH-BITS_FOR_SUBORDINATES] != 'h0) begin
       // Randomize the sequence item
-      assert(seq_item.randomize() with {RESET_op == WORKING; WRITE_op == READ; TRANS_op == IDLE; BURST_op == SINGLE; HADDR == HADDR_reserve;});
-
+      assert(seq_item.randomize() with {RESET_op == WORKING; WRITE_op == READ; TRANS_op == IDLE; BURST_op == SINGLE; SEL_op == HADDR_reserve[ADDR_WIDTH-1:ADDR_WIDTH-BITS_FOR_SUBORDINATES]; HADDRx == HADDR_reserve[ADDR_WIDTH-BITS_FOR_SUBORDINATES-1:0];});
+    end
+    else begin
+      assert(seq_item.randomize() with {RESET_op == WORKING; WRITE_op == READ; TRANS_op == IDLE; BURST_op == SINGLE;});      
+    end
     finish_item(seq_item);
 
 
   endtask : body
+
+  virtual task post_body();
+  endtask : post_body
 
 endclass

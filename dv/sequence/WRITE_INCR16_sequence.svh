@@ -48,9 +48,10 @@ class WRITE_INCR16_sequence extends base_sequence;
 
     do_burst(INCR16, WRITE, NONSEQ);
 
-    IDLE_sequence_h.HADDR_reserve = seq_item.HADDR;
+    IDLE_sequence_h.HADDR_reserve = {seq_item.SEL_op,seq_item.HADDRx};
     seq_item.SIZE_op.rand_mode(0);
-    seq_item.HADDR.rand_mode(0);
+    seq_item.SEL_op.rand_mode(0);
+    seq_item.HADDRx.rand_mode(0);
     seq_item.HPROT.rand_mode(0);
 
     do_burst(INCR16, WRITE, SEQ);

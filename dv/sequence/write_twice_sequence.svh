@@ -17,7 +17,7 @@ class write_twice_sequence extends base_sequence;
 
   // Static flag to determine if reset is needed
   static bit reset_flag;
-  static bit last_test;
+
 
   // Handle to the reset sequence
   reset_sequence reset_sequence_h;
@@ -44,10 +44,6 @@ class write_twice_sequence extends base_sequence;
 
     WRITE_SINGLE_sequence::reset_flag = 1'b1;
     READ_SINGLE_sequence::reset_flag = 1'b1;
-
-    // reset_sequence::last_test = 1'b1;
-    // READ_SINGLE_sequence::last_test = 1'b1;
-    // WRITE_SINGLE_sequence::last_test = 1'b1;
 
 
     reset_sequence_h.start(sequencer_h);
@@ -277,9 +273,6 @@ class write_twice_sequence extends base_sequence;
     // Set the control signals for writing
 
     finish_item(seq_item);
-
-    if(~last_test)
-    seq_item.last_item = 1'b1;
 
     READ_SINGLE_sequence_h.start(sequencer_h);
 
