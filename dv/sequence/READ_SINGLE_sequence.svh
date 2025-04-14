@@ -36,14 +36,13 @@ class READ_SINGLE_sequence extends base_sequence;
 
   // Main task body to perform the read operation
   task body();
+    super.body();
     // Log information about the read operation
     `uvm_info("READ_SINGLE_SEQUENCE: ", "STARTING", UVM_HIGH);
 
     // If reset_flag is not set, start the reset sequence
-    if(~reset_flag) begin
-      super.body(); 
+    if (~reset_flag)
       reset_sequence_h.start(sequencer_h);
-    end
 
     do_burst(SINGLE, READ, NONSEQ);
 

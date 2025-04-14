@@ -37,15 +37,14 @@ class READ_INCR_sequence extends base_sequence;
 
   // Main task body for executing the READ operation
   virtual task body();
+    super.body();
 
     IDLE_sequence::reset_flag = 1'b1;
 
     `uvm_info("READ_INCR_sequence: ", "STARTING" , UVM_HIGH)
 
-    if(~reset_flag) begin
-      super.body(); 
+    if(~reset_flag)
       reset_sequence_h.start(sequencer_h);
-    end
 
     // Set the operation type to READ
     // Randomize the sequence item
@@ -62,7 +61,9 @@ class READ_INCR_sequence extends base_sequence;
 
     IDLE_sequence_h.start(m_sequencer, this);
 
-
+    fork
+      #20ns;
+    join_none
   endtask : body
 
 endclass

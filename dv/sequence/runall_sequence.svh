@@ -151,11 +151,11 @@ class runall_sequence extends base_sequence;
     for(int i = 0; i < seq_item.randomized_number_of_tests ; i++) begin
 
       assert(seq_item.randomize());
-
-      `uvm_info("runall_sequence1",{$sformatf("%s",base_sequence_r[seq_item.sequence_randomizer].get_full_name())}, UVM_LOW); 
-      base_sequence_r[seq_item.sequence_randomizer].start(sequencer_h);
-      //IDLE_sequence_h.HADDR_reserve = base_sequence_r[seq_item.sequence_randomizer].seq_item.HADDR;
-
+        `uvm_info("runall_sequence1",{$sformatf("%s",base_sequence_r[seq_item.sequence_randomizer].get_full_name())}, UVM_LOW); 
+        base_sequence_r[seq_item.sequence_randomizer].start(sequencer_h);
+        // @(finished_sequence);
+        //IDLE_sequence_h.HADDR_reserve = base_sequence_r[seq_item.sequence_randomizer].seq_item.HADDR;
+        
     end
 
     IDLE_sequence_h.start(sequencer_h);

@@ -42,6 +42,11 @@ class reset_sequence extends base_sequence;
     // Display a message indicating the finish of the item
   endtask : body
 
+  // virtual task post_body();
+  //   fork
+  //     #160ns;
+  //   join_none;
+  // endtask : post_body
 endclass
 
 //start item - wait for grant

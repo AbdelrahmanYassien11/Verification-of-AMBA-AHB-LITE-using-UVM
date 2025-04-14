@@ -30,7 +30,7 @@ class WRITE_READ_INCR_test extends base_test;
       // Call the build_phase method of the base class
       super.build_phase(phase);
       // Display a message indicating the build phase of the test
-      $display("my_test build phase");
+      `uvm_info(get_type_name(), "Build Phase", UVM_LOW)
    endfunction
 
    // Connect phase where connections are made
@@ -38,7 +38,7 @@ class WRITE_READ_INCR_test extends base_test;
       // Call the connect_phase method of the base class
       super.connect_phase(phase);
       // Display a message indicating the connect phase of the test
-      $display("my_test connect phase");
+      `uvm_info(get_type_name(), "Connect Phase", UVM_LOW)
    endfunction
 
 endclass

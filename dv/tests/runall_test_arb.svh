@@ -92,7 +92,7 @@ class runall_test_arb extends base_test;
                     READ_INCR4_sequence_h, READ_INCR8_sequence_h, READ_INCR16_sequence_h, READ_WRAP4_sequence_h, READ_WRAP8_sequence_h, READ_WRAP16_sequence_h};
 
       // Display a message indicating the build phase of the test
-      $display("my_test build phase");
+      `uvm_info(get_type_name(), "Build Phase", UVM_LOW)
    endfunction
 
    virtual task run_phase(uvm_phase phase);
@@ -177,7 +177,7 @@ class runall_test_arb extends base_test;
       // Call the connect_phase method of the base class
       super.connect_phase(phase);
       // Display a message indicating the connect phase of the test
-      $display("my_test connect phase");
+      `uvm_info(get_type_name(), "Connect Phase", UVM_LOW)
    endfunction
 
 

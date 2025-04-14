@@ -20,7 +20,7 @@ class base_sequence extends uvm_sequence #(sequence_item);
 
   base_sequence reset_sequence_h;
 
-  // reset_sequence reset_sequence_h;
+  event finished_sequence;
 
   bit break_burst;
 
@@ -50,17 +50,24 @@ class base_sequence extends uvm_sequence #(sequence_item);
   endtask : body
 
   virtual task post_body();
-      #20ns;
+    // -> finished_sequence;
+    // #20ns;
+    // fork
+      // #20ns;
+    // join_none
+    //24478
+    //21284
   endtask : post_body
 
   task response_check();
-    fork
-      begin
+    // fork
+    //   begin
         forever begin
           sequence_item rsp;
           // Wait for the data phase to complete
           get_response(rsp);
           `uvm_info(get_type_name(), {"RESPONSE_RETRIEVED: ", rsp.output2string()}, UVM_LOW)
+          `uvm_info(get_type_name(), $sformatf("Sequence ID: %0d", rsp.get_sequence_id()), UVM_LOW)
 
           if (rsp.HREADY == NOT_READY && rsp.HRESP == ERROR) begin
             $display("%0t ERROR DETECTED",$time()); //180
@@ -68,12 +75,12 @@ class base_sequence extends uvm_sequence #(sequence_item);
             break_burst = 1;
           end
         end
-      end
-      begin
-        #20ns;
-      end
-    join_any;
-    disable fork;
+    //   end
+    //   begin
+    //     #20ns;
+    //   end
+    // join_any;
+    // disable fork;
   endtask : response_check
 
 
@@ -89,11 +96,10 @@ class base_sequence extends uvm_sequence #(sequence_item);
       if(seq_item.reset_flag && trans_type != NONSEQ) begin
         factory.set_type_override_by_name("base_sequence", "reset_sequence");
         reset_sequence_h = base_sequence::type_id::create("reset_sequence_h");
-        `uvm_info("base_sequence", {"checking the reset_sequence instance",$sformatf("%s",reset_sequence_h.get_full_name())}, UVM_LOW)
+        `uvm_info("get_type_name()", {"checking the reset_sequence instance",$sformatf("%s",reset_sequence_h.get_full_name())}, UVM_MEDIUM)
 
         `uvm_info(get_type_name(),"BREAKING BURST WITH RESET", UVM_MEDIUM);
         reset_sequence_h.start(m_sequencer, this);
-        $display("reset_mid_burst");
         `uvm_info(get_type_name(),"RESET MID BURST FINISHED", UVM_MEDIUM);
         break;
       end

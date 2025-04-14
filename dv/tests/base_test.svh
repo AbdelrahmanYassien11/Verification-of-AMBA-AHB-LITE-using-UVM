@@ -49,14 +49,14 @@ class base_test extends uvm_test;
 
       // arb_type = UVM_SEQ_ARB_FIFO;
       // Display message indicating the build phase completion
-      $display("base_test build phase");
+      `uvm_info(get_type_name(), "Build Phase", UVM_LOW)
    endfunction : build_phase
 
    // Connect phase for connecting components
    virtual function void connect_phase(uvm_phase phase);
       // Call the base class's connect_phase method
       super.connect_phase(phase);
-      $display("my_test connect phase");
+      `uvm_info(get_type_name(), "Connect Phase", UVM_LOW)
    endfunction
 
    // End of elaboration phase for final setup
@@ -65,11 +65,15 @@ class base_test extends uvm_test;
       sequencer_h = env_h.active_agent_h.sequencer_h;
       // Set the sequencer in the base sequence
       base_sequence_h.sequencer_h = sequencer_h;
+      `uvm_info(get_type_name(), "End of Elaboration Phase", UVM_LOW)
    endfunction : end_of_elaboration_phase
 
    // Run phase for executing the test
    virtual task run_phase(uvm_phase phase);
       // Call the base class's run_phase method
+
+      `uvm_info(get_type_name(), "Run phase Started", UVM_LOW)
+
       super.run_phase(phase);
       
       // Raise an objection to prevent the phase from ending prematurely
@@ -83,7 +87,7 @@ class base_test extends uvm_test;
       phase.drop_objection(this);
 
       // Display message indicating the run phase completion
-      $display("my_test run phase");
+      `uvm_info(get_type_name(), "Run phase Finished", UVM_LOW)
    endtask
 
    // virtual function void show_arb_cfg();

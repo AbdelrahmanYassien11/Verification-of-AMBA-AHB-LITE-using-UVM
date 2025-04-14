@@ -39,7 +39,7 @@ class WRITE_SINGLE_sequence extends base_sequence;
 
   // Main task body for executing the write operation
   virtual task body();
-
+    super.body();
     // Log the operation for debugging
     `uvm_info("WRITE_SINGLE_SEQUENCE: ", "STARTING", UVM_HIGH)
 
