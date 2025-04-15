@@ -32,5 +32,23 @@ module top_test_uvm();
 		uvm_config_db#(virtual inf)::set(null,"uvm_test_top", "my_vif", f_if);
 		run_test();
 	end
+	initial begin
+		$dumpfile("wave.vcd");
+		$dumpvars(0, top_test_uvm);
+	end
+
+	initial begin
+		$display("Simulation started at %0t", $time());
+		#1000000; // 1ms timeout
+		$display("Simulation finished at %0t", $time());
+		$finish;
+	end
+
+	initial begin
+		string test_name;
+		#1ns;
+		if(!(uvm_config_db#(string)::get(null,"uvm_test_top.env_h","test_name",test_name)))
+		`uvm_fatal("ALU_TOP_TB", "COULDN'T GET TEST NAME")		
+	end
 
 endmodule

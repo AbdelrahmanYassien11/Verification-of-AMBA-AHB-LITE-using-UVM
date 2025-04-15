@@ -47,7 +47,9 @@ class base_test extends uvm_test;
       env_h = env::type_id::create("env_h", this);
       base_sequence_h = base_sequence::type_id::create("base_sequence_h");
 
-      // arb_type = UVM_SEQ_ARB_FIFO;
+      // Set the name of the test tot he entire environment so it can get parameterized accordingly
+      uvm_config_db#(string)::set(this,"*","test_name",get_type_name());
+
       // Display message indicating the build phase completion
       `uvm_info(get_type_name(), "Build Phase", UVM_LOW)
    endfunction : build_phase
