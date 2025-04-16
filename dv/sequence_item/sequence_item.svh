@@ -32,7 +32,7 @@ rand HSEL_e       SEL_op;
 
   // AHB lite Control Signals
 
-  bit         [ADDR_WIDTH-1:ADDR_WIDTH-BITS_FOR_SUBORDINATES] HSEL;
+  rand bit         [ADDR_WIDTH-1:ADDR_WIDTH-BITS_FOR_SUBORDINATES] HSEL;
   rand  bit         [ADDR_WIDTH-BITS_FOR_SUBORDINATES-1:0] HADDRx;
 
   rand  bit   HRESETn;    // reset (active low)

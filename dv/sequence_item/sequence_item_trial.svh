@@ -75,7 +75,8 @@ class sequence_item_trial extends sequence_item;
       HTRANS    = TRANS_op; 
       HSIZE     = SIZE_op;
       HBURST    = BURST_op;
-      HADDR     = {int'(SEL_op),HADDRx};         
+      HADDR     = {int'(SEL_op),HADDRx};
+      $display("post_randomize HSEL %0d & SEL_op %0d, HSIZE %0d & SIZE_op %0d", HSEL, SEL_op, HSIZE, SIZE_op);         
         // Wait for the data phase to complete
         if(this.ERROR_ON_EXECUTE_IDLE) begin
             `uvm_info("SEQUENCE_ITEM", "OVERWRITING FOR ERROR RESPONSE", UVM_MEDIUM)

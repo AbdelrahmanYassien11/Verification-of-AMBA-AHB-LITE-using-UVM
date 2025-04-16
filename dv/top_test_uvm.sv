@@ -2,6 +2,7 @@
 module top_test_uvm();
 	import uvm_pkg::*;
 	import AHB_pkg::*;
+	`include "uvm_macros.svh";
 
 
 	bit clk;
@@ -48,7 +49,7 @@ module top_test_uvm();
 		string test_name;
 		#1ns;
 		if(!(uvm_config_db#(string)::get(null,"uvm_test_top.env_h","test_name",test_name)))
-		`uvm_fatal("ALU_TOP_TB", "COULDN'T GET TEST NAME")		
+		`uvm_fatal("TOP MODULE", "COULDN'T GET TEST NAME")		
 	end
 
 endmodule

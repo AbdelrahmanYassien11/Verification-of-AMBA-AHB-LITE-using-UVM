@@ -1178,8 +1178,8 @@ class predictor extends uvm_subscriber #(sequence_item);
       `uvm_info(get_type_name(),$sformatf("MEM AFTER RESET: SUB1 %p", subordinate1), UVM_HIGH);
       `uvm_info(get_type_name(),$sformatf("MEM AFTER RESET: SUB2 %p", subordinate2), UVM_HIGH);
       `uvm_info(get_type_name(),$sformatf("MEM AFTER RESET: SUB3 %p", subordinate3), UVM_HIGH);
-      `uvm_info(get_type_name(),$sformatf("MEM AFTER RESET: SUB4 %p", subordinate4), UVM_HIGH);
       `uvm_info(get_type_name(),$sformatf("MEM AFTER RESET: SUB5 %p", subordinate5), UVM_HIGH);
+      `uvm_info(get_type_name(),$sformatf("MEM AFTER RESET: SUB6 %p", subordinate6), UVM_HIGH);
       if(seq_item_old.HWRITE == 1) begin
         `uvm_info("PREDICTOR: ", {"seq_item_old: ", seq_item_old.convert2string()}, UVM_MEDIUM)
         undo_on = 1;
@@ -1211,13 +1211,15 @@ class predictor extends uvm_subscriber #(sequence_item);
 
     endfunction : undo_last_operation
 
-    function void display_subordinates(bit [ADDR_WIDTH-1:0] HADDRx, bit [ADDR_WIDTH-1:ADDR_WIDTH-BITS_FOR_SUBORDINATES] HSEL );
+    function void display_subordinates(bit [ADDR_WIDTH-1:0] HADDRy, bit [ADDR_WIDTH-1:ADDR_WIDTH-BITS_FOR_SUBORDINATES] HSEL );
+      bit [ADDR_WIDTH-BITS_FOR_SUBORDINATES-1:0] HADDRx;
+      HADDRx = HADDRy[ADDR_WIDTH-BITS_FOR_SUBORDINATES-1:0];
       case (HSEL)
-        1: `uvm_info(get_type_name(),$sformatf("subordinate1 MEM AFTER FAIL: %0h",subordinate1[HADDRx[ADDR_WIDTH-BITS_FOR_SUBORDINATES-1:0]]), UVM_LOW);
-        2: `uvm_info(get_type_name(),$sformatf("subordinate2 MEM AFTER FAIL: %0h",subordinate2[HADDRx[ADDR_WIDTH-BITS_FOR_SUBORDINATES-1:0]]), UVM_LOW);
-        3: `uvm_info(get_type_name(),$sformatf("subordinate3 MEM AFTER FAIL: %0h",subordinate3[HADDRx[ADDR_WIDTH-BITS_FOR_SUBORDINATES-1:0]]), UVM_LOW);
-        5: `uvm_info(get_type_name(),$sformatf("subordinate5 MEM AFTER FAIL: %0h",subordinate5[HADDRx[ADDR_WIDTH-BITS_FOR_SUBORDINATES-1:0]]), UVM_LOW);
-        6: `uvm_info(get_type_name(),$sformatf("subordinate6 MEM AFTER FAIL: %0h",subordinate6[HADDRx[ADDR_WIDTH-BITS_FOR_SUBORDINATES-1:0]]), UVM_LOW);
+        1: `uvm_info(get_type_name(),$sformatf("subordinate1 MEM AFTER FAIL: %0h",subordinate1[HADDRx]), UVM_LOW)
+        2: `uvm_info(get_type_name(),$sformatf("subordinate2 MEM AFTER FAIL: %0h",subordinate2[HADDRx]), UVM_LOW)
+        3: `uvm_info(get_type_name(),$sformatf("subordinate3 MEM AFTER FAIL: %0h",subordinate3[HADDRx]), UVM_LOW)
+        5: `uvm_info(get_type_name(),$sformatf("subordinate5 MEM AFTER FAIL: %0h",subordinate5[HADDRx]), UVM_LOW)
+        6: `uvm_info(get_type_name(),$sformatf("subordinate6 MEM AFTER FAIL: %0h",subordinate6[HADDRx]), UVM_LOW)
       endcase
       `uvm_info(get_type_name(),$sformatf(" MEM AFTER FAIL: SUB1: %p", subordinate1), UVM_HIGH);
       `uvm_info(get_type_name(),$sformatf(" MEM AFTER FAIL: SUB2: %p", subordinate2), UVM_HIGH);
