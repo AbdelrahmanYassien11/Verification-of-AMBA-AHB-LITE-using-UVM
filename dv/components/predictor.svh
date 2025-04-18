@@ -93,7 +93,9 @@ class predictor extends uvm_subscriber #(sequence_item);
     super.new(name, parent);
   endfunction
 
-  // Build phase
+  //-------------------------------------------------------------
+  // Build phase for component creation, initialization & Setters
+  //-------------------------------------------------------------
   function void build_phase (uvm_phase phase);
     super.build_phase(phase);
 
@@ -112,7 +114,9 @@ class predictor extends uvm_subscriber #(sequence_item);
     $display("my_predictor build phase");
   endfunction : build_phase
 
-  // Connect phase
+  //---------------------------------------------------------
+  // Connect Phase to connect the Enviornment TLM Components
+  //---------------------------------------------------------
   function void connect_phase(uvm_phase phase);
     super.connect_phase(phase);
     $display("my_predictor connect phase");

@@ -24,7 +24,9 @@ class outputs_monitor extends uvm_monitor;
     super.new(name, parent);
   endfunction
 
-  // Build phase: Initializes components and sets up configurations
+  //-------------------------------------------------------------
+  // Build phase for component creation, initialization & Setters
+  //-------------------------------------------------------------
   function void build_phase(uvm_phase phase);
     super.build_phase(phase);
 
@@ -39,7 +41,9 @@ class outputs_monitor extends uvm_monitor;
     `uvm_info("OUTPUTS MONITOR", "Build phase completed", UVM_LOW)
   endfunction
 
-  // Connect phase: Establish connections between components
+  //---------------------------------------------------------
+  // Connect Phase to connect the Enviornment TLM Components
+  //---------------------------------------------------------
   function void connect_phase(uvm_phase phase);
     super.connect_phase(phase);
 

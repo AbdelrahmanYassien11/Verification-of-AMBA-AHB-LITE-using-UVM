@@ -46,9 +46,9 @@ class comparator extends uvm_component;
     super.new(name, parent);
   endfunction
 
-  //-------------------------------------------------------
-  // Build phase for component creation and initialization
-  //------------------------------------------------------
+  //-------------------------------------------------------------
+  // Build phase for component creation, initialization & Setters
+  //-------------------------------------------------------------
   function void build_phase (uvm_phase phase);
     super.build_phase(phase);
 
@@ -70,7 +70,9 @@ class comparator extends uvm_component;
     `uvm_info("COMPARATOR", "Build phase", UVM_LOW)
   endfunction
 
-  // Connect phase for connecting analysis exports to FIFOs
+  //---------------------------------------------------------
+  // Connect Phase to connect the Enviornment TLM Components
+  //---------------------------------------------------------
   function void connect_phase (uvm_phase phase);
     super.connect_phase(phase);
 
@@ -83,7 +85,9 @@ class comparator extends uvm_component;
     `uvm_info("COMPARATOR", "Connect phase completed", UVM_LOW)
   endfunction
 
-  // Run phase for performing comparisons
+  //-------------------------------------------------------
+  // Run phase for comparing expected & actual outputs
+  //------------------------------------------------------
   task run_phase(uvm_phase phase);
     `uvm_info("COMPARATOR", "Run phase completed", UVM_LOW)  
     forever begin

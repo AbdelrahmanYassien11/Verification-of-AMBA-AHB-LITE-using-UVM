@@ -30,7 +30,9 @@ class driver extends uvm_driver #(sequence_item);
     super.new(name, parent);
   endfunction
 
-  // Build phase for component setup and initialization
+  //-------------------------------------------------------------
+  // Build phase for component creation, initialization & Setters
+  //-------------------------------------------------------------
   function void build_phase(uvm_phase phase);
     super.build_phase(phase);
 
@@ -45,14 +47,18 @@ class driver extends uvm_driver #(sequence_item);
     `uvm_info("DRIVER", "Build phase completed", UVM_LOW)
   endfunction
 
-  // Connect phase for setting up connections between components
+  //---------------------------------------------------------
+  // Connect Phase to connect the Enviornment TLM Components
+  //---------------------------------------------------------
   function void connect_phase(uvm_phase phase);
     super.connect_phase(phase);
     my_vif.driver_h = this;
     `uvm_info("DRIVER", "Connect phase completed", UVM_LOW)
   endfunction
 
-  // Run phase where the driver executes and interacts with the DUT
+  //--------------------------------------------------------------------
+  // Run phase: The Driver sends stimulus to the DUT & samples responses
+  //--------------------------------------------------------------------
   task run_phase(uvm_phase phase);
     //super.run_phase(phase);
     sequence_item req;
@@ -77,6 +83,9 @@ class driver extends uvm_driver #(sequence_item);
 
   endtask
 
+  //------------------------------------------------
+  // Function to wait for reset if it gets asserted
+  //------------------------------------------------
   task wait_for_reset(sequence_item req_reset);
     if(~req_reset.HRESETn) begin
       repeat(15) begin
@@ -90,8 +99,9 @@ class driver extends uvm_driver #(sequence_item);
     // end
   endtask : wait_for_reset
 
-  // Function to complete the sequence item - driver handshake back to the sequence 
-  // item, decoupled from the point of the originating request
+  //------------------------------------------------------------------------------------------------------------------------------------------
+  // Function to complete the sequence item - driver handshake back to the sequence item, decoupled from the point of the originating request 
+  //------------------------------------------------------------------------------------------------------------------------------------------
   function void end_transfer(sequence_item t);
     sequence_item rsp;
     $display("QUEUE SIZE: %0d",req_seq_items.size());

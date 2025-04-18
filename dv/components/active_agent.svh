@@ -35,13 +35,15 @@ class active_agent extends uvm_agent;
     super.new(name, parent);
   endfunction
 
-  // Build phase for component creation and configuration
+  //-------------------------------------------------------------
+  // Build phase for component creation, initialization & Setters
+  //-------------------------------------------------------------
   function void build_phase(uvm_phase phase);
     super.build_phase(phase);
 
     // Retrieve the configuration object from the UVM config database
     if(!uvm_config_db#(active_agent_config)::get(this, "", "active_config", active_agent_config_h)) begin
-      `uvm_fatal("active_agent", "Failed to get active_agent_config object");
+      `uvm_fatal(get_type_name(), "Failed to get active_agent_config object");
     end
 
     // Check if the agent is active based on the configuration
@@ -65,10 +67,12 @@ class active_agent extends uvm_agent;
     tlm_analysis_port_inputs = new("tlm_analysis_port_inputs", this);
 
     // Display message indicating the build phase is complete
-    `uvm_info("ACTIVE AGENT", "Build phase", UVM_LOW)
+    `uvm_info(get_type_name(), "Build phase", UVM_LOW)
   endfunction
 
-  // Connect phase for connecting ports and analysis channels
+  //---------------------------------------------------------
+  // Connect Phase to connect the Enviornment TLM Components
+  //---------------------------------------------------------
   function void connect_phase(uvm_phase phase);
     super.connect_phase(phase);
 
@@ -82,21 +86,23 @@ class active_agent extends uvm_agent;
     end
 
     // Display message indicating the connect phase is complete
-    `uvm_info("ACTIVE AGENT", "Connect phase Completed", UVM_LOW)
+    `uvm_info(get_type_name(), "Connect phase Completed", UVM_LOW)
   endfunction
 
   // End of elaboration phase for final setup and checks
   function void end_of_elaboration_phase(uvm_phase phase);
     super.end_of_elaboration_phase(phase);
     // Display message indicating the end_of_elaboration phase is complete
-    `uvm_info("ACTIVE AGENT", "End of Elaboration phase Completed", UVM_LOW)
+    `uvm_info(get_type_name(), "End of Elaboration phase Completed", UVM_LOW)
   endfunction
 
-  // Run phase for executing the agent's functionality
+  //-----------------------------------------------------------------
+  // Run phase to execute the agent's functionality, if there is any
+  //-----------------------------------------------------------------
   task run_phase(uvm_phase phase);
     super.run_phase(phase);
     // Display message indicating the run phase is active
-    `uvm_info("ACTIVE AGENT", "Run phase Completed", UVM_LOW)
+    `uvm_info(get_type_name(), "Run phase Completed", UVM_LOW)
   endtask
 
 endclass

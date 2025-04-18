@@ -35,7 +35,9 @@ bit   [DATA_WIDTH-1:0]  HWDATA;
 // AHB lite output Signals
 logic   [DATA_WIDTH-1:0]  HRDATA;
 logic   [RESP_WIDTH-1:0]  HRESP; 
-logic   [READY_WIDTH-1:0]  HREADY;  
+logic   [READY_WIDTH-1:0]  HREADY;
+bit         [ADDR_WIDTH-1:ADDR_WIDTH-BITS_FOR_SUBORDINATES] HSEL;
+  bit         [BITS_FOR_SUBORDINATES-1:0] HSELx;
 
 // Monitor handles
 inputs_monitor inputs_monitor_h;    // Handle to input monitor

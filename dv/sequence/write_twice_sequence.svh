@@ -85,7 +85,8 @@ class write_twice_sequence extends base_sequence;
       seq_item.TRANS_op.rand_mode(0);
       seq_item.BURST_op.rand_mode(0);
       seq_item.SIZE_op.rand_mode(0);
-      seq_item.HADDR.rand_mode(0);
+    seq_item.HADDRx.rand_mode(0);
+    seq_item.SEL_op.rand_mode(0);
       //seq_item.HWRITE_rand_c.constraint_mode(0);
 
       start_item(seq_item); // Start the sequence item
@@ -109,7 +110,8 @@ class write_twice_sequence extends base_sequence;
     seq_item.TRANS_op.rand_mode(0);
     seq_item.BURST_op.rand_mode(0);
     seq_item.SIZE_op.rand_mode(0);
-    seq_item.HADDR.rand_mode(0);
+    seq_item.HADDRx.rand_mode(0);
+    seq_item.SEL_op.rand_mode(0);
     //seq_item.HWRITE_rand_c.constraint_mode(0);
 
     start_item(seq_item); // Start the sequence item
@@ -161,7 +163,8 @@ class write_twice_sequence extends base_sequence;
       seq_item.TRANS_op.rand_mode(0);
       seq_item.BURST_op.rand_mode(0);
       seq_item.SIZE_op.rand_mode(0);
-      seq_item.HADDR.rand_mode(0);
+    seq_item.HADDRx.rand_mode(0);
+    seq_item.SEL_op.rand_mode(0);
       //seq_item.HWRITE_rand_c.constraint_mode(0);
 
       start_item(seq_item); // Start the sequence item
@@ -185,7 +188,8 @@ class write_twice_sequence extends base_sequence;
     seq_item.TRANS_op.rand_mode(0);
     seq_item.BURST_op.rand_mode(0);
     seq_item.SIZE_op.rand_mode(0);
-    seq_item.HADDR.rand_mode(0);
+    seq_item.HADDRx.rand_mode(0);
+    seq_item.SEL_op.rand_mode(0);
     //seq_item.HWRITE_rand_c.constraint_mode(0);
 
     `uvm_info("WRITE_TWICE_SEQUENCE:", $sformatf("seq_item.HADDR = %0d", seq_item.HADDR), UVM_LOW)
@@ -234,7 +238,8 @@ class write_twice_sequence extends base_sequence;
       seq_item.TRANS_op.rand_mode(0);
       seq_item.BURST_op.rand_mode(0);
       seq_item.SIZE_op.rand_mode(0);
-      seq_item.HADDR.rand_mode(0);
+    seq_item.HADDRx.rand_mode(0);
+    seq_item.SEL_op.rand_mode(0);
       //seq_item.HWRITE_rand_c.constraint_mode(0);
 
       start_item(seq_item); // Start the sequence item
@@ -257,7 +262,8 @@ class write_twice_sequence extends base_sequence;
     seq_item.TRANS_op.rand_mode(0);
     seq_item.BURST_op.rand_mode(0);
     seq_item.SIZE_op.rand_mode(0);
-    seq_item.HADDR.rand_mode(0);
+    seq_item.HADDRx.rand_mode(0);
+    seq_item.SEL_op.rand_mode(0);
     //seq_item.HWRITE_rand_c.constraint_mode(0);
 
     start_item(seq_item); // Start the sequence item

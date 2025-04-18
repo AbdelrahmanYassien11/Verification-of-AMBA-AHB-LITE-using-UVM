@@ -38,7 +38,9 @@ class passive_agent extends uvm_agent;
     super.new(name, parent);
   endfunction
 
-  // Build phase: Initializes components and sets configurations
+  //-------------------------------------------------------------
+  // Build phase for component creation, initialization & Setters
+  //-------------------------------------------------------------
   function void build_phase(uvm_phase phase);
     super.build_phase(phase);
 
@@ -69,7 +71,9 @@ class passive_agent extends uvm_agent;
     `uvm_info("PASSIVE AGENT", "Build phase", UVM_LOW)
   endfunction
 
-  // Connect phase: Connects components together
+  //---------------------------------------------------------
+  // Connect Phase to connect the Enviornment TLM Components
+  //---------------------------------------------------------
   function void connect_phase(uvm_phase phase);
     super.connect_phase(phase);
 

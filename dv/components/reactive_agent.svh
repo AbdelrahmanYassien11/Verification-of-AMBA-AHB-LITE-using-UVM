@@ -38,7 +38,9 @@ class reactive_agent extends uvm_agent;
     super.new(name, parent);
   endfunction
 
-  // Build phase for component creation and configuration
+  //-------------------------------------------------------------
+  // Build phase for component creation, initialization & Setters
+  //-------------------------------------------------------------
   function void build_phase(uvm_phase phase);
     super.build_phase(phase);
 
@@ -74,7 +76,9 @@ class reactive_agent extends uvm_agent;
     $display("my_reactive_agent build phase");
   endfunction
 
-  // Connect phase for connecting ports and analysis channels
+  //---------------------------------------------------------
+  // Connect Phase to connect the Enviornment TLM Components
+  //---------------------------------------------------------
   function void connect_phase(uvm_phase phase);
     super.connect_phase(phase);
 

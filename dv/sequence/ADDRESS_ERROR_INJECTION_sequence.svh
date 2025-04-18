@@ -63,7 +63,8 @@ class ADDRESS_ERROR_INJECTION_sequence extends base_sequence;
     IDLE_sequence_h.HADDR_reserve = {seq_item.SEL_op,seq_item.HADDRx};
     // IDLE_sequence_h.SELx_reserve    = seq_item.SEL_op
     seq_item.SIZE_op.rand_mode(0);
-    seq_item.HADDR.rand_mode(0);
+    seq_item.HADDRx.rand_mode(0);
+    seq_item.SEL_op.rand_mode(0);
     seq_item.HPROT.rand_mode(0);
 
     do_burst(INCR8, WRITE, SEQ);
@@ -82,7 +83,7 @@ class ADDRESS_ERROR_INJECTION_sequence extends base_sequence;
     finish_item(seq_item);
 
 
-  do_burst(INCR8, READ, SEQ);
+    do_burst(INCR8, READ, SEQ);
 
     IDLE_sequence_h.start(m_sequencer, this);
 

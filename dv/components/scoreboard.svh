@@ -31,6 +31,9 @@ class scoreboard extends uvm_scoreboard;
     super.new(name, parent);
   endfunction
 
+  //-------------------------------------------------------------
+  // Build phase for component creation, initialization & Setters
+  //-------------------------------------------------------------
   function void build_phase(uvm_phase phase);
     super.build_phase(phase);
 
@@ -50,6 +53,9 @@ class scoreboard extends uvm_scoreboard;
     `uvm_info("SCOREBOARD", "Build phase completed", UVM_LOW)
   endfunction
 
+  //---------------------------------------------------------
+  // Connect Phase to connect the Enviornment TLM Components
+  //---------------------------------------------------------
   function void connect_phase(uvm_phase phase);
     super.connect_phase(phase);
 

@@ -107,6 +107,7 @@ class sequence_item_trial extends sequence_item;
         HPROT      = to_be_copied.HPROT;  
         HADDR      = to_be_copied.HADDR; 
         HWDATA     = to_be_copied.HWDATA;
+        HSEL       = to_be_copied.HSEL;
 
         HRDATA     = to_be_copied.HRDATA;
         HRESP      = to_be_copied.HRESP;

@@ -20,15 +20,21 @@ class sequencer extends uvm_sequencer#(sequence_item);
     super.new(name, parent);
   endfunction
 
+  //-------------------------------------------------------------
+  // Build phase for component creation, initialization & Setters
+  //-------------------------------------------------------------
   function void build_phase(uvm_phase phase);
     super.build_phase(phase);
-    `uvm_info("SEQUENCER", "Build phase completed", UVM_LOW)
+    `uvm_info(get_type_name(), "Build phase completed", UVM_LOW)
     // Additional build phase configuration can be added here
   endfunction
 
+  //---------------------------------------------------------
+  // Connect Phase to connect the Enviornment TLM Components
+  //---------------------------------------------------------
   function void connect_phase(uvm_phase phase);
     super.connect_phase(phase);
-    `uvm_info("SEQUENCER", "Connect phase completed", UVM_LOW)
+    `uvm_info(get_type_name(), "Connect phase completed", UVM_LOW)
     // Connect ports and exports here
   endfunction
 

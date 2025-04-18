@@ -11,6 +11,10 @@
  * This file is part of the Verification & Design of reconfigurable AMBA AHB LITE.
  **********************************************************************************/
 
+ /*********************************************************
+ // Instance-Based Coverage - Bits Toggle Cover Groups
+ **********************************************************/
+
  covergroup HWDATA_df_tog_cg(input bit [DATA_WIDTH-1:0] position, input sequence_item cov);
     option.per_instance = 1;
     df: coverpoint (cov.HWDATA & position) != 0 iff(cov.HRESETn && cov.HTRANS != IDLE && cov.HTRANS != BUSY);
@@ -47,20 +51,25 @@
       }
   endgroup : HSEL_dt_tog_cg
 
+ /*******************************************************************
+ // Instance-Based Coverage - Data Frames & Data Transition Coverage
+ ********************************************************************/
+
   covergroup HSEL_df_cg(input int i, input sequence_item c);
     option.per_instance = 1;
-    option.name= $sformatf("df = %0d", i);
+    option.name= $sformatf("HSEL_NOT_WORKING df = %0d", i);
     option.weight = ((i == 7)? 0:1);
-    df: coverpoint c.HSEL iff (c.HRESETn) {
+    df:coverpoint c.HSEL iff (c.HRESETn) {
       bins tr[] = {i};
+      ignore_bins unreachable[] = {7};
     }
   endgroup : HSEL_df_cg
 
   covergroup HSEL_dt_cg(input int i, input int j, input sequence_item c);
     option.per_instance = 1;
-    option.name= $sformatf("dt = %0d => %0d", i, j);
+    option.name= $sformatf("HSEL_NOT_WORKING dt = %0d => %0d", i, j);
     option.weight = ((i == 7 || j == 7)? 0:1);
-    dt: coverpoint c.SEL_op iff (c.HRESETn) {
+    dt: coverpoint c.HSEL {
       bins tr[] = (i => j);
       ignore_bins unreachable1[] = (i => 7);
       ignore_bins unreachable2[] = (7 => j);
@@ -71,7 +80,7 @@
     option.per_instance = 1;    
     option.name = $sformatf(" df = %0d", i);
     option.weight = ((i == 1)?0:1);
-    df:coverpoint c.HTRANS iff (c.HRESETn) {
+    df:coverpoint c.HTRANS {
       bins tr[] = {i};
       ignore_bins unreachable = {1};
     }
@@ -179,6 +188,9 @@
     }
   endgroup : HPROT_dt_cg   
 
+ /*********************************************************
+ // -----------------Coverage Class Start
+ **********************************************************/
 class coverage extends uvm_subscriber #(sequence_item);
   `uvm_component_utils(coverage);
 
@@ -187,39 +199,46 @@ class coverage extends uvm_subscriber #(sequence_item);
 
   // Virtual interface used for connecting to the Design Under Test (DUT)
   virtual inf my_vif;
+  
+  // Variable to count the number of transactions in every run!
   int count_trans;
+
+  // Variable to get test_name in through config db and parametarise the class covgroups accordingly
   string test_name;
 
   // AHB lite Control Signals
-        bit   HRESETn_cov;    // reset (active low)
+  bit   HRESETn_cov;    // reset (active low)
 
-        bit   HWRITE_cov;
+  bit   HWRITE_cov;
 
-        bit   [TRANS_WIDTH-1:0]  HTRANS_cov; 
-        bit   [SIZE_WIDTH-1:0]  HSIZE_cov;
-        bit   [BURST_WIDTH-1:0] HBURST_cov;
-        bit   [PROT_WIDTH-1:0]  HPROT_cov; 
+  bit   [TRANS_WIDTH-1:0]  HTRANS_cov; 
+  bit   [SIZE_WIDTH-1:0]  HSIZE_cov;  
+  bit   [BURST_WIDTH-1:0] HBURST_cov;
+  bit   [PROT_WIDTH-1:0]  HPROT_cov; 
 
-        bit   [ADDR_WIDTH-1:0]  HADDR_cov;     
-        bit   [DATA_WIDTH-1:0]  HWDATA_cov;
+  bit   [ADDR_WIDTH-1:0]  HADDR_cov;     
+  bit   [DATA_WIDTH-1:0]  HWDATA_cov;
 
-        bit   [ADDR_WIDTH-BITS_FOR_SUBORDINATES-1:0] HADDR_VALID_cov;
-        bit   [BITS_FOR_SUBORDINATES-1:0] HSEL_cov; 
+  bit   [ADDR_WIDTH-BITS_FOR_SUBORDINATES-1:0] HADDR_VALID_cov;
+  bit   [BITS_FOR_SUBORDINATES-1:0] HSEL_cov; 
 
-        // AHB lite output Signals
-        logic   [DATA_WIDTH-1:0]  HRDATA_cov;
-        logic   [RESP_WIDTH-1:0]  HRESP_cov; 
-        logic   [DATA_WIDTH-1:0]  HREADY_cov;
+  // AHB lite output Signals
+  logic   [DATA_WIDTH-1:0]  HRDATA_cov;
+  logic   [RESP_WIDTH-1:0]  HRESP_cov; 
+  logic   [DATA_WIDTH-1:0]  HREADY_cov;
 
+  //AHB Enums local to the coverage class
   HRESET_e     RESET_op_cov;
   HWRITE_e     WRITE_op_cov;
   HRESP_e      RESP_op_cov;
   HTRANS_e     TRANS_op_cov;
   HBURST_e     BURST_op_cov;
   HSIZE_e      SIZE_op_cov;
+  
+  // Coverage Sequence Items, used for sampling
+  protected sequence_item input_cov_copied, output_cov_copied;
 
-  sequence_item input_cov_copied;
-
+  // Instance Based Coverage: Coverage Instances Declaration
   HWDATA_df_tog_cg HWDATA_df_tog_cg_bits  [DATA_WIDTH-1:0];
   HWDATA_dt_tog_cg HWDATA_dt_tog_cg_bits  [DATA_WIDTH-1:0];
 
@@ -250,6 +269,9 @@ class coverage extends uvm_subscriber #(sequence_item);
   HPROT_df_cg  HPROT_df_cg_vals   [2**PROT_WIDTH];
   HPROT_dt_cg  HPROT_dt_cg_vals   [2**PROT_WIDTH][2**PROT_WIDTH]; 
 
+  /*****************************************************************************************************************************************************************************************
+  // -------------------------------------------------------------------Static Coverage: Static Coverage Groups-----------------------------------------------------------------------------
+  ******************************************************************************************************************************************************************************************/
 
   // Covergroup for RESET-related coverage
   covergroup RESET_covgrp;
@@ -606,8 +628,9 @@ class coverage extends uvm_subscriber #(sequence_item);
     /* -------------------------------------------------------------------------------Data Transition coverage of the current operation (from write to read and vice versa)---------------------------------------------------------------------------------------------- */
   endgroup 
 
-
-  // Function to update coverage based on sequence item
+  //-----------------------------------------------------------
+  // Function to get the input & output stimulus to be sampled
+  //-----------------------------------------------------------
   function void write (sequence_item t);
     //input_cov_copied = new();
     count_trans++;
@@ -635,6 +658,7 @@ class coverage extends uvm_subscriber #(sequence_item);
     SIZE_op_cov  = t.SIZE_op;
 
     input_cov_copied.do_copy(t);
+    `uvm_info(get_type_name(),$sformatf("INPUT_COV_COPIED: %0s", input_cov_copied.input2string), UVM_LOW)
 
     RESET_covgrp.sample();
     WRITE_covgrp.sample();
@@ -646,7 +670,6 @@ class coverage extends uvm_subscriber #(sequence_item);
     HWDATA_covgrp.sample();
 
     foreach(HWDATA_df_tog_cg_bits[i]) HWDATA_df_tog_cg_bits[i].sample();
-
     foreach(HWDATA_dt_tog_cg_bits[i]) HWDATA_dt_tog_cg_bits[i].sample();
 
     foreach(HADDR_df_tog_cg_bits[i]) HADDR_df_tog_cg_bits[i].sample();
@@ -679,7 +702,9 @@ class coverage extends uvm_subscriber #(sequence_item);
     `uvm_info("COVERAGE", {"SAMPLE: ", t.convert2string}, UVM_HIGH)
   endfunction
 
-  // Constructor for the coverage component
+  //------------------------------------------
+  // Constructor for the comparator component
+  //------------------------------------------
   function new(string name, uvm_component parent);
 
     super.new(name, parent);
@@ -725,7 +750,9 @@ class coverage extends uvm_subscriber #(sequence_item);
     foreach(HRESETn_df_cg_vals[i])   HRESETn_df_cg_vals[i]    = new(i, input_cov_copied);
   endfunction
 
-  // Build phase for component setup
+  //-------------------------------------------------------------
+  // Build phase for component creation, initialization & Setters
+  //-------------------------------------------------------------
   function void build_phase(uvm_phase phase);
     super.build_phase(phase);
     `uvm_info("COVERAGE", "Build phase completed", UVM_LOW)
@@ -741,20 +768,25 @@ class coverage extends uvm_subscriber #(sequence_item);
 
   endfunction
 
-  // Run phase for execution
+  //---------------------------------------------------
+  // Run phase for coverage execution & sampling
+  //---------------------------------------------------
   task run_phase(uvm_phase phase);
     super.run_phase(phase);
     `uvm_info("Coverage","Run phase", UVM_LOW)
   endtask
 
+  //---------------------------------------------------
+  // Report phase to report on the coverage results
+  //---------------------------------------------------
   function void report_phase(uvm_phase phase);
     `uvm_info(get_type_name(), $sformatf("Received transactions: %0d", count_trans), UVM_LOW)
 
     `uvm_info(get_type_name(), "\nCoverage Report:", UVM_LOW)
     `uvm_info(get_type_name(), $sformatf("TEST_NAME = %s", test_name), UVM_LOW)
 
-    case(test_name)
-      "runall_test": begin 
+    // case(test_name)
+    //   "runall_test": begin 
         `uvm_info(get_type_name(), $sformatf("HRESETn                 Coverage: %.2f%%", RESET_covgrp.get_coverage()), UVM_LOW)
         `uvm_info(get_type_name(), $sformatf("HWRITE                  Coverage: %.2f%%", WRITE_covgrp.get_coverage()), UVM_LOW)
         `uvm_info(get_type_name(), $sformatf("HTRANS                  Coverage: %.2f%%", TRANS_covgrp.get_coverage()), UVM_LOW)
@@ -794,7 +826,7 @@ class coverage extends uvm_subscriber #(sequence_item);
         
         `uvm_info(get_type_name(), $sformatf("HPROT data frame values  Coverage: %.2f%%", HPROT_df_cg::get_coverage()), UVM_LOW)
         `uvm_info(get_type_name(), $sformatf("HPROT data transition values  Coverage: %.2f%%", HPROT_dt_cg::get_coverage()), UVM_LOW)                  
-      end
+      // end
       
       // "repitition_test": begin 
       //   `uvm_info(get_type_name(), $sformatf("repitition cg for op_A Coverage: %.2f%%", a_op_repi_cg.get_coverage()), UVM_LOW)
@@ -802,14 +834,12 @@ class coverage extends uvm_subscriber #(sequence_item);
       //   `uvm_info(get_type_name(), $sformatf("repitition cg for op_B2 Coverage: %.2f%%", b_op11_repi_cg.get_coverage()), UVM_LOW)   
       // end
 
-      "error_test": begin
-        `uvm_info(get_type_name(), $sformatf("HPROT data frame values  Coverage: %.2f%%", HPROT_df_cg::get_coverage()), UVM_LOW)
-      end
-    endcase
+    //   "error_test": begin
+    //     `uvm_info(get_type_name(), $sformatf("HPROT data frame values  Coverage: %.2f%%", HPROT_df_cg::get_coverage()), UVM_LOW)
+    //   end
+    // endcase
     `uvm_info(get_type_name(), $sformatf("Total Coverage: %.2f%%", $get_coverage()), UVM_LOW)  
     
   endfunction : report_phase
-
-
 
 endclass : coverage

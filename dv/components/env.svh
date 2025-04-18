@@ -40,7 +40,9 @@ class env extends uvm_env;
     super.new(name, parent);
   endfunction
 
-  // Build phase for component setup and initialization
+  //-------------------------------------------------------------
+  // Build phase for component creation, initialization & Setters
+  //-------------------------------------------------------------
   function void build_phase(uvm_phase phase);
     super.build_phase(phase);
 
@@ -80,7 +82,9 @@ class env extends uvm_env;
     `uvm_info("ENV", "Build phase completed", UVM_LOW)
   endfunction
 
-  // Connect phase for setting up connections between components
+  //---------------------------------------------------------
+  // Connect Phase to connect the Enviornment TLM Components
+  //---------------------------------------------------------
   function void connect_phase(uvm_phase phase);
     super.connect_phase(phase);
 

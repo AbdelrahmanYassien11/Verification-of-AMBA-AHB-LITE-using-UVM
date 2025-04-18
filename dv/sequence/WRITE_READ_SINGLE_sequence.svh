@@ -53,7 +53,8 @@ class WRITE_READ_SINGLE_sequence extends base_sequence;
       do_burst(SINGLE, WRITE, NONSEQ);
 
     seq_item.SIZE_op.rand_mode(0);    
-    seq_item.HADDR.rand_mode(0);
+    seq_item.HADDRx.rand_mode(0);
+    seq_item.SEL_op.rand_mode(0);
     /***************************************************************************************/
     //                                 STARTING READ_SINGLE
     /**************************************************************************************/

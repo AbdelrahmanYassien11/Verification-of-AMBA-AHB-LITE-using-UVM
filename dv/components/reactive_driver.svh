@@ -24,7 +24,9 @@ class reactive_driver extends uvm_driver #(sequence_item);
     super.new(name, parent);
   endfunction
 
-  // Build phase for component setup and initialization
+  //-------------------------------------------------------------
+  // Build phase for component creation, initialization & Setters
+  //-------------------------------------------------------------
   function void build_phase(uvm_phase phase);
     super.build_phase(phase);
 
@@ -39,7 +41,9 @@ class reactive_driver extends uvm_driver #(sequence_item);
     $display("my_reactive_driver build phase");
   endfunction
 
-  // Connect phase for setting up connections between components
+  //---------------------------------------------------------
+  // Connect Phase to connect the Enviornment TLM Components
+  //---------------------------------------------------------
   function void connect_phase(uvm_phase phase);
     super.connect_phase(phase);
     $display("my_reactive_driver connect phase");
