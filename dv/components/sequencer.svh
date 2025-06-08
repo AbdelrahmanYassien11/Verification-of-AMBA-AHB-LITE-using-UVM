@@ -40,7 +40,7 @@ class sequencer extends uvm_sequencer#(sequence_item);
 
   task run_phase(uvm_phase phase);
     super.run_phase(phase);
-    `uvm_info("SEQUENCER", "Run phase started", UVM_LOW)
+    `uvm_info(get_type_name(), "Run phase started", UVM_LOW)
   endtask
 
 endclass

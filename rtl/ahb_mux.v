@@ -1,3 +1,13 @@
+//----------------------------------------------------------------
+//  * File: ahb_mux.v
+//  * Author: Abdelrahman Mohamad Yassien
+//  * Email: Abdelrahman.Yassien11@gmail.com
+//  * Date: 25/12/2024
+//  * Description: This module as the multiplexor defined & 
+//                 described per AMBA SPECIFICATION by ARM,
+//                 which samples the outputs of all subordinates
+//                 and drives the correct one to the ahb master
+//----------------------------------------------------------------
 
 `timescale 1ns/1ns
 module ahb_mux #(parameter ADDR_WIDTH, NO_OF_SUBORDINATES, BITS_FOR_SUBORDINATES, DATA_WIDTH)
@@ -44,16 +54,16 @@ module ahb_mux #(parameter ADDR_WIDTH, NO_OF_SUBORDINATES, BITS_FOR_SUBORDINATES
   localparam P_HSEL_bus1      = 6'b000001; //sel0 //1
   localparam P_HSEL_bus2      = 6'b000010; //sel1 //2
   localparam P_HSEL_bus3      = 6'b000100; //sel2 //4
-  localparam P_HSEL_busd      = 6'b001000;
-  localparam P_HSEL_bus_p_r   = 6'b010000;
-  localparam P_HSEL_bus_p_wr  = 6'b100000;
-  localparam P_HSEL_bus_reset = 6'b000000;
+  localparam P_HSEL_busd      = 6'b001000; //sel3 //8  defualt sub
+  localparam P_HSEL_bus_p_r   = 6'b010000; //sel4 //16 priveleged sub read
+  localparam P_HSEL_bus_p_wr  = 6'b100000; //sel5 //32 priveleged sub write/read
+  localparam P_HSEL_bus_reset = 6'b000000; //sel6 //0  0
 
   wire [5:0] HSEL_bus      = {HSEL_p_wr,HSEL_p_r,HSELd,HSEL3,HSEL2,HSEL1};
   reg  [5:0] HSEL_bus_reg_c, HSEL_bus_reg_d, HSEL_bus_reg_s;
 
-
-  always @(*) begin //DATA_PHASE_SYNC
+  //SAMPLING_PHASE_SYNC
+  always @(*) begin 
     if(~HRESETn) begin
        HSEL_bus_reg_s = 0;
     end
@@ -69,18 +79,20 @@ module ahb_mux #(parameter ADDR_WIDTH, NO_OF_SUBORDINATES, BITS_FOR_SUBORDINATES
   //   else begin
   //     HSEL_bus_reg_d <= HSEL_bus_reg_c;
   //   end
-  // end  
+  // end
 
-  always @(*) begin //DATA_PHASE_SYNC
+  //DATA_PHASE_SYNC
+  always @(*) begin 
     if(~HRESETn) begin
-       HSEL_bus_reg_d = 0;
+      HSEL_bus_reg_d = 0;
     end
     else begin
       HSEL_bus_reg_d = HSEL_bus_reg_c;
     end
   end  
 
-  always @(negedge HRESETn or posedge HCLK) begin //CONTROL_PHASE_SYNC
+  //CONTROL_PHASE_SYNC
+  always @(negedge HRESETn or posedge HCLK) begin 
     if (~HRESETn) begin
       HSEL_bus_reg_c <= 'h0;
     end

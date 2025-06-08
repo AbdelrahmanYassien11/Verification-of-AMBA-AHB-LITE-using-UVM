@@ -29,25 +29,14 @@ module ahb_default_subordinate #(parameter ADDR_WIDTH, DATA_WIDTH)
        output  reg   [ 1:0]           HRESP,
        output  reg                    HREADYout
 );
-   /*********************************************************/
-    reg state, next_state;
-    localparam IDLE   = 1'b0, ERROR = 1'b1;
-   /*********************************************************/
-    reg HSEL_reg_d;
-    // reg [1:0] HRESP_reg;
-    // wire  HSEL_reg;
 
-  // //always block to manage OUTPUT/SAMPLING _phase signals
-  // always @(posedge HCLK or negedge HRESETn) begin
-  //   if(~HRESETn) begin
-  //     HRESP <= 0;
-  //   end 
-  //   else begin
-  //     HRESP <= HRESP_reg;
-  //   end
-  // end
+  /*********************************************************/
+  reg state, next_state;
+  localparam IDLE   = 1'b0, ERROR = 1'b1;
+  /*********************************************************/
+  reg HSEL_reg_d;
 
-  //always block to manage CONTROL_phase signals
+  //always block to manage Address Phase signals
   always @ (posedge HCLK or negedge HRESETn) begin
     if (~HRESETn) begin 
       HREADYout     <= 1'b1;
@@ -63,7 +52,7 @@ module ahb_default_subordinate #(parameter ADDR_WIDTH, DATA_WIDTH)
     end 
   end 
 
-  //next_state logic combinational always block
+  // Next_state logic combinational always block
   always@(*) begin //next_state logic
     if (HSEL) begin
       next_state = ERROR;
@@ -73,6 +62,7 @@ module ahb_default_subordinate #(parameter ADDR_WIDTH, DATA_WIDTH)
     end
   end  
 
+  // Always block to assign state logic synchronously
   always@(posedge HCLK or negedge HRESETn) begin
     if(~HRESETn) begin
       state <= IDLE;
@@ -82,7 +72,7 @@ module ahb_default_subordinate #(parameter ADDR_WIDTH, DATA_WIDTH)
     end
   end
 
-  // always block to manage DATA_phase signals
+  // always block to manage Data Phase signals
   always@(negedge HCLK or negedge HRESETn) begin //output logic
     case(state)
 

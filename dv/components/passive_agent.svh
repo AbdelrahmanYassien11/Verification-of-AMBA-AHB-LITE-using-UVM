@@ -46,7 +46,7 @@ class passive_agent extends uvm_agent;
 
     // Retrieve the passive agent configuration from the config database
     if (!uvm_config_db#(passive_agent_config)::get(this, "", "config", passive_agent_config_h)) begin
-      `uvm_fatal("passive_agent", "Failed to get passive_agent_config object");
+      `uvm_fatal(get_type_name(), "Failed to get passive_agent_config object");
     end
 
     // Check if the agent is active or passive
@@ -68,7 +68,7 @@ class passive_agent extends uvm_agent;
     // Initialize the analysis port
     tlm_analysis_port_outputs = new("tlm_analysis_port_outputs", this);
 
-    `uvm_info("PASSIVE AGENT", "Build phase", UVM_LOW)
+    `uvm_info(get_type_name(), "Build phase", UVM_LOW)
   endfunction
 
   //---------------------------------------------------------
@@ -85,7 +85,7 @@ class passive_agent extends uvm_agent;
       driver_h.seq_item_port.connect(sequencer_h.seq_item_export);
     end
 
-    `uvm_info("PASSIVE AGENT", "Connect phase", UVM_LOW)
+    `uvm_info(get_type_name(), "Connect phase", UVM_LOW)
   endfunction
 
   // End of elaboration phase: Check and display connection status
@@ -96,13 +96,13 @@ class passive_agent extends uvm_agent;
     // tlm_analysis_port_outputs.get_connected_to(list);
     // tlm_analysis_port_outputs.get_provided_to(list);
 
-    `uvm_info("PASSIVE AGENT", "End of Elaboration phase", UVM_LOW)
+    `uvm_info(get_type_name(), "End of Elaboration phase", UVM_LOW)
   endfunction
 
   // Run phase: Executes the agent's operations
   task run_phase(uvm_phase phase);
     super.run_phase(phase);
-    `uvm_info("PASSIVE AGENT", "Run phase", UVM_LOW)
+    `uvm_info(get_type_name(), "Run phase", UVM_LOW)
   endtask
 
 endclass

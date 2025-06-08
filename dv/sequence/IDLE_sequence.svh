@@ -14,10 +14,10 @@
 
 class IDLE_sequence extends base_sequence;
   `uvm_object_utils(IDLE_sequence);
+
   // Static flag to determine if reset is needed
   static bit reset_flag;
   bit [ADDR_WIDTH-1:0] HADDR_reserve;
-
 
   // Handle to the reset sequence
   reset_sequence reset_sequence_h;
@@ -62,10 +62,9 @@ class IDLE_sequence extends base_sequence;
     end
     finish_item(seq_item);
 
-
   endtask : body
 
-  virtual task post_body();
-  endtask : post_body
+  // virtual task post_body();
+  // endtask : post_body
 
 endclass

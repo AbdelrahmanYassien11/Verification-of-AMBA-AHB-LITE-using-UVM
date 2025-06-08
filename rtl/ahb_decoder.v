@@ -1,3 +1,13 @@
+//----------------------------------------------------------------
+//  * File: ahb_decoder.v
+//  * Author: Abdelrahman Mohamad Yassien
+//  * Email: Abdelrahman.Yassien11@gmail.com
+//  * Date: 25/12/2024
+//  * Description: This module as the decoder defined & 
+//                 described per AMBA SPECIFICATION by ARM,
+//                 which samples the inputs of all sent by the
+// 				   ahb master & asserts the correct HSEL accordingly
+//----------------------------------------------------------------
 module ahb_decoder #(parameter ADDR_WIDTH, NO_OF_SUBORDINATES, BITS_FOR_SUBORDINATES)
 (
     input   wire [ADDR_WIDTH-1:0] HADDR,

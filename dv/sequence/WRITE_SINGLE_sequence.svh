@@ -41,7 +41,7 @@ class WRITE_SINGLE_sequence extends base_sequence;
   virtual task body();
     super.body();
     // Log the operation for debugging
-    `uvm_info("WRITE_SINGLE_SEQUENCE: ", "STARTING", UVM_HIGH)
+    `uvm_info(get_type_name(), "STARTING", UVM_HIGH)
 
     // If reset_flag is not set, start the reset sequence
     if (~reset_flag)

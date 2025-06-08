@@ -44,7 +44,7 @@ class driver extends uvm_driver #(sequence_item);
     // Create an instance of sequence_item
     seq_item = sequence_item::type_id::create("seq_item");
 
-    `uvm_info("DRIVER", "Build phase completed", UVM_LOW)
+    `uvm_info(get_type_name(), "Build phase completed", UVM_LOW)
   endfunction
 
   //---------------------------------------------------------
@@ -53,7 +53,7 @@ class driver extends uvm_driver #(sequence_item);
   function void connect_phase(uvm_phase phase);
     super.connect_phase(phase);
     my_vif.driver_h = this;
-    `uvm_info("DRIVER", "Connect phase completed", UVM_LOW)
+    `uvm_info(get_type_name(), "Connect phase completed", UVM_LOW)
   endfunction
 
   //--------------------------------------------------------------------
@@ -62,10 +62,10 @@ class driver extends uvm_driver #(sequence_item);
   task run_phase(uvm_phase phase);
     //super.run_phase(phase);
     sequence_item req;
-    `uvm_info("DRIVER", "Run phase Started", UVM_LOW)
+    `uvm_info(get_type_name(), "Run phase Started", UVM_LOW)
     forever begin
       seq_item_port.get_next_item(req);
-      `uvm_info(get_full_name(), { "DRIVEN_ITEM:", req.input2string} , UVM_LOW)
+      `uvm_info(get_type_name(), { "DRIVEN_ITEM:", req.input2string} , UVM_LOW)
       accept_tr(req, $time);
       void'(begin_tr(req, "pipelined_driver"));
 
@@ -104,8 +104,7 @@ class driver extends uvm_driver #(sequence_item);
   //------------------------------------------------------------------------------------------------------------------------------------------
   function void end_transfer(sequence_item t);
     sequence_item rsp;
-    $display("QUEUE SIZE: %0d",req_seq_items.size());
-    //`uvm_info("DRIVER",("QUEUE NUM: %0d",req_seq_items.size()), UVM_LOW)
+    `uvm_info(get_type_name(),$sformatf("QUEUE SIZE: %0d",req_seq_items.size()), UVM_LOW)
     rsp = req_seq_items.pop_front();
     rsp.do_copy(t);
     //seq_item_port.put(rsp); // End of req item

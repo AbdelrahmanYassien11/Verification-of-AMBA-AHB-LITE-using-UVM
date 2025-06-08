@@ -18,8 +18,7 @@ module ahb_lite #(parameter BITS_FOR_SUBORDINATES = 5, ADDR_WIDTH = 32, DATA_WID
       output                      HREADY
 
 );
-   /*********************************************************/
-   /*********************************************************/
+   /*====== Internal Signals ===================================================================================================*/
    wire [5:0]            HSEL_bus;
    wire [DATA_WIDTH-1:0] HRDATA_bus [5:0]; 
    wire [1:0]            HRESP_bus  [5:0]; 
@@ -28,7 +27,7 @@ module ahb_lite #(parameter BITS_FOR_SUBORDINATES = 5, ADDR_WIDTH = 32, DATA_WID
    wire                  HREADYin;
 
    assign HREADYin = HREADY;
-   /*********************************************************/
+   /*===== AHB Decoder ======================================================================================================== */
    ahb_decoder #(.NO_OF_SUBORDINATES(NO_OF_SUBORDINATES), .BITS_FOR_SUBORDINATES(BITS_FOR_SUBORDINATES), .ADDR_WIDTH(ADDR_WIDTH)) decoder1 
               ( 
               .HADDR(HADDR),
@@ -40,7 +39,7 @@ module ahb_lite #(parameter BITS_FOR_SUBORDINATES = 5, ADDR_WIDTH = 32, DATA_WID
               .HSEL_p_r(HSEL_bus[4]),
               .HSEL_p_wr(HSEL_bus[5])
               );
-   /*********************************************************/ //MUX
+   /*===== AHB MUX ============================================================================================================== */
    ahb_mux #(.NO_OF_SUBORDINATES(NO_OF_SUBORDINATES), .BITS_FOR_SUBORDINATES(BITS_FOR_SUBORDINATES), .ADDR_WIDTH(ADDR_WIDTH), .DATA_WIDTH(DATA_WIDTH)) mux1 
           (
           .HRESETn(HRESETn),
@@ -82,7 +81,7 @@ module ahb_lite #(parameter BITS_FOR_SUBORDINATES = 5, ADDR_WIDTH = 32, DATA_WID
           .HREADY_p_wr(HREADY_bus[5])
           );
 
-   /*********************************************************/
+   /*===== AHB Defualt Subordinate ============================================================================================= */
    ahb_default_subordinate #(.ADDR_WIDTH(ADDR_WIDTH), .DATA_WIDTH(DATA_WIDTH)) default_subordinate
                     (
                     .HRESETn          (HRESETn),
@@ -101,7 +100,7 @@ module ahb_lite #(parameter BITS_FOR_SUBORDINATES = 5, ADDR_WIDTH = 32, DATA_WID
                     .HRESP        (HRESP_bus[3]),
                     .HREADYout   (HREADY_bus[3])
                     );
-   /*********************************************************/
+   /*===== AHB Subordinate No.1 =============================================================================================== */
    ahb_subordinate #(.ADDR_WIDTH(ADDR_WIDTH), .DATA_WIDTH(DATA_WIDTH), .ADDR_DEPTH(ADDR_DEPTH), .NO_OF_SUBORDINATES(NO_OF_SUBORDINATES), .BITS_FOR_SUBORDINATES(BITS_FOR_SUBORDINATES)) subordinate1 
             (
             .HRESETn               (HRESETn),
@@ -120,7 +119,7 @@ module ahb_lite #(parameter BITS_FOR_SUBORDINATES = 5, ADDR_WIDTH = 32, DATA_WID
             .HRESP             (HRESP_bus[0]),
             .HREADYout        (HREADY_bus[0])
             );
-   /*********************************************************/
+   /*===== AHB Subordinate No.2 =============================================================================================== */
    ahb_subordinate #(.ADDR_WIDTH(ADDR_WIDTH), .DATA_WIDTH(DATA_WIDTH), .ADDR_DEPTH(ADDR_DEPTH), .NO_OF_SUBORDINATES(NO_OF_SUBORDINATES), .BITS_FOR_SUBORDINATES(BITS_FOR_SUBORDINATES)) subordinate2 
             (
             .HRESETn               (HRESETn),
@@ -140,7 +139,7 @@ module ahb_lite #(parameter BITS_FOR_SUBORDINATES = 5, ADDR_WIDTH = 32, DATA_WID
             .HREADYout       (HREADY_bus[1])
 
             );
-   /*********************************************************/
+   /*===== AHB Subordinate No.3 =============================================================================================== */
    ahb_subordinate #(.ADDR_WIDTH(ADDR_WIDTH), .DATA_WIDTH(DATA_WIDTH), .ADDR_DEPTH(ADDR_DEPTH), .NO_OF_SUBORDINATES(NO_OF_SUBORDINATES), .BITS_FOR_SUBORDINATES(BITS_FOR_SUBORDINATES)) subordinate3 
             (
             .HRESETn               (HRESETn),
@@ -160,7 +159,7 @@ module ahb_lite #(parameter BITS_FOR_SUBORDINATES = 5, ADDR_WIDTH = 32, DATA_WID
             .HREADYout       (HREADY_bus[2])
             );
 
-   /*********************************************************/
+   /*===== AHB Subordinate which needs a privelege level to Read  ============================================================= */
    ahb_subordinate_priveleged_r #(.ADDR_WIDTH(ADDR_WIDTH), .DATA_WIDTH(DATA_WIDTH), .ADDR_DEPTH(ADDR_DEPTH), .NO_OF_SUBORDINATES(NO_OF_SUBORDINATES), .BITS_FOR_SUBORDINATES(BITS_FOR_SUBORDINATES)) subordinate_p_r 
             (
             .HRESETn               (HRESETn),
@@ -180,7 +179,7 @@ module ahb_lite #(parameter BITS_FOR_SUBORDINATES = 5, ADDR_WIDTH = 32, DATA_WID
             .HREADYout       (HREADY_bus[4])
             );
 
-   /*********************************************************/
+   /*===== AHB Subordinate which needs a privelege level to Read or Write ====================================================== */
    ahb_subordinate_priveleged_wr #(.ADDR_WIDTH(ADDR_WIDTH), .DATA_WIDTH(DATA_WIDTH), .ADDR_DEPTH(ADDR_DEPTH), .NO_OF_SUBORDINATES(NO_OF_SUBORDINATES), .BITS_FOR_SUBORDINATES(BITS_FOR_SUBORDINATES)) subordinate_p_wr 
             (
             .HRESETn               (HRESETn),

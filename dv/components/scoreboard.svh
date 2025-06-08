@@ -50,7 +50,7 @@ class scoreboard extends uvm_scoreboard;
     uvm_config_db#(virtual inf)::set(this, "predictor_h", "my_vif", my_vif);
 
     comparator_h.predictor_h = predictor_h;
-    `uvm_info("SCOREBOARD", "Build phase completed", UVM_LOW)
+    `uvm_info(get_type_name(), "Build phase completed", UVM_LOW)
   endfunction
 
   //---------------------------------------------------------
@@ -65,7 +65,7 @@ class scoreboard extends uvm_scoreboard;
     predictor_h.analysis_port_expected_outputs.connect(comparator_h.analysis_expected_outputs);
     predictor_h.analysis_port_expected_outputs.connect(comparator_h.analysis_expected_outputs_cleared);
 
-    `uvm_info("SCOREBOARD", "Connect phase completed", UVM_LOW)
+    `uvm_info(get_type_name(), "Connect phase completed", UVM_LOW)
   endfunction
 
   function void phase_ready_to_end(uvm_phase phase);
@@ -87,7 +87,7 @@ class scoreboard extends uvm_scoreboard;
 
   function void final_phase(uvm_phase phase);
     super.final_phase(phase);
-    `uvm_info("SCOREBOARD", "Scoreboard is stopping.", UVM_MEDIUM)
+    `uvm_info(get_type_name(), "Scoreboard is stopping.", UVM_MEDIUM)
   endfunction
 
 endclass

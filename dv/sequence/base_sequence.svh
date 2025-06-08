@@ -32,7 +32,7 @@ class base_sequence extends uvm_sequence #(sequence_item);
   // Task executed before the main body task
   task pre_body();
     // Display a message indicating the start of the pre_body task
-    $display("start of pre_body task");
+    `uvm_info(get_type_name(), "start of pre_body Task", UVM_HIGH)
     // Create a new instance of the sequence item
     seq_item = sequence_item::type_id::create("seq_item");
   endtask : pre_body
@@ -50,13 +50,14 @@ class base_sequence extends uvm_sequence #(sequence_item);
   endtask : body
 
   virtual task post_body();
-    // -> finished_sequence;
-    // #20ns;
-    // fork
-      // #20ns;
-    // join_none
-    //24478
-    //21284
+    string test_name;
+    if(!($value$plusargs("UVM_TESTNAME=%s", test_name))) `uvm_fatal(get_type_name(), "Could not get test_name");
+    case (test_name)
+      "runall_waited_test": begin
+        #10ns;
+        `uvm_info(get_type_name(), "waitedd", UVM_LOW)
+      end
+    endcase
   endtask : post_body
 
   task response_check();
@@ -66,11 +67,11 @@ class base_sequence extends uvm_sequence #(sequence_item);
           sequence_item rsp;
           // Wait for the data phase to complete
           get_response(rsp);
-          `uvm_info(get_type_name(), {"RESPONSE_RETRIEVED: ", rsp.output2string()}, UVM_LOW)
-          `uvm_info(get_type_name(), $sformatf("Sequence ID: %0d", rsp.get_sequence_id()), UVM_LOW)
+          `uvm_info(get_type_name(), {"RESPONSE_RETRIEVED: ", rsp.output2string()}, UVM_MEDIUM)
+          `uvm_info(get_type_name(), $sformatf("Sequence ID: %0d", rsp.get_sequence_id()), UVM_MEDIUM)
 
           if (rsp.HREADY == NOT_READY && rsp.HRESP == ERROR) begin
-            $display("%0t ERROR DETECTED",$time()); //180
+            `uvm_info(get_type_name(), $sformatf("%0t ERROR DETECTED",$time()), UVM_MEDIUM) //180
             seq_item.ERROR_ON_EXECUTE_IDLE = 1;
             break_burst = 1;
           end

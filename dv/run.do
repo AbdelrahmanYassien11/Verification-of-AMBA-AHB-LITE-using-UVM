@@ -5,7 +5,7 @@ vlog -f tb.f +cover -covercells
 vopt top_test_uvm -o top_optimized +acc +cover=bcefsx+ahb_lite(rtl)
 
 #set test_names {"WRITE_READ_INCR_test" "WRITE_READ_INCR4_test" "WRITE_READ_INCR8_test" "WRITE_READ_INCR16_test" "WRITE_READ_WRAP4_test" "WRITE_READ_WRAP8_test" "WRITE_READ_WRAP16_test" "runall_test"}
-set test_names {runall_test}
+set test_names {runall_waited_test}
 
 foreach test_name $test_names {
 	vsim top_optimized -cover -voptargs=+acc -solvefaildebug=2 -debugDB +UVM_TESTNAME=$test_name
@@ -72,12 +72,12 @@ foreach test_name $test_names {
 	set NoQuitOnFinish 1
 	onbreak {resume}
 	log /* -r
-	run -all
-	coverage report -assert -details -zeros -verbose -output reports/assertion_based_coverage_report.txt -append /.
-	coverage report -detail -cvg -directive -comments -option -memory -output reports/functional_coverage_report.txt {}
+	#run -all
+	#coverage report -assert -details -zeros -verbose -output reports/assertion_based_coverage_report.txt -append /.
+	#coverage report -detail -cvg -directive -comments -option -memory -output reports/functional_coverage_report.txt {}
 
-	coverage attribute -name TESTNAME -value $test_name
-	coverage save reports/$test_name.ucdb
+	#coverage attribute -name TESTNAME -value $test_name
+	#coverage save reports/$test_name.ucdb
 
 }
 

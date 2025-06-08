@@ -47,7 +47,7 @@ class SINGLE_IDLE_sequence extends base_sequence;
     WRITE_SINGLE_sequence::reset_flag = 1'b1;
 
 
-    `uvm_info("SINGLE_IDLE_sequence: ", "STARTING" , UVM_HIGH)
+    `uvm_info(get_type_name(), "STARTING" , UVM_HIGH)
 
     if(~reset_flag)
       reset_sequence_h.start(sequencer_h);

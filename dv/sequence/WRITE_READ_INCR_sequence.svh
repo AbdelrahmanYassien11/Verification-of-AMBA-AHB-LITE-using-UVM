@@ -43,7 +43,7 @@ class WRITE_READ_INCR_sequence extends base_sequence;
     IDLE_sequence::reset_flag = 1'b1;
 
     //READ_INCR_sequence::last_test = 1'b1;
-    `uvm_info("WRITE_READ_INCR_sequence: ", "STARTING" , UVM_HIGH)
+    `uvm_info(get_type_name(), "STARTING" , UVM_HIGH)
 
     if(~reset_flag)
       reset_sequence_h.start(m_sequencer, this);

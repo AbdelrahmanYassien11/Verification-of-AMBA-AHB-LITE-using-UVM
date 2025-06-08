@@ -82,14 +82,14 @@ class comparator extends uvm_component;
     analysis_expected_outputs_cleared.connect(fifo_expected_outputs_cleared.analysis_export);
 
     // Display a message indicating the connect phase is complete
-    `uvm_info("COMPARATOR", "Connect phase completed", UVM_LOW)
+    `uvm_info(get_type_name(), "Connect phase completed", UVM_LOW)
   endfunction
 
   //-------------------------------------------------------
   // Run phase for comparing expected & actual outputs
   //------------------------------------------------------
   task run_phase(uvm_phase phase);
-    `uvm_info("COMPARATOR", "Run phase completed", UVM_LOW)  
+    `uvm_info(get_type_name(), "Run phase completed", UVM_LOW)  
     forever begin
 
     //creating the seq item expected at each loop so 
@@ -97,7 +97,7 @@ class comparator extends uvm_component;
 
       // Get the expected sequence item from expected sequence item fifo
       fifo_expected_outputs.get(seq_item_expected);
-      `uvm_info("COMPARATOR", {"EXPECTED_SEQ_ITEM RECEIVED: ", 
+      `uvm_info(get_type_name(), {"EXPECTED_SEQ_ITEM RECEIVED: ", 
                       seq_item_expected.convert2string()}, UVM_HIGH)
 
       // looping on the expected seq item fifo to clear it if a reset occurs
@@ -106,15 +106,15 @@ class comparator extends uvm_component;
       // Get the actual sequence item from actual sequence item fifo
       fifo_actual_outputs.get(seq_item_actual);
       fifo_expected_outputs_cleared.try_get(seq_item_expected_reset);
-      `uvm_info("COMPARATOR", {"ACTUAL_SEQ_ITEM RECEIVED: ", 
+      `uvm_info(get_type_name(), {"ACTUAL_SEQ_ITEM RECEIVED: ", 
                 seq_item_actual.convert2string()}, UVM_HIGH)
 
       // Compare the actual and expected sequence items
       if (seq_item_actual.do_compare(seq_item_expected, comparer_h)) begin
-        `uvm_info("SCOREBOARD", "PASS", UVM_HIGH)
+        `uvm_info(get_type_name(), "PASS", UVM_HIGH)
       end
       else begin
-        `uvm_error("SCOREBOARD", "FAIL")
+        `uvm_error(get_type_name(), "FAIL")
         predictor_h.display_subordinates(seq_item_expected.HADDR, seq_item_expected.HSEL);
       end
       sequence_item::COMPARATOR_transaction_counter = sequence_item::COMPARATOR_transaction_counter + 1;

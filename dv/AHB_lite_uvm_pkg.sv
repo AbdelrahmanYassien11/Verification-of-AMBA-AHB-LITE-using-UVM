@@ -117,13 +117,12 @@ package AHB_pkg;
    	//******************************************************************************************************************//
    	//												UVM AMBA AHB LITE SEQUENCES
    	//*****************************************************************************************************************//
-	`include "reset_sequence.svh"
+	`include "reset_sequence.sv"
 
 	`include "IDLE_sequence.svh"
 
 	`include "WRITE_SINGLE_sequence.svh"
 	`include "READ_SINGLE_sequence.svh"
-	`include "write_twice_sequence.svh"
 
 	`include "WRITE_READ_SINGLE_sequence.svh"
 
@@ -163,16 +162,15 @@ package AHB_pkg;
 	`include "ADDRESS_ERROR_INJECTION_sequence.svh"
 	`include "PRIVELEGE_ERROR_INJECTION_sequence.svh"
 
+	`include "runall_waited_sequence.svh"
 	`include "runall_sequence.svh"
 
 	`include "driver.svh"
-	`include "reactive_driver.svh"
 	`include "inputs_monitor.svh"
 	`include "outputs_monitor.svh"
 
 	`include "active_agent.svh"
 	`include "passive_agent.svh"
-	`include "reactive_agent.svh"	
 
 	`include "scoreboard.svh"
 	`include "coverage.svh"
@@ -185,7 +183,6 @@ package AHB_pkg;
 
 	`include "base_test.svh"
 	`include "reset_test.svh"
-	`include "write_twice_test.svh"
 
 	`include "IDLE_test.svh"
 
@@ -220,6 +217,7 @@ package AHB_pkg;
 	`include "WRITE_READ_INCR16_test.svh"
 	`include "WRITE_READ_WRAP16_test.svh"
 
+	`include "runall_waited_test.svh"
 	`include "runall_test.svh"
 	`include "test_test.svh"
 	`include "ADDRESS_ERROR_INJECTION_test.svh"

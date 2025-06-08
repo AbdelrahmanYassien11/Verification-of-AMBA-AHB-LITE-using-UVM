@@ -27,8 +27,6 @@ class env extends uvm_env;
   scoreboard scoreboard_h;
   coverage coverage_h;
 
-  reactive_agent reactive_agent_h;
-
   // List for handling port connections
   uvm_port_list list;
 
@@ -70,16 +68,13 @@ class env extends uvm_env;
     uvm_config_db#(virtual inf)::set(this, "coverage_h", "my_vif", my_vif);
     uvm_config_db#(virtual inf)::set(this, "scoreboard_h", "my_vif", my_vif);
 
-    // Create instances of the agents and components
+    // Create instances of the environment components
     active_agent_h = active_agent::type_id::create("active_agent_h", this);
     passive_agent_h = passive_agent::type_id::create("passive_agent_h", this);
     scoreboard_h = scoreboard::type_id::create("scoreboard_h", this);
     coverage_h = coverage::type_id::create("coverage_h", this);
 
-    uvm_config_db#(active_agent_config)::set(this, "reactive_agent_h", "reactive_config", active_agent_config_h);   
-    reactive_agent_h = reactive_agent::type_id::create("reactive_agent_h", this);    
-
-    `uvm_info("ENV", "Build phase completed", UVM_LOW)
+    `uvm_info(get_type_name(), "Build phase completed", UVM_LOW)
   endfunction
 
   //---------------------------------------------------------
@@ -96,7 +91,7 @@ class env extends uvm_env;
     // reactive_agent_h.tlm_analysis_port_inputs.connect(coverage.analysis_export_inputs);
     // reactive_agent_h.tlm_analysis_port_inputs.connect(scoreboard_h.analysis_export_inputs);
 
-    `uvm_info("ENV", "Connect phase completed", UVM_LOW)
+    `uvm_info(get_type_name(), "Connect phase completed", UVM_LOW)
   endfunction
 
   // End of elaboration phase for reporting connection details
@@ -113,7 +108,7 @@ class env extends uvm_env;
     `uvm_info(get_name(), $sformatf("%p", list), UVM_LOW);
     scoreboard_h.analysis_export_outputs.get_provided_to(list);
     `uvm_info(get_name(), $sformatf("%p", list), UVM_LOW);
-    `uvm_info("ENV", "FINISHED GET_PROVIDED_TO", UVM_LOW)
+    `uvm_info(get_type_name(), "FINISHED GET_PROVIDED_TO", UVM_LOW)
 
     coverage_h.analysis_export.get_connected_to(list);
     `uvm_info(get_name(), $sformatf("%p", list), UVM_LOW);
@@ -121,15 +116,14 @@ class env extends uvm_env;
     `uvm_info(get_name(), $sformatf("%p", list), UVM_LOW);
     scoreboard_h.analysis_export_outputs.get_connected_to(list);
     `uvm_info(get_name(), $sformatf("%p", list), UVM_LOW);
-    `uvm_info("ENV", "FINISHED GET_CONNECTED_TO", UVM_LOW)
+    `uvm_info(get_type_name(), "FINISHED GET_CONNECTED_TO", UVM_LOW)
 
-    `uvm_info("ENV", "End of Elaboration phase completed", UVM_LOW)
+    `uvm_info(get_type_name(), "End of Elaboration phase completed", UVM_LOW)
   endfunction
 
   // Run phase where the environment executes
   task run_phase(uvm_phase phase);
     super.run_phase(phase);
-    $display("Run phase completed");
   endtask
 
 endclass

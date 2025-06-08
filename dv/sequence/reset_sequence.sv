@@ -26,8 +26,7 @@ class reset_sequence extends base_sequence;
     // seq_item.HADDR_c.constraint_mode(0);
     // seq_item.HADDR_SEL_c.constraint_mode(0);
     // Log information about the reset operation
-    `uvm_info("RESET_SEQUENCE: ", "STARTING", UVM_HIGH);
-
+    `uvm_info(get_type_name(), $sformatf("STARTING with ID: %0d, item_sequence_id: %0d", get_sequence_id(), seq_item.get_sequence_id()), UVM_LOW);
     // Start the sequence item for the reset operation
     start_item(seq_item);
 

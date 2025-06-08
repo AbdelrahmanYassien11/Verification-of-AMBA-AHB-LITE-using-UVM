@@ -41,7 +41,7 @@ class twice_IDLE_sequence extends base_sequence;
   virtual task body();
     super.body();
 
-    `uvm_info("twice_IDLE_sequence: ", "STARTING" , UVM_HIGH)
+    `uvm_info(get_type_name(), "STARTING" , UVM_HIGH)
 
     IDLE_sequence::reset_flag = 1'b1;
 

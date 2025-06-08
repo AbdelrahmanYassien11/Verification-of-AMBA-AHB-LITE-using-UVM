@@ -755,7 +755,7 @@ class coverage extends uvm_subscriber #(sequence_item);
   //-------------------------------------------------------------
   function void build_phase(uvm_phase phase);
     super.build_phase(phase);
-    `uvm_info("COVERAGE", "Build phase completed", UVM_LOW)
+    `uvm_info(get_type_name(), "Build phase completed", UVM_LOW)
     
     //Getter for vvirtual interface handle
     if (!uvm_config_db#(virtual inf)::get(this, "", "my_vif", my_vif)) begin
@@ -773,7 +773,7 @@ class coverage extends uvm_subscriber #(sequence_item);
   //---------------------------------------------------
   task run_phase(uvm_phase phase);
     super.run_phase(phase);
-    `uvm_info("Coverage","Run phase", UVM_LOW)
+    `uvm_info(get_type_name(),"Run phase", UVM_LOW)
   endtask
 
   //---------------------------------------------------
@@ -785,59 +785,46 @@ class coverage extends uvm_subscriber #(sequence_item);
     `uvm_info(get_type_name(), "\nCoverage Report:", UVM_LOW)
     `uvm_info(get_type_name(), $sformatf("TEST_NAME = %s", test_name), UVM_LOW)
 
-    // case(test_name)
-    //   "runall_test": begin 
-        `uvm_info(get_type_name(), $sformatf("HRESETn                 Coverage: %.2f%%", RESET_covgrp.get_coverage()), UVM_LOW)
-        `uvm_info(get_type_name(), $sformatf("HWRITE                  Coverage: %.2f%%", WRITE_covgrp.get_coverage()), UVM_LOW)
-        `uvm_info(get_type_name(), $sformatf("HTRANS                  Coverage: %.2f%%", TRANS_covgrp.get_coverage()), UVM_LOW)
-        `uvm_info(get_type_name(), $sformatf("HBURST                  Coverage: %.2f%%", BURST_covgrp.get_coverage()), UVM_LOW)
-        `uvm_info(get_type_name(), $sformatf("HSIZE                   Coverage: %.2f%%", SIZE_covgrp.get_coverage()), UVM_LOW)    
-        `uvm_info(get_type_name(), $sformatf("SUBORDINATE Selection   Coverage: %.2f%%", SUBORDINATE_SELECT_covgrp.get_coverage()), UVM_LOW)
-        `uvm_info(get_type_name(), $sformatf("Subordinate Addresses   Coverage: %.2f%%", ADDR_covgrp.get_coverage()), UVM_LOW)
-        `uvm_info(get_type_name(), $sformatf("HWDATA                  Coverage: %.2f%%", HWDATA_covgrp.get_coverage()), UVM_LOW)
+    `uvm_info(get_type_name(), $sformatf("HRESETn                 Coverage: %.2f%%", RESET_covgrp.get_coverage()), UVM_LOW)
+    `uvm_info(get_type_name(), $sformatf("HWRITE                  Coverage: %.2f%%", WRITE_covgrp.get_coverage()), UVM_LOW)
+    `uvm_info(get_type_name(), $sformatf("HTRANS                  Coverage: %.2f%%", TRANS_covgrp.get_coverage()), UVM_LOW)
+    `uvm_info(get_type_name(), $sformatf("HBURST                  Coverage: %.2f%%", BURST_covgrp.get_coverage()), UVM_LOW)
+    `uvm_info(get_type_name(), $sformatf("HSIZE                   Coverage: %.2f%%", SIZE_covgrp.get_coverage()), UVM_LOW)    
+    `uvm_info(get_type_name(), $sformatf("SUBORDINATE Selection   Coverage: %.2f%%", SUBORDINATE_SELECT_covgrp.get_coverage()), UVM_LOW)
+    `uvm_info(get_type_name(), $sformatf("Subordinate Addresses   Coverage: %.2f%%", ADDR_covgrp.get_coverage()), UVM_LOW)
+    `uvm_info(get_type_name(), $sformatf("HWDATA                  Coverage: %.2f%%", HWDATA_covgrp.get_coverage()), UVM_LOW)
 
-        `uvm_info(get_type_name(), $sformatf("HWDATA data frame bits toggling  Coverage: %.2f%%", HWDATA_df_tog_cg::get_coverage()), UVM_LOW)
-        `uvm_info(get_type_name(), $sformatf("HWDATA data transition bits toggling  Coverage: %.2f%%", HWDATA_dt_tog_cg::get_coverage()), UVM_LOW)
+    `uvm_info(get_type_name(), $sformatf("HWDATA data frame bits toggling  Coverage: %.2f%%", HWDATA_df_tog_cg::get_coverage()), UVM_LOW)
+    `uvm_info(get_type_name(), $sformatf("HWDATA data transition bits toggling  Coverage: %.2f%%", HWDATA_dt_tog_cg::get_coverage()), UVM_LOW)
 
-        `uvm_info(get_type_name(), $sformatf("HADDR data frame bits toggling  Coverage: %.2f%%", HADDR_df_tog_cg::get_coverage()), UVM_LOW)
-        `uvm_info(get_type_name(), $sformatf("HADDR data transition bits toggling  Coverage: %.2f%%", HADDR_dt_tog_cg::get_coverage()), UVM_LOW)
+    `uvm_info(get_type_name(), $sformatf("HADDR data frame bits toggling  Coverage: %.2f%%", HADDR_df_tog_cg::get_coverage()), UVM_LOW)
+    `uvm_info(get_type_name(), $sformatf("HADDR data transition bits toggling  Coverage: %.2f%%", HADDR_dt_tog_cg::get_coverage()), UVM_LOW)
 
-        `uvm_info(get_type_name(), $sformatf("HSEL data frame bits toggling  Coverage: %.2f%%", HSEL_df_tog_cg::get_coverage()), UVM_LOW)
-        `uvm_info(get_type_name(), $sformatf("HSEL data transition bits toggling  Coverage: %.2f%%", HSEL_dt_tog_cg::get_coverage()), UVM_LOW)
+    `uvm_info(get_type_name(), $sformatf("HSEL data frame bits toggling  Coverage: %.2f%%", HSEL_df_tog_cg::get_coverage()), UVM_LOW)
+    `uvm_info(get_type_name(), $sformatf("HSEL data transition bits toggling  Coverage: %.2f%%", HSEL_dt_tog_cg::get_coverage()), UVM_LOW)
 
 
-        `uvm_info(get_type_name(), $sformatf("HRESETn data frame values  Coverage: %.2f%%", HRESETn_df_cg::get_coverage()), UVM_LOW)
-        `uvm_info(get_type_name(), $sformatf("HRESETn data transition values  Coverage: %.2f%%", HRESETn_dt_cg::get_coverage()), UVM_LOW)
+    `uvm_info(get_type_name(), $sformatf("HRESETn data frame values  Coverage: %.2f%%", HRESETn_df_cg::get_coverage()), UVM_LOW)
+    `uvm_info(get_type_name(), $sformatf("HRESETn data transition values  Coverage: %.2f%%", HRESETn_dt_cg::get_coverage()), UVM_LOW)
 
-        `uvm_info(get_type_name(), $sformatf("HSEL data frame values  Coverage: %.2f%%", HSEL_df_cg::get_coverage()), UVM_LOW)
-        `uvm_info(get_type_name(), $sformatf("HSEL data transition values  Coverage: %.2f%%", HSEL_dt_cg::get_coverage()), UVM_LOW)
+    `uvm_info(get_type_name(), $sformatf("HSEL data frame values  Coverage: %.2f%%", HSEL_df_cg::get_coverage()), UVM_LOW)
+    `uvm_info(get_type_name(), $sformatf("HSEL data transition values  Coverage: %.2f%%", HSEL_dt_cg::get_coverage()), UVM_LOW)
 
-        `uvm_info(get_type_name(), $sformatf("HWRITE data frame values  Coverage: %.2f%%", HWRITE_df_cg::get_coverage()), UVM_LOW)
-        `uvm_info(get_type_name(), $sformatf("HWRITE data transition values  Coverage: %.2f%%", HWRITE_dt_cg::get_coverage()), UVM_LOW)
+    `uvm_info(get_type_name(), $sformatf("HWRITE data frame values  Coverage: %.2f%%", HWRITE_df_cg::get_coverage()), UVM_LOW)
+    `uvm_info(get_type_name(), $sformatf("HWRITE data transition values  Coverage: %.2f%%", HWRITE_dt_cg::get_coverage()), UVM_LOW)
 
-        `uvm_info(get_type_name(), $sformatf("HTRANS data frame values  Coverage: %.2f%%", HTRANS_df_cg::get_coverage()), UVM_LOW)
-        `uvm_info(get_type_name(), $sformatf("HTRANS data transition values  Coverage: %.2f%%", HTRANS_dt_cg::get_coverage()), UVM_LOW)
+    `uvm_info(get_type_name(), $sformatf("HTRANS data frame values  Coverage: %.2f%%", HTRANS_df_cg::get_coverage()), UVM_LOW)
+    `uvm_info(get_type_name(), $sformatf("HTRANS data transition values  Coverage: %.2f%%", HTRANS_dt_cg::get_coverage()), UVM_LOW)
 
-        `uvm_info(get_type_name(), $sformatf("HBURST data frame values  Coverage: %.2f%%", HBURST_df_cg::get_coverage()), UVM_LOW)
-        `uvm_info(get_type_name(), $sformatf("HBURST data transition values  Coverage: %.2f%%", HBURST_dt_cg::get_coverage()), UVM_LOW)
+    `uvm_info(get_type_name(), $sformatf("HBURST data frame values  Coverage: %.2f%%", HBURST_df_cg::get_coverage()), UVM_LOW)
+    `uvm_info(get_type_name(), $sformatf("HBURST data transition values  Coverage: %.2f%%", HBURST_dt_cg::get_coverage()), UVM_LOW)
 
-        `uvm_info(get_type_name(), $sformatf("HSIZE data frame values  Coverage: %.2f%%", HSIZE_df_cg::get_coverage()), UVM_LOW)
-        `uvm_info(get_type_name(), $sformatf("HSIZE data transition values  Coverage: %.2f%%", HSIZE_dt_cg::get_coverage()), UVM_LOW)
-        
-        `uvm_info(get_type_name(), $sformatf("HPROT data frame values  Coverage: %.2f%%", HPROT_df_cg::get_coverage()), UVM_LOW)
-        `uvm_info(get_type_name(), $sformatf("HPROT data transition values  Coverage: %.2f%%", HPROT_dt_cg::get_coverage()), UVM_LOW)                  
-      // end
-      
-      // "repitition_test": begin 
-      //   `uvm_info(get_type_name(), $sformatf("repitition cg for op_A Coverage: %.2f%%", a_op_repi_cg.get_coverage()), UVM_LOW)
-      //   `uvm_info(get_type_name(), $sformatf("repitition cg for op_B1 Coverage: %.2f%%", b_op01_repi_cg.get_coverage()), UVM_LOW)
-      //   `uvm_info(get_type_name(), $sformatf("repitition cg for op_B2 Coverage: %.2f%%", b_op11_repi_cg.get_coverage()), UVM_LOW)   
-      // end
-
-    //   "error_test": begin
-    //     `uvm_info(get_type_name(), $sformatf("HPROT data frame values  Coverage: %.2f%%", HPROT_df_cg::get_coverage()), UVM_LOW)
-    //   end
-    // endcase
+    `uvm_info(get_type_name(), $sformatf("HSIZE data frame values  Coverage: %.2f%%", HSIZE_df_cg::get_coverage()), UVM_LOW)
+    `uvm_info(get_type_name(), $sformatf("HSIZE data transition values  Coverage: %.2f%%", HSIZE_dt_cg::get_coverage()), UVM_LOW)
+    
+    `uvm_info(get_type_name(), $sformatf("HPROT data frame values  Coverage: %.2f%%", HPROT_df_cg::get_coverage()), UVM_LOW)
+    `uvm_info(get_type_name(), $sformatf("HPROT data transition values  Coverage: %.2f%%", HPROT_dt_cg::get_coverage()), UVM_LOW)                  
+    
     `uvm_info(get_type_name(), $sformatf("Total Coverage: %.2f%%", $get_coverage()), UVM_LOW)  
     
   endfunction : report_phase

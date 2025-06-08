@@ -39,7 +39,7 @@ class WRITE_READ_SINGLE_sequence extends base_sequence;
   virtual task body();
 
     //READ_INCR4_sequence::last_test = 1'b1;
-    `uvm_info("WRITE_READ_SINGLE_sequence: ", "STARTING" , UVM_HIGH)
+    `uvm_info(get_type_name(), "STARTING" , UVM_HIGH)
 
     if(~reset_flag)
       reset_sequence_h.start(sequencer_h);

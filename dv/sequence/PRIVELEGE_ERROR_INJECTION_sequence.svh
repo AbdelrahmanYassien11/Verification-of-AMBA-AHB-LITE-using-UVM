@@ -17,6 +17,7 @@ class PRIVELEGE_ERROR_INJECTION_sequence extends base_sequence;
 
   // Static flag to determine if reset is needed
   static bit reset_flag;
+
   // Handle to the reset sequence
   reset_sequence reset_sequence_h;
   IDLE_sequence IDLE_sequence_h;
@@ -29,7 +30,7 @@ class PRIVELEGE_ERROR_INJECTION_sequence extends base_sequence;
 
   // Pre-body phase task for setup operations
   task pre_body();
-    `uvm_info(get_type_name, "start of pre_body task", UVM_HIGH)
+    `uvm_info(get_type_name(), "start of pre_body task", UVM_HIGH)
     super.pre_body(); // Call the base class pre_body
     // Create an instance of the reset sequence
     reset_sequence_h = reset_sequence::type_id::create("reset_sequence_h");
@@ -40,17 +41,14 @@ class PRIVELEGE_ERROR_INJECTION_sequence extends base_sequence;
   virtual task body();
     super.body();
     IDLE_sequence::reset_flag = 1'b1;
-    `uvm_info("PRIVELEGE_ERROR_INJECTION_sequence: ", "STARTING" , UVM_HIGH)
+    `uvm_info(get_type_name(), "STARTING" , UVM_HIGH)
 
     if(~reset_flag)
       reset_sequence_h.start(sequencer_h);
 
-
     seq_item.HADDR_VAL_BURST.constraint_mode(0);
     seq_item.HADDR_SEL_c.constraint_mode(0);
     seq_item.HPROT_c.constraint_mode(0);
-
-
 
     /***************************************************************************************/
     //                                 STARTING WRITE_INCR8
@@ -79,12 +77,11 @@ class PRIVELEGE_ERROR_INJECTION_sequence extends base_sequence;
 
     // Set the operation type to READ
     start_item(seq_item);
-      $display("STARTING READ CYCLES %0t",$time());
       assert(seq_item.randomize() with { RESET_op == WORKING; WRITE_op == READ; TRANS_op == NONSEQ; BURST_op == INCR8;}); // Randomize the sequence item
     finish_item(seq_item);
 
 
-  do_burst(INCR8, READ, SEQ);
+    do_burst(INCR8, READ, SEQ);
 
     IDLE_sequence_h.start(m_sequencer, this);
 

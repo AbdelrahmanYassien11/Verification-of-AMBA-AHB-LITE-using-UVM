@@ -38,7 +38,7 @@ class twice_reset_sequence extends base_sequence;
   virtual task body();
     super.body();
 
-    `uvm_info("twice_reset_sequence: ", "STARTING" , UVM_HIGH)
+    `uvm_info(get_type_name(), "STARTING" , UVM_HIGH)
 
     if(~reset_flag)
       reset_sequence_h.start(sequencer_h);

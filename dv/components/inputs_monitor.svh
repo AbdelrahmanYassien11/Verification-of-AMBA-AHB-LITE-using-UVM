@@ -40,7 +40,7 @@ class inputs_monitor extends uvm_monitor;
     // Create and initialize the analysis port
     tlm_analysis_port = new("tlm_analysis_port", this);
 
-    `uvm_info("INPUTS MONITOR", "Build phase completed", UVM_LOW)
+    `uvm_info(get_type_name(), "Build phase completed", UVM_LOW)
   endfunction
 
   //---------------------------------------------------------
@@ -52,18 +52,13 @@ class inputs_monitor extends uvm_monitor;
     // Link the monitor with the virtual interface
     my_vif.inputs_monitor_h = this;
 
-    `uvm_info("INPUTS MONITOR", "Connect phase completed", UVM_LOW)
+    `uvm_info(get_type_name(), "Connect phase completed", UVM_LOW)
   endfunction
 
   // End of elaboration phase: Finalize and check connections
   function void end_of_elaboration_phase(uvm_phase phase);
     super.end_of_elaboration_phase(phase);
-
-    // Optionally, you can use these lines to check connections
-    // tlm_analysis_port.get_connected_to(list);
-    // tlm_analysis_port.get_provided_to(list);
-
-    `uvm_info("INPUTS MONITOR", "End of Elaboration phase completed", UVM_LOW)
+    `uvm_info(get_type_name(), "End of Elaboration phase completed", UVM_LOW)
   endfunction
 
   virtual function void write_to_monitor (sequence_item input_req);
