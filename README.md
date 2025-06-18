@@ -14,11 +14,12 @@ For full methodology, results, and coverage analysis, see the main report:
 ## 📂 Repository Structure
 
 - `/rtl` – RTL design files for AHB-Lite components (add description if present)
-- `/tb` – UVM testbench and verification components
+- `/dv` – UVM testbench and verification components
+- `/illustrations` – Images used in the report
 - `/documents` – Reference documents and project reports
   - [UVM_AMBA_AHB_LITE_REPORT.pdf](documents/UVM_AMBA_AHB_LITE_REPORT.pdf) – Main project report
-  - [08_amba_ahb.pdf](documents/08_amba_ahb.pdf) – ARM AMBA AHB protocol reference
-  - [IHI0033C_amba_ahb_protocol_spec.pdf](documents/IHI0033C_amba_ahb_protocol_spec.pdf) – ARM official protocol specification
+  - [08_amba_ahb.pdf](documents/08_amba_ahb.pdf) – AMBA AHB protocol overview (sourced from [adki/AMBA_AXI_AHB_APB](https://github.com/adki/AMBA_AXI_AHB_APB/tree/master/slides))
+  - [IHI0033C_amba_ahb_protocol_spec.pdf](documents/IHI0033C_amba_ahb_protocol_spec.pdf) – Official ARM protocol specification
 
 ---
 
@@ -41,7 +42,6 @@ For full methodology, results, and coverage analysis, see the main report:
 
 2. **Explore the Folders**
    - Review the [project report](documents/UVM_AMBA_AHB_LITE_REPORT.pdf) for methodology and results
-   - Check `/illustrations` for images used in the report
    - Browse `/rtl` and `/dv` for design and verification sources
 
 3. **Simulate**
@@ -79,9 +79,9 @@ For full methodology, results, and coverage analysis, see the main report:
 
 ## 📚 References
 
-- [AMBA AHB Protocol Specification](documents/IHI0033C_amba_ahb_protocol_spec.pdf)
+- [AMBA AHB Protocol Specification](documents/IHI0033C_amba_ahb_protocol_spec.pdf) – Official ARM documentation
 - [Project Report](documents/UVM_AMBA_AHB_LITE_REPORT.pdf)
-- [AMBA AHB Protocol Overview](documents/08_amba_ahb.pdf)
+- [AMBA AHB Protocol Overview](documents/08_amba_ahb.pdf) – Sourced from [adki/AMBA_AXI_AHB_APB GitHub repository](https://github.com/adki/AMBA_AXI_AHB_APB/tree/master/slides)
 
 ---
 
