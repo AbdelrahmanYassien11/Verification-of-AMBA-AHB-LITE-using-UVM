@@ -1,0 +1,103 @@
+Coverage Report by instance with details
+
+=================================================================================
+=== Instance: /top_test_uvm/DUT/sva
+=== Design Unit: work.AHB_subordinate_sva
+=================================================================================
+
+Assertion Coverage:
+    Assertions                      12         2        10    16.66%
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Name                 Assertion   Design     Design     Lang File(Line)                Enable    Failure      Pass  FPSA   Failure Pass    Failure EOS  Formal       Formal
+                     Type        Unit       UnitType                                            Count        Count Action Log     Log     Limit   Note Status       Radius
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+/top_test_uvm/DUT/sva/burst_trans_seq_assert
+                     Concurrent  AHB_subordinate_sva
+                                            Verilog    SVA  ../sva/AHB_subordinate_sva.sv(128)
+                                                                                        on            0          0 CCCC   -       -     unlimited off                     
+/top_test_uvm/DUT/sva/burst_trans_nonseq_assert
+                     Concurrent  AHB_subordinate_sva
+                                            Verilog    SVA  ../sva/AHB_subordinate_sva.sv(129)
+                                                                                        on           79          0 CCCC   -       -     unlimited off                     
+/top_test_uvm/DUT/sva/reset_duration_assert
+                     Concurrent  AHB_subordinate_sva
+                                            Verilog    SVA  ../sva/AHB_subordinate_sva.sv(130)
+                                                                                        on            3          1 CCCC   -       -     unlimited off                     
+/top_test_uvm/DUT/sva/idle_inputs_assert
+                     Concurrent  AHB_subordinate_sva
+                                            Verilog    SVA  ../sva/AHB_subordinate_sva.sv(133)
+                                                                                        on          102          1 CCCC   -       -     unlimited off                     
+/top_test_uvm/DUT/sva/incr4_idle_assert
+                     Concurrent  AHB_subordinate_sva
+                                            Verilog    SVA  ../sva/AHB_subordinate_sva.sv(135)
+                                                                                        on           13          1 CCCC   -       -     unlimited off                     
+/top_test_uvm/DUT/sva/incr8_idle_assert
+                     Concurrent  AHB_subordinate_sva
+                                            Verilog    SVA  ../sva/AHB_subordinate_sva.sv(136)
+                                                                                        on            0          0 CCCC   -       -     unlimited off                     
+/top_test_uvm/DUT/sva/incr16_idle_assert
+                     Concurrent  AHB_subordinate_sva
+                                            Verilog    SVA  ../sva/AHB_subordinate_sva.sv(137)
+                                                                                        on            0          0 CCCC   -       -     unlimited off                     
+/top_test_uvm/DUT/sva/wrap4_idle_assert
+                     Concurrent  AHB_subordinate_sva
+                                            Verilog    SVA  ../sva/AHB_subordinate_sva.sv(139)
+                                                                                        on           10          1 CCCC   -       -     unlimited off                     
+/top_test_uvm/DUT/sva/wrap8_idle_assert
+                     Concurrent  AHB_subordinate_sva
+                                            Verilog    SVA  ../sva/AHB_subordinate_sva.sv(140)
+                                                                                        on            0          0 CCCC   -       -     unlimited off                     
+/top_test_uvm/DUT/sva/wrap16_idle_assert
+                     Concurrent  AHB_subordinate_sva
+                                            Verilog    SVA  ../sva/AHB_subordinate_sva.sv(141)
+                                                                                        on            0          0 CCCC   -       -     unlimited off                     
+
+
+ASSERTION RESULTS:
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Name                 Assertion   Design     Design     Lang File(Line)                Enable    Failure      Pass  FPSA   Failure Pass    Failure EOS  Formal       Formal
+                     Type        Unit       UnitType                                            Count        Count Action Log     Log     Limit   Note Status       Radius
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+/top_test_uvm/DUT/sva/burst_trans_seq_assert
+                     Concurrent  AHB_subordinate_sva
+                                            Verilog    SVA  ../sva/AHB_subordinate_sva.sv(128)
+                                                                                        on            0          0 CCCC   -       -     unlimited off                     
+/top_test_uvm/DUT/sva/burst_trans_nonseq_assert
+                     Concurrent  AHB_subordinate_sva
+                                            Verilog    SVA  ../sva/AHB_subordinate_sva.sv(129)
+                                                                                        on           79          0 CCCC   -       -     unlimited off                     
+/top_test_uvm/DUT/sva/reset_duration_assert
+                     Concurrent  AHB_subordinate_sva
+                                            Verilog    SVA  ../sva/AHB_subordinate_sva.sv(130)
+                                                                                        on            3          1 CCCC   -       -     unlimited off                     
+/top_test_uvm/DUT/sva/idle_inputs_assert
+                     Concurrent  AHB_subordinate_sva
+                                            Verilog    SVA  ../sva/AHB_subordinate_sva.sv(133)
+                                                                                        on          102          1 CCCC   -       -     unlimited off                     
+/top_test_uvm/DUT/sva/incr4_idle_assert
+                     Concurrent  AHB_subordinate_sva
+                                            Verilog    SVA  ../sva/AHB_subordinate_sva.sv(135)
+                                                                                        on           13          1 CCCC   -       -     unlimited off                     
+/top_test_uvm/DUT/sva/incr8_idle_assert
+                     Concurrent  AHB_subordinate_sva
+                                            Verilog    SVA  ../sva/AHB_subordinate_sva.sv(136)
+                                                                                        on            0          0 CCCC   -       -     unlimited off                     
+/top_test_uvm/DUT/sva/incr16_idle_assert
+                     Concurrent  AHB_subordinate_sva
+                                            Verilog    SVA  ../sva/AHB_subordinate_sva.sv(137)
+                                                                                        on            0          0 CCCC   -       -     unlimited off                     
+/top_test_uvm/DUT/sva/wrap4_idle_assert
+                     Concurrent  AHB_subordinate_sva
+                                            Verilog    SVA  ../sva/AHB_subordinate_sva.sv(139)
+                                                                                        on           10          1 CCCC   -       -     unlimited off                     
+/top_test_uvm/DUT/sva/wrap8_idle_assert
+                     Concurrent  AHB_subordinate_sva
+                                            Verilog    SVA  ../sva/AHB_subordinate_sva.sv(140)
+                                                                                        on            0          0 CCCC   -       -     unlimited off                     
+/top_test_uvm/DUT/sva/wrap16_idle_assert
+                     Concurrent  AHB_subordinate_sva
+                                            Verilog    SVA  ../sva/AHB_subordinate_sva.sv(141)
+                                                                                        on            0          0 CCCC   -       -     unlimited off                     
+
+Total Coverage By Instance (filtered view): 16.66%
+

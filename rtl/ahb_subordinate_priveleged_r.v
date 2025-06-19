@@ -73,15 +73,7 @@ module ahb_subordinate_priveleged_r
   // A flag to indicate that the wrap burst reached the positive end of its index 
   reg half_of_wrap;
 
-  integer i;
-
   wire [ADDR_WIDTH-1:0] HADDR_reg_c;
-  // wire [       2:0] HBURST_reg_c;
-  // wire [       1:0] HTRANS_reg_c;
-  // wire              HREADYin_reg_c;
-  // wire              HSEL_reg_c;
-  // wire [       2:0] HSIZE_reg_c;
-  // wire              HWRITE_reg_c;
 
   reg [ADDR_WIDTH-1:0] HADDR_reg_d;  
   reg [DATA_WIDTH-1:0] HWDATA_reg_d;
@@ -275,12 +267,7 @@ module ahb_subordinate_priveleged_r
               wrap_counter_reg <= wrap_counter_reg;       
           end
           default: begin
-            // if(next_state == ERROR) begin
-            //     wrap_counter_reg <= wrap_counter_reg;
-            // end
-            // else begin
-                wrap_counter_reg <= 0;
-            //end
+            wrap_counter_reg <= 0;
           end
         endcase // HTRANS_reg_d
       end
@@ -349,12 +336,7 @@ module ahb_subordinate_priveleged_r
               burst_counter_reg <= burst_counter_reg;       
           end
           default: begin
-            // if(next_state == ERROR) begin
-            //     burst_counter_reg <= burst_counter_reg;
-            // end
-            // else begin
-                burst_counter_reg <= 0;
-            //end
+            burst_counter_reg <= 0;
           end
         endcase // HTRANS_reg_d
       end
@@ -366,7 +348,7 @@ module ahb_subordinate_priveleged_r
 
 
   // ========== Ouput logic assignment sequential always block ================================================================= */
-  always @( negedge HCLK/*burst_counter_reg or wrap_counter_reg or HWRITE_reg_d or HADDR_reg_d or HWDATA or HSIZE_reg_d or HTRANS_reg_d or HBURST_reg_d or HSEL_reg_d */or negedge HRESETn) begin 
+  always @(negedge HCLK negedge HRESETn) begin 
     if(~HRESETn) begin
         HRDATA      <= 0;
         HRESP       <= 0;
@@ -378,7 +360,7 @@ module ahb_subordinate_priveleged_r
         IDLE: begin
           HREADYout <= 1;        
           HRDATA    <= HRDATA;
-          if(HSEL_reg_d && HREADYin_reg_c) begin
+          if(HSEL_reg_d && HREADYin) begin
             if(HRESP == 2'b01) begin
               HRESP     <= 2'b01;
             end
@@ -386,7 +368,7 @@ module ahb_subordinate_priveleged_r
               HRESP <= 2'b00;
             end
           end
-          else if (HSEL_reg_d && !HREADYin_reg_c) begin
+          else if (HSEL_reg_d && !HREADYin) begin
             HRESP   <= 2'b01;
           end
           else begin
@@ -396,7 +378,7 @@ module ahb_subordinate_priveleged_r
 
         WRITE: begin
           HRDATA <= HRDATA;
-          if(HSEL_reg_d && HREADYin_reg_c) begin     
+          if(HSEL_reg_d && HREADYin) begin     
             case(HTRANS_reg_d)
               2'b00, 2'b01: begin
                 HRESP <= 2'b00;
@@ -433,7 +415,7 @@ module ahb_subordinate_priveleged_r
               end
             endcase // HTRANS_reg_d                    
           end
-          else if (HSEL_reg_d && !HREADYin_reg_c) begin
+          else if (HSEL_reg_d && !HREADYin) begin
             HRESP <= 2'b01;
             HREADYout <= 0;
           end
@@ -445,7 +427,7 @@ module ahb_subordinate_priveleged_r
 
         READ: begin
 
-          if(HSEL_reg_d && HREADYin_reg_c) begin 
+          if(HSEL_reg_d && HREADYin) begin 
             case(HTRANS_reg_d)
               2'b00, 2'b01: begin
                 HRESP       <= 2'b00; //`HRESP_OKAY;
@@ -484,7 +466,7 @@ module ahb_subordinate_priveleged_r
               end
             endcase // HTRANS_reg_d  
           end
-          else if (HSEL_reg_d && !HREADYin_reg_c) begin
+          else if (HSEL_reg_d && !HREADYin) begin
             HRESP     <= 2'b01;
             HREADYout <= 0;
             HRDATA <= HRDATA;
@@ -498,7 +480,7 @@ module ahb_subordinate_priveleged_r
 
         ERROR: begin
           HRDATA    <= HRDATA;
-          if(HSEL_reg_d && HREADYin_reg_c) begin 
+          if(HSEL_reg_d && HREADYin) begin 
             HRESP     <= 2'b01;
             if(state == ERROR) begin
               HREADYout <=  0;
@@ -507,7 +489,7 @@ module ahb_subordinate_priveleged_r
               HREADYout <= 1;
             end
           end
-          else if (HSEL_reg_d && !HREADYin_reg_c) begin
+          else if (HSEL_reg_d && !HREADYin) begin
             HRESP <= 2'b01;
             HREADYout <= 0;
           end
@@ -531,33 +513,10 @@ module ahb_subordinate_priveleged_r
   // ========== Always block to manage Address Phase signals ================================================================== */
   always@(negedge HCLK or negedge HRESETn) begin
     if (~HRESETn) begin
-      //state             <= IDLE;
-      // burst_counter_reg <= 0;
-      // wrap_counter_reg  <= 0;
-
-      // HADDR_reg_c       <= 0;
-      // HBURST_reg_c      <= 0;
-      // HTRANS_reg_c      <= 0;
-      // HSEL_reg_c        <= 0;
-      // HREADYin_reg_c    <= 1;
-      // HSIZE_reg_c       <= 0;
-      // HWRITE_reg_c      <= 0;
-
       // burst_counter <= 0;
       // wrap_counter  <= 0;
-
     end 
     else begin 
-      // state             <= next_state;
-
-      // HBURST_reg_c      <= HBURST;
-      // HTRANS_reg_c      <= HTRANS;
-      // HSEL_reg_c        <= HSEL;
-      // HADDR_reg_c       <= HADDR[ADDR_WIDTH-BITS_FOR_SUBORDINATES-1:0];
-      // HREADYin_reg_c    <= HREADYin;
-      // HSIZE_reg_c       <= HSIZE;
-      // HWRITE_reg_c      <= HWRITE;
-
       burst_counter     <= burst_counter_reg;
       wrap_counter      <= wrap_counter_reg;
     end
@@ -573,14 +532,7 @@ module ahb_subordinate_priveleged_r
     end
   end
 
-  // assign HBURST_reg_c      = HBURST;
-  // assign HTRANS_reg_c      = HTRANS;
-  // assign HSEL_reg_c        = HSEL;
   assign HADDR_reg_c       = HADDR[ADDR_WIDTH-BITS_FOR_SUBORDINATES-1:0];
-  // assign HREADYin_reg_c    = HREADYin;
-  // assign HSIZE_reg_c       = HSIZE;
-  // assign HWRITE_reg_c      = HWRITE;
-
 
   // always block to manage DATA_phase signals
   always @ (negedge HCLK or negedge HRESETn) begin
@@ -602,17 +554,14 @@ module ahb_subordinate_priveleged_r
       // HREADYout_reg_d   <= 1;
     end 
     else begin 
-      HBURST_reg_d     <= HBURST_reg_c;
-      HTRANS_reg_d     <= HTRANS_reg_c;
-      HSEL_reg_d       <= HSEL_reg_c;
+      HBURST_reg_d     <= HBURST;
+      HTRANS_reg_d     <= HTRANS;
+      HSEL_reg_d       <= HSEL;
       HADDR_reg_d      <= HADDR_reg_c;
-      HSIZE_reg_d      <= HSIZE_reg_c;
-
+      HSIZE_reg_d      <= HSIZE;
       HWDATA_reg_d     <= HWDATA;
-
-      HWRITE_reg_d     <= HWRITE_reg_c;
-
-      HREADYin_reg_d   <= HREADYin_reg_c;
+      HWRITE_reg_d     <= HWRITE;
+      HREADYin_reg_d   <= HREADYin;
     end 
   end
 
@@ -625,9 +574,9 @@ module ahb_subordinate_priveleged_r
       case(state)
 
         IDLE, BUSY: begin
-          if (HSEL_reg_c && HREADYin && HPROT[3:2] == 2'b00) begin
+          if (HSEL && HREADYin && HPROT[3:2] == 2'b00) begin
 
-            case (HTRANS_reg_c) 
+            case (HTRANS) 
               2'b00: begin 
                next_state    = IDLE; 
               end 
@@ -636,10 +585,10 @@ module ahb_subordinate_priveleged_r
               end
 
               2'b10: begin 
-                if (HWRITE_reg_c && HPROT[3:1] == 3'b001) begin 
+                if (HWRITE && HPROT[3:1] == 3'b001) begin 
                   next_state = WRITE; 
                 end 
-                else if(~HWRITE_reg_c && HPROT[3:2] == 2'b00) begin 
+                else if(~HWRITE && HPROT[3:2] == 2'b00) begin 
                   next_state = READ; 
                 end
                 else begin 
@@ -657,9 +606,9 @@ module ahb_subordinate_priveleged_r
             endcase //HTRANS_reg_c
 
           end
-          else if(HSEL_reg_c && (~HREADYin || HPROT[3:2] != 2'b00))begin
+          else if(HSEL && (~HREADYin || HPROT[3:2] != 2'b00))begin
             if(next_state == ERROR) begin
-              case (HTRANS_reg_c)
+              case (HTRANS)
                 2'b00: next_state = IDLE;
                 default : next_state = ERROR;
               endcase
@@ -675,9 +624,9 @@ module ahb_subordinate_priveleged_r
         end
 
         WRITE, READ : begin
-          if (HSEL_reg_c && HREADYin && HPROT[3:2] == 2'b00) begin
+          if (HSEL && HREADYin && HPROT[3:2] == 2'b00) begin
 
-            case (HTRANS_reg_c) 
+            case (HTRANS) 
               2'b00: begin 
                 next_state    = IDLE; 
               end 
@@ -687,10 +636,10 @@ module ahb_subordinate_priveleged_r
 
               2'b11, 2'b10: begin 
                 if((HADDR_reg_c + burst_counter < ADDR_DEPTH) & ($signed(HADDR_reg_c + wrap_counter) < ADDR_DEPTH) /*& ((HADDR_reg_c + wrap_counter) > 0)*/) begin 
-                  if (HWRITE_reg_c && HPROT [1] == 1'b1) begin 
+                  if (HWRITE && HPROT [1] == 1'b1) begin 
                     next_state = WRITE; 
                   end 
-                  else if(~HWRITE_reg_c) begin 
+                  else if(~HWRITE) begin 
                     next_state = READ; 
                   end
                   else begin 
@@ -708,8 +657,8 @@ module ahb_subordinate_priveleged_r
             endcase //HTRANS_reg_c
           end
 
-          else if(HSEL_reg_c && (~HREADYin || HPROT[3:2] != 2'b00))begin
-            case (HTRANS_reg_c)
+          else if(HSEL && (~HREADYin || HPROT[3:2] != 2'b00))begin
+            case (HTRANS)
               2'b00: begin
                 next_state = IDLE;
               end
@@ -733,112 +682,6 @@ module ahb_subordinate_priveleged_r
       endcase
     end
   end
-
-  // //next_state logic combinational always block
-  // always@(*) begin
-  //   case(state)
-
-  //     IDLE, BUSY: begin
-  //       if (HSEL_reg_c && HREADYin) begin
-
-  //         case (HTRANS_reg_c) 
-  //           2'b00: begin 
-  //             next_state    = IDLE; 
-  //           end 
-  //           2'b01: begin 
-  //             next_state    = BUSY; 
-  //           end
-
-  //           2'b11, 2'b10: begin 
-  //             if (HWRITE_reg_c) begin 
-  //               next_state = WRITE; 
-  //             end 
-  //             else if(~HWRITE_reg_c) begin 
-  //               next_state = READ; 
-  //             end
-  //             else begin 
-  //               next_state = ERROR;
-  //             end 
-  //           end 
-
-  //           default: begin
-  //             next_state = IDLE;
-  //           end 
-  //         endcase //HTRANS_reg_c
-
-  //       end
-  //       else if(HSEL_reg_c && !HREADYin)begin
-  //         if(state == ERROR) begin
-  //           next_state = IDLE;
-  //         end
-  //         else begin
-  //           next_state = state;
-  //         end
-  //       end
-
-  //       else begin
-  //         next_state = IDLE;
-  //       end
-  //     end
-
-  //     WRITE, READ : begin
-  //       if (HSEL_reg_c && HREADYin) begin
-
-  //         case (HTRANS_reg_c) 
-  //           2'b00: begin 
-  //             next_state    = IDLE; 
-  //           end 
-  //           2'b01: begin 
-  //             next_state    = BUSY; 
-  //           end 
-
-  //           2'b11, 2'b10: begin 
-  //             if((HADDR_reg_c + burst_counter < ADDR_DEPTH) & ($signed(HADDR_reg_c + wrap_counter) < ADDR_DEPTH) /*& ((HADDR_reg_c + wrap_counter) > 0)*/) begin 
-  //               if (HWRITE_reg_c) begin 
-  //                 next_state = WRITE; 
-  //               end 
-  //               else if(~HWRITE_reg_c) begin 
-  //                 next_state = READ; 
-  //               end
-  //               else begin 
-  //                 next_state = ERROR;
-  //               end 
-  //             end 
-  //             else begin 
-  //               next_state = ERROR; 
-  //             end
-  //           end
-
-  //           default: begin
-  //             next_state = IDLE;
-  //           end 
-  //         endcase //HTRANS_reg_c
-  //       end
-
-  //       else if(HSEL_reg_c && !HREADYin)begin
-  //         if(state == ERROR) begin
-  //           next_state = IDLE;
-  //         end
-  //         else begin
-  //           next_state = state;
-  //         end
-  //       end
-
-  //       else begin
-  //         next_state = IDLE;
-  //       end
-  //     end
-
-  //     ERROR: begin
-  //       if(HBURST == SINGLE) begin
-  //         next_state = IDLE;
-  //       end
-  //       else begin
-  //         next_state = state;
-  //       end
-  //     end
-  //   endcase
-  // end
 
   // Controls wrap_counte_reg which later gets assigned to wrap_counter assignment to keep syhtizablity & correct behaviour
   always@(*) begin

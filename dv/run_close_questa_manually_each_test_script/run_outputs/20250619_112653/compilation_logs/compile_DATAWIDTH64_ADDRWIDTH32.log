@@ -1,0 +1,52 @@
+Reading pref.tcl
+
+# 2024.1
+
+# do log.do
+# QuestaSim-64 vlog 2024.1 Compiler 2024.02 Feb  1 2024
+# Start time: 11:27:54 on Jun 19,2025
+# vlog -f dut.f "+cover" -covercells 
+# -- Compiling module ahb_default_subordinate
+# -- Compiling module ahb_subordinate
+# -- Compiling module ahb_subordinate_priveleged_r
+# -- Compiling module ahb_subordinate_priveleged_wr
+# -- Compiling module ahb_mux
+# -- Compiling module ahb_decoder
+# -- Compiling module ahb_lite
+# 
+# Top level modules:
+# 	ahb_lite
+# End time: 11:27:54 on Jun 19,2025, Elapsed time: 0:00:00
+# Errors: 0, Warnings: 0
+# QuestaSim-64 vlog 2024.1 Compiler 2024.02 Feb  1 2024
+# Start time: 11:27:54 on Jun 19,2025
+# vlog -f tb.f "+cover" -covercells 
+# -- Compiling package AHB_pkg
+# -- Importing package mtiUvm.uvm_pkg (uvm-1.1d Built-in)
+# ** Note: (vlog-2286) ../AHB_lite_uvm_pkg.sv(15): Using implicit +incdir+C:/questasim64_2024.1/uvm-1.1d/../verilog_src/uvm-1.1d/src from import uvm_pkg
+# ** Warning: ** while parsing file included at ../AHB_lite_uvm_pkg.sv(104)
+# ** at ../sequence_item/sequence_item.svh(226): (vlog-2643) Unterminated string literal continues onto next line.
+# ** Warning: ** while parsing file included at ../AHB_lite_uvm_pkg.sv(104)
+# ** at ../sequence_item/sequence_item.svh(235): (vlog-2643) Unterminated string literal continues onto next line.
+# ** Warning: ** while parsing file included at ../AHB_lite_uvm_pkg.sv(104)
+# ** at ../sequence_item/sequence_item.svh(243): (vlog-2643) Unterminated string literal continues onto next line.
+# ** Warning: ** while parsing file included at ../AHB_lite_uvm_pkg.sv(105)
+# ** at ../sequence_item/sequence_item_trial.svh(129): (vlog-2643) Unterminated string literal continues onto next line.
+# ** Warning: ** while parsing file included at ../AHB_lite_uvm_pkg.sv(105)
+# ** at ../sequence_item/sequence_item_trial.svh(138): (vlog-2643) Unterminated string literal continues onto next line.
+# ** Warning: ** while parsing file included at ../AHB_lite_uvm_pkg.sv(105)
+# ** at ../sequence_item/sequence_item_trial.svh(146): (vlog-2643) Unterminated string literal continues onto next line.
+# ** Warning: ../components/coverage.svh(172): (vlog-2570) Zero-length range with constant bounds. Low-bound and high-bound may be reversed.
+# ** Warning: ../components/coverage.svh(182): (vlog-2570) Zero-length range with constant bounds. Low-bound and high-bound may be reversed.
+# ** Warning: ../components/coverage.svh(182): (vlog-2570) Zero-length range with constant bounds. Low-bound and high-bound may be reversed.
+# ** Warning: ../components/predictor.svh(1205): (vlog-2875) Task "write_AHB" is being called in function "undo_last_operation".
+# -- Compiling interface inf
+# -- Importing package AHB_pkg
+# ** Warning: ../interface/AHB_lite_interface.sv(185): (vlog-13365) Ignoring dynamic type senstivity for 'outputs_monitor_h' inside always procedure.
+# -- Compiling module AHB_subordinate_sva
+# -- Compiling module top_test_uvm
+# 
+# Top level modules:
+# 	top_test_uvm
+# End time: 11:27:55 on Jun 19,2025, Elapsed time: 0:00:01
+# Errors: 0, Warnings: 11

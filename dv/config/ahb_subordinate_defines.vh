@@ -1,4 +1,4 @@
-`define HWDATA_WIDTH32
+`define HWDATA_WIDTH128
 `define ADDR_WIDTH32
 
   `ifdef HWDATA_WIDTH64
