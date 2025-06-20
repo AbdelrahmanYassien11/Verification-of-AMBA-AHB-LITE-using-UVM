@@ -14,7 +14,7 @@ mkdir -p "$COMP_LOGS" "$SIM_LOGS" "$REPORTS"
 
 # Define the path to the Verilog header file
 HEADER_FILE="../config/ahb_subordinate_defines.vh"
-DO_FILE="run_close_questa_manually_each_test.do"
+DO_FILE="run_all_configs_all_tests.do"
 LOG_FILE="log.do"
 
 # Function to modify the header file with the given values for HWDATA_WIDTH and ADDR_WIDTH
