@@ -46,24 +46,32 @@ For full methodology, results, and coverage analysis, see the main report:
 
 3. **Simulate**
    - **There are three main ways to run simulations:**
-     - **Using the `run.do` file**
+     - 1) **Using the `run.do` file**
        - Run with:  
          ```bash
          vsim -do run.do
          ```
        - Edit `run.do` to specify which tests to run.
-       - Coverage results and transcripts are saved for each `UVM_TESTNAME` executed.
-     - **Using the `/run_all_tests_update_header_each_time_script` directory**
+       - Coverage results ucdbs & txt files are saved for each `UVM_TESTNAME` executed.
+     - 2) **Using the `/run_all_configs_all_tests` directory**
+       - This approach employs a bash script that:
+         - Uses the test names and bus widths that are defined inside it.
+         - Edits the `.vh` header file accordingly.
+         - Compiles the RTL & DV Environment using `log.do`.
+         - Runs all the tests which are defined inside it.
+         - Executes the corresponding `run_all_configs_all_tests.do` file which starts the respective test simulation.
+         - **Outputs:** 
+           - `/run_outputs` inside this directory, a folder with its name being the YYYYMMDD_HHMMSS format is created inside it are a number of subfolders:
+             - `/compilation_logs` has the output log of the script's compilation for each configuration that was compiled.
+             - `/simulation_logs` has the output log of the script's simulation for each configuration & test that has been run.
+             - `/reports` contains the coverage report files for each test and the config that the test was run on, as well as the transcript respectively.
+         - **Note:** After each test run, you must manually close Questa before the next test starts.
+     - 3) **Using the `/run_all_tests_update_header_each_time_script` directory**
        - This method uses a `.do` file in combination with a bash script.
        - The script updates the project's header file to change bus widths before each test.
        - All test configurations (various bus widths) are executed automatically.
-     - **Using the `/run_close_questa_manually_each_test_script` directory**
-       - This approach employs a bash script that:
-         - Accepts test names and bus widths as input.
-         - Edits the `.vh` header file accordingly.
-         - Executes the corresponding `.do` file for each configuration.
-         - **Note:** After each test run, you must manually close Questa before the next test starts.
    - **Important Notes:**
+     - Method 2 uses questa GuI (NOT IN BATCH MODE).
      - Methods 2 & 3 will run each test (`X_test`) for all available bus widths (32, 64, 128, 256, 512, 1024 bits).
      - This produces coverage results and transcripts for every configuration.
      - On machines with limited resources, reduce the number of widths or tests to avoid heavy workloads.
