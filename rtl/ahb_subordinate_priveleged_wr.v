@@ -98,6 +98,9 @@ module ahb_subordinate_priveleged_wr
   // State & Next State value holders
   reg [2:0] state, next_state;
 
+  // used to initialize the memory at the start of simulation
+  integer i;
+  
   // Initializing the Internal Signals & the Memory
   initial begin
     burst_counter_reg = 0;
@@ -346,7 +349,7 @@ module ahb_subordinate_priveleged_wr
 
 
   // ========== Ouput logic assignment sequential always block ================================================================= */
-  always @(negedge HCLK negedge HRESETn) begin 
+  always @(negedge HCLK or negedge HRESETn) begin 
     if(~HRESETn) begin
         HRDATA      <= 0;
         HRESP       <= 0;

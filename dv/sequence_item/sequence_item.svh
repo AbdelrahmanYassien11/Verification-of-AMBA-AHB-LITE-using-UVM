@@ -50,6 +50,7 @@ rand HSEL_e       SEL_op;
     logic   [RESP_WIDTH-1:0]  HRESP; 
     logic   [DATA_WIDTH-1:0]  HREADY;   
 
+    // constraint randomized_seq_c { sequence_randomizer dist {[0:22]:=1};
     constraint randomized_seq_c { sequence_randomizer dist {[0:20]:=1};
     }
 

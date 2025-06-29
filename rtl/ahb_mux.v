@@ -51,12 +51,12 @@ module ahb_mux #(parameter ADDR_WIDTH, NO_OF_SUBORDINATES, BITS_FOR_SUBORDINATES
   output  reg                   HREADY
 );
  /********************************************************/
-  localparam P_HSEL_bus1      = 6'b000001; //sel0 //1
-  localparam P_HSEL_bus2      = 6'b000010; //sel1 //2
-  localparam P_HSEL_bus3      = 6'b000100; //sel2 //4
-  localparam P_HSEL_busd      = 6'b001000; //sel3 //8  defualt sub
-  localparam P_HSEL_bus_p_r   = 6'b010000; //sel4 //16 priveleged sub read
-  localparam P_HSEL_bus_p_wr  = 6'b100000; //sel5 //32 priveleged sub write/read
+  localparam P_HSEL_bus1      = 6'b000001; //sel0 //1  sub1
+  localparam P_HSEL_bus2      = 6'b000010; //sel1 //2  sub2
+  localparam P_HSEL_bus3      = 6'b000100; //sel2 //4  sub3
+  localparam P_HSEL_busd      = 6'b001000; //sel3 //8  defualt sub (sub4)
+  localparam P_HSEL_bus_p_r   = 6'b010000; //sel4 //16 priveleged sub read (sub5)
+  localparam P_HSEL_bus_p_wr  = 6'b100000; //sel5 //32 priveleged sub write/read (sub6)
   localparam P_HSEL_bus_reset = 6'b000000; //sel6 //0  0
 
   wire [5:0] HSEL_bus      = {HSEL_p_wr,HSEL_p_r,HSELd,HSEL3,HSEL2,HSEL1};

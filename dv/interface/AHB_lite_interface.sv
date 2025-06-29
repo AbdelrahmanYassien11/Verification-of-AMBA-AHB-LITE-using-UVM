@@ -116,7 +116,7 @@ event dataPhase_event, samplingPhase_event;
 		@(posedge clk);
 
 		while((~HREADY) && (HRESP == OKAY)) begin
-			$display("ANNA1 %0t",$time());
+			$display("%0t:	Address Phase: Waiting for READY & OKAY ",$time());
 			@(posedge clk);
 		end
 	endtask : addressPhase
@@ -137,7 +137,7 @@ event dataPhase_event, samplingPhase_event;
 			HWDATA = dataPhase_req.HWDATA;
 		end
 		while ((~HREADY) && (HRESP == OKAY)) begin
-			$display("ANNA2 %0t",$time());
+			$display("%0t:	Data Phase: Waiting for READY & OKAY ",$time());
 			@(posedge clk);
 		end
 	endtask : dataPhase
@@ -156,8 +156,8 @@ event dataPhase_event, samplingPhase_event;
 		pipeline4.HRESP  = HRESP;
 		pipeline4.HRDATA = HRDATA;
 		pipeline4.HREADY = HREADY;
-        RESP_op  = HRESP_e'(HRESP);
-        READY_op = HREADY_e'(HREADY);
+        // RESP_op  = HRESP_e'(HRESP);
+        // READY_op = HREADY_e'(HREADY);
 		driver_h.end_transfer(pipeline4);
 		send_outputs(pipeline4);
 	end
@@ -198,6 +198,10 @@ event dataPhase_event, samplingPhase_event;
         create_sequence_item_trial();
         HRESETn <= 1'b1;
     end
+
+
+    assign RESP_op  = HRESP_e'(HRESP);
+    assign READY_op = HREADY_e'(HREADY);
 
 endinterface : inf
 

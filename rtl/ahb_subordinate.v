@@ -76,12 +76,6 @@ module ahb_subordinate
   integer i;
 
   wire [ADDR_WIDTH-1:0] HADDR_reg_c;
-  // wire [       2:0] HBURST_reg_c;
-  // wire [       1:0] HTRANS_reg_c;
-  // wire              HREADYin_reg_c;
-  // wire              HSEL_reg_c;
-  // wire [       2:0] HSIZE_reg_c;
-  // wire              HWRITE_reg_c;
 
   reg [ADDR_WIDTH-1:0] HADDR_reg_d;  
   reg [DATA_WIDTH-1:0] HWDATA_reg_d;

@@ -52,6 +52,9 @@ class runall_sequence extends base_sequence;
   twice_reset_sequence twice_reset_sequence_h;
   SINGLE_IDLE_sequence SINGLE_IDLE_sequence_h;
 
+  PRIVELEGE_ERROR_INJECTION_sequence  PRIVELEGE_ERROR_INJECTION_sequence_h;
+  ADDRESS_ERROR_INJECTION_sequence    ADDRESS_ERROR_INJECTION_sequence_h;
+
   // Constructor
   function new(string name = "runall_sequence");
     super.new(name);
@@ -92,12 +95,8 @@ class runall_sequence extends base_sequence;
     twice_reset_sequence_h  = twice_reset_sequence::type_id::create("twice_reset_sequence_h");
     SINGLE_IDLE_sequence_h  = SINGLE_IDLE_sequence::type_id::create("SINGLE_IDLE_sequence_h");
 
-    // genvar i;
-    // generate
-    //   for(i = 0; i<18; i++)begin
-    //     base_sequence_r[i] = new();
-    //   end
-    // endgenerate
+    PRIVELEGE_ERROR_INJECTION_sequence_h = PRIVELEGE_ERROR_INJECTION_sequence::type_id::create("PRIVELEGE_ERROR_INJECTION_sequence_h");
+    ADDRESS_ERROR_INJECTION_sequence_h   = ADDRESS_ERROR_INJECTION_sequence::type_id::create("ADDRESS_ERROR_INJECTION_sequence_h");
 
     for(int i = 0; i <21; i++) begin
       base_sequence_r[i] = new();
@@ -136,6 +135,9 @@ class runall_sequence extends base_sequence;
     twice_IDLE_sequence::reset_flag = 1'b1;
     twice_reset_sequence::reset_flag = 1'b1;
     SINGLE_IDLE_sequence::reset_flag = 1'b1;
+
+    PRIVELEGE_ERROR_INJECTION_sequence::reset_flag = 1'b1;
+    ADDRESS_ERROR_INJECTION_sequence::reset_flag   = 1'b1;
 
     `uvm_info("runall_sequence: ", "STARTING" , UVM_HIGH)
 
