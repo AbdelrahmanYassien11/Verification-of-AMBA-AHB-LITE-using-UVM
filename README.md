@@ -65,7 +65,6 @@ For full methodology, results, and coverage analysis, see the main report:
              - `/compilation_logs` has the output log of the script's compilation for each configuration that was compiled.
              - `/simulation_logs` has the output log of the script's simulation for each configuration & test that has been run.
              - `/reports` contains the coverage report files for each test and the config that the test was run on, as well as the transcript respectively.
-         - **Note:** After each test run, you must manually close Questa before the next test starts.
      - 3) **Using the `/run_all_tests_update_header_each_time_script` directory**
        - This method uses a `.do` file in combination with a bash script.
        - The script updates the project's header file to change bus widths before each test.
