@@ -70,10 +70,11 @@ For full methodology, results, and coverage analysis, see the main report:
        - The script updates the project's header file to change bus widths before each test.
        - All test configurations (various bus widths) are executed automatically.
    - **Important Notes:**
-     - Method 2 uses questa GuI (NOT IN BATCH MODE).
+     - Method 3 uses questa GuI (NOT IN BATCH MODE).
      - Methods 2 & 3 will run each test (`X_test`) for all available bus widths (32, 64, 128, 256, 512, 1024 bits).
      - This produces coverage results and transcripts for every configuration.
      - On machines with limited resources, reduce the number of widths or tests to avoid heavy workloads.
+     - I don't recommend using method 3, its just old & I havent updated it in a while.
    - **General Simulation Steps:**
      - Use your preferred SystemVerilog/UVM simulator (e.g., ModelSim, QuestaSim).
      - Typical flow:
